@@ -128,6 +128,7 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
         // delete the slots of the old validators
         if (length < _currentValidatorSetLength) {
             for (uint256 i = length; i < _currentValidatorSetLength; i++) {
+                // slither-disable-next-line costly-operations-inside-a-loop
                 delete _currentValidatorSet[i];
             }
         }
@@ -141,6 +142,7 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
             if (votingPower == 0) revert VotingPowerIsZero();
             totalPower += votingPower;
             _currentValidatorSet[i] = newValidatorSet[i];
+            // slither-disable-next-line calls-inside-a-loop
             apk = _bls.ecadd(apk, newValidatorSet[i].g1pk);
         }
 
@@ -342,7 +344,7 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
         return uint8(bitmap[byteNumber]) & (1 << bitNumber) > 0;
     }
 
-    // slither-disable-next-line unused-state,naming-convention
     // solhint-disable-next-line ordering
+    // slither-disable-next-line unused-state,naming-convention
     uint256[50] private __gap;
 }

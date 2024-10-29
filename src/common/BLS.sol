@@ -726,16 +726,6 @@ contract BLS is IBLS {
     uint256 internal constant G1_X = 1;
     uint256 internal constant G1_Y = 2;
 
-    // generator of G2
-    uint256 internal constant G2_X0 =
-        10_857_046_999_023_057_135_944_570_762_232_829_481_370_756_359_578_518_086_990_519_993_285_655_852_781;
-    uint256 internal constant G2_X1 =
-        11_559_732_032_986_387_107_991_004_021_392_285_783_925_812_861_821_192_530_917_403_151_452_391_805_634;
-    uint256 internal constant G2_Y0 =
-        8_495_653_923_123_431_417_604_973_247_489_272_438_418_190_587_263_600_148_770_280_649_306_958_101_930;
-    uint256 internal constant G2_Y1 =
-        4_082_367_875_863_433_681_332_203_403_145_435_568_316_851_327_593_401_208_105_741_076_214_120_093_531;
-
     // Negated generator of G2
     uint256 internal constant N_G2_X0 =
         10_857_046_999_023_057_135_944_570_762_232_829_481_370_756_359_578_518_086_990_519_993_285_655_852_781;
@@ -747,10 +737,13 @@ contract BLS is IBLS {
         17_805_874_995_975_841_540_914_202_342_111_839_520_379_459_829_704_422_454_583_296_818_431_106_115_052;
 
     // sqrt(-3)
+    // slither-disable-next-line too-many-digits
     uint256 internal constant Z0 = 0x0000000000000000b3c4d79d41a91759a9e4c7e359b6b89eaec68e62effffffd;
     // (sqrt(-3) - 1) / 2
+    // slither-disable-next-line too-many-digits
     uint256 internal constant Z1 = 0x000000000000000059e26bcea0d48bacd4f263f1acdb5c4f5763473177fffffe;
 
+    // slither-disable-next-line too-many-digits
     uint256 internal constant T24 = 0x1000000000000000000000000000000000000000000000000;
     uint256 internal constant MASK24 = 0xffffffffffffffffffffffffffffffffffffffffffffffff;
 

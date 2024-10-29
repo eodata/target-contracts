@@ -177,7 +177,7 @@ contract EOFeedAdapter is IEOFeedAdapter, Initializable {
         return priceData.eoracleBlockNumber;
     }
 
-    // slither-disable-next-line unused-state,naming-convention
     // solhint-disable-next-line ordering
+    // slither-disable-next-line unused-state,naming-convention
     uint256[50] private __gap;
 }

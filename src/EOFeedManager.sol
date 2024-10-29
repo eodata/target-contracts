@@ -191,7 +191,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable {
         return _priceFeeds[feedId];
     }
 
-    // slither-disable-next-line unused-state,naming-convention
     // solhint-disable-next-line ordering
+    // slither-disable-next-line unused-state,naming-convention
     uint256[50] private __gap;
 }
