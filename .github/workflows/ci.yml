@@ -123,7 +123,7 @@ jobs:
         run: "npm install"
 
       - name: "Run Slither analysis"
-        uses: "crytic/slither-action@v0.3.0"
+        uses: "crytic/slither-action@v0.10.0"
         id: "slither"
         with:
           fail-on: "low"

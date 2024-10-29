@@ -142,7 +142,7 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
             if (votingPower == 0) revert VotingPowerIsZero();
             totalPower += votingPower;
             _currentValidatorSet[i] = newValidatorSet[i];
-            // slither-disable-next-line calls-inside-a-loop
+            // slither-disable-next-line calls-inside-a-loop§
             apk = _bls.ecadd(apk, newValidatorSet[i].g1pk);
         }
 
