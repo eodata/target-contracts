@@ -127,8 +127,8 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
         if (length < _minNumOfValidators) revert ValidatorSetTooSmall();
         // delete the slots of the old validators
         if (length < _currentValidatorSetLength) {
+            // slither-disable-next-line costly-operations-inside-a-loop
             for (uint256 i = length; i < _currentValidatorSetLength; i++) {
-                // slither-disable-next-line costly-operations-inside-a-loop
                 delete _currentValidatorSet[i];
             }
         }
@@ -136,13 +136,13 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
         _currentValidatorSetHash = keccak256(abi.encode(newValidatorSet));
         uint256 totalPower = 0;
         uint256[2] memory apk = [uint256(0), uint256(0)];
+        // slither-disable-next-line calls-inside-a-loop§
         for (uint256 i = 0; i < length; i++) {
             if (newValidatorSet[i]._address == address(0)) revert InvalidAddress();
             uint256 votingPower = newValidatorSet[i].votingPower;
             if (votingPower == 0) revert VotingPowerIsZero();
             totalPower += votingPower;
             _currentValidatorSet[i] = newValidatorSet[i];
-            // slither-disable-next-line calls-inside-a-loop§
             apk = _bls.ecadd(apk, newValidatorSet[i].g1pk);
         }
 
