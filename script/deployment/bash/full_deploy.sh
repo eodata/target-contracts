@@ -21,12 +21,18 @@ for var in "${required_vars[@]}"; do
     fi
 done
 
-# Set default value for USE_PRECOMPILED_MODEXP if not set
-USE_PRECOMPILED_MODEXP=${USE_PRECOMPILED_MODEXP:-true}
-
+# Set default values for optional variables
+USE_PRECOMPILED_MODEXP=${USE_PRECOMPILED_MODEXP:-false}
+BROADCAST_MODE=${BROADCAST_MODE:-broadcast} # Can be 'broadcast', 'dry-run'
 # Validate USE_PRECOMPILED_MODEXP is boolean
 if [[ "${USE_PRECOMPILED_MODEXP}" != "true" && "${USE_PRECOMPILED_MODEXP}" != "false" ]]; then
     echo "Error: USE_PRECOMPILED_MODEXP must be either 'true' or 'false'"
+    exit 1
+fi
+
+# Validate BROADCAST_MODE
+if [[ "${BROADCAST_MODE}" != "broadcast" && "${BROADCAST_MODE}" != "dry-run" ]]; then
+    echo "Error: BROADCAST_MODE must be either 'broadcast', 'dry-run'"
     exit 1
 fi
 
@@ -93,12 +99,24 @@ npx prettier --write "$CONFIG_DIR/targetContractSetConfig.json" --ignore-path ''
 
 echo "Generated config file at $CONFIG_DIR/targetContractSetConfig.json"
 
+# Set up broadcast flags based on BROADCAST_MODE
+case $BROADCAST_MODE in
+    "broadcast")
+        BROADCAST_FLAG="--broadcast"
+        echo "Running in broadcast mode - will submit transactions"
+        ;;
+    "dry-run")
+        BROADCAST_FLAG=""
+        echo "Running in dry-run mode - will simulate transactions"
+        ;;
+esac
+
 # Run the deployment
 echo "Starting deployment..."
 forge script script/deployment/DeployAll.s.sol:DeployAll \
     --rpc-url $RPC_URL \
     --private-key $PRIVATE_KEY \
-    --broadcast \
+    $BROADCAST_FLAG \
     --legacy \
     --slow \
     --gas-estimate-multiplier 200
