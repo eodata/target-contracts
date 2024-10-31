@@ -6,7 +6,7 @@ set -euo pipefail
 required_vars=(
     "PRIVATE_KEY"
     "OWNER_PRIVATE_KEY"
-    "RPC_URL"
+    "TARGET_RPC_URL"
     "EORACLE_CHAIN_ID"
     "PROXY_ADMIN_OWNER"
     "TARGET_CONTRACTS_OWNER"
@@ -23,7 +23,7 @@ done
 
 # Set default values for optional variables
 USE_PRECOMPILED_MODEXP=${USE_PRECOMPILED_MODEXP:-false}
-BROADCAST_MODE=${BROADCAST_MODE:-broadcast} # Can be 'broadcast', 'dry-run'
+BROADCAST_MODE=${BROADCAST_MODE:-dry-run} # Can be 'broadcast', 'dry-run'
 # Validate USE_PRECOMPILED_MODEXP is boolean
 if [[ "${USE_PRECOMPILED_MODEXP}" != "true" && "${USE_PRECOMPILED_MODEXP}" != "false" ]]; then
     echo "Error: USE_PRECOMPILED_MODEXP must be either 'true' or 'false'"
@@ -55,7 +55,7 @@ case $EORACLE_CHAIN_ID in
 esac
 
 # Get chain ID from RPC URL
-CHAIN_ID=$(cast chain-id --rpc-url $RPC_URL)
+CHAIN_ID=$(cast chain-id --rpc-url $TARGET_RPC_URL)
 echo "Detected Chain ID: $CHAIN_ID"
 
 # Create config directory if it doesn't exist
@@ -65,6 +65,7 @@ mkdir -p "$CONFIG_DIR"
 # Read and parse the feed IDs
 IFS=',' read -ra FEED_IDS <<< "$SUPPORTED_FEED_IDS"
 FEED_IDS_JSON="[$(echo "${FEED_IDS[@]}" | tr ' ' ',')]"
+echo "FEED_IDS_JSON ${FEED_IDS_JSON}"
 
 # Generate feeds data array from AssetsList.json
 ASSETS_LIST_PATH="script/config/AssetsList.json"
@@ -74,10 +75,11 @@ if [ ! -f "$ASSETS_LIST_PATH" ]; then
 fi
 
 # Create a jq filter to select feeds based on the provided feed IDs
-JQ_FILTER=".supportedFeedsData | map(select(.feedId | tostring | IN(\$feed_ids[])))"
+JQ_FILTER=".supportedFeedsData | map(select(.feedId | IN(\$feed_ids[])))"
 
 # Generate the feeds data array using jq
-SUPPORTED_FEEDS_DATA=$(jq --argjson feed_ids "$FEED_IDS_JSON" "$JQ_FILTER" "$ASSETS_LIST_PATH")
+SUPPORTED_FEEDS_DATA=$(jq --argjson feed_ids "${FEED_IDS_JSON}" "$JQ_FILTER" "$ASSETS_LIST_PATH")
+echo "SUPPORTED_FEEDS_DATA ${SUPPORTED_FEEDS_DATA}"
 
 # Generate config file
 cat > "$CONFIG_DIR/targetContractSetConfig.json" << EOF
@@ -114,11 +116,10 @@ esac
 # Run the deployment
 echo "Starting deployment..."
 forge script script/deployment/DeployAll.s.sol:DeployAll \
-    --rpc-url $RPC_URL \
-    --private-key $PRIVATE_KEY \
-    $BROADCAST_FLAG \
+    --rpc-url $TARGET_RPC_URL \
+    --private-key $DEPLOYER_PRIVATE_KEY \
     --legacy \
-    --slow \
-    --gas-estimate-multiplier 200
+    --slow $BROADCAST_FLAG \
+    --gas-estimate-multiplier 200 -vvvv
 
 echo "Deployment completed"
