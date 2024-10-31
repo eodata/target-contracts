@@ -194,9 +194,9 @@
 | Scroll                         | SolvBTCm/USD              | 0xCBd27d921cED2368414C9ab46549da5B2816080f |
 | Scroll                         | SolvBTCm/USD (8 decimals) | 0x5DCcBfEDb4F8750774B5d3e079247d109cB89ec0 |
 | Scroll                         | USDe/USD                  | 0x122Fa0e098dc9f9031b25C6B0572Be455Da1BD84 |
-| Scroll                         | USDe/USD                  | 0x5E22Fccc027Dff8Ee45819576e7Ee0822955562c |
+| Scroll                         | USDe/USD (8 decimals)     | 0x5E22Fccc027Dff8Ee45819576e7Ee0822955562c |
 | Scroll                         | wstETH/USD                | 0x062fF53fC3e4053c5189950D1ABF20a9D54C07a8 |
-| Scroll                         | wstETH/USD                | 0x5F86e1De3dCdb61ADE916c1BFC85F4E047e83588 |
+| Scroll                         | wstETH/USD (8 decimals)   | 0x5F86e1De3dCdb61ADE916c1BFC85F4E047e83588 |
 | Taiko Hekla L2                 | AUD/USD                   | 0x6C2E7fdA1C5bB93B9c10AF1c7f516DBE30cD82ab |
 | Taiko Hekla L2                 | BTC/USD                   | 0x4A0aDea3d3f27475B52D3b0A201fd15702d9854E |
 | Taiko Hekla L2                 | ETH/USD                   | 0x1Ee2487e186e4dcF2446A0E0dE21bf3F906303f2 |
@@ -374,8 +374,8 @@
 | Linea                          | WBTC/USD (8 decimals)     | 0xdEd5C17969220990de62cd1894BcDf49dC28583E |
 | Linea                          | ezETH/USD                 | 0x7EC54fA7ee35a7A6475849D0BffdD7c2850A5301 |
 | Linea                          | ezETH/USD (8 decimals)    | 0x1C19C36926D353fD5889F0FD9e2a72570196B4EC |
-| Linea                          | uniEUSD/USD               | 0xA308f1cC8D0b3AAc4fb23316161d4d339ecF4F4F |
-| Linea                          | uniEUSD/USD (8 decimals)  | 0xADb511136B591e0d484889ECe1087e6bA5a175c7 |
+| Linea                          | uniETH/USD                | 0xA308f1cC8D0b3AAc4fb23316161d4d339ecF4F4F |
+| Linea                          | uniETH/USD (8 decimals)   | 0xADb511136B591e0d484889ECe1087e6bA5a175c7 |
 | Linea                          | weETH/USD                 | 0xEAd770C0F71f55D0337B0C7524AC3c72103cc032 |
 | Linea                          | weETH/USD (8 decimals)    | 0xb71B0D0Bf654D360E5CD5B39E8bbD7CEE9970E09 |
 | Linea                          | wrsETH/USD                | 0x88Bc8175C542869dA5eFC0Ad204eadA6FC98b89D |
