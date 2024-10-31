@@ -5,7 +5,7 @@ import { IEOFeedManager } from "../interfaces/IEOFeedManager.sol";
 import { IEOFeedAdapter } from "./interfaces/IEOFeedAdapter.sol";
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
-import { InvalidAddress, InvalidDecimals } from "../interfaces/Errors.sol";
+import { InvalidAddress } from "../interfaces/Errors.sol";
 
 /**
  * @title EOFeedAdapter
@@ -28,7 +28,7 @@ contract EOFeedAdapter is IEOFeedAdapter, Initializable {
     /// @dev Decimals of the rate
     uint8 private _inputDecimals;
     uint8 private _outputDecimals;
-    int256 private _decimalsDivisor;
+    int256 private _decimalsDiff;
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
@@ -56,14 +56,12 @@ contract EOFeedAdapter is IEOFeedAdapter, Initializable {
         initializer
     {
         if (feedManager == address(0)) revert InvalidAddress();
-        if (inputDecimals == 0 || inputDecimals > 18) revert InvalidDecimals();
-        if (outputDecimals == 0 || outputDecimals > 18) revert InvalidDecimals();
         _feedManager = IEOFeedManager(feedManager);
         _feedId = feedId;
         _outputDecimals = outputDecimals;
         _inputDecimals = inputDecimals;
         uint256 diff = inputDecimals > outputDecimals ? inputDecimals - outputDecimals : outputDecimals - inputDecimals;
-        _decimalsDivisor = int256(10 ** diff);
+        _decimalsDiff = int256(10 ** diff); // casted to int256 to conform with the adapter interface return type
         _description = feedDescription;
         _version = feedVersion;
     }
@@ -188,9 +186,9 @@ contract EOFeedAdapter is IEOFeedAdapter, Initializable {
 
     function _normalizePrice(uint256 price) internal view returns (int256) {
         if (_inputDecimals > _outputDecimals) {
-            return int256(price) / _decimalsDivisor;
+            return int256(price) / _decimalsDiff;
         } else {
-            return int256(price) * _decimalsDivisor;
+            return int256(price) * _decimalsDiff;
         }
     }
 

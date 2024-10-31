@@ -7,7 +7,7 @@ import { MockEOFeedManager } from "../../mock/MockEOFeedManager.sol";
 import { IEOFeedManager } from "../../../src/interfaces/IEOFeedManager.sol";
 import { IEOFeedVerifier } from "../../../src/interfaces/IEOFeedVerifier.sol";
 
-import { InvalidDecimals, InvalidAddress } from "../../../src/interfaces/Errors.sol";
+import { InvalidAddress } from "../../../src/interfaces/Errors.sol";
 import { Upgrades } from "openzeppelin-foundry-upgrades/Upgrades.sol";
 import { Options } from "openzeppelin-foundry-upgrades/Options.sol";
 
@@ -52,26 +52,6 @@ contract EOFeedAdapterInitializationTest is EOFeedAdapterTestUninitialized {
     function test_RevertWhen_ZeroAddress_Initialize() public {
         vm.expectRevert(InvalidAddress.selector);
         _feedAdapter.initialize(address(0), FEED_ID, DECIMALS, DECIMALS, DESCRIPTION, VERSION);
-    }
-
-    function test_RevertWhen_InputDecimalsTooLarge_Initialize() public {
-        vm.expectRevert(InvalidDecimals.selector);
-        _feedAdapter.initialize(address(_feedManager), FEED_ID, 19, DECIMALS, DESCRIPTION, VERSION);
-    }
-
-    function test_RevertWhen_InputDecimalsZero_Initialize() public {
-        vm.expectRevert(InvalidDecimals.selector);
-        _feedAdapter.initialize(address(_feedManager), FEED_ID, 0, DECIMALS, DESCRIPTION, VERSION);
-    }
-
-    function test_RevertWhen_OutputDecimalsTooLarge_Initialize() public {
-        vm.expectRevert(InvalidDecimals.selector);
-        _feedAdapter.initialize(address(_feedManager), FEED_ID, DECIMALS, 19, DESCRIPTION, VERSION);
-    }
-
-    function test_RevertWhen_OutputDecimalsZero_Initialize() public {
-        vm.expectRevert(InvalidDecimals.selector);
-        _feedAdapter.initialize(address(_feedManager), FEED_ID, DECIMALS, 0, DESCRIPTION, VERSION);
     }
 
     function test_ValidDecimals_Initialize() public {
