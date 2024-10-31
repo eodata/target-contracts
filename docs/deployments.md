@@ -502,3 +502,13 @@
 | Holesky                        | weETH/ETH                 | 0x9307063480aC3e3930fDFe64a7abA9E0DC5c4192 |
 | Holesky                        | weETHs/ETH                | 0x3785302200D1fAAE21e7bAdD676e41ebB2f16f5D |
 | Holesky                        | ynETH/ETH                 | 0xFCe7588c12Cd7D3fF1880872143e602B9EdaA1dF |
+| Morph                          | BTC/USD                   | 0x754680BB1a03E0D1eE926ec9CC9a0e63550f31A2 |
+| Morph                          | BTC/USD (8 decimals)      | 0xd2c1C3F14ce879dC2291eF8bE18f94a9E51bE8dc |
+| Morph                          | DAI/USD                   | 0x422976F604e2D1F1CC3DBC3979F7980B50Fc7fF3 |
+| Morph                          | DAI/USD (8 decimals)      | 0x96addddd63bF609FEc59Ab2262B9a28bC38FD3eb |
+| Morph                          | ETH/USD                   | 0x29930d8bc87A61a9fB709226DD72E969900E54c0 |
+| Morph                          | ETH/USD (8 decimals)      | 0x383b30462016Ef2f29fa1ad923b6A5Aff0B8D964 |
+| Morph                          | USDC/USD                  | 0x6a78Fb7fA8ba2C134f1506E6373201436E64523F |
+| Morph                          | USDC/USD (8 decimals)     | 0xCA28E1ba3144f82Ba36B07AB3Bc015EC30B752e1 |
+| Morph                          | USDT/USD                  | 0x4B0C3669111f5690c550cD509b047508d06996e1 |
+| Morph                          | USDT/USD (8 decimals)     | 0x09D11d74af6E203B2cdeB4D46A03C0b3a321AE55 |
