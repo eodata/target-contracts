@@ -15,7 +15,7 @@ jobs:
       - name: Check Branch Name
         shell: bash
         run: |
-          regular_branch_pattern='^DEV-([0-9]{3,}|nojira).*$'
+          regular_branch_pattern='^DEV-([0-9]{3,}).*$'
           hotfix_branch_pattern='^HF-.*$'
           branch_name=$(echo $GITHUB_REF | sed 's/refs\/heads\///')
           if [[ ! $branch_name =~ $regular_branch_pattern && ! $branch_name =~ $hotfix_branch_pattern ]]; then
