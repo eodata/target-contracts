@@ -1,9 +1,8 @@
 name: Enforce Branch Name
 
 on:
-  push:
-    branches:
-      - "*"
+  pull_request:
+    types: [opened, edited]
 
 jobs:
   enforce_branch_name:
