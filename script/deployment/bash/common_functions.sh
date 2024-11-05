@@ -41,7 +41,7 @@ deploy_contract() {
     else
         echo "Deploying $contract_name..."
         local output
-        if output=$(forge create --rpc-url $RPC_URL --private-key $PRIVATE_KEY --zksync $contract_path $constructor_args 2>&1); then
+        if output=$(forge create --rpc-url $RPC_URL --private-key $DEPLOYER_PRIVATE_KEY --zksync $contract_path $constructor_args 2>&1); then
             address=$(echo "$output" | grep "Deployed to" | awk '{print $3}')
             echo "$contract_name deployed to: $address"
             echo "\"$contract_name\": \"$address\"," >> $OUTPUT_FILE
@@ -73,7 +73,7 @@ deploy_proxy() {
         
         echo "Deploying proxy for $contract_name..."
         local output
-        if output=$(forge create --rpc-url $RPC_URL --private-key $PRIVATE_KEY --zksync\
+        if output=$(forge create --rpc-url $RPC_URL --private-key $DEPLOYER_PRIVATE_KEY --zksync\
             lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy \
             --constructor-args $implementation_address $proxy_admin $init_data 2>&1); then
             address=$(echo "$output" | grep "Deployed to" | awk '{print $3}')
@@ -92,7 +92,7 @@ deploy_proxy() {
 call_contract() {
     local contract_address=$1
     local function_signature=$2
-    local private_key=${3:-$PRIVATE_KEY}
+    local private_key=${3:-$DEPLOYER_PRIVATE_KEY}
     shift 3
     local args="$@"
     

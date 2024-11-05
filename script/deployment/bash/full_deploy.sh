@@ -1,56 +1,102 @@
 #!/bin/bash
 
-set -euo pipefail
+# ANSI escape codes for text color
+RED="\033[31m"
+GREEN="\033[32m"
+YELLOW="\033[33m"
+BOLD="\033[1m"
+RESET="\033[0m"
 
-# Check required environment variables
-required_vars=(
-    "PRIVATE_KEY"
-    "OWNER_PRIVATE_KEY"
-    "TARGET_RPC_URL"
-    "EORACLE_CHAIN_ID"
-    "PROXY_ADMIN_OWNER"
-    "TARGET_CONTRACTS_OWNER"
-    "PUBLISHERS"
-    "SUPPORTED_FEED_IDS"
-)
+# eOracle Chain ID mappings
+get_eoracle_chain_id() {
+    local chain=$1
+    case $chain in
+        "mainnet") echo "42420" ;;
+        "testnet") echo "42421" ;;
+        *) echo "" ;;
+    esac
+}
 
-for var in "${required_vars[@]}"; do
-    if [ -z "${!var:-}" ]; then
-        echo "Error: Required environment variable $var is not set"
-        exit 1
-    fi
+usage() {
+    echo "Usage: $0 --rpc-url <uri> --chain <mainnet|testnet> --deployer-private-key <key> --proxy-admin-owner <address> --target-contracts-owner <address> --publishers <json-array> --feed-ids <comma-separated-ids> [--use-precompiled-modexp] [--dry-run]"
+    exit 1
+}
+
+# Default values
+dry_run=true
+USE_PRECOMPILED_MODEXP=false
+chain="mainnet"
+
+# Parse named arguments
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --rpc-url)
+            TARGET_RPC_URL=${2}
+            shift 2
+            ;;
+        --chain)
+            chain=${2}
+            shift 2
+            ;;
+        --deployer-private-key)
+            DEPLOYER_PRIVATE_KEY=${2}
+            shift 2
+            ;;
+        --proxy-admin-owner)
+            PROXY_ADMIN_OWNER=${2}
+            shift 2
+            ;;
+        --target-contracts-owner)
+            TARGET_CONTRACTS_OWNER=${2}
+            shift 2
+            ;;
+        --publishers)
+            PUBLISHERS=${2}
+            shift 2
+            ;;
+        --feed-ids)
+            SUPPORTED_FEED_IDS=${2}
+            shift 2
+            ;;
+        --use-precompiled-modexp)
+            USE_PRECOMPILED_MODEXP=true
+            shift
+            ;;
+        --dry-run)
+            dry_run=true
+            shift
+            ;;
+        *)
+            echo -e "${RED}Unknown parameter passed: $1${RESET}"
+            usage
+            ;;
+    esac
 done
 
-# Set default values for optional variables
-USE_PRECOMPILED_MODEXP=${USE_PRECOMPILED_MODEXP:-false}
-BROADCAST_MODE=${BROADCAST_MODE:-dry-run} # Can be 'broadcast', 'dry-run'
-# Validate USE_PRECOMPILED_MODEXP is boolean
-if [[ "${USE_PRECOMPILED_MODEXP}" != "true" && "${USE_PRECOMPILED_MODEXP}" != "false" ]]; then
-    echo "Error: USE_PRECOMPILED_MODEXP must be either 'true' or 'false'"
-    exit 1
-fi
-
-# Validate BROADCAST_MODE
-if [[ "${BROADCAST_MODE}" != "broadcast" && "${BROADCAST_MODE}" != "dry-run" ]]; then
-    echo "Error: BROADCAST_MODE must be either 'broadcast', 'dry-run'"
-    exit 1
-fi
+# Validate chain parameter and set eOracle chain ID
+case $chain in
+    mainnet|testnet)
+        EORACLE_CHAIN_ID=$(get_eoracle_chain_id $chain)
+        ;;
+    *)
+        echo -e "${RED}Invalid chain specified: $chain. Must be one of: mainnet, testnet${RESET}"
+        usage
+        ;;
+esac
 
 # Set ALLOWED_SENDERS based on EORACLE_CHAIN_ID
 case $EORACLE_CHAIN_ID in
     42420)
         ALLOWED_SENDERS='["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"]'
-        echo "Using predefined ALLOWED_SENDERS for EORACLE_CHAIN_ID 42420"
+        echo -e "${GREEN}Using predefined ALLOWED_SENDERS for EORACLE_CHAIN_ID 42420${RESET}"
         ;;
     42421)
         ALLOWED_SENDERS='["0x6B0BE2aaD42612803c9Fc389A3806EF21E8cbDb6"]'
-        echo "Using predefined ALLOWED_SENDERS for EORACLE_CHAIN_ID 42421"
+        echo -e "${GREEN}Using predefined ALLOWED_SENDERS for EORACLE_CHAIN_ID 42421${RESET}"
         ;;
     *)
-        if [ -z "${ALLOWED_SENDERS:-}" ]; then
-            echo "Error: ALLOWED_SENDERS must be set for EORACLE_CHAIN_ID $EORACLE_CHAIN_ID"
-            exit 1
-        fi
+        echo -e "${RED}Error: Unsupported EORACLE_CHAIN_ID $EORACLE_CHAIN_ID${RESET}"
+        exit 1
         ;;
 esac
 
@@ -101,25 +147,34 @@ npx prettier --write "$CONFIG_DIR/targetContractSetConfig.json" --ignore-path ''
 
 echo "Generated config file at $CONFIG_DIR/targetContractSetConfig.json"
 
-# Set up broadcast flags based on BROADCAST_MODE
-case $BROADCAST_MODE in
-    "broadcast")
-        BROADCAST_FLAG="--broadcast"
-        echo "Running in broadcast mode - will submit transactions"
-        ;;
-    "dry-run")
-        BROADCAST_FLAG=""
-        echo "Running in dry-run mode - will simulate transactions"
-        ;;
-esac
+# Set up broadcast flag based on dry_run
+if [ "${dry_run}" = "true" ]; then
+    BROADCAST_FLAG=""
+    echo -e "${YELLOW}Running in dry-run mode - will simulate transactions${RESET}"
+else
+    BROADCAST_FLAG="--broadcast"
+    echo -e "${GREEN}Running in broadcast mode - will submit transactions${RESET}"
+fi
 
 # Run the deployment
-echo "Starting deployment..."
-forge script script/deployment/DeployAll.s.sol:DeployAll \
+echo -e "${BOLD}Starting deployment...${RESET}"
+result=$(forge script script/deployment/DeployAll.s.sol:DeployAll \
     --rpc-url $TARGET_RPC_URL \
     --private-key $DEPLOYER_PRIVATE_KEY \
     --legacy \
     --slow $BROADCAST_FLAG \
-    --gas-estimate-multiplier 200 -vvvv
+    --gas-estimate-multiplier 200 -vvvv)
+rc=$?
 
-echo "Deployment completed"
+if [ $rc -ne 0 ]; then
+    echo -e "${RED}Error: Deployment failed${RESET}\nOutput: $result"
+    exit 1
+fi
+
+if [ "${dry_run}" = "true" ]; then
+    echo -e "${GREEN}Dry run deployment simulation complete${RESET}"
+    echo -e "${BOLD}Config file generated at:${RESET} ${YELLOW}$CONFIG_DIR/targetContractSetConfig.json${RESET}"
+else
+    echo -e "${GREEN}Deployment complete${RESET}"
+    echo -e "${BOLD}Config file generated at:${RESET} ${YELLOW}$CONFIG_DIR/targetContractSetConfig.json${RESET}"
+fi
