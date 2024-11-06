@@ -25,11 +25,14 @@ interface IEOFeedVerifier {
      * @param nonSignersBitmap used to construct G1 apk onchain
      */
     struct VerificationParams {
-        bytes32 eventRoot;
-        uint256 blockNumber;
-        uint256[2] signature;
-        uint256[4] apkG2;
-        bytes nonSignersBitmap;
+        uint64 blockNumber; // 8 bytes +
+        uint32 chainId; // 4 bytes +
+        address aggregator; // 20 bytes = 32 bytes
+        bytes32 eventRoot; // 32 bytes
+        bytes32 blockHash; // 32 bytes
+        uint256[2] signature; // 64 bytes
+        uint256[4] apkG2; // 64 bytes
+        bytes nonSignersBitmap; // dynamic
     }
 
     /**

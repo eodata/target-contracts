@@ -15,21 +15,27 @@ abstract contract UninitializedFeedVerifier is Test, Utils {
     struct DecodedData {
         IEOFeedVerifier.Validator[] validatorSet;
         uint256[] secrets;
+        uint32 chainId;
+        address aggregator;
+
         IEOFeedVerifier.LeafInput[] leafInputs1;
         bytes32 merkleRoot1;
-        uint256 blockNumber1;
+        uint64 blockNumber1;
+        bytes32 blockHash1;
         bytes nonSignersBitmap1;
         uint256[2] sigG1_1;
         uint256[4] apkG2_1;
         IEOFeedVerifier.LeafInput[] leafInputs2;
         bytes32 merkleRoot2;
-        uint256 blockNumber2;
+        uint64 blockNumber2;
+        bytes32 blockHash2;
         bytes nonSignersBitmap2;
         uint256[2] sigG1_2;
         uint256[4] apkG2_2;
         IEOFeedVerifier.LeafInput[] leafInputs3;
         bytes32 merkleRoot3;
-        uint256 blockNumber3;
+        uint64 blockNumber3;
+        bytes32 blockHash3;
         bytes nonSignersBitmap3;
         uint256[2] sigG1_3;
         uint256[4] apkG2_3;
@@ -43,21 +49,27 @@ abstract contract UninitializedFeedVerifier is Test, Utils {
     uint256 internal validatorSetSize;
     IEOFeedVerifier.Validator[] internal validatorSet;
     uint256[] internal secrets;
+    uint32 internal chainId;
+    address internal aggregator;
+
     IEOFeedVerifier.LeafInput[] internal leafInputs1;
     bytes32 internal merkleRoot1;
-    uint256 internal blockNumber1;
+    uint64 internal blockNumber1;
+    bytes32 internal blockHash1;
     bytes internal nonSignersBitmap1;
     uint256[2] internal sigG1_1 = [uint256(0), uint256(0)];
     uint256[4] internal apkG2_1 = [uint256(0), uint256(0), uint256(0), uint256(0)];
     IEOFeedVerifier.LeafInput[] internal leafInputs2;
     bytes32 internal merkleRoot2;
-    uint256 internal blockNumber2;
+    uint64 internal blockNumber2;
+    bytes32 internal blockHash2;
     bytes internal nonSignersBitmap2;
     uint256[2] internal sigG1_2 = [uint256(0), uint256(0)];
     uint256[4] internal apkG2_2 = [uint256(0), uint256(0), uint256(0), uint256(0)];
     IEOFeedVerifier.LeafInput[] internal leafInputs3;
     bytes32 internal merkleRoot3;
-    uint256 internal blockNumber3;
+    uint64 internal blockNumber3;
+    bytes32 internal blockHash3;
     bytes internal nonSignersBitmap3;
     uint256[2] internal sigG1_3 = [uint256(0), uint256(0)];
     uint256[4] internal apkG2_3 = [uint256(0), uint256(0), uint256(0), uint256(0)];
@@ -94,9 +106,13 @@ abstract contract UninitializedFeedVerifier is Test, Utils {
             leafInputs3.push(decoded.leafInputs3[i]);
         }
 
+        chainId = decoded.chainId;
+        aggregator = decoded.aggregator;
+        
         // full signature - 4/4 voters
         merkleRoot1 = decoded.merkleRoot1;
         blockNumber1 = decoded.blockNumber1;
+        blockHash1 = decoded.blockHash1;
         nonSignersBitmap1 = decoded.nonSignersBitmap1;
         sigG1_1 = decoded.sigG1_1;
         apkG2_1 = decoded.apkG2_1;
@@ -104,6 +120,7 @@ abstract contract UninitializedFeedVerifier is Test, Utils {
         // partial signature - 3/4 voters
         merkleRoot2 = decoded.merkleRoot2;
         blockNumber2 = decoded.blockNumber2;
+        blockHash2 = decoded.blockHash2;
         nonSignersBitmap2 = decoded.nonSignersBitmap2;
         sigG1_2 = decoded.sigG1_2;
         apkG2_2 = decoded.apkG2_2;
@@ -111,6 +128,7 @@ abstract contract UninitializedFeedVerifier is Test, Utils {
         // partial signature - 1/4 voters
         merkleRoot3 = decoded.merkleRoot3;
         blockNumber3 = decoded.blockNumber3;
+        blockHash3 = decoded.blockHash3;
         nonSignersBitmap3 = decoded.nonSignersBitmap3;
         sigG1_3 = decoded.sigG1_3;
         apkG2_3 = decoded.apkG2_3;
@@ -142,6 +160,9 @@ abstract contract UninitializedFeedVerifier is Test, Utils {
         return IEOFeedVerifier.VerificationParams({
             eventRoot: merkleRoot1,
             blockNumber: blockNumber1,
+            blockHash: blockHash1,
+            chainId: chainId,
+            aggregator: aggregator,
             signature: sigG1_1,
             apkG2: apkG2_1,
             nonSignersBitmap: nonSignersBitmap1
@@ -156,6 +177,9 @@ abstract contract UninitializedFeedVerifier is Test, Utils {
         return IEOFeedVerifier.VerificationParams({
             eventRoot: merkleRoot3,
             blockNumber: blockNumber3,
+            blockHash: blockHash3,
+            chainId: chainId,
+            aggregator: aggregator,
             signature: sigG1_3,
             apkG2: apkG2_3,
             nonSignersBitmap: nonSignersBitmap3

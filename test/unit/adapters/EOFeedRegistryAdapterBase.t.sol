@@ -233,8 +233,11 @@ abstract contract EOFeedRegistryAdapterBaseTest is Test {
         _feedManager.updatePriceFeed(
             input,
             IEOFeedVerifier.VerificationParams({
-                blockNumber: _lastBlockNumber,
                 eventRoot: bytes32(0),
+                blockNumber: uint64(_lastBlockNumber),
+                blockHash: bytes32(uint256(1)),
+                chainId: uint32(1),
+                aggregator: address(1),
                 signature: [uint256(0), uint256(0)],
                 apkG2: [uint256(0), uint256(0), uint256(0), uint256(0)],
                 nonSignersBitmap: bytes("0")

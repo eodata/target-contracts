@@ -26,7 +26,7 @@ abstract contract EOFeedAdapterTestUninitialized is Test {
     IEOFeedManager internal _feedManager;
     address internal _owner;
     uint256 internal _lastTimestamp;
-    uint256 internal _lastBlockNumber;
+    uint64 internal _lastBlockNumber;
 
     function setUp() public virtual {
         _owner = makeAddr("_owner");
@@ -35,7 +35,7 @@ abstract contract EOFeedAdapterTestUninitialized is Test {
         _feedAdapter = EOFeedAdapter(Upgrades.deployTransparentProxy("EOFeedAdapter.sol", proxyAdmin, ""));
 
         _lastTimestamp = block.timestamp;
-        _lastBlockNumber = block.number;
+        _lastBlockNumber = uint64(block.number);
     }
 }
 
@@ -165,8 +165,11 @@ contract EOFeedAdapterTest is EOFeedAdapterTestUninitialized {
         _feedManager.updatePriceFeed(
             input,
             IEOFeedVerifier.VerificationParams({
-                blockNumber: _lastBlockNumber,
                 eventRoot: bytes32(0),
+                blockNumber: _lastBlockNumber,
+                blockHash: bytes32(0),
+                chainId: uint32(1),
+                aggregator: address(1),
                 signature: [uint256(0), uint256(0)],
                 apkG2: [uint256(0), uint256(0), uint256(0), uint256(0)],
                 nonSignersBitmap: bytes("0")

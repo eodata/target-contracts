@@ -24,21 +24,29 @@ abstract contract IntegrationBaseTests is Test, Utils {
     struct DecodedData {
         IEOFeedVerifier.Validator[] validatorSet;
         uint256[] secrets;
+        uint32 chainId;
+        address aggregator;
+
         IEOFeedVerifier.LeafInput[] leafInputs1;
         bytes32 merkleRoot1;
-        uint256 blockNumber1;
+        uint64 blockNumber1;
+        bytes32 blockHash1;
         bytes nonSignersBitmap1;
         uint256[2] sigG1_1;
         uint256[4] apkG2_1;
+        
         IEOFeedVerifier.LeafInput[] leafInputs2;
         bytes32 merkleRoot2;
-        uint256 blockNumber2;
+        uint64 blockNumber2;
+        bytes32 blockHash2;
         bytes nonSignersBitmap2;
         uint256[2] sigG1_2;
         uint256[4] apkG2_2;
+        
         IEOFeedVerifier.LeafInput[] leafInputs3;
         bytes32 merkleRoot3;
-        uint256 blockNumber3;
+        uint64 blockNumber3;
+        bytes32 blockHash3;
         bytes nonSignersBitmap3;
         uint256[2] sigG1_3;
         uint256[4] apkG2_3;
@@ -137,8 +145,11 @@ abstract contract IntegrationBaseTests is Test, Utils {
         // full signature - 4/4 voters
         vParams.push(
             IEOFeedVerifier.VerificationParams({
-                blockNumber: decoded.blockNumber1,
                 eventRoot: decoded.merkleRoot1,
+                blockNumber: decoded.blockNumber1,
+                blockHash: decoded.blockHash1,
+                chainId: decoded.chainId,
+                aggregator: aggregatpr,
                 signature: decoded.sigG1_1,
                 apkG2: decoded.apkG2_1,
                 nonSignersBitmap: decoded.nonSignersBitmap1

@@ -46,6 +46,9 @@ async function run() {
             unhashedLeaf,
         }
     });
+    const chainId = 1;
+    const aggregator = ethers.Wallet.createRandom().address;
+
     const tree1 = new MerkleTree(leafInputs1.map(d => ethers.keccak256(d.unhashedLeaf)), ethers.keccak256, { sort: true });
     const root1 = tree1.getRoot();
     leafInputs1.forEach((d, i) => {
@@ -54,6 +57,7 @@ async function run() {
         d.proof = proof.map(p => '0x' + p.data.toString('hex'));
     })
     const block1 = 1;
+    const blockHash1 = ethers.hexlify(ethers.randomBytes(32));
     let _apkG2_1 = new mcl.G2();
     const nonSignersBitmap1 = '0x00';
 
@@ -74,6 +78,7 @@ async function run() {
         d.proof = tree2.getProof(ethers.keccak256(d.unhashedLeaf)).map(p => '0x' + p.data.toString('hex'));
     })
     const block2 = 2;
+    const blockHash2 = ethers.hexlify(ethers.randomBytes(32));
     let _apkG2_2 = new mcl.G2();
     const nonSignersBitmap2 = '0x01';
     const secrets: bigint[] = [];
@@ -95,13 +100,18 @@ async function run() {
         d.proof = tree3.getProof(ethers.keccak256(d.unhashedLeaf)).map(p => '0x' + p.data.toString('hex'));
     })
     const block3 = 3;
+    const blockHash3 = ethers.hexlify(ethers.randomBytes(32));
     let _apkG2_3 = new mcl.G2();
     const nonSignersBitmap3 = '0xfe'; // only one voter
 
     let _sig1: mcl.G1 = new mcl.G1(), _sig2: mcl.G1 = new mcl.G1(), _sig3: mcl.G1 = new mcl.G1();
-    let msg1 = ethers.keccak256(ethers.solidityPacked(['bytes32', 'uint256'], [root1, block1]));
-    let msg2 = ethers.keccak256(ethers.solidityPacked(['bytes32', 'uint256'], [root2, block2]));
-    let msg3 = ethers.keccak256(ethers.solidityPacked(['bytes32', 'uint256'], [root3, block3]));
+    let msg1 = ethers.keccak256(abiCoder.encode(
+        ['bytes32', 'uint64', 'bytes32', 'uint32', 'address'],
+        [root1, block1, blockHash1, chainId, aggregator]
+    ));
+    let msg2 = ethers.keccak256(ethers.solidityPacked(['bytes32', 'uint64', 'bytes32', 'uint32', 'address'], [root2, block2, blockHash2, chainId, aggregator]));
+    let msg3 = ethers.keccak256(ethers.solidityPacked(['bytes32', 'uint64', 'bytes32', 'uint32', 'address'], [root3, block3, blockHash3, chainId, aggregator]));
+
     for (let i = 0; i < 12; i++) {
         const { secret, g1pk, g2pk } = newKey();
         const g1pkArr = g1ToArray(g1pk);
@@ -144,24 +154,29 @@ async function run() {
     [
         'tuple(address _address, uint256[2] g1pk, uint256[4] g2pk, uint256 votingPower)[] validators',
         'uint256[] secrets',
+        'uint32 chainId',
+        'address aggregator',
 
         'tuple(uint256 leafIndex, bytes unhashedLeaf, bytes32[] proof)[] leafInputs1',
         'bytes32 root1',
-        'uint256 block1',
+        'uint64 block1',
+        'bytes32 blockHash1',
         'bytes nonSignersBitmap1',
         'uint256[2] signature1',
         'uint256[4] apkG2_1',
 
         'tuple(uint256 leafIndex, bytes unhashedLeaf, bytes32[] proof)[] leafInputs2',
         'bytes32 root2',
-        'uint256 block2',
+        'uint64 block2',
+        'bytes32 blockHash2',
         'bytes nonSignersBitmap2',
         'uint256[2] signature2',
         'uint256[4] apkG2_2',
 
         'tuple(uint256 leafIndex, bytes unhashedLeaf, bytes32[] proof)[] leafInputs3',
         'bytes32 root3',
-        'uint256 block3',
+        'uint64 block3',
+        'bytes32 blockHash3',
         'bytes nonSignersBitmap3',
         'uint256[2] signature3',
         'uint256[4] apkG2_3'
@@ -179,15 +194,21 @@ async function run() {
         {
             validators,
             secrets,
+            chainId,
+            aggregator,
+
             leafInputs1,
             root1,
             block1,
+            blockHash1,
             nonSignersBitmap1: nonSignersBitmap1,
             signature1: sig1,
             apkG2_1: apkG2_1,
+            
             leafInputs2,
             root2,
             block2,
+            blockHash2,
             nonSignersBitmap2: nonSignersBitmap2,
             signature2: sig2,
             apkG2_2: apkG2_2,
@@ -195,6 +216,7 @@ async function run() {
             leafInputs3,
             root3,
             block3,
+            blockHash3,
             nonSignersBitmap3: nonSignersBitmap3,
             signature3: sig3,
             apkG2_3: apkG2_3

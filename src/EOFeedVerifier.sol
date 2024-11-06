@@ -242,9 +242,17 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
             return;
         }
 
-        _verifySignature(
-            vParams.eventRoot, vParams.blockNumber, vParams.signature, vParams.apkG2, vParams.nonSignersBitmap
-        );
+        bytes32 msgHash = keccak256(abi.encode(
+            vParams.eventRoot,
+            vParams.blockNumber,
+            vParams.blockHash,
+            vParams.chainId,
+            vParams.aggregator
+        ));
+        if (vParams.eventRoot == bytes32(0)) revert InvalidEventRoot();
+
+        _verifySignature(msgHash, vParams.signature, vParams.apkG2, vParams.nonSignersBitmap);
+
         if (vParams.blockNumber > _lastProcessedBlockNumber) {
             _lastProcessedBlockNumber = vParams.blockNumber;
             _lastProcessedEventRoot = vParams.eventRoot;
@@ -253,15 +261,13 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
 
     /**
      * @notice Verify the signature of the checkpoint
-     * @param eventRoot Root of the event
-     * @param blockNumber Block number of the event
+     * @param messageHash Hash of the message to verify
      * @param signature G1 Aggregated signature of the checkpoint
      * @param apkG2 G2 Aggregated public key of the checkpoint
-     * @param nonSignersBitmap Bitmap of the validators who did not signed the data
+     * @param nonSignersBitmap Bitmap of the validators who did not sign the data
      */
     function _verifySignature(
-        bytes32 eventRoot,
-        uint256 blockNumber,
+        bytes32 messageHash,
         uint256[2] calldata signature,
         uint256[4] calldata apkG2,
         bytes calldata nonSignersBitmap
@@ -269,8 +275,6 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
         internal
         view
     {
-        if (eventRoot == bytes32(0)) revert InvalidEventRoot();
-
         uint256[2] memory apk = [uint256(0), uint256(0)];
         uint256 aggVotingPower = _totalVotingPower;
         // first apk will hold all non signers
@@ -287,10 +291,9 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
 
         // then we negate the non signers and add the full apk
         apk = _bls.ecadd(_fullApk, _bls.neg(apk));
-        uint256[2] memory msgHash =
-            _bls.hashToPoint(DOMAIN, abi.encode(keccak256(abi.encodePacked(eventRoot, blockNumber))));
+        uint256[2] memory hashPoint = _bls.hashToPoint(DOMAIN, abi.encodePacked(messageHash));
         (bool pairingSuccessful, bool signatureIsValid) =
-            _bls.verifySignatureAndVeracity(apk, signature, msgHash, apkG2);
+            _bls.verifySignatureAndVeracity(apk, signature, hashPoint, apkG2);
 
         if (!pairingSuccessful) revert SignaturePairingFailed();
         if (!signatureIsValid) revert SignatureVerificationFailed();

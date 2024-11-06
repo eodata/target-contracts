@@ -64,8 +64,11 @@ contract EOFeedVerifierTest is InitializedFeedVerifier {
     function test_verify() public {
         IEOFeedVerifier.LeafInput memory input = _getDefaultInputLeaf();
         IEOFeedVerifier.VerificationParams memory vParams = _getDefaultVerificationParams();
-        vParams.blockNumber = blockNumber1;
         vParams.eventRoot = merkleRoot1;
+        vParams.blockNumber = blockNumber1;
+        vParams.blockHash = blockHash1;
+        vParams.chainId = chainId;
+        vParams.aggregator = aggregator;
         vParams.signature = sigG1_1;
         vParams.apkG2 = apkG2_1;
         vParams.nonSignersBitmap = nonSignersBitmap1;
