@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Define branch name patterns
 regular_branch_pattern='^DEV-([0-9]{3,}).*$'

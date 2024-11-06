@@ -18,3 +18,4 @@ jobs:
         run: |
           branch_name=$(echo $GITHUB_REF | sed 's/refs\/heads\///')
           ./.husky/check-branch-name.sh $branch_name
+        continue-on-error: false
