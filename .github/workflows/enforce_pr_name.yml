@@ -2,7 +2,7 @@ name: Enforce Pull Request Name
 
 on:
   pull_request:
-    types: [opened, edited]
+    types: [opened, edited, synchronize]
 
 jobs:
   enforce_pr_name:

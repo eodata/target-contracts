@@ -2,7 +2,7 @@ name: Enforce Branch Name
 
 on:
   pull_request:
-    types: [opened, edited]
+    types: [opened, edited, synchronize]
 
 jobs:
   enforce_branch_name:
