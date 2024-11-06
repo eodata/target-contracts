@@ -14,3 +14,5 @@ if [[ ! ${branch_name} =~ ${regular_branch_pattern} && ! ${branch_name} =~ ${hot
   echo "Branch name ${branch_name} does not match the required patterns."
   exit 1
 fi
+
+echo "Branch name ${branch_name} matches the required patterns."
