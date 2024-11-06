@@ -1,1 +1,3 @@
 npm run pre-commit
+# Run branch name check
+./.husky/check-branch-name.sh
