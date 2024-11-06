@@ -53,8 +53,8 @@
       "quote": "0x0000000000000000000000000000000000000348",
       "feedId": 67,
       "inputDecimals": 18,
-      "outputDecimals": 18,
-      "description": "FTM/ETH"
+      "outputDecimals": 8,
+      "description": "FTM/USD"
     }
   ]
 }
