@@ -11,6 +11,8 @@ jobs:
       image: "ubuntu:24.04"
 
     steps:
+      - uses: actions/checkout@v3
+
       - name: Check Branch Name
         shell: bash
         run: |
