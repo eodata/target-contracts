@@ -16,6 +16,7 @@ jobs:
       - name: Check Branch Name
         shell: bash
         run: |
-          branch_name=$(echo $GITHUB_REF | sed 's/refs\/heads\///')
+          branch_name=${GITHUB_HEAD_REF}
+          echo "Checking branch name: ${branch_name}"
           ./.husky/check-branch-name.sh $branch_name
         continue-on-error: false
