@@ -120,6 +120,11 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
         return IEOFeedAdapter(feedAdapter);
     }
 
+    /**
+     * @notice Remove the feedAdapter
+     * @param base The base asset address
+     * @param quote The quote asset address
+     */
     function removeFeedAdapter(address base, address quote) external onlyOwner {
         uint16 feedId = _tokenAddressesToFeedIds[base][quote];
         if (feedId == 0) revert FeedDoesNotExist();
