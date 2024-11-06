@@ -10,7 +10,12 @@ import { IEOFeedManager } from "../../../src/interfaces/IEOFeedManager.sol";
 import { EOFeedRegistryAdapterBase } from "../../../src/adapters/EOFeedRegistryAdapterBase.sol";
 import { OwnableUpgradeable } from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import { IEOFeedVerifier } from "../../../src/interfaces/IEOFeedVerifier.sol";
-import { FeedAlreadyExists, BaseQuotePairExists, FeedNotSupported } from "../../../src/interfaces/Errors.sol";
+import {
+    FeedAlreadyExists,
+    BaseQuotePairExists,
+    FeedNotSupported,
+    FeedDoesNotExist
+} from "../../../src/interfaces/Errors.sol";
 import { Upgrades } from "openzeppelin-foundry-upgrades/Upgrades.sol";
 import { Options } from "openzeppelin-foundry-upgrades/Options.sol";
 
@@ -140,6 +145,28 @@ abstract contract EOFeedRegistryAdapterBaseTest is Test {
         );
         vm.prank(_notOwner);
         _deployEOFeedAdapter(_base1Address, _quote1Address, FEED_ID1, DESCRIPTION1, DECIMALS, DECIMALS, VERSION);
+    }
+
+    function test_RemoveFeedAdapter() public {
+        IEOFeedAdapter feedAdapter =
+            _deployEOFeedAdapter(_base1Address, _quote1Address, FEED_ID1, DESCRIPTION1, DECIMALS, DECIMALS, VERSION);
+        _feedRegistryAdapter.removeFeedAdapter(_base1Address, _quote1Address);
+        assertFalse(_feedRegistryAdapter.isFeedEnabled(address(feedAdapter)));
+        assertEq(address(_feedRegistryAdapter.getFeedById(FEED_ID1)), address(0));
+    }
+
+    function test_RevertWhen_RemoveFeedAdapter_FeedDoesNotExist() public {
+        vm.expectRevert(FeedDoesNotExist.selector);
+        _feedRegistryAdapter.removeFeedAdapter(_base1Address, _quote1Address);
+    }
+
+    function test_RevertWhen_RemoveFeedAdapter_NotOwner() public {
+        _deployEOFeedAdapter(_base1Address, _quote1Address, FEED_ID1, DESCRIPTION1, DECIMALS, DECIMALS, VERSION);
+        vm.expectRevert(
+            abi.encodeWithSelector(OwnableUpgradeable.OwnableUnauthorizedAccount.selector, address(_notOwner))
+        );
+        vm.prank(_notOwner);
+        _feedRegistryAdapter.removeFeedAdapter(_base1Address, _quote1Address);
     }
 
     function test_Decimals() public {
