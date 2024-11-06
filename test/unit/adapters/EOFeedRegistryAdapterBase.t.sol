@@ -155,6 +155,13 @@ abstract contract EOFeedRegistryAdapterBaseTest is Test {
         assertEq(address(_feedRegistryAdapter.getFeedById(FEED_ID1)), address(0));
     }
 
+    function test_RemoveFeedAdapter_And_AddFeedAdapter() public {
+        _deployEOFeedAdapter(_base1Address, _quote1Address, FEED_ID1, DESCRIPTION1, DECIMALS, DECIMALS, VERSION);
+        _feedRegistryAdapter.removeFeedAdapter(_base1Address, _quote1Address);
+        _deployEOFeedAdapter(_base1Address, _quote1Address, FEED_ID1, DESCRIPTION1, DECIMALS, DECIMALS, VERSION);
+        assertTrue(_feedRegistryAdapter.isFeedEnabled(address(_feedRegistryAdapter.getFeedById(FEED_ID1))));
+    }
+
     function test_RevertWhen_RemoveFeedAdapter_FeedDoesNotExist() public {
         vm.expectRevert(FeedDoesNotExist.selector);
         _feedRegistryAdapter.removeFeedAdapter(_base1Address, _quote1Address);

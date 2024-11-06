@@ -10,6 +10,7 @@ import { IEOFeedAdapter } from "./IEOFeedAdapter.sol";
  */
 interface IEOFeedRegistryAdapter {
     // V3 AggregatorV3Interface
+
     function decimals(address base, address quote) external view returns (uint8);
 
     function description(address base, address quote) external view returns (string memory);
