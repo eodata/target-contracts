@@ -25,7 +25,7 @@
       "description": "ETH/USD"
     },
     {
-      "base": "0x681202351a488040Fa4FdCc24188AfB582c9DD62",
+      "base": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8,
@@ -33,7 +33,7 @@
       "feedId": 17
     },
     {
-      "base": "0xE544e8a38aDD9B1ABF21922090445Ba93f74B9E5",
+      "base": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8,
