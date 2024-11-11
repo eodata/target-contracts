@@ -1,0 +1,76 @@
+{
+  "usePrecompiledModexp": false,
+  "proxyAdminOwner": "0x366dBE87aE5D5B976c2C544eCd7Db8503a8f826e",
+  "targetContractsOwner": "0x366dBE87aE5D5B976c2C544eCd7Db8503a8f826e",
+  "eoracleChainId": 42420,
+  "targetChainId": 60808,
+  "publishers": ["0xacDe8DC95DC44b13f5b7A205DB1ceBB6087B708C"],
+  "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
+  "supportedFeedIds": [2, 17, 65, 72, 83, 92, 95, 97, 76],
+  "supportedFeedsData": [
+    {
+      "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "ETH/USD",
+      "feedId": 2
+    },
+    {
+      "base": "0x05D032ac25d322df992303dCa074EE7392C117b9",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "USDT/USD",
+      "feedId": 17
+    },
+    {
+      "base": "0xBBa2eF945D523C4e2608C9E1214C2Cc64D4fc2e2",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "feedId": 72,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "tBTC/USD"
+    },
+    {
+      "base": "0x03C7054BCB39f7b2e5B2c7AcB37583e32D70Cfa3",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "WBTC/USD",
+      "feedId": 83
+    },
+    {
+      "base": "0x85008aE6198BC91aC0735CB5497CF125ddAAc528",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "wstETH/USD",
+      "feedId": 92
+    },
+    {
+      "base": "0xba20a5e63eeEFfFA6fD365E7e540628F8fC61474",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "SOV/USD",
+      "feedId": 95
+    },
+    {
+      "base": "0xe75D0fB2C24A55cA1e3F96781a2bCC7bdba058F0",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "USDCe/USD",
+      "feedId": 97
+    },
+    {
+      "base": "0x7122985656e38BDC0302Db86685bb972b145bD3C",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "feedId": 76,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "STONE/USD"
+    }
+  ]
+}
