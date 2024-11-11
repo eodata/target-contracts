@@ -711,12 +711,12 @@
       "description": "SolvBTCb/USD"
     },
     {
-      "base": "0x96155858A02c410c3C814BB32Fdc413b3241b62E",
+      "base": "0x41D9036454BE47d3745A823C4aaCD0e29cFB0f71",
       "quote": "0x0000000000000000000000000000000000000348",
       "feedId": 94,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "SolvBTCb/USD"
+      "description": "SolvBTCm/USD"
     },
     {
       "base": "0x5FFcE65A40f6d3de5332766ffF6A28BF491C868c",
@@ -724,7 +724,7 @@
       "feedId": 95,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "SolvBTCm/USD"
+      "description": "SolvBTC/USD"
     }
   ]
 }
