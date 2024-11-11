@@ -25,6 +25,14 @@
       "feedId": 35
     },
     {
+      "base": "0xDB9f97165657aeE56ce412966FD68b8715b04815",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "AVAX/USD",
+      "feedId": 36
+    },
+    {
       "base": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
