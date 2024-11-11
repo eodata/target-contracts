@@ -6,7 +6,7 @@
   "targetChainId": 60808,
   "publishers": ["0xacDe8DC95DC44b13f5b7A205DB1ceBB6087B708C"],
   "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
-  "supportedFeedIds": [2, 17, 65, 72, 83, 92, 95, 97],
+  "supportedFeedIds": [2, 17, 65, 72, 83, 92, 95, 97, 76],
   "supportedFeedsData": [
     {
       "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -71,6 +71,14 @@
       "outputDecimals": 8,
       "description": "USDCe/USD",
       "feedId": 97
+    }, 
+    {
+      "base": "0x7122985656e38BDC0302Db86685bb972b145bD3C",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "feedId": 76,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "STONE/USD"
     }
   ]
 }
