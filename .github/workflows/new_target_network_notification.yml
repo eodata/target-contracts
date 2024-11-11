@@ -16,6 +16,11 @@ jobs:
     if: ${{ github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'develop' }}
 
     steps:
+      - name: Install Git
+        run: |
+          apt-get update
+          apt-get install -y git
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
