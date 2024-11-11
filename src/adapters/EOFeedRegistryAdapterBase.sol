@@ -6,7 +6,13 @@ import { OwnableUpgradeable } from "@openzeppelin/contracts-upgradeable/access/O
 import { IEOFeedAdapter } from "./interfaces/IEOFeedAdapter.sol";
 import { IEOFeedRegistryAdapter } from "./interfaces/IEOFeedRegistryAdapter.sol";
 import { EOFeedFactoryBase } from "./factories/EOFeedFactoryBase.sol";
-import { InvalidAddress, FeedAlreadyExists, BaseQuotePairExists, FeedNotSupported } from "../interfaces/Errors.sol";
+import {
+    InvalidAddress,
+    FeedAlreadyExists,
+    BaseQuotePairExists,
+    FeedNotSupported,
+    FeedDoesNotExist
+} from "../interfaces/Errors.sol";
 
 /**
  * @title EOFeedRegistryAdapterBase
@@ -68,7 +74,8 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
      * @param quote The quote asset address
      * @param feedId The feed id
      * @param feedDescription The description of feed
-     * @param feedDecimals The decimals
+     * @param inputDecimals The input decimals
+     * @param outputDecimals The output decimals
      * @param feedVersion The version of the feed
      * @return IEOFeedAdapter The feed adapter
      */
@@ -80,7 +87,8 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
         address quote,
         uint16 feedId,
         string calldata feedDescription,
-        uint8 feedDecimals,
+        uint8 inputDecimals,
+        uint8 outputDecimals,
         uint256 feedVersion
     )
         external
@@ -100,7 +108,7 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
         }
         address feedAdapter = _deployEOFeedAdapter();
         IEOFeedAdapter(feedAdapter).initialize(
-            address(_feedManager), feedId, feedDecimals, feedDescription, feedVersion
+            address(_feedManager), feedId, inputDecimals, outputDecimals, feedDescription, feedVersion
         );
 
         _feedEnabled[feedAdapter] = true;
@@ -110,6 +118,20 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
         emit FeedAdapterDeployed(feedId, feedAdapter, base, quote);
 
         return IEOFeedAdapter(feedAdapter);
+    }
+
+    /**
+     * @notice Remove the feedAdapter
+     * @param base The base asset address
+     * @param quote The quote asset address
+     */
+    function removeFeedAdapter(address base, address quote) external onlyOwner {
+        uint16 feedId = _tokenAddressesToFeedIds[base][quote];
+        if (feedId == 0) revert FeedDoesNotExist();
+        address feedAdapter = address(_feedAdapters[feedId]);
+        delete _feedEnabled[feedAdapter];
+        delete _feedAdapters[feedId];
+        delete _tokenAddressesToFeedIds[base][quote];
     }
 
     /**

@@ -30,3 +30,4 @@ error SenderNotAllowed(address sender);
 //////////////////////////////////////////////////////////////////////////*/
 error FeedAlreadyExists();
 error BaseQuotePairExists();
+error FeedDoesNotExist();

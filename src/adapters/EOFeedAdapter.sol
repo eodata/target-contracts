@@ -26,7 +26,9 @@ contract EOFeedAdapter is IEOFeedAdapter, Initializable {
     uint16 private _feedId;
 
     /// @dev Decimals of the rate
-    uint8 private _decimals;
+    uint8 private _inputDecimals;
+    uint8 private _outputDecimals;
+    int256 private _decimalsDiff;
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
@@ -37,14 +39,16 @@ contract EOFeedAdapter is IEOFeedAdapter, Initializable {
      * @notice Initialize the contract
      * @param feedManager The feed manager address
      * @param feedId Feed id
-     * @param feedDecimals The decimals of the rate
+     * @param inputDecimals The input decimal precision of the rate
+     * @param outputDecimals The output decimal precision of the rate
      * @param feedDescription The description of feed
      * @param feedVersion The version of feed
      */
     function initialize(
         address feedManager,
         uint16 feedId,
-        uint8 feedDecimals,
+        uint8 inputDecimals,
+        uint8 outputDecimals,
         string memory feedDescription,
         uint256 feedVersion
     )
@@ -54,7 +58,10 @@ contract EOFeedAdapter is IEOFeedAdapter, Initializable {
         if (feedManager == address(0)) revert InvalidAddress();
         _feedManager = IEOFeedManager(feedManager);
         _feedId = feedId;
-        _decimals = feedDecimals;
+        _outputDecimals = outputDecimals;
+        _inputDecimals = inputDecimals;
+        uint256 diff = inputDecimals > outputDecimals ? inputDecimals - outputDecimals : outputDecimals - inputDecimals;
+        _decimalsDiff = int256(10 ** diff); // casted to int256 to conform with the adapter interface return type
         _description = feedDescription;
         _version = feedVersion;
     }
@@ -72,7 +79,7 @@ contract EOFeedAdapter is IEOFeedAdapter, Initializable {
         IEOFeedManager.PriceFeed memory priceData = _feedManager.getLatestPriceFeed(_feedId);
         return (
             uint80(priceData.eoracleBlockNumber),
-            int256(priceData.value),
+            _normalizePrice(priceData.value),
             priceData.timestamp,
             priceData.timestamp,
             uint80(priceData.eoracleBlockNumber)
@@ -91,7 +98,7 @@ contract EOFeedAdapter is IEOFeedAdapter, Initializable {
         IEOFeedManager.PriceFeed memory priceData = _feedManager.getLatestPriceFeed(_feedId);
         return (
             uint80(priceData.eoracleBlockNumber),
-            int256(priceData.value),
+            _normalizePrice(priceData.value),
             priceData.timestamp,
             priceData.timestamp,
             uint80(priceData.eoracleBlockNumber)
@@ -104,7 +111,7 @@ contract EOFeedAdapter is IEOFeedAdapter, Initializable {
      */
     function latestAnswer() external view returns (int256) {
         IEOFeedManager.PriceFeed memory priceData = _feedManager.getLatestPriceFeed(_feedId);
-        return int256(priceData.value);
+        return _normalizePrice(priceData.value);
     }
 
     /**
@@ -123,7 +130,7 @@ contract EOFeedAdapter is IEOFeedAdapter, Initializable {
      */
     function getAnswer(uint256) external view returns (int256) {
         IEOFeedManager.PriceFeed memory priceData = _feedManager.getLatestPriceFeed(_feedId);
-        return int256(priceData.value);
+        return _normalizePrice(priceData.value);
     }
 
     /**
@@ -149,7 +156,7 @@ contract EOFeedAdapter is IEOFeedAdapter, Initializable {
      * @return uint8 The decimals
      */
     function decimals() external view returns (uint8) {
-        return _decimals;
+        return _outputDecimals;
     }
 
     /**
@@ -175,6 +182,14 @@ contract EOFeedAdapter is IEOFeedAdapter, Initializable {
     function latestRound() external view returns (uint256) {
         IEOFeedManager.PriceFeed memory priceData = _feedManager.getLatestPriceFeed(_feedId);
         return priceData.eoracleBlockNumber;
+    }
+
+    function _normalizePrice(uint256 price) internal view returns (int256) {
+        if (_inputDecimals > _outputDecimals) {
+            return int256(price) / _decimalsDiff;
+        } else {
+            return int256(price) * _decimalsDiff;
+        }
     }
 
     // slither-disable-next-line unused-state,naming-convention
