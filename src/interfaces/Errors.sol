@@ -7,8 +7,6 @@ pragma solidity 0.8.25;
 error CallerIsNotWhitelisted(address caller);
 error MissingLeafInputs();
 error FeedNotSupported(uint16 feedId);
-error SymbolReplay(uint16 feedId);
-
 /*//////////////////////////////////////////////////////////////////////////
                                 EOFeedVerifier
 //////////////////////////////////////////////////////////////////////////*/

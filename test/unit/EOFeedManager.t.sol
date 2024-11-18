@@ -14,8 +14,7 @@ import {
     InvalidAddress,
     CallerIsNotWhitelisted,
     FeedNotSupported,
-    MissingLeafInputs,
-    SymbolReplay
+    MissingLeafInputs
 } from "../../src/interfaces/Errors.sol";
 
 //solhint-disable max-states-count
@@ -39,7 +38,7 @@ contract EOFeedManagerTest is Test, Utils {
     uint256 private blockNumber = 1;
 
     event RateUpdated(uint16 indexed feedId, uint256 rate, uint256 timestamp);
-
+    event SymbolReplay(uint16 indexed feedId, uint256 rate, uint256 timestamp, uint256 latestTimestamp);
     function setUp() public {
         verifier = new MockFeedVerifier();
         deployer = new DeployFeedManager();
@@ -186,7 +185,8 @@ contract EOFeedManagerTest is Test, Utils {
         _setSupportedFeed(owner, feedId);
         vm.startPrank(publisher);
         registry.updatePriceFeed(input, vParams);
-        vm.expectRevert(abi.encodeWithSelector(SymbolReplay.selector, feedId));
+        vm.expectEmit(true, false, false, true);
+        emit SymbolReplay(feedId, rate, timestamp, timestamp);
         registry.updatePriceFeed(input, vParams);
     }
 

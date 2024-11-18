@@ -25,6 +25,15 @@ interface IEOFeedManager {
     event RateUpdated(uint16 indexed feedId, uint256 rate, uint256 timestamp);
 
     /**
+     * @dev Event emitted when a price feed is replayed
+     * @param feedId Feed id
+     * @param rate Price feed value
+     * @param timestamp Price feed timestamp
+     * @param latestTimestamp Latest price feed timestamp
+     */
+    event SymbolReplay(uint16 indexed feedId, uint256 rate, uint256 timestamp, uint256 latestTimestamp);
+
+    /**
      * @notice Update the price for a feed
      * @param input A merkle leaf containing price data and its merkle proof
      * @param vParams Verification parameters
@@ -45,13 +54,6 @@ interface IEOFeedManager {
         IEOFeedVerifier.VerificationParams calldata vParams
     )
         external;
-
-    /**
-     * @notice Set the whitelisted publishers
-     * @param publishers Array of publisher addresses
-     * @param isWhitelisted Array of booleans indicating whether the publisher is whitelisted
-     */
-    function whitelistPublishers(address[] memory publishers, bool[] memory isWhitelisted) external;
 
     /**
      * @notice Get the latest price for a feed
@@ -80,4 +82,11 @@ interface IEOFeedManager {
      * @return Boolean indicating whether the feed is supported
      */
     function isSupportedFeed(uint16 feedId) external view returns (bool);
+
+    /**
+     * @notice Whitelist or remove publishers
+     * @param publishers Array of publisher addresses
+     * @param isWhitelisted Array of booleans indicating whether each publisher should be whitelisted
+     */
+    function whitelistPublishers(address[] calldata publishers, bool[] calldata isWhitelisted) external;
 }

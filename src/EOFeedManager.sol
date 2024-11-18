@@ -9,7 +9,6 @@ import {
     CallerIsNotWhitelisted,
     MissingLeafInputs,
     FeedNotSupported,
-    SymbolReplay,
     InvalidInput
 } from "./interfaces/Errors.sol";
 
@@ -176,9 +175,12 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable {
     function _processVerifiedRate(bytes memory data, uint256 blockNumber) internal {
         (uint16 feedId, uint256 rate, uint256 timestamp) = abi.decode(data, (uint16, uint256, uint256));
         if (!_supportedFeedIds[feedId]) revert FeedNotSupported(feedId);
-        if (_priceFeeds[feedId].timestamp >= timestamp) revert SymbolReplay(feedId);
-        _priceFeeds[feedId] = PriceFeed(rate, timestamp, blockNumber);
-        emit RateUpdated(feedId, rate, timestamp);
+        if (_priceFeeds[feedId].timestamp < timestamp) {
+            _priceFeeds[feedId] = PriceFeed(rate, timestamp, blockNumber);
+            emit RateUpdated(feedId, rate, timestamp);
+        } else {
+            emit SymbolReplay(feedId, rate, timestamp, _priceFeeds[feedId].timestamp);
+        }
     }
 
     /**
