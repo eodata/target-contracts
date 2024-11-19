@@ -90,14 +90,14 @@ deploy_proxy() {
 
 # Function to call a contract method
 call_contract() {
-    local contract_address=$1
+    local EO_AGGREGATOR_ADDRESS=$1
     local function_signature=$2
     local private_key=${3:-$PRIVATE_KEY}
     shift 3
     local args="$@"
     
-    echo "Calling $function_signature on $contract_address with args $args"
-    cast send --rpc-url $RPC_URL --private-key $private_key $contract_address $function_signature $args
+    echo "Calling $function_signature on $EO_AGGREGATOR_ADDRESS with args $args"
+    cast send --rpc-url $RPC_URL --private-key $private_key $EO_AGGREGATOR_ADDRESS $function_signature $args
 }
 
 # Initialize output file if it doesn't exist
@@ -111,4 +111,3 @@ USE_PRECOMPILED_MODEXP=$(echo $CONFIG | jq -r '.usePrecompiledModexp')
 PROXY_ADMIN_OWNER=$(echo $CONFIG | jq -r '.proxyAdminOwner')
 OWNER_ADDRESS=$(echo $CONFIG | jq -r '.targetContractsOwner')
 EORACLE_CHAIN_ID=$(echo $CONFIG | jq -r '.eoracleChainId')
-ALLOWED_SENDERS=$(echo $CONFIG | jq -r '.allowedSenders | join(",")')

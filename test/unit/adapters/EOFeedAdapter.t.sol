@@ -10,7 +10,6 @@ import { IEOFeedVerifier } from "../../../src/interfaces/IEOFeedVerifier.sol";
 import { InvalidAddress } from "../../../src/interfaces/Errors.sol";
 import { Upgrades } from "openzeppelin-foundry-upgrades/Upgrades.sol";
 import { Options } from "openzeppelin-foundry-upgrades/Options.sol";
-
 // solhint-disable ordering
 
 abstract contract EOFeedAdapterTestUninitialized is Test {
@@ -27,7 +26,7 @@ abstract contract EOFeedAdapterTestUninitialized is Test {
     IEOFeedManager internal _feedManager;
     address internal _owner;
     uint256 internal _lastTimestamp;
-    uint256 internal _lastBlockNumber;
+    uint64 internal _lastBlockNumber;
 
     function setUp() public virtual {
         _owner = makeAddr("_owner");
@@ -36,7 +35,7 @@ abstract contract EOFeedAdapterTestUninitialized is Test {
         _feedAdapter = EOFeedAdapter(Upgrades.deployTransparentProxy("EOFeedAdapter.sol", proxyAdmin, ""));
 
         _lastTimestamp = block.timestamp;
-        _lastBlockNumber = block.number;
+        _lastBlockNumber = uint64(block.number);
     }
 }
 
@@ -165,15 +164,16 @@ contract EOFeedAdapterTest is EOFeedAdapterTestUninitialized {
         input.unhashedLeaf = abi.encode(feedId, rate, timestamp);
         _feedManager.updatePriceFeed(
             input,
-            IEOFeedVerifier.Checkpoint({
-                blockNumber: _lastBlockNumber,
-                epoch: 0,
+            IEOFeedVerifier.VerificationParams({
                 eventRoot: bytes32(0),
+                blockNumber: _lastBlockNumber,
                 blockHash: bytes32(0),
-                blockRound: 0
-            }),
-            [uint256(0), uint256(0)],
-            bytes("0")
+                chainId: uint32(1),
+                aggregator: address(1),
+                signature: [uint256(0), uint256(0)],
+                apkG2: [uint256(0), uint256(0), uint256(0), uint256(0)],
+                nonSignersBitmap: bytes("0")
+            })
         );
     }
 }

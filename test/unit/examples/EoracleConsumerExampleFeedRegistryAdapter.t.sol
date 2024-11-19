@@ -79,15 +79,16 @@ contract EoracleConsumerExampleFeedRegistryAdapterTest is Test {
         input.unhashedLeaf = abi.encode(feedId, rate, timestamp);
         _feedManager.updatePriceFeed(
             input,
-            IEOFeedVerifier.Checkpoint({
-                blockNumber: 0,
-                epoch: 0,
+            IEOFeedVerifier.VerificationParams({
                 eventRoot: bytes32(0),
-                blockHash: bytes32(0),
-                blockRound: 0
-            }),
-            [uint256(0), uint256(0)],
-            bytes("0")
+                blockNumber: uint64(0),
+                blockHash: bytes32(uint256(0)),
+                chainId: uint32(0),
+                aggregator: address(0),
+                signature: [uint256(0), uint256(0)],
+                apkG2: [uint256(0), uint256(0), uint256(0), uint256(0)],
+                nonSignersBitmap: bytes("0")
+            })
         );
     }
 }
