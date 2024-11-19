@@ -149,7 +149,7 @@ abstract contract IntegrationBaseTests is Test, Utils {
                 blockNumber: decoded.blockNumber1,
                 blockHash: decoded.blockHash1,
                 chainId: decoded.chainId,
-                aggregator: aggregator,
+                aggregator: decoded.aggregator,
                 signature: decoded.sigG1_1,
                 apkG2: decoded.apkG2_1,
                 nonSignersBitmap: decoded.nonSignersBitmap1
