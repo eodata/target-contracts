@@ -17,7 +17,6 @@ abstract contract UninitializedFeedVerifier is Test, Utils {
         uint256[] secrets;
         uint32 chainId;
         address aggregator;
-
         IEOFeedVerifier.LeafInput[] leafInputs1;
         bytes32 merkleRoot1;
         uint64 blockNumber1;
@@ -51,7 +50,6 @@ abstract contract UninitializedFeedVerifier is Test, Utils {
     uint256[] internal secrets;
     uint32 internal chainId;
     address internal aggregator;
-
     IEOFeedVerifier.LeafInput[] internal leafInputs1;
     bytes32 internal merkleRoot1;
     uint64 internal blockNumber1;
@@ -108,7 +106,6 @@ abstract contract UninitializedFeedVerifier is Test, Utils {
 
         chainId = decoded.chainId;
         aggregator = decoded.aggregator;
-        
         // full signature - 4/4 voters
         merkleRoot1 = decoded.merkleRoot1;
         blockNumber1 = decoded.blockNumber1;

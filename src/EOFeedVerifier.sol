@@ -242,13 +242,10 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
             return;
         }
 
-        bytes32 msgHash = keccak256(abi.encode(
-            vParams.eventRoot,
-            vParams.blockNumber,
-            vParams.blockHash,
-            vParams.chainId,
-            vParams.aggregator
-        ));
+        bytes32 msgHash = keccak256(
+            abi.encode(vParams.eventRoot, vParams.blockNumber, vParams.blockHash, vParams.chainId, vParams.aggregator)
+        );
+
         if (vParams.eventRoot == bytes32(0)) revert InvalidEventRoot();
 
         _verifySignature(msgHash, vParams.signature, vParams.apkG2, vParams.nonSignersBitmap);

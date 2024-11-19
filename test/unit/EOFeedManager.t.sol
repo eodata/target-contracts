@@ -39,6 +39,7 @@ contract EOFeedManagerTest is Test, Utils {
 
     event RateUpdated(uint16 indexed feedId, uint256 rate, uint256 timestamp);
     event SymbolReplay(uint16 indexed feedId, uint256 rate, uint256 timestamp, uint256 latestTimestamp);
+
     function setUp() public {
         verifier = new MockFeedVerifier();
         deployer = new DeployFeedManager();
