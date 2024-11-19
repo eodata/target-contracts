@@ -26,7 +26,6 @@ abstract contract IntegrationBaseTests is Test, Utils {
         uint256[] secrets;
         uint32 chainId;
         address aggregator;
-
         IEOFeedVerifier.LeafInput[] leafInputs1;
         bytes32 merkleRoot1;
         uint64 blockNumber1;
@@ -34,7 +33,6 @@ abstract contract IntegrationBaseTests is Test, Utils {
         bytes nonSignersBitmap1;
         uint256[2] sigG1_1;
         uint256[4] apkG2_1;
-        
         IEOFeedVerifier.LeafInput[] leafInputs2;
         bytes32 merkleRoot2;
         uint64 blockNumber2;
@@ -42,7 +40,6 @@ abstract contract IntegrationBaseTests is Test, Utils {
         bytes nonSignersBitmap2;
         uint256[2] sigG1_2;
         uint256[4] apkG2_2;
-        
         IEOFeedVerifier.LeafInput[] leafInputs3;
         bytes32 merkleRoot3;
         uint64 blockNumber3;
