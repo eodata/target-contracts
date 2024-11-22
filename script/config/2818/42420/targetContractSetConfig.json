@@ -6,7 +6,7 @@
   "targetChainId": 2818,
   "publishers": ["0x2C5e9c2D437679BaAe64B519139Fd21fdD82f3c6"],
   "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
-  "supportedFeedIds": [1, 2, 17, 54, 55],
+  "supportedFeedIds": [1, 2, 17, 54, 55, 83],
   "supportedFeedsData": [
     {
       "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
@@ -47,6 +47,14 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "DAI/USD"
+    },
+    {
+      "base": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "WBTC/USD",
+      "feedId": 83
     }
   ]
 }
