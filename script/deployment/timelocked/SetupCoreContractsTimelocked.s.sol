@@ -51,7 +51,7 @@ contract SetupCoreContractsTimelocked is Script {
             }
         }
         if (feedIds.length > 0) {
-            bytes data = abi.encodeCall(feedManager.setSupportedFeeds, (feedIds, feedBools));
+            bytes memory data = abi.encodeCall(feedManager.setSupportedFeeds, (feedIds, feedBools));
             callTimelock(address(feedManager), data);
         }
     }
@@ -64,7 +64,7 @@ contract SetupCoreContractsTimelocked is Script {
             }
         }
         if (publishers.length > 0) {
-            bytes data = abi.encodeCall(feedManager.whitelistPublishers, (publishers, publishersBools));
+            bytes memory data = abi.encodeCall(feedManager.whitelistPublishers, (publishers, publishersBools));
             callTimelock(address(feedManager), data);
         }
     }
