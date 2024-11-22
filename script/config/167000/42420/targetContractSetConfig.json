@@ -137,7 +137,7 @@
       "feedId": 69
     },
     {
-      "base": "0xb880fd278198bd590252621d4cd071b1842e9bcd",
+      "base": "0xB880fd278198bd590252621d4CD071b1842E9Bcd",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8,
