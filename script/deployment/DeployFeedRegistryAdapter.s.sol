@@ -14,6 +14,8 @@ contract DeployFeedRegistryAdapter is Script {
 
     function run() external returns (address feedAdapterImplementation, address adapterProxy) {
         string memory outputConfig = EOJsonUtils.initOutputConfig();
+        address timelock = outputConfig.readAddress(".timelock");
+        address deployer =vm.addr(vm.envUint("PRIVATE_KEY"));
 
         vm.startBroadcast();
         feedAdapterImplementation = address(new EOFeedAdapter());
@@ -21,14 +23,12 @@ contract DeployFeedRegistryAdapter is Script {
 
         address feedManager = outputConfig.readAddress(".feedManager");
 
-        EOJsonUtils.Config memory configStructured = EOJsonUtils.getParsedConfig();
-
         bytes memory initData = abi.encodeCall(
             EOFeedRegistryAdapterBase.initialize,
-            (feedManager, feedAdapterImplementation, configStructured.targetContractsOwner)
+            (feedManager, feedAdapterImplementation, deployer)
         );
         adapterProxy =
-            Upgrades.deployTransparentProxy("EOFeedRegistryAdapter.sol", configStructured.proxyAdminOwner, initData);
+            Upgrades.deployTransparentProxy("EOFeedRegistryAdapter.sol", timelock, initData);
         EOJsonUtils.OUTPUT_CONFIG.serialize("feedRegistryAdapter", adapterProxy);
         address implementationAddress = Upgrades.getImplementationAddress(adapterProxy);
         string memory outputConfigJson =

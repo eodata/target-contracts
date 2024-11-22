@@ -9,6 +9,8 @@ import { DeployFeedRegistryAdapter } from "./DeployFeedRegistryAdapter.s.sol";
 import { DeployFeeds } from "./DeployFeeds.s.sol";
 import { SetupCoreContracts } from "./setup/SetupCoreContracts.s.sol";
 import { SetValidators } from "./setup/SetValidators.s.sol";
+import { TransferOwnershipToTimelock } from "./setup/TransferOwnershipToTimelock.s.sol";
+import { DeployTimelock } from "./DeployTimelock.s.sol";
 
 contract DeployAll is Script {
     using stdJson for string;
@@ -18,6 +20,8 @@ contract DeployAll is Script {
     SetupCoreContracts public coreContractsSetup;
     DeployFeeds public feedsDeployer;
     SetValidators public setValidators;
+    DeployTimelock public timelockDeployer;
+    TransferOwnershipToTimelock public transferOwnership;
 
     function run() public {
         mainDeployer = new DeployNewTargetContractSet();
@@ -25,11 +29,15 @@ contract DeployAll is Script {
         adapterDeployer = new DeployFeedRegistryAdapter();
         feedsDeployer = new DeployFeeds();
         setValidators = new SetValidators();
+        timelockDeployer = new DeployTimelock();
+        transferOwnership = new TransferOwnershipToTimelock();
 
+        timelockDeployer.run();
         mainDeployer.run();
         coreContractsSetup.run();
         adapterDeployer.run();
         feedsDeployer.run();
         setValidators.run();
+        transferOwnership.run();
     }
 }
