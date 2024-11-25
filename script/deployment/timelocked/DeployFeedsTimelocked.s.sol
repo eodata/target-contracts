@@ -35,13 +35,19 @@ contract DeployFeedsTimelocked is Script {
     error FeedIsNotSupported(uint16 feedId);
 
     function run() external {
-        bool isExecution = vm.envOr("IS_EXECUTION", false);
         vm.startBroadcast();
-        execute(isExecution);
+        execute();
         vm.stopBroadcast();
     }
 
-    function execute(bool isExecution) public {
+    // for testing purposes
+    function run(address broadcastFrom) public {
+        vm.startBroadcast(broadcastFrom);
+        execute();
+        vm.stopBroadcast();
+    }
+
+    function execute() public {
         EOJsonUtils.Config memory configStructured = EOJsonUtils.getParsedConfig();
         string memory outputConfig = EOJsonUtils.initOutputConfig();
 
@@ -91,7 +97,7 @@ contract DeployFeedsTimelocked is Script {
         vars.salt = keccak256(abi.encode("feeds"));
         vars.predecessor;
         vars.delay = timelock.getMinDelay();
-
+        bool isExecution = vm.envOr("IS_EXECUTION", false);
         if (isExecution) {
             timelock.executeBatch(vars.targets, vars.values, vars.payloads, vars.predecessor, vars.salt);
         } else {

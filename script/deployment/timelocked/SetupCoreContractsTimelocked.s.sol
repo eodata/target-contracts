@@ -25,6 +25,13 @@ contract SetupCoreContractsTimelocked is Script {
         vm.stopBroadcast();
     }
 
+    // for testing purposes
+    function run(address broadcastFrom) public {
+        vm.startBroadcast(broadcastFrom);
+        execute();
+        vm.stopBroadcast();
+    }
+
     function execute() public {
         EOJsonUtils.Config memory configStructured = EOJsonUtils.getParsedConfig();
 

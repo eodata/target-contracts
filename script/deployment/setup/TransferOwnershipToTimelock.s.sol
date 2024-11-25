@@ -11,8 +11,14 @@ contract TransferOwnershipToTimelock is Script {
     using stdJson for string;
 
     function run() external {
-        uint256 pk = vm.envUint("OWNER_PRIVATE_KEY");
-        vm.startBroadcast(pk);
+        vm.startBroadcast();
+        execute();
+        vm.stopBroadcast();
+    }
+
+        // for testing purposes
+    function run(address broadcastFrom) public {
+        vm.startBroadcast(broadcastFrom);
         execute();
         vm.stopBroadcast();
     }

@@ -47,7 +47,7 @@ abstract contract IntegrationBaseTests is Test, Utils {
         EOJsonUtils.Config memory configStructured = EOJsonUtils.getParsedConfig();
 
         _publisher = configStructured.publishers[0];
-        _owner = configStructured.targetContractsOwner;
+        _owner = address(this);
 
         DeployNewTargetContractSet mainDeployer = new DeployNewTargetContractSet();
         DeployFeedRegistryAdapter adapterDeployer = new DeployFeedRegistryAdapter();

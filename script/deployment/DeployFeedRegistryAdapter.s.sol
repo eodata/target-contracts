@@ -15,7 +15,7 @@ contract DeployFeedRegistryAdapter is Script {
     function run() external returns (address feedAdapterImplementation, address adapterProxy) {
         string memory outputConfig = EOJsonUtils.initOutputConfig();
         address timelock = outputConfig.readAddress(".timelock");
-        address deployer =vm.addr(vm.envUint("PRIVATE_KEY"));
+        address deployer = msg.sender;
 
         vm.startBroadcast();
         feedAdapterImplementation = address(new EOFeedAdapter());
