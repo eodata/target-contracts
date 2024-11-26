@@ -17,7 +17,7 @@ import { EOFeedRegistryAdapter } from "../src/adapters/EOFeedRegistryAdapter.sol
 import { EOJsonUtils } from "script/utils/EOJsonUtils.sol";
 import { IEOFeedAdapter } from "../src/adapters/interfaces/IEOFeedAdapter.sol";
 
-// solhint-disable ordering
+// solhint-disable ordering,max-states-count
 contract DeployScriptTest is Test {
     using stdJson for string;
 
@@ -51,7 +51,7 @@ contract DeployScriptTest is Test {
         config = EOJsonUtils.getConfig();
 
         (bls, bn256G2, feedVerifierProxy, feedManagerProxy) = mainDeployer.run(address(this));
-        (feedAdapterImplementation, adapterProxy) = adapterDeployer.run();
+        (feedAdapterImplementation, adapterProxy) = adapterDeployer.run(address(this));
         coreContractsSetup.run(address(this));
         feedsDeployer.run(address(this));
         timelockDeployer.run();

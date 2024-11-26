@@ -57,10 +57,10 @@ abstract contract IntegrationBaseTests is Test, Utils {
         address feedVerifierAddr;
         address feedManagerAddr;
 
-        (,, feedVerifierAddr, feedManagerAddr) = mainDeployer.run(address(this));
+        (,, feedVerifierAddr, feedManagerAddr) = mainDeployer.run(_owner);
         coreContractsSetup.run(_owner);
         address feedRegistryAdapterAddress;
-        (, feedRegistryAdapterAddress) = adapterDeployer.run();
+        (, feedRegistryAdapterAddress) = adapterDeployer.run(_owner);
         feedsDeployer.run(_owner);
 
         _feedVerifier = EOFeedVerifier(feedVerifierAddr);

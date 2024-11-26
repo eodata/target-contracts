@@ -17,14 +17,14 @@ contract DeployFeeds is Script {
     error FeedIsNotSupported(uint16 feedId);
 
     function run() external {
-        uint256 pk = vm.envUint("OWNER_PRIVATE_KEY");
+        uint256 pk = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(pk);
         execute();
         vm.stopBroadcast();
     }
 
     // for testing purposes
-    function run(address broadcastFrom) public {
+    function run(address broadcastFrom) external {
         vm.startBroadcast(broadcastFrom);
         execute();
         vm.stopBroadcast();
