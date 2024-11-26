@@ -8,7 +8,7 @@ import { stdJson } from "forge-std/Script.sol";
 import { EOJsonUtils } from "script/utils/EOJsonUtils.sol";
 
 // timelock usage
-// cast send <timelock_address> "schedule(address,uint256,bytes,bytes32,bytes32,uint256)" 
+// cast send <timelock_address> "schedule(address,uint256,bytes,bytes32,bytes32,uint256)"
 // <target_address> <value> <data=cast calldata func params> <predecessor> <salt> <delay>
 
 contract DeployTimelock is Script {

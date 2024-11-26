@@ -69,9 +69,7 @@ contract DeployNewTargetContractSet is FeedVerifierDeployer, FeedManagerDeployer
         /*//////////////////////////////////////////////////////////////////////////
                                         EOFeedManager
         //////////////////////////////////////////////////////////////////////////*/
-        feedManagerProxy = deployFeedManager(
-            timelock, feedVerifierProxy, broadcastFrom
-        );
+        feedManagerProxy = deployFeedManager(timelock, feedVerifierProxy, broadcastFrom);
 
         // set feedManager in feedVerifier
         IEOFeedVerifier(feedVerifierProxy).setFeedManager(feedManagerProxy);
