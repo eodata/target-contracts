@@ -14,14 +14,13 @@ contract DeployFeedsTimelocked is Script {
 
     struct LocalVars {
         address feedAdapter;
-        string feedAddressesJsonKey;
-        string feedAddressesJson;
         uint16 feedId;
         uint256 feedsLength;
         uint256 feedsToDeploy;
         address[] targets;
         bytes[] payloads;
         uint256[] values;
+        EOJsonUtils.FeedData[] feedData;
         uint256 index;
         bytes32 salt;
         bytes32 predecessor;
@@ -48,6 +47,7 @@ contract DeployFeedsTimelocked is Script {
     }
 
     function execute() public {
+        bool isExecution = vm.envOr("IS_EXECUTION", false);
         EOJsonUtils.Config memory configStructured = EOJsonUtils.getParsedConfig();
         string memory outputConfig = EOJsonUtils.initOutputConfig();
 
@@ -58,13 +58,13 @@ contract DeployFeedsTimelocked is Script {
         LocalVars memory vars;
 
         // Deploy feeds which are not deployed yet
-        vars.feedAddressesJsonKey = "feedsJson";
         vars.feedsLength = configStructured.supportedFeedsData.length;
         vars.feedsToDeploy = checkFeeds(configStructured);
 
         vars.targets = new address[](vars.feedsToDeploy);
         vars.payloads = new bytes[](vars.feedsToDeploy);
         vars.values = new uint256[](vars.feedsToDeploy);
+        vars.feedData = new EOJsonUtils.FeedData[](vars.feedsToDeploy);
         vars.index = 0;
 
         for (uint256 i = 0; i < vars.feedsLength; i++) {
@@ -84,25 +84,36 @@ contract DeployFeedsTimelocked is Script {
                     )
                 );
                 vars.targets[vars.index] = address(feedRegistryAdapter);
+                vars.feedData[vars.index] = configStructured.supportedFeedsData[i];
                 vars.index++;
             }
-            vars.feedAddressesJson = vars.feedAddressesJsonKey.serialize(
-                configStructured.supportedFeedsData[i].description, vars.feedAdapter
-            );
         }
-        string memory outputConfigJson = EOJsonUtils.OUTPUT_CONFIG.serialize("feeds", vars.feedAddressesJson);
-        EOJsonUtils.writeConfig(outputConfigJson);
 
         // schedule or execute
         vars.salt = keccak256(abi.encode("feeds"));
         vars.predecessor;
         vars.delay = timelock.getMinDelay();
-        bool isExecution = vm.envOr("IS_EXECUTION", false);
+
         if (isExecution) {
             timelock.executeBatch(vars.targets, vars.values, vars.payloads, vars.predecessor, vars.salt);
+            writeConfig(vars.feedData);
         } else {
             timelock.scheduleBatch(vars.targets, vars.values, vars.payloads, vars.predecessor, vars.salt, vars.delay);
         }
+    }
+
+    function writeConfig(EOJsonUtils.FeedData[] memory feedData) public {
+        string memory feedAddressesJsonKey = "feedsJson";
+        string memory feedAddressesJson;
+        for (uint256 i = 0; i < feedData.length; i++) {
+            feedAddressesJson = feedAddressesJsonKey.serialize(
+                feedRegistryAdapter.description(feedData[i].base, feedData[i].quote),
+                address(feedRegistryAdapter.getFeed(feedData[i].base, feedData[i].quote))
+            );
+        }
+
+        string memory outputConfigJson = EOJsonUtils.OUTPUT_CONFIG.serialize("feeds", feedAddressesJson);
+        EOJsonUtils.writeConfig(outputConfigJson);
     }
 
     function checkFeeds(EOJsonUtils.Config memory configStructured) public view returns (uint256 newFeedsCount) {
