@@ -31,23 +31,26 @@ contract DeployFeedsTimelocked is Script {
     EOFeedRegistryAdapter public feedRegistryAdapter;
     TimelockController public timelock;
 
+    bool public isExecutionMode;
+
     error FeedIsNotSupported(uint16 feedId);
 
-    function run() external {
+    function run(bool isExecution) external {
+        isExecutionMode = isExecution;
         vm.startBroadcast();
         execute();
         vm.stopBroadcast();
     }
 
     // for testing purposes
-    function run(address broadcastFrom) public {
+    function run(address broadcastFrom, bool isExecution) public {
+        isExecutionMode = isExecution;
         vm.startBroadcast(broadcastFrom);
         execute();
         vm.stopBroadcast();
     }
 
     function execute() public {
-        bool isExecution = vm.envOr("IS_EXECUTION", false);
         EOJsonUtils.Config memory configStructured = EOJsonUtils.getParsedConfig();
         string memory outputConfig = EOJsonUtils.initOutputConfig();
 
@@ -94,7 +97,7 @@ contract DeployFeedsTimelocked is Script {
         vars.predecessor;
         vars.delay = timelock.getMinDelay();
 
-        if (isExecution) {
+        if (isExecutionMode) {
             timelock.executeBatch(vars.targets, vars.values, vars.payloads, vars.predecessor, vars.salt);
             writeConfig(vars.feedData);
         } else {

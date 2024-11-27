@@ -16,17 +16,21 @@ contract SetupCoreContractsTimelocked is Script {
     address[] public publishers;
     bool[] public publishersBools;
 
+    bool public isExecutionMode;
+
     EOFeedManager public feedManager;
     TimelockController public timelock;
 
-    function run() external {
+    function run(bool isExecution) external {
+        isExecutionMode = isExecution;
         vm.startBroadcast();
         execute();
         vm.stopBroadcast();
     }
 
     // for testing purposes
-    function run(address broadcastFrom) public {
+    function run(address broadcastFrom, bool isExecution) public {
+        isExecutionMode = isExecution;
         vm.startBroadcast(broadcastFrom);
         execute();
         vm.stopBroadcast();
@@ -77,12 +81,11 @@ contract SetupCoreContractsTimelocked is Script {
     }
 
     function callTimelock(address target, bytes memory data) internal {
-        bool isExecution = vm.envOr("IS_EXECUTION", false);
         bytes32 salt = keccak256(abi.encode("feeds"));
         bytes32 predecessor;
         uint256 delay = timelock.getMinDelay();
 
-        if (isExecution) {
+        if (isExecutionMode) {
             timelock.execute(target, 0, data, predecessor, salt);
         } else {
             timelock.schedule(target, 0, data, predecessor, salt, delay);

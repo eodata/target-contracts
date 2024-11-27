@@ -116,11 +116,10 @@ contract DeployScriptTest is Test {
         EOJsonUtils.Config memory configStructured = EOJsonUtils.getParsedConfig();
         SetupCoreContractsTimelocked setupCoreContractsTimelocked = new SetupCoreContractsTimelocked();
 
-        setupCoreContractsTimelocked.run(configStructured.timelock.proposers[0]);
+        setupCoreContractsTimelocked.run(configStructured.timelock.proposers[0], false);
 
         vm.warp(block.timestamp + configStructured.timelock.minDelay + 1);
-        vm.setEnv("IS_EXECUTION", "true");
-        setupCoreContractsTimelocked.run(configStructured.timelock.executors[0]);
+        setupCoreContractsTimelocked.run(configStructured.timelock.executors[0], true);
 
         uint16 feedId;
         for (uint256 i = 0; i < configStructured.supportedFeedIds.length; i++) {
@@ -142,11 +141,10 @@ contract DeployScriptTest is Test {
         transferOwnership.run(address(this));
 
         DeployFeedsTimelocked deployFeedsTimelocked = new DeployFeedsTimelocked();
-        deployFeedsTimelocked.run(configStructured.timelock.proposers[0]);
+        deployFeedsTimelocked.run(configStructured.timelock.proposers[0], false);
 
         vm.warp(block.timestamp + configStructured.timelock.minDelay + 1);
-        vm.setEnv("IS_EXECUTION", "true");
-        deployFeedsTimelocked.run(configStructured.timelock.executors[0]);
+        deployFeedsTimelocked.run(configStructured.timelock.executors[0], true);
         assertEq(EOFeedRegistryAdapter(adapterProxy).getFeed(base, quote).getFeedId(), 1);
     }
 
