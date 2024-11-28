@@ -6,7 +6,6 @@ import { TimelockController } from "@openzeppelin/contracts/governance/TimelockC
 import { Script } from "forge-std/Script.sol";
 import { stdJson } from "forge-std/Script.sol";
 import { EOJsonUtils } from "script/utils/EOJsonUtils.sol";
-import { console } from "forge-std/console.sol";
 
 // timelock usage
 // cast send <timelock_address> "schedule(address,uint256,bytes,bytes32,bytes32,uint256)"
@@ -16,10 +15,14 @@ contract DeployTimelock is Script {
     using stdJson for string;
 
     function run() external {
+        run(vm.addr(vm.envUint("PRIVATE_KEY")));
+    }
+
+    function run(address broadcastFrom) public {
         EOJsonUtils.Config memory configStructured = EOJsonUtils.getParsedConfig();
         EOJsonUtils.initOutputConfig();
 
-        vm.startBroadcast();
+        vm.startBroadcast(broadcastFrom);
         TimelockController timelock = new TimelockController(
             configStructured.timelock.minDelay,
             configStructured.timelock.proposers,
@@ -30,6 +33,5 @@ contract DeployTimelock is Script {
         vm.stopBroadcast();
         string memory outputConfigJson = EOJsonUtils.OUTPUT_CONFIG.serialize("timelock", address(timelock));
         EOJsonUtils.writeConfig(outputConfigJson);
-        console.log("Timelock deployed at: %s", address(timelock));
     }
 }

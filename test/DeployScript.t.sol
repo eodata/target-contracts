@@ -54,7 +54,7 @@ contract DeployScriptTest is Test {
         (feedAdapterImplementation, adapterProxy) = adapterDeployer.run(address(this));
         coreContractsSetup.run(address(this));
         feedsDeployer.run(address(this));
-        timelockDeployer.run();
+        timelockDeployer.run(address(this));
         outputConfig = EOJsonUtils.getOutputConfig();
     }
 
@@ -146,10 +146,5 @@ contract DeployScriptTest is Test {
         vm.warp(block.timestamp + configStructured.timelock.minDelay + 1);
         deployFeedsTimelocked.run(configStructured.timelock.executors[0], true);
         assertEq(EOFeedRegistryAdapter(adapterProxy).getFeed(base, quote).getFeedId(), 1);
-    }
-
-    // revert the changes to the config made by this test suite
-    function test_Cleanup() public {
-        EOJsonUtils.writeConfig(initialOutputConfig);
     }
 }
