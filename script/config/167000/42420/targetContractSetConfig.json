@@ -6,7 +6,7 @@
   "targetChainId": 167000,
   "publishers": ["0xD2171e5EB129f2D76f60664E021df671D8E42171"],
   "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
-  "supportedFeedIds": [1, 2, 6, 13, 14, 16, 17, 18, 41, 42, 43, 54, 59, 68, 69, 77, 79, 88],
+  "supportedFeedIds": [1, 2, 6, 13, 14, 16, 17, 18, 41, 42, 43, 54, 59, 68, 69, 77, 79, 88, 100, 101],
   "supportedFeedsData": [
     {
       "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
@@ -151,6 +151,22 @@
       "outputDecimals": 8,
       "description": "ezETH/USD",
       "feedId": 88
+    },
+    {
+      "base": "0xd9D920AA40f578ab794426F5C90F6C731D159DEf",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "SolvBTCBBN/USD",
+      "feedId": 100
+    },
+    {
+      "base": "0x004E9C3EF86bc1ca1f0bB5C7662861Ee93350568",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "uniBTC/USD",
+      "feedId": 101
     }
   ]
 }
