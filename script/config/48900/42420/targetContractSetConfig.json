@@ -6,7 +6,7 @@
   "targetChainId": 48900,
   "publishers": ["0x5FdB41Fa496D42C52C1AF4900a13E342684CFB95"],
   "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
-  "supportedFeedIds": [2, 17, 92],
+  "supportedFeedIds": [2, 17, 88, 89, 91, 92, 93],
   "supportedFeedsData": [
     {
       "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -23,6 +23,38 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "USDT/USD"
+    },
+    {
+      "base": "0x7122985656e38BDC0302Db86685bb972b145bD3C",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "STONE/USD",
+      "feedId": 76
+    },
+    {
+      "base": "0xbf5495Efe5DB9ce00f80364C8B423567e58d2110",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "ezETH/USD",
+      "feedId": 88
+    },
+    {
+      "base": "0xCd5fE23C85820F7B72D0926FC9b05b43E359b7ee",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "feedId": 89,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "weETH/USD"
+    },
+    {
+      "base": "0xa25b25548B4C98B0c7d3d27dcA5D5ca743d68b7F",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "feedId": 91,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "wrsETH/USD"
     },
     {
       "base": "0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0",
