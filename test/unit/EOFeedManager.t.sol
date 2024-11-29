@@ -2,6 +2,7 @@
 pragma solidity 0.8.25;
 
 import { OwnableUpgradeable } from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import { PauserRegistry } from "eigenlayer-contracts/permissions/PauserRegistry.sol";
 import { Test } from "forge-std/Test.sol";
 import { Utils } from "../utils/Utils.sol";
 import { IEOFeedManager } from "../../src/interfaces/IEOFeedManager.sol";
@@ -43,7 +44,10 @@ contract EOFeedManagerTest is Test, Utils {
     function setUp() public {
         verifier = new MockFeedVerifier();
         deployer = new DeployFeedManager();
-        registry = EOFeedManager(deployer.run(proxyAdmin, address(verifier), owner));
+        address[] memory pausers = new address[](1);
+        pausers[0] = owner;
+        address pauserRegistry = address(new PauserRegistry(pausers, owner));
+        registry = EOFeedManager(deployer.run(proxyAdmin, address(verifier), owner, pauserRegistry));
     }
 
     function test_RevertWhen_NotOwner_SetFeedVerifier() public {
@@ -222,6 +226,21 @@ contract EOFeedManagerTest is Test, Utils {
         registry.updatePriceFeed(input, checkpoint, signature, bitmap);
     }
 
+    function test_RevertWhen_Paused_UpdatePriceFeed() public {
+        vm.startPrank(owner);
+        registry.pause(uint256(1 << registry.PAUSED_FEED_UPDATES()));
+        vm.stopPrank();
+
+        IEOFeedVerifier.LeafInput memory input;
+        IEOFeedVerifier.Checkpoint memory checkpoint;
+        uint256[2] memory signature;
+        bytes memory bitmap;
+        _whitelistPublisher(owner, publisher);
+        vm.expectRevert("Pausable: index is paused");
+        vm.prank(publisher);
+        registry.updatePriceFeed(input, checkpoint, signature, bitmap);
+    }
+
     function test_UpdatePriceFeeds() public {
         bytes memory ratesData0 = abi.encode(feedId, rate, timestamp);
         bytes memory unhashedLeaf0 = abi.encode(1, address(0), address(0), ratesData0);
@@ -281,6 +300,21 @@ contract EOFeedManagerTest is Test, Utils {
         _setSupportedFeed(owner, feedId);
         _setSupportedFeed(owner, feedId + 1);
         vm.expectRevert(abi.encodeWithSelector(CallerIsNotWhitelisted.selector, address(this)));
+        registry.updatePriceFeeds(inputs, checkpoint, signature, bitmap);
+    }
+
+    function test_RevertWhen_Paused_UpdatePriceFeeds() public {
+        vm.startPrank(owner);
+        registry.pause(uint256(1 << registry.PAUSED_FEED_UPDATES()));
+        vm.stopPrank();
+
+        IEOFeedVerifier.LeafInput[] memory inputs;
+        IEOFeedVerifier.Checkpoint memory checkpoint;
+        uint256[2] memory signature;
+        bytes memory bitmap;
+        _whitelistPublisher(owner, publisher);
+        vm.expectRevert("Pausable: index is paused");
+        vm.prank(publisher);
         registry.updatePriceFeeds(inputs, checkpoint, signature, bitmap);
     }
 

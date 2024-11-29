@@ -11,6 +11,7 @@ library EOJsonUtils {
     struct Config {
         address[] allowedSenders;
         uint256 eoracleChainId;
+        PauserRegistry pauserRegistry;
         address proxyAdminOwner;
         address[] publishers;
         uint256[] supportedFeedIds;
@@ -27,6 +28,11 @@ library EOJsonUtils {
         uint256 inputDecimals;
         uint256 outputDecimals;
         address quote;
+    }
+
+    struct PauserRegistry {
+        address[] pausers;
+        address unpauser;
     }
 
     // Cheat code address, 0x7109709ECfa91a80626fF3989D68f67F5b1DD12D.
