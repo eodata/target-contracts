@@ -16,16 +16,18 @@ contract DeployFeedsTimelocked is Script {
         address feedAdapter;
         uint16 feedId;
         uint256 feedsLength;
-        uint256 feedsToDeploy;
         address[] targets;
         bytes[] payloads;
         uint256[] values;
         EOJsonUtils.FeedData[] feedData;
-        uint256 index;
         bytes32 salt;
         bytes32 predecessor;
         uint256 delay;
+        uint16[] feedIds;
+        bool[] feedBools;
     }
+
+    LocalVars public vars;
 
     EOFeedManager public feedManager;
     EOFeedRegistryAdapter public feedRegistryAdapter;
@@ -58,43 +60,42 @@ contract DeployFeedsTimelocked is Script {
         feedRegistryAdapter = EOFeedRegistryAdapter(outputConfig.readAddress(".feedRegistryAdapter"));
         timelock = TimelockController(payable(outputConfig.readAddress(".timelock")));
 
-        LocalVars memory vars;
-
         // Deploy feeds which are not deployed yet
         vars.feedsLength = configStructured.supportedFeedsData.length;
-        vars.feedsToDeploy = checkFeeds(configStructured);
 
-        vars.targets = new address[](vars.feedsToDeploy);
-        vars.payloads = new bytes[](vars.feedsToDeploy);
-        vars.values = new uint256[](vars.feedsToDeploy);
-        vars.feedData = new EOJsonUtils.FeedData[](vars.feedsToDeploy);
-        vars.index = 0;
+        bytes memory supportedFeedsCalldata = updateSupportedFeedsData(configStructured);
+        if (supportedFeedsCalldata.length > 0) {
+            vars.targets.push(address(feedManager));
+            vars.payloads.push(supportedFeedsCalldata);
+            vars.values.push(0);
+        }
 
         for (uint256 i = 0; i < vars.feedsLength; i++) {
             vars.feedId = uint16(configStructured.supportedFeedsData[i].feedId);
             vars.feedAdapter = address(feedRegistryAdapter.getFeedById(vars.feedId));
             if (vars.feedAdapter == address(0)) {
-                vars.payloads[vars.index] = abi.encodeCall(
-                    feedRegistryAdapter.deployEOFeedAdapter,
-                    (
-                        configStructured.supportedFeedsData[i].base,
-                        configStructured.supportedFeedsData[i].quote,
-                        vars.feedId,
-                        configStructured.supportedFeedsData[i].description,
-                        uint8(configStructured.supportedFeedsData[i].inputDecimals),
-                        uint8(configStructured.supportedFeedsData[i].outputDecimals),
-                        1
+                vars.payloads.push(
+                    abi.encodeCall(
+                        feedRegistryAdapter.deployEOFeedAdapter,
+                        (
+                            configStructured.supportedFeedsData[i].base,
+                            configStructured.supportedFeedsData[i].quote,
+                            vars.feedId,
+                            configStructured.supportedFeedsData[i].description,
+                            uint8(configStructured.supportedFeedsData[i].inputDecimals),
+                            uint8(configStructured.supportedFeedsData[i].outputDecimals),
+                            1
+                        )
                     )
                 );
-                vars.targets[vars.index] = address(feedRegistryAdapter);
-                vars.feedData[vars.index] = configStructured.supportedFeedsData[i];
-                vars.index++;
+                vars.targets.push(address(feedRegistryAdapter));
+                vars.values.push(0);
+                vars.feedData.push(configStructured.supportedFeedsData[i]);
             }
         }
 
         // schedule or execute
         vars.salt = keccak256(abi.encode("feeds"));
-        vars.predecessor;
         vars.delay = timelock.getMinDelay();
 
         if (isExecutionMode) {
@@ -103,6 +104,7 @@ contract DeployFeedsTimelocked is Script {
         } else {
             timelock.scheduleBatch(vars.targets, vars.values, vars.payloads, vars.predecessor, vars.salt, vars.delay);
         }
+        delete vars;
     }
 
     function writeConfig(EOJsonUtils.FeedData[] memory feedData) public {
@@ -119,18 +121,18 @@ contract DeployFeedsTimelocked is Script {
         EOJsonUtils.writeConfig(outputConfigJson);
     }
 
-    function checkFeeds(EOJsonUtils.Config memory configStructured) public view returns (uint256 newFeedsCount) {
-        uint256 feedsLength = configStructured.supportedFeedsData.length;
-        for (uint256 i = 0; i < feedsLength; i++) {
-            uint16 feedId = uint16(configStructured.supportedFeedsData[i].feedId);
+    function updateSupportedFeedsData(EOJsonUtils.Config memory _configData) internal returns (bytes memory data) {
+        uint16 feedId;
+
+        for (uint256 i = 0; i < _configData.supportedFeedIds.length; i++) {
+            feedId = uint16(_configData.supportedFeedIds[i]);
             if (!feedManager.isSupportedFeed(feedId)) {
-                revert FeedIsNotSupported(feedId);
-            }
-            address feedAdapter = address(feedRegistryAdapter.getFeedById(feedId));
-            if (feedAdapter == address(0)) {
-                newFeedsCount++;
+                vars.feedIds.push(feedId);
+                vars.feedBools.push(true);
             }
         }
-        return newFeedsCount;
+        if (vars.feedIds.length > 0) {
+            data = abi.encodeCall(feedManager.setSupportedFeeds, (vars.feedIds, vars.feedBools));
+        }
     }
 }
