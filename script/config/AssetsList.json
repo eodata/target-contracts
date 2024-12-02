@@ -664,7 +664,7 @@
     },
     {
       "base": "0xbf5495Efe5DB9ce00f80364C8B423567e58d2110",
-      "quote": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "ezETH/USD",
