@@ -38,21 +38,20 @@ contract DeployFeedsTimelocked is Script {
     error FeedIsNotSupported(uint16 feedId);
 
     function run(bool isExecution) external {
-        isExecutionMode = isExecution;
         vm.startBroadcast();
-        execute();
+        execute(isExecution, true);
         vm.stopBroadcast();
     }
 
     // for testing purposes
     function run(address broadcastFrom, bool isExecution) public {
-        isExecutionMode = isExecution;
         vm.startBroadcast(broadcastFrom);
-        execute();
+        execute(isExecution, true);
         vm.stopBroadcast();
     }
 
-    function execute() public {
+    function execute(bool isExecution, bool send) public returns (bytes memory) {
+        isExecutionMode = isExecution;
         EOJsonUtils.Config memory configStructured = EOJsonUtils.getParsedConfig();
         string memory outputConfig = EOJsonUtils.initOutputConfig();
 
@@ -98,13 +97,24 @@ contract DeployFeedsTimelocked is Script {
         vars.salt = keccak256(abi.encode("feeds"));
         vars.delay = timelock.getMinDelay();
 
-        if (isExecutionMode) {
-            timelock.executeBatch(vars.targets, vars.values, vars.payloads, vars.predecessor, vars.salt);
+        bytes memory txn = isExecutionMode
+            ? abi.encodeCall(timelock.executeBatch, (vars.targets, vars.values, vars.payloads, vars.predecessor, vars.salt))
+            : abi.encodeCall(
+                timelock.scheduleBatch, (vars.targets, vars.values, vars.payloads, vars.predecessor, vars.salt, vars.delay)
+            );
+
+        if (send) {
+            // solhint-disable-next-line avoid-low-level-calls
+            (bool success,) = address(timelock).call(txn);
+            if (!success) {
+                revert("Transaction failed");
+            }
+        }
+        if (isExecutionMode && send) {
             writeConfig(vars.feedData);
-        } else {
-            timelock.scheduleBatch(vars.targets, vars.values, vars.payloads, vars.predecessor, vars.salt, vars.delay);
         }
         delete vars;
+        return txn;
     }
 
     function writeConfig(EOJsonUtils.FeedData[] memory feedData) public {

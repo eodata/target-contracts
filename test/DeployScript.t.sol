@@ -110,10 +110,16 @@ contract DeployScriptTest is Test {
     }
 
     function test_WhitelistPublishersTimelocked() public {
+        EOJsonUtils.Config memory configStructured = EOJsonUtils.getParsedConfig();
+        // remove the first publisher and add it again using timelock
+        address[] memory publishers = new address[](1); 
+        publishers[0] = configStructured.publishers[0];
+        bool[] memory isWhitelisted = new bool[](1);
+        isWhitelisted[0] = false;
+        EOFeedManager(feedManagerProxy).whitelistPublishers(publishers, isWhitelisted);
         // transfer ownership to timelock
         transferOwnership.run(address(this));
 
-        EOJsonUtils.Config memory configStructured = EOJsonUtils.getParsedConfig();
         WhitelistPublishersTimelocked whitelistPublishersTimelocked = new WhitelistPublishersTimelocked();
 
         whitelistPublishersTimelocked.run(configStructured.timelock.proposers[0], false);

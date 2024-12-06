@@ -20,21 +20,20 @@ contract WhitelistPublishersTimelocked is Script {
     TimelockController public timelock;
 
     function run(bool isExecution) external {
-        isExecutionMode = isExecution;
         vm.startBroadcast();
-        execute();
+        execute(isExecution, true);
         vm.stopBroadcast();
     }
 
     // for testing purposes
     function run(address broadcastFrom, bool isExecution) public {
-        isExecutionMode = isExecution;
         vm.startBroadcast(broadcastFrom);
-        execute();
+        execute(isExecution, true);
         vm.stopBroadcast();
     }
 
-    function execute() public {
+    function execute(bool isExecution, bool send) public returns (bytes memory) {
+        isExecutionMode = isExecution;
         EOJsonUtils.Config memory configStructured = EOJsonUtils.getParsedConfig();
 
         string memory outputConfig = EOJsonUtils.initOutputConfig();
@@ -43,31 +42,37 @@ contract WhitelistPublishersTimelocked is Script {
         timelock = TimelockController(payable(outputConfig.readAddress(".timelock")));
 
         // Set publishers in FeedManager which are not set yet
-        _updateWhiteListedPublishers(configStructured);
-    }
-
-    function _updateWhiteListedPublishers(EOJsonUtils.Config memory _configData) internal {
-        for (uint256 i = 0; i < _configData.publishers.length; i++) {
-            if (!feedManager.isWhitelistedPublisher(_configData.publishers[i])) {
-                publishers.push(_configData.publishers[i]);
+        for (uint256 i = 0; i < configStructured.publishers.length; i++) {
+            if (!feedManager.isWhitelistedPublisher(configStructured.publishers[i])) {
+                publishers.push(configStructured.publishers[i]);
                 publishersBools.push(true);
             }
         }
-        if (publishers.length > 0) {
-            bytes memory data = abi.encodeCall(feedManager.whitelistPublishers, (publishers, publishersBools));
-            callTimelock(address(feedManager), data);
+        if (publishers.length == 0) revert("No publishers to whitelist");
+        bytes memory data = abi.encodeCall(feedManager.whitelistPublishers, (publishers, publishersBools));
+        bytes memory txn = callTimelock(address(feedManager), data);
+
+        if (send) {
+            // solhint-disable-next-line avoid-low-level-calls
+            (bool success,) = address(timelock).call(txn);
+            if (!success) {
+                revert("Transaction failed");
+            }
         }
+        delete publishers;
+        delete publishersBools;
+
+        return txn;
     }
 
-    function callTimelock(address target, bytes memory data) internal {
+    function callTimelock(address target, bytes memory data) internal returns (bytes memory) {
         bytes32 salt = keccak256(abi.encode("feeds"));
         bytes32 predecessor;
         uint256 delay = timelock.getMinDelay();
 
-        if (isExecutionMode) {
-            timelock.execute(target, 0, data, predecessor, salt);
-        } else {
-            timelock.schedule(target, 0, data, predecessor, salt, delay);
-        }
+        bytes memory txn = isExecutionMode
+            ? abi.encodeCall(timelock.execute, (target, 0, data, predecessor, salt))
+            : abi.encodeCall(timelock.schedule, (target, 0, data, predecessor, salt, delay));
+        return txn;
     }
 }
