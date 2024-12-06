@@ -6,7 +6,7 @@
   "targetChainId": 200901,
   "publishers": ["0xCE68e4d87DDf72a09dBd6dd11746Cda1C407511d"],
   "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
-  "supportedFeedIds": [1, 2, 17, 54],
+  "supportedFeedIds": [1, 2, 17, 54, 99],
   "supportedFeedsData": [
     {
       "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
@@ -39,6 +39,14 @@
       "outputDecimals": 8,
       "description": "USDC/USD",
       "feedId": 54
+    },
+    {
+      "base": "0x07373d112edc4570b46996ad1187bc4ac9fb5ed0",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "BITUSD/USD",
+      "feedId": 99
     }
   ]
 }
