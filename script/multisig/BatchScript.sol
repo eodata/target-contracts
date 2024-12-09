@@ -418,7 +418,7 @@ abstract contract BatchScript is Script {
             // If the response is short, there are no transactions
             if (data.length < 100) {
                 return 0;
-            } 
+            }
             string memory resp = string(data);
             return resp.readUint(".results[0].nonce") + 1;
         } else {
