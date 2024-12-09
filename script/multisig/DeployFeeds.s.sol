@@ -12,7 +12,7 @@ forge script script/multisig/DeployFeeds.s.sol \
     --sig "run(bool,bool,string)" \
     true \
     true \
-    "holesky" \
+    "sepolia" \
     --rpc-url $RPC_URL \
     -vvvv
 */

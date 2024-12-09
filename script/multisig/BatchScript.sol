@@ -7,7 +7,7 @@ pragma solidity ^0.8.25;
 // 🧩 MODULES
 import { Script, console2, stdJson } from "forge-std/Script.sol";
 
-import { Surl } from "../../lib/surl/src/Surl.sol";
+import { Surl } from "surl/Surl.sol";
 
 // solhint-disable
 abstract contract BatchScript is Script {
@@ -415,10 +415,11 @@ abstract contract BatchScript is Script {
         string memory endpoint = string.concat(_getSafeAPIEndpoint(safe_), "?limit=1");
         (uint256 status, bytes memory data) = endpoint.get();
         if (status == 200) {
+            // If the response is short, there are no transactions
+            if (data.length < 100) {
+                return 0;
+            } 
             string memory resp = string(data);
-            string[] memory results;
-            results = resp.readStringArray(".results");
-            if (results.length == 0) return 0;
             return resp.readUint(".results[0].nonce") + 1;
         } else {
             revert("Get nonce failed!");

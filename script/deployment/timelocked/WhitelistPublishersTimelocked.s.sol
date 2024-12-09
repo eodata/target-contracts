@@ -65,7 +65,7 @@ contract WhitelistPublishersTimelocked is Script {
         return txn;
     }
 
-    function callTimelock(address target, bytes memory data) internal returns (bytes memory) {
+    function callTimelock(address target, bytes memory data) internal view returns (bytes memory) {
         bytes32 salt = keccak256(abi.encode("feeds"));
         bytes32 predecessor;
         uint256 delay = timelock.getMinDelay();

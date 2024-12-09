@@ -110,7 +110,7 @@ contract DeployFeedsTimelocked is Script {
                 revert("Transaction failed");
             }
         }
-        if (isExecutionMode && send) {
+        if (isExecutionMode) {
             writeConfig(vars.feedData);
         }
         delete vars;
