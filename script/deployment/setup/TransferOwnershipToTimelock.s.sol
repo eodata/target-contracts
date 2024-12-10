@@ -3,6 +3,8 @@
 pragma solidity 0.8.25;
 
 import { OwnableUpgradeable } from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import { Upgrades } from "openzeppelin-foundry-upgrades/Upgrades.sol";
+import { ProxyAdmin } from "@openzeppelin/contracts/proxy/transparent/ProxyAdmin.sol";
 import { UpgradeableBeacon } from "@openzeppelin/contracts/proxy/beacon/UpgradeableBeacon.sol";
 import { EOFeedFactoryBeacon } from "../../../src/adapters/factories/EOFeedFactoryBeacon.sol";
 import { Script } from "forge-std/Script.sol";
@@ -37,5 +39,9 @@ contract TransferOwnershipToTimelock is Script {
         OwnableUpgradeable(feedVerifier).transferOwnership(timelock);
         OwnableUpgradeable(feedRegistryAdapter).transferOwnership(timelock);
         UpgradeableBeacon(EOFeedFactoryBeacon(feedRegistryAdapter).getBeacon()).transferOwnership(timelock);
+
+        ProxyAdmin(Upgrades.getAdminAddress(feedManager)).transferOwnership(timelock);
+        ProxyAdmin(Upgrades.getAdminAddress(feedVerifier)).transferOwnership(timelock);
+        ProxyAdmin(Upgrades.getAdminAddress(feedRegistryAdapter)).transferOwnership(timelock);
     }
 }
