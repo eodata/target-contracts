@@ -6,7 +6,7 @@
   "targetChainId": 48900,
   "publishers": ["0x5FdB41Fa496D42C52C1AF4900a13E342684CFB95"],
   "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
-  "supportedFeedIds": [2, 17, 76, 88, 89, 91, 92],
+  "supportedFeedIds": [2, 17, 76, 88, 89, 91, 92, 102],
   "supportedFeedsData": [
     {
       "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -63,6 +63,14 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "wstETH/USD"
+    },
+    {
+      "base": "0xfd418e42783382e86ae91e445406600ba144d162",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "feedId": 102,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "ZRC/USD"
     }
   ]
 }
