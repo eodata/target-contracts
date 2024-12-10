@@ -97,11 +97,17 @@ contract DeployFeedsTimelocked is Script {
         vars.salt = keccak256(abi.encode("feeds"));
         vars.delay = timelock.getMinDelay();
 
-        bytes memory txn = isExecutionMode
-            ? abi.encodeCall(timelock.executeBatch, (vars.targets, vars.values, vars.payloads, vars.predecessor, vars.salt))
-            : abi.encodeCall(
-                timelock.scheduleBatch, (vars.targets, vars.values, vars.payloads, vars.predecessor, vars.salt, vars.delay)
+        bytes memory txn;
+        if (isExecutionMode) {
+            txn = abi.encodeCall(
+                timelock.executeBatch, (vars.targets, vars.values, vars.payloads, vars.predecessor, vars.salt)
             );
+        } else {
+            txn = abi.encodeCall(
+                timelock.scheduleBatch,
+                (vars.targets, vars.values, vars.payloads, vars.predecessor, vars.salt, vars.delay)
+            );
+        }
 
         if (send) {
             // solhint-disable-next-line avoid-low-level-calls
