@@ -9,10 +9,10 @@ import { Script } from "forge-std/Script.sol";
 import { stdJson } from "forge-std/Script.sol";
 import { EOJsonUtils } from "../../utils/EOJsonUtils.sol";
 import { TimelockController } from "@openzeppelin/contracts/governance/TimelockController.sol";
-import { EOFeedRegistryAdapter } from "../../../src/adapters/EOFeedRegistryAdapter.sol";
+import { EOFeedManager } from "../../../src/EOFeedManager.sol";
 import { TimelockBase } from "./TimelockBase.sol";
 
-contract UpgradeFeedRegistryAdapterTimelocked is Script, TimelockBase {
+contract UpgradeFeedManagerTimelocked is Script, TimelockBase {
     using stdJson for string;
 
     bool internal isExecutionMode;
@@ -35,17 +35,17 @@ contract UpgradeFeedRegistryAdapterTimelocked is Script, TimelockBase {
         isExecutionMode = isExecution;
 
         string memory config = EOJsonUtils.initOutputConfig();
-        address proxyAddress = config.readAddress(".feedRegistryAdapter");
+        address proxyAddress = config.readAddress(".feedManager");
         timelock = TimelockController(payable(config.readAddress(".timelock")));
         address admin = Upgrades.getAdminAddress(proxyAddress);
 
         address implementationAddress;
         if (isExecutionMode) {
-            implementationAddress = config.readAddress(".feedRegistryAdapterImplementation");
+            implementationAddress = config.readAddress(".feedManagerImplementation");
         } else {
-            implementationAddress = address(new EOFeedRegistryAdapter());
+            implementationAddress = address(new EOFeedManager());
             string memory outputConfigJson =
-                EOJsonUtils.OUTPUT_CONFIG.serialize("feedRegistryAdapterImplementation", implementationAddress);
+                EOJsonUtils.OUTPUT_CONFIG.serialize("feedManagerImplementation", implementationAddress);
             EOJsonUtils.writeConfig(outputConfigJson);
         }
         bytes memory initData;

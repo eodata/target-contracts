@@ -9,8 +9,9 @@ import { Script } from "forge-std/Script.sol";
 import { stdJson } from "forge-std/Script.sol";
 import { EOJsonUtils } from "../../utils/EOJsonUtils.sol";
 import { TimelockController } from "@openzeppelin/contracts/governance/TimelockController.sol";
+import { TimelockBase } from "./TimelockBase.sol";
 
-contract TransferOwnershipTimelocked is Script {
+contract TransferOwnershipTimelocked is Script, TimelockBase {
     using stdJson for string;
 
     struct LocalVars {
@@ -24,27 +25,28 @@ contract TransferOwnershipTimelocked is Script {
         bytes32 salt;
         bytes32 predecessor;
         uint256 delay;
-        bool isExecutionMode;
     }
+
+    bool public isExecutionMode;
 
     LocalVars public vars;
 
     function run(bool isExecution, address to) external {
-        vars.isExecutionMode = isExecution;
         vm.startBroadcast();
-        execute(to);
+        execute(isExecution, true, to);
         vm.stopBroadcast();
     }
 
     // for testing purposes
     function run(address broadcastFrom, bool isExecution, address to) public {
-        vars.isExecutionMode = isExecution;
         vm.startBroadcast(broadcastFrom);
-        execute(to);
+        execute(isExecution, true, to);
         vm.stopBroadcast();
     }
 
-    function execute(address to) public {
+    function execute(bool isExecution, bool send, address to) public returns (bytes memory) {
+        isExecutionMode = isExecution;
+
         string memory outputConfig = EOJsonUtils.initOutputConfig();
 
         vars.feedManager = outputConfig.readAddress(".feedManager");
@@ -74,11 +76,11 @@ contract TransferOwnershipTimelocked is Script {
         vars.salt = keccak256(abi.encode("transferOwnership"));
         vars.delay = timelock.getMinDelay();
 
-        if (vars.isExecutionMode) {
-            timelock.executeBatch(vars.targets, vars.values, vars.payloads, vars.predecessor, vars.salt);
-        } else {
-            timelock.scheduleBatch(vars.targets, vars.values, vars.payloads, vars.predecessor, vars.salt, vars.delay);
-        }
+        bytes memory txn = callTimelockBatch(
+            timelock, isExecutionMode, send, vars.targets, vars.payloads, vars.values, "transferOwnership"
+        );
+
         delete vars;
+        return txn;
     }
 }

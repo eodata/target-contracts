@@ -8,8 +8,9 @@ import { EOJsonUtils } from "../../utils/EOJsonUtils.sol";
 import { EOFeedManager } from "../../../src/EOFeedManager.sol";
 import { EOFeedRegistryAdapter } from "../../../src/adapters/EOFeedRegistryAdapter.sol";
 import { TimelockController } from "@openzeppelin/contracts/governance/TimelockController.sol";
+import { TimelockBase } from "./TimelockBase.sol";
 
-contract DeployFeedsTimelocked is Script {
+contract DeployFeedsTimelocked is Script, TimelockBase {
     using stdJson for string;
 
     struct LocalVars {
@@ -19,7 +20,6 @@ contract DeployFeedsTimelocked is Script {
         address[] targets;
         bytes[] payloads;
         uint256[] values;
-        EOJsonUtils.FeedData[] feedData;
         bytes32 salt;
         bytes32 predecessor;
         uint256 delay;
@@ -38,21 +38,20 @@ contract DeployFeedsTimelocked is Script {
     error FeedIsNotSupported(uint16 feedId);
 
     function run(bool isExecution) external {
-        isExecutionMode = isExecution;
         vm.startBroadcast();
-        execute();
+        execute(isExecution, true);
         vm.stopBroadcast();
     }
 
     // for testing purposes
     function run(address broadcastFrom, bool isExecution) public {
-        isExecutionMode = isExecution;
         vm.startBroadcast(broadcastFrom);
-        execute();
+        execute(isExecution, true);
         vm.stopBroadcast();
     }
 
-    function execute() public {
+    function execute(bool isExecution, bool send) public returns (bytes memory) {
+        isExecutionMode = isExecution;
         EOJsonUtils.Config memory configStructured = EOJsonUtils.getParsedConfig();
         string memory outputConfig = EOJsonUtils.initOutputConfig();
 
@@ -90,21 +89,17 @@ contract DeployFeedsTimelocked is Script {
                 );
                 vars.targets.push(address(feedRegistryAdapter));
                 vars.values.push(0);
-                vars.feedData.push(configStructured.supportedFeedsData[i]);
             }
         }
 
         // schedule or execute
-        vars.salt = keccak256(abi.encode("feeds"));
-        vars.delay = timelock.getMinDelay();
-
+        bytes memory txn =
+            callTimelockBatch(timelock, isExecutionMode, send, vars.targets, vars.payloads, vars.values, "feeds");
         if (isExecutionMode) {
-            timelock.executeBatch(vars.targets, vars.values, vars.payloads, vars.predecessor, vars.salt);
-            writeConfig(vars.feedData);
-        } else {
-            timelock.scheduleBatch(vars.targets, vars.values, vars.payloads, vars.predecessor, vars.salt, vars.delay);
+            writeConfig(configStructured.supportedFeedsData);
         }
         delete vars;
+        return txn;
     }
 
     function writeConfig(EOJsonUtils.FeedData[] memory feedData) public {

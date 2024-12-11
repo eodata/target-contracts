@@ -40,8 +40,17 @@ contract TransferOwnershipToTimelock is Script {
         OwnableUpgradeable(feedRegistryAdapter).transferOwnership(timelock);
         UpgradeableBeacon(EOFeedFactoryBeacon(feedRegistryAdapter).getBeacon()).transferOwnership(timelock);
 
-        ProxyAdmin(Upgrades.getAdminAddress(feedManager)).transferOwnership(timelock);
-        ProxyAdmin(Upgrades.getAdminAddress(feedVerifier)).transferOwnership(timelock);
-        ProxyAdmin(Upgrades.getAdminAddress(feedRegistryAdapter)).transferOwnership(timelock);
+        ProxyAdmin admin = ProxyAdmin(Upgrades.getAdminAddress(feedManager));
+        if (admin.owner() != timelock) {
+            admin.transferOwnership(timelock);
+        }
+        admin = ProxyAdmin(Upgrades.getAdminAddress(feedVerifier));
+        if (admin.owner() != timelock) {
+            admin.transferOwnership(timelock);
+        }
+        admin = ProxyAdmin(Upgrades.getAdminAddress(feedRegistryAdapter));
+        if (admin.owner() != timelock) {
+            admin.transferOwnership(timelock);
+        }
     }
 }
