@@ -30,7 +30,7 @@ contract EOFeedManagerTest is Test, Utils {
     address private notOwner = makeAddr("notOwner");
     uint16 private feedId = 1;
     uint256 private rate = 1_000_000;
-    uint256 private timestamp = 9_999_999_999;
+    uint256 private timestamp = 1_801_180_800;
     bytes32 private blockHash = keccak256("BLOCK_HASH");
     bytes32 private eventRoot = keccak256("EVENT_ROOT");
     bytes32 private validatorSetHash = keccak256("VALIDATOR_SET_HASH");

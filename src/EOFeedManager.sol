@@ -21,6 +21,8 @@ import {
  * the feed manager.
  */
 contract EOFeedManager is IEOFeedManager, OwnableUpgradeable {
+    uint256 internal constant MAX_SECONDS_TIMESTAMP = 4_073_328_000; // 2099-01-01
+
     /// @dev Map of feed id to price feed (feed id => PriceFeed)
     mapping(uint16 => PriceFeed) internal _priceFeeds;
 
@@ -180,7 +182,19 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable {
     function _processVerifiedRate(bytes memory data, uint256 blockNumber) internal {
         (uint16 feedId, uint256 rate, uint256 timestamp) = abi.decode(data, (uint16, uint256, uint256));
         if (!_supportedFeedIds[feedId]) revert FeedNotSupported(feedId);
-        if (_priceFeeds[feedId].timestamp >= timestamp) revert SymbolReplay(feedId);
+        // if timestamp is greater than 2099-01-01, it means the timestamp is in milliseconds
+        if (timestamp > MAX_SECONDS_TIMESTAMP) {
+            timestamp = timestamp / 1000;
+        }
+
+        uint256 lastTimestamp = _priceFeeds[feedId].timestamp;
+        // auto fix milliseconds timestamp in storage
+        if (lastTimestamp > MAX_SECONDS_TIMESTAMP) {
+            lastTimestamp = lastTimestamp / 1000;
+            _priceFeeds[feedId].timestamp = lastTimestamp;
+        }
+
+        if (lastTimestamp >= timestamp) revert SymbolReplay(feedId);
         _priceFeeds[feedId] = PriceFeed(rate, timestamp, blockNumber);
         emit RateUpdated(feedId, rate, timestamp);
     }
