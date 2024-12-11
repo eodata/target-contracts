@@ -8,8 +8,9 @@ import { EOJsonUtils } from "../../utils/EOJsonUtils.sol";
 import { EOFeedManager } from "../../../src/EOFeedManager.sol";
 import { EOFeedRegistryAdapter } from "../../../src/adapters/EOFeedRegistryAdapter.sol";
 import { TimelockController } from "@openzeppelin/contracts/governance/TimelockController.sol";
+import { TimelockBase } from "./TimelockBase.sol";
 
-contract DeployFeedsTimelocked is Script {
+contract DeployFeedsTimelocked is Script, TimelockBase {
     using stdJson for string;
 
     struct LocalVars {
@@ -19,7 +20,6 @@ contract DeployFeedsTimelocked is Script {
         address[] targets;
         bytes[] payloads;
         uint256[] values;
-        EOJsonUtils.FeedData[] feedData;
         bytes32 salt;
         bytes32 predecessor;
         uint256 delay;
@@ -89,35 +89,14 @@ contract DeployFeedsTimelocked is Script {
                 );
                 vars.targets.push(address(feedRegistryAdapter));
                 vars.values.push(0);
-                vars.feedData.push(configStructured.supportedFeedsData[i]);
             }
         }
 
         // schedule or execute
-        vars.salt = keccak256(abi.encode("feeds"));
-        vars.delay = timelock.getMinDelay();
-
-        bytes memory txn;
+        bytes memory txn =
+            callTimelockBatch(timelock, isExecutionMode, send, vars.targets, vars.payloads, vars.values, "feeds");
         if (isExecutionMode) {
-            txn = abi.encodeCall(
-                timelock.executeBatch, (vars.targets, vars.values, vars.payloads, vars.predecessor, vars.salt)
-            );
-        } else {
-            txn = abi.encodeCall(
-                timelock.scheduleBatch,
-                (vars.targets, vars.values, vars.payloads, vars.predecessor, vars.salt, vars.delay)
-            );
-        }
-
-        if (send) {
-            // solhint-disable-next-line avoid-low-level-calls
-            (bool success,) = address(timelock).call(txn);
-            if (!success) {
-                revert("Transaction failed");
-            }
-        }
-        if (isExecutionMode) {
-            writeConfig(vars.feedData);
+            writeConfig(configStructured.supportedFeedsData);
         }
         delete vars;
         return txn;

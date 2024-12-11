@@ -7,8 +7,9 @@ import { stdJson } from "forge-std/Script.sol";
 import { TimelockController } from "openzeppelin-contracts/contracts/governance/TimelockController.sol";
 import { EOJsonUtils } from "../../utils/EOJsonUtils.sol";
 import { EOFeedManager } from "../../../src/EOFeedManager.sol";
+import { TimelockBase } from "./TimelockBase.sol";
 
-contract WhitelistPublishersTimelocked is Script {
+contract WhitelistPublishersTimelocked is Script, TimelockBase {
     using stdJson for string;
 
     address[] public publishers;
@@ -50,29 +51,11 @@ contract WhitelistPublishersTimelocked is Script {
         }
         if (publishers.length == 0) revert("No publishers to whitelist");
         bytes memory data = abi.encodeCall(feedManager.whitelistPublishers, (publishers, publishersBools));
-        bytes memory txn = callTimelock(address(feedManager), data);
+        bytes memory txn = callTimelock(timelock, isExecutionMode, send, address(feedManager), data, "publishers");
 
-        if (send) {
-            // solhint-disable-next-line avoid-low-level-calls
-            (bool success,) = address(timelock).call(txn);
-            if (!success) {
-                revert("Transaction failed");
-            }
-        }
         delete publishers;
         delete publishersBools;
 
-        return txn;
-    }
-
-    function callTimelock(address target, bytes memory data) internal view returns (bytes memory) {
-        bytes32 salt = keccak256(abi.encode("feeds"));
-        bytes32 predecessor;
-        uint256 delay = timelock.getMinDelay();
-
-        bytes memory txn = isExecutionMode
-            ? abi.encodeCall(timelock.execute, (target, 0, data, predecessor, salt))
-            : abi.encodeCall(timelock.schedule, (target, 0, data, predecessor, salt, delay));
         return txn;
     }
 }
