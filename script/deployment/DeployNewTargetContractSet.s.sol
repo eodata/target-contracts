@@ -4,6 +4,7 @@ pragma solidity 0.8.25;
 
 import { stdJson } from "forge-std/Script.sol";
 import { Upgrades } from "openzeppelin-foundry-upgrades/Upgrades.sol";
+import { PauserRegistry } from "eigenlayer-contracts/permissions/PauserRegistry.sol";
 import { FeedVerifierDeployer } from "./base/DeployFeedVerifier.s.sol";
 import { FeedManagerDeployer } from "./base/DeployFeedManager.s.sol";
 import { BN256G2 } from "../../src/common/BN256G2.sol";
@@ -50,6 +51,11 @@ contract DeployNewTargetContractSet is FeedVerifierDeployer, FeedManagerDeployer
         bls = address(new BLS());
         EOJsonUtils.OUTPUT_CONFIG.serialize("bls", bls);
 
+        address pauserRegistry = address(
+            new PauserRegistry(configStructured.pauserRegistry.pausers, configStructured.pauserRegistry.unpauser)
+        );
+        EOJsonUtils.OUTPUT_CONFIG.serialize("pauserRegistry", pauserRegistry);
+
         /*//////////////////////////////////////////////////////////////////////////
                                         EOFeedVerifier
         //////////////////////////////////////////////////////////////////////////*/
@@ -69,7 +75,7 @@ contract DeployNewTargetContractSet is FeedVerifierDeployer, FeedManagerDeployer
         /*//////////////////////////////////////////////////////////////////////////
                                         EOFeedManager
         //////////////////////////////////////////////////////////////////////////*/
-        feedManagerProxy = deployFeedManager(timelock, feedVerifierProxy, broadcastFrom);
+        feedManagerProxy = deployFeedManager(timelock, feedVerifierProxy, broadcastFrom, pauserRegistry);
 
         // set feedManager in feedVerifier
         IEOFeedVerifier(feedVerifierProxy).setFeedManager(feedManagerProxy);

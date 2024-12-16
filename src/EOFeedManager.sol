@@ -2,6 +2,8 @@
 pragma solidity 0.8.25;
 
 import { OwnableUpgradeable } from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import { Pausable } from "eigenlayer-contracts/permissions/Pausable.sol";
+import { IPauserRegistry } from "eigenlayer-contracts/interfaces/IPauserRegistry.sol";
 import { IEOFeedVerifier } from "./interfaces/IEOFeedVerifier.sol";
 import { IEOFeedManager } from "./interfaces/IEOFeedManager.sol";
 import {
@@ -20,7 +22,10 @@ import {
  * the EOFeedManager and made available for other smart contracts to read. Only supported feed IDs can be published to
  * the feed manager.
  */
-contract EOFeedManager is IEOFeedManager, OwnableUpgradeable {
+contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, Pausable {
+    /// @notice Index for flag that pauses feed updates
+    uint8 public constant PAUSED_FEED_UPDATES = 0;
+
     /// @dev Map of feed id to price feed (feed id => PriceFeed)
     mapping(uint16 => PriceFeed) internal _priceFeeds;
 
@@ -55,10 +60,20 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable {
      * @dev The feed verifier contract must be deployed first
      * @param feedVerifier Address of the feed verifier contract
      * @param owner Owner of the contract
+     * @param pauserRegistry Address of the pauser registry contract
      */
-    function initialize(address feedVerifier, address owner) external onlyNonZeroAddress(feedVerifier) initializer {
+    function initialize(
+        address feedVerifier,
+        address owner,
+        address pauserRegistry
+    )
+        external
+        onlyNonZeroAddress(feedVerifier)
+        initializer
+    {
         __Ownable_init(owner);
         _feedVerifier = IEOFeedVerifier(feedVerifier);
+        _initializePauser(IPauserRegistry(pauserRegistry), UNPAUSE_ALL);
     }
 
     /**
@@ -105,6 +120,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable {
     )
         external
         onlyWhitelisted
+        onlyWhenNotPaused(PAUSED_FEED_UPDATES)
     {
         bytes memory data = _feedVerifier.verify(input, checkpoint, signature, bitmap);
         _processVerifiedRate(data, checkpoint.blockNumber);
@@ -123,6 +139,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable {
     )
         external
         onlyWhitelisted
+        onlyWhenNotPaused(PAUSED_FEED_UPDATES)
     {
         if (inputs.length == 0) revert MissingLeafInputs();
 
