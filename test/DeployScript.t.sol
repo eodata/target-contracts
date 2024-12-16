@@ -50,11 +50,11 @@ contract DeployScriptTest is Test {
 
         config = EOJsonUtils.getConfig();
 
+        timelockDeployer.run(address(this));
         (bls, bn256G2, feedVerifierProxy, feedManagerProxy) = mainDeployer.run(address(this));
         (feedAdapterImplementation, adapterProxy) = adapterDeployer.run(address(this));
         coreContractsSetup.run(address(this));
         feedsDeployer.run(address(this));
-        timelockDeployer.run(address(this));
         outputConfig = EOJsonUtils.getOutputConfig();
     }
 
