@@ -121,7 +121,7 @@ jobs:
           )" >> $GITHUB_ENV
 
       - name: "Run the tests"
-        run: "forge test --ffi"
+        run: "forge test -vvv --ffi"
 
       - name: "Add test summary"
         run: |

@@ -2,4 +2,5 @@
 @openzeppelin/contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/
 ds-test/=lib/ds-test/src/
 forge-std/=lib/forge-std/src/
+forge-safe/=lib/forge-safe/src/
 eigenlayer-contracts/=lib/eigenlayer-contracts/src/contracts

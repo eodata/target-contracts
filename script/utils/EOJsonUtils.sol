@@ -12,12 +12,11 @@ library EOJsonUtils {
         address[] allowedSenders;
         uint256 eoracleChainId;
         PauserRegistry pauserRegistry;
-        address proxyAdminOwner;
         address[] publishers;
         uint256[] supportedFeedIds;
         FeedData[] supportedFeedsData;
         uint256 targetChainId;
-        address targetContractsOwner;
+        TimelockConfig timelock;
         bool usePrecompiledModexp;
     }
 
@@ -28,6 +27,12 @@ library EOJsonUtils {
         uint256 inputDecimals;
         uint256 outputDecimals;
         address quote;
+    }
+
+    struct TimelockConfig {
+        address[] executors;
+        uint256 minDelay;
+        address[] proposers;
     }
 
     struct PauserRegistry {

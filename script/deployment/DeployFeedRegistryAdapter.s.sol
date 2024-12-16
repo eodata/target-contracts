@@ -12,23 +12,24 @@ import { EOJsonUtils } from "script/utils/EOJsonUtils.sol";
 contract DeployFeedRegistryAdapter is Script {
     using stdJson for string;
 
-    function run() external returns (address feedAdapterImplementation, address adapterProxy) {
-        string memory outputConfig = EOJsonUtils.initOutputConfig();
+    function run() external {
+        run(vm.addr(vm.envUint("PRIVATE_KEY")));
+    }
 
-        vm.startBroadcast();
+    function run(address broadcastFrom) public returns (address feedAdapterImplementation, address adapterProxy) {
+        string memory outputConfig = EOJsonUtils.initOutputConfig();
+        address deployer = broadcastFrom;
+
+        vm.startBroadcast(broadcastFrom);
         feedAdapterImplementation = address(new EOFeedAdapter());
         EOJsonUtils.OUTPUT_CONFIG.serialize("feedAdapterImplementation", feedAdapterImplementation);
 
         address feedManager = outputConfig.readAddress(".feedManager");
+        address timelock = outputConfig.readAddress(".timelock");
 
-        EOJsonUtils.Config memory configStructured = EOJsonUtils.getParsedConfig();
-
-        bytes memory initData = abi.encodeCall(
-            EOFeedRegistryAdapterBase.initialize,
-            (feedManager, feedAdapterImplementation, configStructured.targetContractsOwner)
-        );
-        adapterProxy =
-            Upgrades.deployTransparentProxy("EOFeedRegistryAdapter.sol", configStructured.proxyAdminOwner, initData);
+        bytes memory initData =
+            abi.encodeCall(EOFeedRegistryAdapterBase.initialize, (feedManager, feedAdapterImplementation, deployer));
+        adapterProxy = Upgrades.deployTransparentProxy("EOFeedRegistryAdapter.sol", timelock, initData);
         EOJsonUtils.OUTPUT_CONFIG.serialize("feedRegistryAdapter", adapterProxy);
         address implementationAddress = Upgrades.getImplementationAddress(adapterProxy);
         string memory outputConfigJson =
