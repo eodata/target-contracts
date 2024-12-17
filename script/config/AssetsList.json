@@ -682,11 +682,11 @@
     },
     {
       "feedId": 86,
-      "description": "wstETH/USD",
+      "description": "wstETH/ETH",
       "base": "0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0",
-      "quote": "0x0000000000000000000000000000000000000348",
+      "quote": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 18
     },
     {
       "feedId": 87,
@@ -762,7 +762,7 @@
     },
     {
       "feedId": 96,
-      "description": "fdusd/USD",
+      "description": "FDUSD/USD",
       "base": "0xC2Fe4f673455Ef92299770a09CDB5E8756A525D5",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
@@ -786,7 +786,7 @@
     },
     {
       "feedId": 99,
-      "description": "bitusd/USD",
+      "description": "BITUSD/USD",
       "base": "0x07373d112edc4570b46996ad1187bc4ac9fb5ed0",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
