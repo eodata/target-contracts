@@ -1,12 +1,12 @@
 {
   "usePrecompiledModexp": false,
-  "proxyAdminOwner": "0xd9c32116a01F1B924a658545158b9C9c2f073AEf",
-  "targetContractsOwner": "0xd9c32116a01F1B924a658545158b9C9c2f073AEf",
+  "proxyAdminOwner": "0xf5782eE64518604EF67ABD3C8A52f1c416e29cB3",
+  "targetContractsOwner": "0xf5782eE64518604EF67ABD3C8A52f1c416e29cB3",
   "eoracleChainId": 42420,
-  "targetChainId": 81457,
-  "publishers": ["0x8EA04C858c1bD08a424252DDdB85B63aEB266bfA"],
+  "targetChainId": 200901,
+  "publishers": ["0xCE68e4d87DDf72a09dBd6dd11746Cda1C407511d"],
   "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
-  "supportedFeedIds": [1, 2, 9, 35, 36, 67],
+  "supportedFeedIds": [1, 2, 17, 54, 99],
   "supportedFeedsData": [
     {
       "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
@@ -25,36 +25,28 @@
       "description": "ETH/USD"
     },
     {
-      "base": "0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0",
+      "base": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
       "quote": "0x0000000000000000000000000000000000000348",
-      "feedId": 9,
+      "feedId": 17,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "MATIC/USD"
+      "description": "USDT/USD"
     },
     {
-      "base": "0xd6fAA45f5180A36CE1925ba9b4C9683CCaA3D117",
+      "base": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
       "quote": "0x0000000000000000000000000000000000000348",
-      "feedId": 35,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "BNB/USD"
+      "description": "USDC/USD",
+      "feedId": 54
     },
     {
-      "base": "0xDB9f97165657aeE56ce412966FD68b8715b04815",
+      "base": "0x07373d112edc4570b46996ad1187bc4ac9fb5ed0",
       "quote": "0x0000000000000000000000000000000000000348",
-      "feedId": 36,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "AVAX/USD"
-    },
-    {
-      "base": "0x4E15361FD6b4BB609Fa63C81A2be19d873717870",
-      "quote": "0x0000000000000000000000000000000000000348",
-      "feedId": 67,
-      "inputDecimals": 18,
-      "outputDecimals": 8,
-      "description": "FTM/USD"
+      "description": "BITUSD/USD",
+      "feedId": 99
     }
   ]
 }

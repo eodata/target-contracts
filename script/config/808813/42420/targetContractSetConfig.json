@@ -1,26 +1,24 @@
 {
-  "usePrecompiledModexp": true,
-  "proxyAdminOwner": "0x33A6671ecB46Eef7F164A88D61f364556761280d",
-  "targetContractsOwner": "0x33A6671ecB46Eef7F164A88D61f364556761280d",
+  "usePrecompiledModexp": false,
+  "proxyAdminOwner": "0x18fB439789322F3c9C8d1325E64cdA6C06005Be2",
+  "targetContractsOwner": "0x18fB439789322F3c9C8d1325E64cdA6C06005Be2",
   "eoracleChainId": 42420,
-  "targetChainId": 2818,
-  "publishers": ["0x2C5e9c2D437679BaAe64B519139Fd21fdD82f3c6"],
+  "targetChainId": 808813,
+  "publishers": ["0xE7E8C680cAf54751013791acaE4D06AbAD8b5851"],
   "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
-  "supportedFeedIds": [1, 2, 17, 54, 55, 83],
+  "supportedFeedIds": [1, 2, 17, 54, 55],
   "supportedFeedsData": [
     {
       "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
       "quote": "0x0000000000000000000000000000000000000348",
-      "inputDecimals": 18,
-      "outputDecimals": 8,
+      "decimals": 18,
       "description": "BTC/USD",
       "feedId": 1
     },
     {
       "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
       "quote": "0x0000000000000000000000000000000000000348",
-      "inputDecimals": 18,
-      "outputDecimals": 8,
+      "decimals": 18,
       "description": "ETH/USD",
       "feedId": 2
     },
@@ -28,33 +26,22 @@
       "base": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
       "quote": "0x0000000000000000000000000000000000000348",
       "feedId": 17,
-      "inputDecimals": 18,
-      "outputDecimals": 8,
+      "decimals": 18,
       "description": "USDT/USD"
     },
     {
       "base": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
       "quote": "0x0000000000000000000000000000000000000348",
       "feedId": 54,
-      "inputDecimals": 18,
-      "outputDecimals": 8,
+      "decimals": 18,
       "description": "USDC/USD"
     },
     {
       "base": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
       "quote": "0x0000000000000000000000000000000000000348",
       "feedId": 55,
-      "inputDecimals": 18,
-      "outputDecimals": 8,
+      "decimals": 18,
       "description": "DAI/USD"
-    },
-    {
-      "base": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
-      "quote": "0x0000000000000000000000000000000000000348",
-      "inputDecimals": 18,
-      "outputDecimals": 8,
-      "description": "WBTC/USD",
-      "feedId": 83
     }
   ]
 }
