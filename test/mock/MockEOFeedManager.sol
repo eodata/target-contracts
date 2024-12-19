@@ -11,7 +11,7 @@ contract MockEOFeedManager is IEOFeedManager {
     uint16 public constant NOT_SUPPORTED_FEED = 1000;
     mapping(uint16 => PriceFeed) public priceFeeds;
 
-    function updatePriceFeed(
+    function updateFeed(
         IEOFeedVerifier.LeafInput calldata input,
         IEOFeedVerifier.VerificationParams calldata vParams
     )
@@ -22,7 +22,7 @@ contract MockEOFeedManager is IEOFeedManager {
         priceFeeds[feedId] = PriceFeed(rate, timestamp, vParams.blockNumber);
     }
 
-    function updatePriceFeeds(
+    function updateFeeds(
         IEOFeedVerifier.LeafInput[] calldata inputs,
         IEOFeedVerifier.VerificationParams calldata vParams
     )

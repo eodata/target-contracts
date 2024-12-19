@@ -123,12 +123,12 @@ function whitelistPublishers(address[] memory publishers, bool[] memory isWhitel
 | `publishers`    | `address[]` | Array of publisher addresses                                      |
 | `isWhitelisted` | `bool[]`    | Array of booleans indicating whether the publisher is whitelisted |
 
-### updatePriceFeed
+### updateFeed
 
 Update the price for a feed
 
 ```solidity
-function updatePriceFeed(
+function updateFeed(
     IEOFeedVerifier.LeafInput memory input,
     IEOFeedVerifier.Checkpoint calldata checkpoint,
     uint256[2] calldata signature,
@@ -147,12 +147,12 @@ function updatePriceFeed(
 | `signature`  | `uint256[2]`                 | Aggregated signature of the checkpoint                                     |
 | `bitmap`     | `bytes`                      | Bitmap of the validators who signed the checkpoint                         |
 
-### updatePriceFeeds
+### updateFeeds
 
 Update the price for multiple feeds
 
 ```solidity
-function updatePriceFeeds(
+function updateFeeds(
     IEOFeedVerifier.LeafInput[] calldata inputs,
     IEOFeedVerifier.Checkpoint calldata checkpoint,
     uint256[2] calldata signature,

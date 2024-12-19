@@ -38,7 +38,7 @@ interface IEOFeedManager {
      * @param input A merkle leaf containing price data and its merkle proof
      * @param vParams Verification parameters
      */
-    function updatePriceFeed(
+    function updateFeed(
         IEOFeedVerifier.LeafInput calldata input,
         IEOFeedVerifier.VerificationParams calldata vParams
     )
@@ -49,11 +49,18 @@ interface IEOFeedManager {
      * @param inputs Array of leafs to prove the price feeds
      * @param vParams Verification parameters
      */
-    function updatePriceFeeds(
+    function updateFeeds(
         IEOFeedVerifier.LeafInput[] calldata inputs,
         IEOFeedVerifier.VerificationParams calldata vParams
     )
         external;
+
+    /**
+     * @notice Whitelist or remove publishers
+     * @param publishers Array of publisher addresses
+     * @param isWhitelisted Array of booleans indicating whether each publisher should be whitelisted
+     */
+    function whitelistPublishers(address[] calldata publishers, bool[] calldata isWhitelisted) external;
 
     /**
      * @notice Get the latest price for a feed
@@ -82,11 +89,4 @@ interface IEOFeedManager {
      * @return Boolean indicating whether the feed is supported
      */
     function isSupportedFeed(uint16 feedId) external view returns (bool);
-
-    /**
-     * @notice Whitelist or remove publishers
-     * @param publishers Array of publisher addresses
-     * @param isWhitelisted Array of booleans indicating whether each publisher should be whitelisted
-     */
-    function whitelistPublishers(address[] calldata publishers, bool[] calldata isWhitelisted) external;
 }

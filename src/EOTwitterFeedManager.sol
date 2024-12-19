@@ -3,34 +3,30 @@ pragma solidity 0.8.25;
 
 import { OwnableUpgradeable } from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import { IEOFeedVerifier } from "./interfaces/IEOFeedVerifier.sol";
-import { IEOFeedManager } from "./interfaces/IEOFeedManager.sol";
-import {
-    InvalidAddress,
-    CallerIsNotWhitelisted,
-    MissingLeafInputs,
-    FeedNotSupported,
-    InvalidInput
-} from "./interfaces/Errors.sol";
+import { IEOTwitterFeedManager } from "./interfaces/IEOTwitterFeedManager.sol";
+import { InvalidAddress, CallerIsNotWhitelisted, MissingLeafInputs, InvalidInput } from "./interfaces/Errors.sol";
 
 /**
- * @title EOFeedManager
+ * @title EOTwitterFeedManager
  * @notice The EOFeedManager contract is responsible for receiving feed updates from whitelisted publishers. These
  * updates are verified using the logic in the EOFeedVerifier. Upon successful verification, the feed data is stored in
  * the EOFeedManager and made available for other smart contracts to read. Only supported feed IDs can be published to
  * the feed manager.
  */
-contract EOFeedManager is IEOFeedManager, OwnableUpgradeable {
-    /// @dev Map of feed id to price feed (feed id => PriceFeed)
-    mapping(uint16 => PriceFeed) internal _priceFeeds;
+contract EOTwitterFeedManager is IEOTwitterFeedManager, OwnableUpgradeable {
+    /// @dev Map of feed id to feed (feed id => Feed)
+    mapping(uint32 feedId => Feed feed) internal _feeds;
 
     /// @dev Map of whitelisted publishers (publisher => is whitelisted)
     mapping(address => bool) internal _whitelistedPublishers;
 
     /// @dev Map of supported feeds, (feed id => is supported)
-    mapping(uint16 => bool) internal _supportedFeedIds;
+    mapping(uint32 => bool) internal _supportedFeedIds;
 
     /// @dev feed verifier contract
     IEOFeedVerifier internal _feedVerifier;
+
+    error FeedNotSupported(uint64 feedId);
 
     /// @dev Allows only whitelisted publishers to call the function
     modifier onlyWhitelisted() {
@@ -73,7 +69,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable {
      * @param feedIds Array of feed ids
      * @param isSupported Array of booleans indicating whether the feed is supported
      */
-    function setSupportedFeeds(uint16[] calldata feedIds, bool[] calldata isSupported) external onlyOwner {
+    function setSupportedFeeds(uint32[] calldata feedIds, bool[] calldata isSupported) external onlyOwner {
         if (feedIds.length != isSupported.length) revert InvalidInput();
         for (uint256 i = 0; i < feedIds.length; i++) {
             _supportedFeedIds[feedIds[i]] = isSupported[i];
@@ -81,7 +77,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable {
     }
 
     /**
-     * @inheritdoc IEOFeedManager
+     * @inheritdoc IEOTwitterFeedManager
      */
     function whitelistPublishers(address[] calldata publishers, bool[] calldata isWhitelisted) external onlyOwner {
         if (publishers.length != isWhitelisted.length) revert InvalidInput();
@@ -92,7 +88,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable {
     }
 
     /**
-     * @inheritdoc IEOFeedManager
+     * @inheritdoc IEOTwitterFeedManager
      */
     // Reentrancy is not an issue because _feedVerifier is set by the owner
     // slither-disable-next-line reentrancy-benign,reentrancy-events
@@ -104,11 +100,11 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable {
         onlyWhitelisted
     {
         bytes memory data = _feedVerifier.verify(input, vParams);
-        _processVerifiedRate(data, vParams.blockNumber);
+        _processVerifiedPost(data, vParams.blockNumber);
     }
 
     /**
-     * @inheritdoc IEOFeedManager
+     * @inheritdoc IEOTwitterFeedManager
      */
     // Reentrancy is not an issue because _feedVerifier is set by the owner
     // slither-disable-next-line reentrancy-benign,reentrancy-events
@@ -123,39 +119,51 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable {
 
         bytes[] memory data = _feedVerifier.batchVerify(inputs, vParams);
         for (uint256 i = 0; i < data.length; i++) {
-            _processVerifiedRate(data[i], vParams.blockNumber);
+            _processVerifiedPost(data[i], vParams.blockNumber);
         }
     }
 
     /**
-     * @inheritdoc IEOFeedManager
+     * @inheritdoc IEOTwitterFeedManager
      */
-    function getLatestPriceFeed(uint16 feedId) external view returns (PriceFeed memory) {
-        return _getLatestPriceFeed(feedId);
+    function getLatestFeedPost(uint32 feedId) external view returns (Post memory) {
+        if (!_supportedFeedIds[feedId]) revert FeedNotSupported(feedId);
+        return _feeds[feedId].posts[_feeds[feedId].lastPostId];
     }
 
     /**
-     * @inheritdoc IEOFeedManager
+     * @inheritdoc IEOTwitterFeedManager
      */
-    function getLatestPriceFeeds(uint16[] calldata feedIds) external view returns (PriceFeed[] memory) {
-        PriceFeed[] memory retVal = new PriceFeed[](feedIds.length);
-        for (uint256 i = 0; i < feedIds.length; i++) {
-            retVal[i] = _getLatestPriceFeed(feedIds[i]);
+    function getFeedPost(uint32 feedId, uint32 postId) external view returns (Post memory) {
+        if (!_supportedFeedIds[feedId]) revert FeedNotSupported(feedId);
+        return _feeds[feedId].posts[postId];
+    }
+
+    /**
+     * @inheritdoc IEOTwitterFeedManager
+     */
+    function getLatestFeedPosts(uint32 feedId, uint256 latestAmount) external view returns (Post[] memory) {
+        if (!_supportedFeedIds[feedId]) revert FeedNotSupported(feedId);
+        uint256 postIdsLength = _feeds[feedId].postIds.length;
+        if (latestAmount > postIdsLength) revert InvalidInput();
+        Post[] memory posts = new Post[](latestAmount);
+        for (uint256 i = 0; i < latestAmount; i++) {
+            posts[i] = _feeds[feedId].posts[_feeds[feedId].postIds[postIdsLength - i - 1]];
         }
-        return retVal;
+        return posts;
     }
 
     /**
-     * @inheritdoc IEOFeedManager
+     * @inheritdoc IEOTwitterFeedManager
      */
     function isWhitelistedPublisher(address publisher) external view returns (bool) {
         return _whitelistedPublishers[publisher];
     }
 
     /**
-     * @inheritdoc IEOFeedManager
+     * @inheritdoc IEOTwitterFeedManager
      */
-    function isSupportedFeed(uint16 feedId) external view returns (bool) {
+    function isSupportedFeed(uint32 feedId) external view returns (bool) {
         return _supportedFeedIds[feedId];
     }
 
@@ -172,25 +180,34 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable {
      * @param data Verified rate data, abi encoded (uint16 feedId, uint256 rate, uint256 timestamp)
      * @param blockNumber eoracle chain block number
      */
-    function _processVerifiedRate(bytes memory data, uint256 blockNumber) internal {
-        (uint16 feedId, uint256 rate, uint256 timestamp) = abi.decode(data, (uint16, uint256, uint256));
-        if (!_supportedFeedIds[feedId]) revert FeedNotSupported(feedId);
-        if (_priceFeeds[feedId].timestamp < timestamp) {
-            _priceFeeds[feedId] = PriceFeed(rate, timestamp, blockNumber);
-            emit RateUpdated(feedId, rate, timestamp);
-        } else {
-            emit SymbolReplay(feedId, rate, timestamp, _priceFeeds[feedId].timestamp);
-        }
-    }
+    function _processVerifiedPost(bytes memory data, uint256 blockNumber) internal {
+        LeafData memory leafData = abi.decode(data, (LeafData));
+        PostData memory postData = abi.decode(leafData.data, (PostData));
+        if (!_supportedFeedIds[leafData.feedId]) revert FeedNotSupported(leafData.feedId);
 
-    /**
-     * @notice Get the latest price feed
-     * @param feedId Feed id
-     * @return PriceFeed struct
-     */
-    function _getLatestPriceFeed(uint16 feedId) internal view returns (PriceFeed memory) {
-        if (!_supportedFeedIds[feedId]) revert FeedNotSupported(feedId);
-        return _priceFeeds[feedId];
+        Post storage post = _feeds[leafData.feedId].posts[postData.postId];
+        post.eoracleBlockNumber = blockNumber;
+        if (postData.action == PostAction.Creation) {
+            PostCreation memory postCreation = abi.decode(postData.content, (PostCreation));
+            post.content = postCreation.content;
+            post.timestampCreated = postCreation.timestamp;
+        } else if (postData.action == PostAction.UpdateContent) {
+            PostUpdateContent memory postUpdateContent = abi.decode(postData.content, (PostUpdateContent));
+            post.content = postUpdateContent.content;
+            post.timestampUpdatedContent = postUpdateContent.timestamp;
+        } else if (postData.action == PostAction.UpdateStatistics) {
+            PostUpdateStatistics memory postUpdateStatistics = abi.decode(postData.content, (PostUpdateStatistics));
+            post.replies = postUpdateStatistics.replies;
+            post.bookmarks = postUpdateStatistics.bookmarks;
+            post.reposts = postUpdateStatistics.reposts;
+            post.likes = postUpdateStatistics.likes;
+            post.views = postUpdateStatistics.views;
+            post.timestampUpdatedStatistics = postUpdateStatistics.timestamp;
+        } else if (postData.action == PostAction.Deletion) {
+            PostDeletion memory postDeletion = abi.decode(postData.content, (PostDeletion));
+            post.timestampDeleted = postDeletion.timestamp;
+        }
+        emit FeedPostUpdated(leafData.feedId, postData.postId, post);
     }
 
     // slither-disable-next-line unused-state,naming-convention
