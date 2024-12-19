@@ -334,7 +334,7 @@
       "base": "0xac3e018457b222d93114458476f3e3416abbe38f",
       "quote": "0xcf7ecee185f19e2e970a301ee37f93536ed66179",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 18
     },
     {
       "feedId": 43,
