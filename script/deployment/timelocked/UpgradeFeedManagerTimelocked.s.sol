@@ -53,7 +53,7 @@ contract UpgradeFeedManagerTimelocked is Script, TimelockBase {
             ProxyAdmin(admin).upgradeAndCall,
             (ITransparentUpgradeableProxy(payable(proxyAddress)), implementationAddress, initData)
         );
-        bytes memory txn = callTimelock(timelock, isExecutionMode, send, address(admin), data, "feedRegistryAdapter");
+        bytes memory txn = callTimelock(timelock, isExecutionMode, send, address(admin), data, "feedRegistryManager");
         return txn;
     }
 }
