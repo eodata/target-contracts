@@ -95,14 +95,19 @@ contract DeployFeedsTimelocked is Script, TimelockBase {
         // schedule or execute
         bytes memory txn =
             callTimelockBatch(timelock, isExecutionMode, send, vars.targets, vars.payloads, vars.values, "feeds");
-        if (isExecutionMode) {
-            writeConfig(configStructured.supportedFeedsData);
+        if (isExecutionMode && send) {
+            writeConfig();
         }
         delete vars;
         return txn;
     }
 
-    function writeConfig(EOJsonUtils.FeedData[] memory feedData) public {
+    function writeConfig() public {
+        EOJsonUtils.Config memory configStructured = EOJsonUtils.getParsedConfig();
+        EOJsonUtils.FeedData[] memory feedData = configStructured.supportedFeedsData;
+        string memory outputConfig = EOJsonUtils.initOutputConfig();
+        feedRegistryAdapter = EOFeedRegistryAdapter(outputConfig.readAddress(".feedRegistryAdapter"));
+
         string memory feedAddressesJsonKey = "feedsJson";
         string memory feedAddressesJson;
         for (uint256 i = 0; i < feedData.length; i++) {

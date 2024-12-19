@@ -135,5 +135,9 @@
     "minDelay": 10,
     "proposers": ["0x59cAE195Ad704Ae629a9F263EB5C978A2543dC34"],
     "executors": ["0x59cAE195Ad704Ae629a9F263EB5C978A2543dC34"]
+  },
+  "pauserRegistry": {
+    "pausers": ["0x59cAE195Ad704Ae629a9F263EB5C978A2543dC34"],
+    "unpauser": "0x59cAE195Ad704Ae629a9F263EB5C978A2543dC34"
   }
 }
