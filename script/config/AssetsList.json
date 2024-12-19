@@ -326,7 +326,7 @@
       "base": "0xa663b02cf0a4b149d2ad41910cb81e23e1c41c32",
       "quote": "0x853d955acef822db058eb8505911ed77f175b99e",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 18
     },
     {
       "feedId": 42,
@@ -334,7 +334,7 @@
       "base": "0xac3e018457b222d93114458476f3e3416abbe38f",
       "quote": "0xcf7ecee185f19e2e970a301ee37f93536ed66179",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 18
     },
     {
       "feedId": 43,
