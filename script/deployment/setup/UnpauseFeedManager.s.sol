@@ -7,7 +7,7 @@ import { stdJson } from "forge-std/Script.sol";
 import { EOJsonUtils } from "../../utils/EOJsonUtils.sol";
 import { EOFeedManager } from "../../../src/EOFeedManager.sol";
 
-contract PauseFeedManager is Script {
+contract UnpauseFeedManager is Script {
     using stdJson for string;
 
     function run() public {
@@ -15,7 +15,7 @@ contract PauseFeedManager is Script {
         EOFeedManager feedManager = EOFeedManager(outputConfig.readAddress(".feedManager"));
 
         vm.startBroadcast();
-        feedManager.unpause(0);
+        feedManager.unpause();
         vm.stopBroadcast();
     }
 }

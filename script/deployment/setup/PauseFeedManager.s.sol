@@ -15,7 +15,7 @@ contract PauseFeedManager is Script {
         EOFeedManager feedManager = EOFeedManager(outputConfig.readAddress(".feedManager"));
 
         vm.startBroadcast();
-        feedManager.pauseAll();
+        feedManager.pause();
         vm.stopBroadcast();
     }
 }

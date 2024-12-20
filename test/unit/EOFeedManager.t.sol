@@ -3,6 +3,7 @@ pragma solidity 0.8.25;
 
 import { OwnableUpgradeable } from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import { PauserRegistry } from "eigenlayer-contracts/permissions/PauserRegistry.sol";
+import { PausableUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
 import { Test } from "forge-std/Test.sol";
 import { Utils } from "../utils/Utils.sol";
 import { IEOFeedManager } from "../../src/interfaces/IEOFeedManager.sol";
@@ -228,7 +229,7 @@ contract EOFeedManagerTest is Test, Utils {
 
     function test_RevertWhen_Paused_UpdatePriceFeed() public {
         vm.startPrank(owner);
-        registry.pause(uint256(1 << registry.PAUSED_FEED_UPDATES()));
+        registry.pause();
         vm.stopPrank();
 
         IEOFeedVerifier.LeafInput memory input;
@@ -236,7 +237,7 @@ contract EOFeedManagerTest is Test, Utils {
         uint256[2] memory signature;
         bytes memory bitmap;
         _whitelistPublisher(owner, publisher);
-        vm.expectRevert("Pausable: index is paused");
+        vm.expectRevert(PausableUpgradeable.EnforcedPause.selector);
         vm.prank(publisher);
         registry.updatePriceFeed(input, checkpoint, signature, bitmap);
     }
@@ -305,7 +306,7 @@ contract EOFeedManagerTest is Test, Utils {
 
     function test_RevertWhen_Paused_UpdatePriceFeeds() public {
         vm.startPrank(owner);
-        registry.pause(uint256(1 << registry.PAUSED_FEED_UPDATES()));
+        registry.pause();
         vm.stopPrank();
 
         IEOFeedVerifier.LeafInput[] memory inputs;
@@ -313,7 +314,7 @@ contract EOFeedManagerTest is Test, Utils {
         uint256[2] memory signature;
         bytes memory bitmap;
         _whitelistPublisher(owner, publisher);
-        vm.expectRevert("Pausable: index is paused");
+        vm.expectRevert(PausableUpgradeable.EnforcedPause.selector);
         vm.prank(publisher);
         registry.updatePriceFeeds(inputs, checkpoint, signature, bitmap);
     }
