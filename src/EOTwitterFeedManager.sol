@@ -100,7 +100,6 @@ contract EOTwitterFeedManager is IEOTwitterFeedManager, OwnableUpgradeable {
         onlyWhitelisted
     {
         bytes memory data = _feedVerifier.verify(input, vParams);
-        emit LogVerifiedPost(data);
         _processVerifiedPost(data, vParams.blockNumber);
     }
 
@@ -183,9 +182,7 @@ contract EOTwitterFeedManager is IEOTwitterFeedManager, OwnableUpgradeable {
      */
     function _processVerifiedPost(bytes memory data, uint256 blockNumber) internal {
         LeafData memory leafData = abi.decode(data, (LeafData));
-        emit LogLeafData(leafData);
         PostData memory postData = abi.decode(leafData.data, (PostData));
-        emit LogPostData(postData);
         if (!_supportedFeedIds[leafData.feedId]) revert FeedNotSupported(leafData.feedId);
 
         Post storage post = _feeds[leafData.feedId].posts[postData.postId];
