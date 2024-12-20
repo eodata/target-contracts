@@ -116,7 +116,7 @@ interface IEOTwitterFeedManager {
      * @param postId Post id
      * @return Post struct
      */
-    function getFeedPost(uint32 feedId, uint32 postId) external view returns (Post memory);
+    function getFeedPost(uint32 feedId, uint64 postId) external view returns (Post memory);
 
     /**
      * @notice Get several(latestAmount) latest feed posts

@@ -159,8 +159,7 @@ contract EOFeedManagerTest is Test, Utils {
 
     function test_UpdatePriceFeed() public {
         bytes memory ratesData = abi.encode(feedId, rate, timestamp);
-        bytes memory unhashedLeaf = abi.encode(1, address(0), address(0), ratesData);
-
+        bytes memory unhashedLeaf = ratesData;
         IEOFeedVerifier.VerificationParams memory vParams = _getDefaultVerificationParams();
         IEOFeedVerifier.LeafInput memory input =
             IEOFeedVerifier.LeafInput({ unhashedLeaf: unhashedLeaf, leafIndex: 1, proof: new bytes32[](0) });
@@ -177,7 +176,7 @@ contract EOFeedManagerTest is Test, Utils {
 
     function test_RevertWhen_SymbolReplay_UpdatePriceFeed() public {
         bytes memory ratesData = abi.encode(feedId, rate, timestamp);
-        bytes memory unhashedLeaf = abi.encode(1, address(0), address(0), ratesData);
+        bytes memory unhashedLeaf = ratesData;
 
         IEOFeedVerifier.VerificationParams memory vParams = _getDefaultVerificationParams();
         IEOFeedVerifier.LeafInput memory input =
@@ -193,9 +192,9 @@ contract EOFeedManagerTest is Test, Utils {
 
     function test_UpdatePriceFeeds() public {
         bytes memory ratesData0 = abi.encode(feedId, rate, timestamp);
-        bytes memory unhashedLeaf0 = abi.encode(1, address(0), address(0), ratesData0);
+        bytes memory unhashedLeaf0 = ratesData0;
         bytes memory ratesData1 = abi.encode(feedId + 1, rate + 1, timestamp + 1);
-        bytes memory unhashedLeaf1 = abi.encode(2, address(0), address(0), ratesData1);
+        bytes memory unhashedLeaf1 = ratesData1;
 
         IEOFeedVerifier.VerificationParams memory vParams = _getDefaultVerificationParams();
 
@@ -220,9 +219,9 @@ contract EOFeedManagerTest is Test, Utils {
 
     function test_RevertWhen_NotWhitelisted_UpdatePriceFeeds() public {
         bytes memory ratesData0 = abi.encode(feedId, rate, timestamp);
-        bytes memory unhashedLeaf0 = abi.encode(1, address(0), address(0), ratesData0);
+        bytes memory unhashedLeaf0 = ratesData0;
         bytes memory ratesData1 = abi.encode(feedId + 1, rate + 1, timestamp + 1);
-        bytes memory unhashedLeaf1 = abi.encode(2, address(0), address(0), ratesData1);
+        bytes memory unhashedLeaf1 = ratesData1;
 
         IEOFeedVerifier.VerificationParams memory vParams = _getDefaultVerificationParams();
         IEOFeedVerifier.LeafInput[] memory inputs = new IEOFeedVerifier.LeafInput[](2);
