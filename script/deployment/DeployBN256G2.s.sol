@@ -13,7 +13,7 @@ contract DeployBN256G2 is Script {
     using stdJson for string;
 
     function run() external {
-        run(vm.addr(vm.envUint("PRIVATE_KEY")));
+        run(vm.addr(vm.envUint("DEPLOYER_PRIVATE_KEY")));
     }
 
     function run(address broadcastFrom) public returns (address bn256G2) {
