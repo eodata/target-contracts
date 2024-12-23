@@ -16,12 +16,12 @@ import { IEOFeedVerifier } from "src/interfaces/IEOFeedVerifier.sol";
 import { EOJsonUtils } from "script/utils/EOJsonUtils.sol";
 
 // Deployment command: FOUNDRY_PROFILE="deployment" forge script script/deployment/DeployNewTargetContractSet.s.sol
-// --rpc-url $RPC_URL --private-key $PRIVATE_KEY -vvv --slow --verify --broadcast
+// --rpc-url $RPC_URL --private-key $DEPLOYER_PRIVATE_KEY -vvv --slow --verify --broadcast
 contract DeployNewTargetContractSet is FeedVerifierDeployer, FeedManagerDeployer {
     using stdJson for string;
 
     function run() external {
-        run(vm.addr(vm.envUint("PRIVATE_KEY")));
+        run(vm.addr(vm.envUint("DEPLOYER_PRIVATE_KEY")));
     }
 
     function run(address broadcastFrom)
