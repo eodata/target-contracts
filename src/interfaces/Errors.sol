@@ -7,7 +7,6 @@ pragma solidity 0.8.25;
 error CallerIsNotWhitelisted(address caller);
 error MissingLeafInputs();
 error FeedNotSupported(uint16 feedId);
-error SymbolReplay(uint16 feedId);
 error CallerIsNotPauser();
 error CallerIsNotUnpauser();
 
@@ -23,6 +22,7 @@ error VotingPowerIsZero();
 error AggVotingPowerIsZero();
 error InsufficientVotingPower();
 error SignatureVerificationFailed();
+error SignaturePairingFailed();
 error ValidatorIndexOutOfBounds();
 error ValidatorSetTooSmall();
 error SenderNotAllowed(address sender);

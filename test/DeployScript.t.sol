@@ -28,7 +28,6 @@ contract DeployScriptTest is Test {
     DeployTimelock public timelockDeployer;
     TransferOwnershipToTimelock public transferOwnership;
     address public bls;
-    address public bn256G2;
     address public feedVerifierProxy;
     address public feedManagerProxy;
     address public feedAdapterImplementation;
@@ -51,7 +50,7 @@ contract DeployScriptTest is Test {
         config = EOJsonUtils.getConfig();
 
         timelockDeployer.run(address(this));
-        (bls, bn256G2, feedVerifierProxy, feedManagerProxy) = mainDeployer.run(address(this));
+        (bls, feedVerifierProxy, feedManagerProxy) = mainDeployer.run(address(this));
         (feedAdapterImplementation, adapterProxy) = adapterDeployer.run(address(this));
         coreContractsSetup.run(address(this));
         feedsDeployer.run(address(this));
@@ -63,7 +62,6 @@ contract DeployScriptTest is Test {
         assertEq(EOFeedVerifier(feedVerifierProxy).owner(), targetContractsOwner);
         assertEq(EOFeedVerifier(feedVerifierProxy).eoracleChainId(), eoracleChainId);
         assertEq(address(EOFeedVerifier(feedVerifierProxy).bls()), bls);
-        assertEq(address(EOFeedVerifier(feedVerifierProxy).bn256G2()), bn256G2);
         assertEq(feedVerifierProxy, outputConfig.readAddress(".feedVerifier"));
     }
 

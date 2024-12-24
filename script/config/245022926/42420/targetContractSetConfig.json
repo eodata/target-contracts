@@ -1,25 +1,46 @@
 {
   "usePrecompiledModexp": false,
-  "proxyAdminOwner": "0x75ad3417ACb95f2755688D050b2fb56eD51E3E54",
-  "targetContractsOwner": "0x75ad3417ACb95f2755688D050b2fb56eD51E3E54",
+  "proxyAdminOwner": "0x7AE70A27e140Bc91303f72a5D8427c25eeCf6D5e",
+  "targetContractsOwner": "0x7AE70A27e140Bc91303f72a5D8427c25eeCf6D5e",
   "eoracleChainId": 42420,
-  "targetChainId": 59141,
-  "publishers": ["0x261FE7099e8Ac37279CF4a69B77251508D66230b"],
-  "supportedFeedIds": [1, 2, 6, 13, 14, 16, 17, 18, 41, 42, 43, 63, 64],
+  "targetChainId": 245022926,
+  "publishers": ["0xde32C1a7DEDf95a87C480d4f57f6Fd2798964111"],
+  "supportedFeedIds": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 41, 42, 43],
   "supportedFeedsData": [
     {
       "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
       "quote": "0x0000000000000000000000000000000000000348",
-      "feedId": 1,
       "decimals": 18,
-      "description": "BTC/USD"
+      "description": "BTC/USD",
+      "feedId": 1
     },
     {
       "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
       "quote": "0x0000000000000000000000000000000000000348",
-      "feedId": 2,
       "decimals": 18,
-      "description": "ETH/USD"
+      "description": "ETH/USD",
+      "feedId": 2
+    },
+    {
+      "base": "0xa3FCD2041abc7fd3ac76aF9DEfCe42ea241b2a5f",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "feedId": 3,
+      "decimals": 18,
+      "description": "XRP/USD"
+    },
+    {
+      "base": "0xadADADadAdADAdadADADADadadADAdAdadaDAdAD",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "feedId": 4,
+      "decimals": 18,
+      "description": "ADA/USD"
+    },
+    {
+      "base": "0xDDdDddDdDdddDDddDDddDDDDdDdDDdDDdDDDDDDd",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "decimals": 18,
+      "description": "DOGE/USD",
+      "feedId": 5
     },
     {
       "base": "0xd4094e4ffa89985583E52D491251619a4C5b0BE9",
@@ -29,39 +50,32 @@
       "description": "SOL/USD"
     },
     {
-      "base": "0x00000000000000000000000000000000000003d2",
+      "base": "0x50327c6c5a14DCaDE707ABad2E27eB517df87AB5",
       "quote": "0x0000000000000000000000000000000000000348",
-      "feedId": 13,
+      "feedId": 7,
       "decimals": 18,
-      "description": "EUR/USD"
+      "description": "TRX/USD"
     },
     {
-      "base": "0x0000000000000000000000000000000000000024",
+      "base": "0xE4A74E85E85957B0A7A52D9c566C0a3C8d6133d0",
       "quote": "0x0000000000000000000000000000000000000348",
-      "feedId": 14,
+      "feedId": 8,
       "decimals": 18,
-      "description": "AUD/USD"
+      "description": "DOT/USD"
     },
     {
-      "base": "0x000000000000000000000000000000000000033A",
+      "base": "0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0",
       "quote": "0x0000000000000000000000000000000000000348",
-      "feedId": 16,
+      "feedId": 9,
       "decimals": 18,
-      "description": "GBP/USD"
+      "description": "MATIC/USD"
     },
     {
-      "base": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+      "base": "0x2793E9D561c2235A0bcfAaA496b3e98f57eCA249",
       "quote": "0x0000000000000000000000000000000000000348",
-      "feedId": 17,
+      "feedId": 10,
       "decimals": 18,
-      "description": "USDT/USD"
-    },
-    {
-      "base": "0x514910771AF9Ca656af840dff83E8264EcF986CA",
-      "quote": "0x0000000000000000000000000000000000000348",
-      "feedId": 18,
-      "decimals": 18,
-      "description": "LINK/USD"
+      "description": "LTC/USD"
     },
     {
       "base": "0xa663b02cf0a4b149d2ad41910cb81e23e1c41c32",
@@ -83,20 +97,6 @@
       "decimals": 18,
       "description": "stETH/ETH",
       "feedId": 43
-    },
-    {
-      "base": "0x8DB2350D78aBc13f5673A411D4700BCF87864dDE",
-      "quote": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
-      "decimals": 8,
-      "description": "swBTC/BTC",
-      "feedId": 63
-    },
-    {
-      "base": "0x657e8C867D8B37dCC18fA4Caead9C45EB088C642",
-      "quote": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
-      "decimals": 8,
-      "description": "eBTC/BTC",
-      "feedId": 64
     }
   ]
 }

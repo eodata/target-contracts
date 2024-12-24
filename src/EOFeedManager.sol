@@ -11,7 +11,6 @@ import {
     CallerIsNotWhitelisted,
     MissingLeafInputs,
     FeedNotSupported,
-    SymbolReplay,
     InvalidInput,
     CallerIsNotPauser,
     CallerIsNotUnpauser
@@ -113,7 +112,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
     /**
      * @inheritdoc IEOFeedManager
      */
-    function whitelistPublishers(address[] memory publishers, bool[] memory isWhitelisted) external onlyOwner {
+    function whitelistPublishers(address[] calldata publishers, bool[] calldata isWhitelisted) external onlyOwner {
         if (publishers.length != isWhitelisted.length) revert InvalidInput();
         for (uint256 i = 0; i < publishers.length; i++) {
             if (publishers[i] == address(0)) revert InvalidAddress();
@@ -127,17 +126,15 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
     // Reentrancy is not an issue because _feedVerifier is set by the owner
     // slither-disable-next-line reentrancy-benign,reentrancy-events
     function updatePriceFeed(
-        IEOFeedVerifier.LeafInput memory input,
-        IEOFeedVerifier.Checkpoint calldata checkpoint,
-        uint256[2] calldata signature,
-        bytes calldata bitmap
+        IEOFeedVerifier.LeafInput calldata input,
+        IEOFeedVerifier.VerificationParams calldata vParams
     )
         external
         onlyWhitelisted
         whenNotPaused
     {
-        bytes memory data = _feedVerifier.verify(input, checkpoint, signature, bitmap);
-        _processVerifiedRate(data, checkpoint.blockNumber);
+        bytes memory data = _feedVerifier.verify(input, vParams);
+        _processVerifiedRate(data, vParams.blockNumber);
     }
 
     /**
@@ -147,9 +144,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
     // slither-disable-next-line reentrancy-benign,reentrancy-events
     function updatePriceFeeds(
         IEOFeedVerifier.LeafInput[] calldata inputs,
-        IEOFeedVerifier.Checkpoint calldata checkpoint,
-        uint256[2] calldata signature,
-        bytes calldata bitmap
+        IEOFeedVerifier.VerificationParams calldata vParams
     )
         external
         onlyWhitelisted
@@ -157,9 +152,9 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
     {
         if (inputs.length == 0) revert MissingLeafInputs();
 
-        bytes[] memory data = _feedVerifier.batchVerify(inputs, checkpoint, signature, bitmap);
+        bytes[] memory data = _feedVerifier.batchVerify(inputs, vParams);
         for (uint256 i = 0; i < data.length; i++) {
-            _processVerifiedRate(data[i], checkpoint.blockNumber);
+            _processVerifiedRate(data[i], vParams.blockNumber);
         }
     }
 
@@ -241,9 +236,12 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
     function _processVerifiedRate(bytes memory data, uint256 blockNumber) internal {
         (uint16 feedId, uint256 rate, uint256 timestamp) = abi.decode(data, (uint16, uint256, uint256));
         if (!_supportedFeedIds[feedId]) revert FeedNotSupported(feedId);
-        if (_priceFeeds[feedId].timestamp >= timestamp) revert SymbolReplay(feedId);
-        _priceFeeds[feedId] = PriceFeed(rate, timestamp, blockNumber);
-        emit RateUpdated(feedId, rate, timestamp);
+        if (_priceFeeds[feedId].timestamp < timestamp) {
+            _priceFeeds[feedId] = PriceFeed(rate, timestamp, blockNumber);
+            emit RateUpdated(feedId, rate, timestamp);
+        } else {
+            emit SymbolReplay(feedId, rate, timestamp, _priceFeeds[feedId].timestamp);
+        }
     }
 
     /**

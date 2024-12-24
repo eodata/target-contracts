@@ -5,6 +5,10 @@
   "[solidity]": {
     "editor.defaultFormatter": "JuanBlanco.solidity"
   },
+  "[json]": {
+    "editor.formatOnSave": false,
+    "editor.defaultFormatter": null
+  },
   "solidity.formatter": "forge",
   "security.olympix.project.includePath": "src",
   "cSpell.enableFiletypes": ["solidity"],

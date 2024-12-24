@@ -18,9 +18,9 @@ import {
 } from "../../../src/interfaces/Errors.sol";
 import { Upgrades } from "openzeppelin-foundry-upgrades/Upgrades.sol";
 import { Options } from "openzeppelin-foundry-upgrades/Options.sol";
-
 // solhint-disable ordering
 // solhint-disable no-empty-blocks
+
 abstract contract EOFeedRegistryAdapterBaseTest is Test {
     uint16 public constant FEED_ID1 = 1;
     uint16 public constant FEED_ID2 = 2;
@@ -266,15 +266,16 @@ abstract contract EOFeedRegistryAdapterBaseTest is Test {
         input.unhashedLeaf = abi.encode(feedId, rate, timestamp);
         _feedManager.updatePriceFeed(
             input,
-            IEOFeedVerifier.Checkpoint({
-                blockNumber: _lastBlockNumber,
-                epoch: 0,
+            IEOFeedVerifier.VerificationParams({
                 eventRoot: bytes32(0),
-                blockHash: bytes32(0),
-                blockRound: 0
-            }),
-            [uint256(0), uint256(0)],
-            bytes("1")
+                blockNumber: uint64(_lastBlockNumber),
+                blockHash: bytes32(uint256(1)),
+                chainId: uint32(1),
+                aggregator: address(1),
+                signature: [uint256(0), uint256(0)],
+                apkG2: [uint256(0), uint256(0), uint256(0), uint256(0)],
+                nonSignersBitmap: bytes("0")
+            })
         );
     }
 
