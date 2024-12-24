@@ -38,7 +38,7 @@ contract SetValidators is Script {
         string memory outputConfig = EOJsonUtils.getOutputConfig();
         feedVerifier = EOFeedVerifier(outputConfig.readAddress(".feedVerifier"));
 
-        uint256 broadcastFrom = vm.envUint("OWNER_PRIVATE_KEY");
+        uint256 broadcastFrom = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(broadcastFrom);
         feedVerifier.setNewValidatorSet(newValidatorSet);
         vm.stopBroadcast();

@@ -192,7 +192,7 @@ contract EOFeedAdapter is IEOFeedAdapter, Initializable {
         }
     }
 
-    // solhint-disable-next-line
-    // slither-disable-next-line ordering,unused-state,naming-convention
+    // slither-disable-next-line unused-state,naming-convention
+    // solhint-disable-next-line ordering
     uint256[50] private __gap;
 }

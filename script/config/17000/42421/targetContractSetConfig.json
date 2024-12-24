@@ -1,7 +1,5 @@
 {
   "usePrecompiledModexp": true,
-  "proxyAdminOwner": "0x59cAE195Ad704Ae629a9F263EB5C978A2543dC34",
-  "targetContractsOwner": "0x59cAE195Ad704Ae629a9F263EB5C978A2543dC34",
   "eoracleChainId": 42421,
   "targetChainId": 17000,
   "publishers": ["0x4C6447EE26e87739D8CC5f906c23db8150E46b68"],
@@ -11,6 +9,14 @@
     61, 62, 63, 64, 65, 66, 67, 70, 71, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 94, 95
   ],
   "supportedFeedsData": [
+    {
+      "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "BTC/USD",
+      "feedId": 1
+    },
     {
       "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
       "quote": "0x0000000000000000000000000000000000000348",
@@ -123,5 +129,14 @@
       "outputDecimals": 8,
       "description": "SolvBTCm/USD"
     }
-  ]
+  ],
+  "timelock": {
+    "minDelay": 10,
+    "proposers": ["0x59cAE195Ad704Ae629a9F263EB5C978A2543dC34"],
+    "executors": ["0x59cAE195Ad704Ae629a9F263EB5C978A2543dC34"]
+  },
+  "pauserRegistry": {
+    "pausers": ["0x59cAE195Ad704Ae629a9F263EB5C978A2543dC34"],
+    "unpauser": "0x59cAE195Ad704Ae629a9F263EB5C978A2543dC34"
+  }
 }

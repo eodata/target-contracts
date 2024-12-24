@@ -3,8 +3,8 @@
 pragma solidity 0.8.25;
 
 import { stdJson } from "forge-std/Script.sol";
-import { OwnableUpgradeable } from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import { Upgrades } from "openzeppelin-foundry-upgrades/Upgrades.sol";
+import { PauserRegistry } from "eigenlayer-contracts/permissions/PauserRegistry.sol";
 import { FeedVerifierDeployer } from "./base/DeployFeedVerifier.s.sol";
 import { FeedManagerDeployer } from "./base/DeployFeedManager.s.sol";
 import { BLS } from "src/common/BLS.sol";
@@ -35,17 +35,21 @@ contract DeployNewTargetContractSet is FeedVerifierDeployer, FeedManagerDeployer
 
         vm.startBroadcast(broadcastFrom);
 
-        EOJsonUtils.initOutputConfig();
+        string memory outputConfig = EOJsonUtils.initOutputConfig();
+        address timelock = outputConfig.readAddress(".timelock");
 
         bls = address(new BLS());
         EOJsonUtils.OUTPUT_CONFIG.serialize("bls", bls);
 
+        address pauserRegistry = address(
+            new PauserRegistry(configStructured.pauserRegistry.pausers, configStructured.pauserRegistry.unpauser)
+        );
+        EOJsonUtils.OUTPUT_CONFIG.serialize("pauserRegistry", pauserRegistry);
+
         /*//////////////////////////////////////////////////////////////////////////
                                         EOFeedVerifier
         //////////////////////////////////////////////////////////////////////////*/
-        feedVerifierProxy = deployFeedVerifier(
-            configStructured.proxyAdminOwner, broadcastFrom, IBLS(bls), configStructured.eoracleChainId
-        );
+        feedVerifierProxy = deployFeedVerifier(timelock, broadcastFrom, IBLS(bls), configStructured.eoracleChainId);
         EOJsonUtils.OUTPUT_CONFIG.serialize("feedVerifier", feedVerifierProxy);
 
         address implementationAddress = Upgrades.getImplementationAddress(feedVerifierProxy);
@@ -54,16 +58,10 @@ contract DeployNewTargetContractSet is FeedVerifierDeployer, FeedManagerDeployer
         /*//////////////////////////////////////////////////////////////////////////
                                         EOFeedManager
         //////////////////////////////////////////////////////////////////////////*/
-        feedManagerProxy = deployFeedManager(
-            configStructured.proxyAdminOwner, feedVerifierProxy, configStructured.targetContractsOwner
-        );
+        feedManagerProxy = deployFeedManager(timelock, feedVerifierProxy, broadcastFrom, pauserRegistry);
 
         // set feedManager in feedVerifier
         IEOFeedVerifier(feedVerifierProxy).setFeedManager(feedManagerProxy);
-        // transfer ownership of feedVerifier to targetContractsOwner
-        if (OwnableUpgradeable(feedVerifierProxy).owner() != configStructured.targetContractsOwner) {
-            OwnableUpgradeable(feedVerifierProxy).transferOwnership(configStructured.targetContractsOwner);
-        }
 
         vm.stopBroadcast();
         EOJsonUtils.OUTPUT_CONFIG.serialize("feedManager", feedManagerProxy);

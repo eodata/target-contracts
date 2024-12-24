@@ -56,6 +56,13 @@ interface IEOFeedManager {
         external;
 
     /**
+     * @notice Whitelist or remove publishers
+     * @param publishers Array of publisher addresses
+     * @param isWhitelisted Array of booleans indicating whether each publisher should be whitelisted
+     */
+    function whitelistPublishers(address[] calldata publishers, bool[] calldata isWhitelisted) external;
+
+    /**
      * @notice Get the latest price for a feed
      * @param feedId Feed id
      * @return PriceFeed struct
@@ -82,11 +89,4 @@ interface IEOFeedManager {
      * @return Boolean indicating whether the feed is supported
      */
     function isSupportedFeed(uint16 feedId) external view returns (bool);
-
-    /**
-     * @notice Whitelist or remove publishers
-     * @param publishers Array of publisher addresses
-     * @param isWhitelisted Array of booleans indicating whether each publisher should be whitelisted
-     */
-    function whitelistPublishers(address[] calldata publishers, bool[] calldata isWhitelisted) external;
 }

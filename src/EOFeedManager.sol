@@ -2,6 +2,8 @@
 pragma solidity 0.8.25;
 
 import { OwnableUpgradeable } from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import { PausableUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
+import { IPauserRegistry } from "eigenlayer-contracts/interfaces/IPauserRegistry.sol";
 import { IEOFeedVerifier } from "./interfaces/IEOFeedVerifier.sol";
 import { IEOFeedManager } from "./interfaces/IEOFeedManager.sol";
 import {
@@ -9,7 +11,9 @@ import {
     CallerIsNotWhitelisted,
     MissingLeafInputs,
     FeedNotSupported,
-    InvalidInput
+    InvalidInput,
+    CallerIsNotPauser,
+    CallerIsNotUnpauser
 } from "./interfaces/Errors.sol";
 
 /**
@@ -19,7 +23,7 @@ import {
  * the EOFeedManager and made available for other smart contracts to read. Only supported feed IDs can be published to
  * the feed manager.
  */
-contract EOFeedManager is IEOFeedManager, OwnableUpgradeable {
+contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeable {
     /// @dev Map of feed id to price feed (feed id => PriceFeed)
     mapping(uint16 => PriceFeed) internal _priceFeeds;
 
@@ -31,6 +35,10 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable {
 
     /// @dev feed verifier contract
     IEOFeedVerifier internal _feedVerifier;
+
+    /// @notice Address of the `PauserRegistry` contract that this contract defers to for determining access control
+    /// (for pausing).
+    IPauserRegistry internal _pauserRegistry;
 
     /// @dev Allows only whitelisted publishers to call the function
     modifier onlyWhitelisted() {
@@ -44,6 +52,16 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable {
         _;
     }
 
+    modifier onlyPauser() {
+        if (!_pauserRegistry.isPauser(msg.sender)) revert CallerIsNotPauser();
+        _;
+    }
+
+    modifier onlyUnpauser() {
+        if (msg.sender != _pauserRegistry.unpauser()) revert CallerIsNotUnpauser();
+        _;
+    }
+
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         _disableInitializers();
@@ -54,10 +72,21 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable {
      * @dev The feed verifier contract must be deployed first
      * @param feedVerifier Address of the feed verifier contract
      * @param owner Owner of the contract
+     * @param pauserRegistry Address of the pauser registry contract
      */
-    function initialize(address feedVerifier, address owner) external onlyNonZeroAddress(feedVerifier) initializer {
+    function initialize(
+        address feedVerifier,
+        address owner,
+        address pauserRegistry
+    )
+        external
+        onlyNonZeroAddress(feedVerifier)
+        initializer
+    {
         __Ownable_init(owner);
+        __Pausable_init();
         _feedVerifier = IEOFeedVerifier(feedVerifier);
+        _pauserRegistry = IPauserRegistry(pauserRegistry);
     }
 
     /**
@@ -102,6 +131,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable {
     )
         external
         onlyWhitelisted
+        whenNotPaused
     {
         bytes memory data = _feedVerifier.verify(input, vParams);
         _processVerifiedRate(data, vParams.blockNumber);
@@ -118,6 +148,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable {
     )
         external
         onlyWhitelisted
+        whenNotPaused
     {
         if (inputs.length == 0) revert MissingLeafInputs();
 
@@ -125,6 +156,36 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable {
         for (uint256 i = 0; i < data.length; i++) {
             _processVerifiedRate(data[i], vParams.blockNumber);
         }
+    }
+
+    /**
+     * @notice Set the pauser registry contract address
+     * @param pauserRegistry Address of the pauser registry contract
+     */
+    function setPauserRegistry(address pauserRegistry) external onlyOwner {
+        _pauserRegistry = IPauserRegistry(pauserRegistry);
+    }
+
+    /**
+     * @notice Pause the feed manager
+     */
+    function pause() external onlyPauser {
+        _pause();
+    }
+
+    /**
+     * @notice Unpause the feed manager
+     */
+    function unpause() external onlyUnpauser {
+        _unpause();
+    }
+
+    /**
+     * @notice Get the pauser registry contract address
+     * @return Address of the pauser registry contract
+     */
+    function getPauserRegistry() external view returns (IPauserRegistry) {
+        return _pauserRegistry;
     }
 
     /**
@@ -193,7 +254,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable {
         return _priceFeeds[feedId];
     }
 
-    // solhint-disable-next-line ordering
     // slither-disable-next-line unused-state,naming-convention
+    // solhint-disable-next-line ordering
     uint256[50] private __gap;
 }

@@ -2,6 +2,8 @@
 pragma solidity 0.8.25;
 
 import { OwnableUpgradeable } from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import { PauserRegistry } from "eigenlayer-contracts/permissions/PauserRegistry.sol";
+import { PausableUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
 import { Test } from "forge-std/Test.sol";
 import { Utils } from "../utils/Utils.sol";
 import { IEOFeedManager } from "../../src/interfaces/IEOFeedManager.sol";
@@ -17,7 +19,7 @@ import {
     MissingLeafInputs
 } from "../../src/interfaces/Errors.sol";
 
-//solhint-disable max-states-count
+// solhint-disable max-states-count
 contract EOFeedManagerTest is Test, Utils {
     EOFeedManager private registry;
     IEOFeedVerifier private verifier;
@@ -43,7 +45,10 @@ contract EOFeedManagerTest is Test, Utils {
     function setUp() public {
         verifier = new MockFeedVerifier();
         deployer = new DeployFeedManager();
-        registry = EOFeedManager(deployer.run(proxyAdmin, address(verifier), owner));
+        address[] memory pausers = new address[](1);
+        pausers[0] = owner;
+        address pauserRegistry = address(new PauserRegistry(pausers, owner));
+        registry = EOFeedManager(deployer.run(proxyAdmin, address(verifier), owner, pauserRegistry));
     }
 
     function test_RevertWhen_NotOwner_SetFeedVerifier() public {
@@ -191,6 +196,19 @@ contract EOFeedManagerTest is Test, Utils {
         registry.updatePriceFeed(input, vParams);
     }
 
+    function test_RevertWhen_Paused_UpdatePriceFeed() public {
+        vm.startPrank(owner);
+        registry.pause();
+        vm.stopPrank();
+
+        IEOFeedVerifier.LeafInput memory input;
+        IEOFeedVerifier.VerificationParams memory vParams = _getDefaultVerificationParams();
+        _whitelistPublisher(owner, publisher);
+        vm.expectRevert(PausableUpgradeable.EnforcedPause.selector);
+        vm.prank(publisher);
+        registry.updatePriceFeed(input, vParams);
+    }
+
     function test_UpdatePriceFeeds() public {
         bytes memory ratesData0 = abi.encode(feedId, rate, timestamp);
         bytes memory unhashedLeaf0 = abi.encode(1, address(0), address(0), ratesData0);
@@ -233,6 +251,19 @@ contract EOFeedManagerTest is Test, Utils {
         _setSupportedFeed(owner, feedId);
         _setSupportedFeed(owner, feedId + 1);
         vm.expectRevert(abi.encodeWithSelector(CallerIsNotWhitelisted.selector, address(this)));
+        registry.updatePriceFeeds(inputs, vParams);
+    }
+
+    function test_RevertWhen_Paused_UpdatePriceFeeds() public {
+        vm.startPrank(owner);
+        registry.pause();
+        vm.stopPrank();
+
+        IEOFeedVerifier.LeafInput[] memory inputs;
+        IEOFeedVerifier.VerificationParams memory vParams = _getDefaultVerificationParams();
+        _whitelistPublisher(owner, publisher);
+        vm.expectRevert(PausableUpgradeable.EnforcedPause.selector);
+        vm.prank(publisher);
         registry.updatePriceFeeds(inputs, vParams);
     }
 
