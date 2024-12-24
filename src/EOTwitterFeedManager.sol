@@ -128,7 +128,7 @@ contract EOTwitterFeedManager is IEOTwitterFeedManager, OwnableUpgradeable {
      */
     function getLatestFeedPost(uint32 feedId) external view returns (Post memory) {
         if (!_supportedFeedIds[feedId]) revert FeedNotSupported(feedId);
-        return _feeds[feedId].posts[_feeds[feedId].lastPostId];
+        return _feeds[feedId].posts[_feeds[feedId].postIds[_feeds[feedId].postIds.length - 1]];
     }
 
     /**
@@ -137,6 +137,10 @@ contract EOTwitterFeedManager is IEOTwitterFeedManager, OwnableUpgradeable {
     function getFeedPost(uint32 feedId, uint64 postId) external view returns (Post memory) {
         if (!_supportedFeedIds[feedId]) revert FeedNotSupported(feedId);
         return _feeds[feedId].posts[postId];
+    }
+
+    function getPostsAmount(uint32 feedId) external view returns (uint256) {
+        return _feeds[feedId].postIds.length;
     }
 
     /**
@@ -186,6 +190,9 @@ contract EOTwitterFeedManager is IEOTwitterFeedManager, OwnableUpgradeable {
         if (!_supportedFeedIds[leafData.feedId]) revert FeedNotSupported(leafData.feedId);
 
         Post storage post = _feeds[leafData.feedId].posts[postData.postId];
+        if (post.timestampCreated == 0) {
+            _feeds[leafData.feedId].postIds.push(postData.postId);
+        }
         post.eoracleBlockNumber = blockNumber;
         if (postData.action == PostAction.Creation) {
             PostCreation memory postCreation = abi.decode(postData.content, (PostCreation));

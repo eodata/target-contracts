@@ -7,7 +7,6 @@ interface IEOTwitterFeedManager {
     struct Feed {
         mapping(uint64 postId => Post) posts;
         uint64[] postIds;
-        uint64 lastPostId;
     }
 
     struct Post {
@@ -21,7 +20,6 @@ interface IEOTwitterFeedManager {
         uint32 likes; // 4 bytes
         uint32 views; // 4 bytes
         string content;
-        bool isDeleted;
         uint256 eoracleBlockNumber;
     }
 
