@@ -25,41 +25,35 @@ interface IEOFeedManager {
     event RateUpdated(uint16 indexed feedId, uint256 rate, uint256 timestamp);
 
     /**
+     * @dev Event emitted when a price feed is replayed
+     * @param feedId Feed id
+     * @param rate Price feed value
+     * @param timestamp Price feed timestamp
+     * @param latestTimestamp Latest price feed timestamp
+     */
+    event SymbolReplay(uint16 indexed feedId, uint256 rate, uint256 timestamp, uint256 latestTimestamp);
+
+    /**
      * @notice Update the price for a feed
      * @param input A merkle leaf containing price data and its merkle proof
-     * @param checkpoint Checkpoint data containing eoracle chain metadata and the data merkle root
-     * @param signature Aggregated signature of the checkpoint
-     * @param bitmap Bitmap of the validators who signed the checkpoint
+     * @param vParams Verification parameters
      */
     function updatePriceFeed(
         IEOFeedVerifier.LeafInput calldata input,
-        IEOFeedVerifier.Checkpoint calldata checkpoint,
-        uint256[2] calldata signature,
-        bytes calldata bitmap
+        IEOFeedVerifier.VerificationParams calldata vParams
     )
         external;
 
     /**
      * @notice Update the price for multiple feeds
      * @param inputs Array of leafs to prove the price feeds
-     * @param checkpoint Checkpoint data
-     * @param signature Aggregated signature of the checkpoint
-     * @param bitmap Bitmap of the validators who signed the checkpoint
+     * @param vParams Verification parameters
      */
     function updatePriceFeeds(
         IEOFeedVerifier.LeafInput[] calldata inputs,
-        IEOFeedVerifier.Checkpoint calldata checkpoint,
-        uint256[2] calldata signature,
-        bytes calldata bitmap
+        IEOFeedVerifier.VerificationParams calldata vParams
     )
         external;
-
-    /**
-     * @notice Set the whitelisted publishers
-     * @param publishers Array of publisher addresses
-     * @param isWhitelisted Array of booleans indicating whether the publisher is whitelisted
-     */
-    function whitelistPublishers(address[] memory publishers, bool[] memory isWhitelisted) external;
 
     /**
      * @notice Get the latest price for a feed
@@ -88,4 +82,11 @@ interface IEOFeedManager {
      * @return Boolean indicating whether the feed is supported
      */
     function isSupportedFeed(uint16 feedId) external view returns (bool);
+
+    /**
+     * @notice Whitelist or remove publishers
+     * @param publishers Array of publisher addresses
+     * @param isWhitelisted Array of booleans indicating whether each publisher should be whitelisted
+     */
+    function whitelistPublishers(address[] calldata publishers, bool[] calldata isWhitelisted) external;
 }

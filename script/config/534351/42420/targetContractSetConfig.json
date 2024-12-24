@@ -1,11 +1,11 @@
 {
   "usePrecompiledModexp": false,
-  "proxyAdminOwner": "0x75ad3417ACb95f2755688D050b2fb56eD51E3E54",
-  "targetContractsOwner": "0x75ad3417ACb95f2755688D050b2fb56eD51E3E54",
+  "proxyAdminOwner": "0x1700a1fCd962e5187E78ed49C1808cdc8D2272B1",
+  "targetContractsOwner": "0x1700a1fCd962e5187E78ed49C1808cdc8D2272B1",
   "eoracleChainId": 42420,
-  "targetChainId": 59141,
-  "publishers": ["0x261FE7099e8Ac37279CF4a69B77251508D66230b"],
-  "supportedFeedIds": [1, 2, 6, 13, 14, 16, 17, 18, 41, 42, 43, 63, 64],
+  "targetChainId": 534351,
+  "publishers": ["0x179022a32376E66475a92D012b56C9C6ec394f96"],
+  "supportedFeedIds": [1, 2, 6, 11, 13, 14, 16, 17, 18, 41, 42, 43],
   "supportedFeedsData": [
     {
       "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
@@ -27,6 +27,13 @@
       "feedId": 6,
       "decimals": 18,
       "description": "SOL/USD"
+    },
+    {
+      "base": "0x7D800a2559b7e3A9b50a1865Ac45C22D168Ce900",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "feedId": 11,
+      "decimals": 18,
+      "description": "XAU/USD"
     },
     {
       "base": "0x00000000000000000000000000000000000003d2",
@@ -83,20 +90,6 @@
       "decimals": 18,
       "description": "stETH/ETH",
       "feedId": 43
-    },
-    {
-      "base": "0x8DB2350D78aBc13f5673A411D4700BCF87864dDE",
-      "quote": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
-      "decimals": 8,
-      "description": "swBTC/BTC",
-      "feedId": 63
-    },
-    {
-      "base": "0x657e8C867D8B37dCC18fA4Caead9C45EB088C642",
-      "quote": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
-      "decimals": 8,
-      "description": "eBTC/BTC",
-      "feedId": 64
     }
   ]
 }

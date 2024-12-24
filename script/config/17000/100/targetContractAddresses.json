@@ -1,10 +1,10 @@
 {
-  "bls": "0xa38b0382a6fA934ff5C885A7C83C563A2A34b5e5",
+  "bls": "0x83E2EE7b4127420546D86174dB688df3a92E6d4A",
   "bn256G2": "0x74b9fC007FE7dabbC5395b9D3D45247A5d9F74B7",
-  "feedManager": "0xc45594fD75fade16FF62718e138D8DF421e72EC2",
-  "feedManagerImplementation": "0xD29a2484C1D0EE935A1c4d197b20206dd8a8101C",
+  "feedManager": "0xC76Ca930EECAca465AF6fEca42EF0c86545118E6",
+  "feedManagerImplementation": "0xf5aCF9cC6D7132c4cd2d355E5319E7FCE4F521cF",
   "feedRegistryAdapter": "0xf099658ccc89e6b6facab3f3bb9ec2978c6944b9",
-  "feedVerifier": "0x75B44659fa69356F7dc8D22BdD8AA596eBa820C8",
-  "feedVerifierImplementation": "0x1e7E4B422Ef826546F66a05f2D22354B96cFf000",
+  "feedVerifier": "0x229514c1A3c2c4EaCf2F59FdC6Bf78Cd8aD064EB",
+  "feedVerifierImplementation": "0x6311F20A2A493306D45C5Cf8d7ACAc066E67D9D4",
   "proxyAdmin": ""
 }
