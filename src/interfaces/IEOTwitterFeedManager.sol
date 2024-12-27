@@ -24,7 +24,7 @@ interface IEOTwitterFeedManager {
     }
 
     struct LeafData {
-        uint32 feedId; // 32 bytes
+        uint32 feedId; // 4 bytes, but we use 32 bytes since next attribute is bytes
         bytes data; // encoded Post
     }
 
