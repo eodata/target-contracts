@@ -26,7 +26,7 @@ contract EOTwitterFeedManager is IEOTwitterFeedManager, OwnableUpgradeable {
     /// @dev feed verifier contract
     IEOFeedVerifier internal _feedVerifier;
 
-    error FeedNotSupported(uint64 feedId);
+    error FeedNotSupported(uint32 feedId);
 
     /// @dev Allows only whitelisted publishers to call the function
     modifier onlyWhitelisted() {
