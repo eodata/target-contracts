@@ -149,11 +149,10 @@ jobs:
         run: "npm install"
 
       - name: "Run Slither analysis"
-        uses: " @v0.4.0"
+        uses: " crytic/slither-action@v0.3.0"
         id: "slither"
         with:
           fail-on: "low"
-          slither-version: "0.10.4"
           sarif: "results.sarif"
 
       - name: "Add summary"
