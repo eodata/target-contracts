@@ -1,14 +1,14 @@
 # IEOFeedAdapterV2
+
 [Git Source](https://github.com/Eoracle/target-contracts/blob/88beedd8b816225fb92696d7d314b9def6318a7e/src/adapters/interfaces/IEOFeedAdapterV2.sol)
 
 Interface for the EOFeedAdapter contract.
 
-*compatible of AggregatorV3Interface from CL.*
-
+_compatible of AggregatorV3Interface from CL._
 
 ## Functions
-### initialize
 
+### initialize
 
 ```solidity
 function initialize(
@@ -24,13 +24,11 @@ function initialize(
 
 ### getFeedId
 
-
 ```solidity
 function getFeedId() external view returns (uint256);
 ```
 
 ### decimals
-
 
 ```solidity
 function decimals() external view returns (uint8);
@@ -38,20 +36,17 @@ function decimals() external view returns (uint8);
 
 ### description
 
-
 ```solidity
 function description() external view returns (string memory);
 ```
 
 ### version
 
-
 ```solidity
 function version() external view returns (uint256);
 ```
 
 ### getRoundData
-
 
 ```solidity
 function getRoundData(uint80 roundId_)
@@ -62,7 +57,6 @@ function getRoundData(uint80 roundId_)
 
 ### latestRoundData
 
-
 ```solidity
 function latestRoundData()
     external
@@ -72,13 +66,11 @@ function latestRoundData()
 
 ### latestAnswer
 
-
 ```solidity
 function latestAnswer() external view returns (int256);
 ```
 
 ### latestTimestamp
-
 
 ```solidity
 function latestTimestamp() external view returns (uint256);
@@ -86,13 +78,11 @@ function latestTimestamp() external view returns (uint256);
 
 ### latestRound
 
-
 ```solidity
 function latestRound() external view returns (uint256);
 ```
 
 ### getAnswer
-
 
 ```solidity
 function getAnswer(uint256 roundId) external view returns (int256);
@@ -100,8 +90,6 @@ function getAnswer(uint256 roundId) external view returns (int256);
 
 ### getTimestamp
 
-
 ```solidity
 function getTimestamp(uint256 roundId) external view returns (uint256);
 ```
-
