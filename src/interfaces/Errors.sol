@@ -6,7 +6,7 @@ pragma solidity 0.8.25;
 //////////////////////////////////////////////////////////////////////////*/
 error CallerIsNotWhitelisted(address caller);
 error MissingLeafInputs();
-error FeedNotSupported(uint16 feedId);
+error FeedNotSupported(uint256 feedId);
 error CallerIsNotPauser();
 error CallerIsNotUnpauser();
 

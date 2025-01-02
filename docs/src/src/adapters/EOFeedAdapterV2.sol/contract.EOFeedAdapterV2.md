@@ -1,8 +1,8 @@
-# EOFeedAdapter
-[Git Source](https://github.com/Eoracle/target-contracts/blob/88beedd8b816225fb92696d7d314b9def6318a7e/src/adapters/EOFeedAdapter.sol)
+# EOFeedAdapterV2
+[Git Source](https://github.com/Eoracle/target-contracts/blob/88beedd8b816225fb92696d7d314b9def6318a7e/src/adapters/EOFeedAdapterV2.sol)
 
 **Inherits:**
-[IEOFeedAdapter](/src/adapters/interfaces/IEOFeedAdapter.sol/interface.IEOFeedAdapter.md), Initializable
+[IEOFeedAdapterV2](/src/adapters/interfaces/IEOFeedAdapterV2.sol/interface.IEOFeedAdapterV2.md), Initializable
 
 Price feed adapter contract
 
@@ -40,7 +40,7 @@ string private _description;
 
 
 ```solidity
-uint256 private _feedId;
+uint16 private _feedId;
 ```
 
 
@@ -90,7 +90,7 @@ Initialize the contract
 ```solidity
 function initialize(
     address feedManager,
-    uint256 feedId,
+    uint16 feedId,
     uint8 inputDecimals,
     uint8 outputDecimals,
     string memory feedDescription,
@@ -104,7 +104,7 @@ function initialize(
 |Name|Type|Description|
 |----|----|-----------|
 |`feedManager`|`address`|The feed manager address|
-|`feedId`|`uint256`|Feed id|
+|`feedId`|`uint16`|Feed id|
 |`inputDecimals`|`uint8`|The input decimal precision of the rate|
 |`outputDecimals`|`uint8`|The output decimal precision of the rate|
 |`feedDescription`|`string`|The description of feed|

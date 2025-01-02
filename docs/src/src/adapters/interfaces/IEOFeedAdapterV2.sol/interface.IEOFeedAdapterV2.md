@@ -1,5 +1,5 @@
-# IEOFeedAdapter
-[Git Source](https://github.com/Eoracle/target-contracts/blob/88beedd8b816225fb92696d7d314b9def6318a7e/src/adapters/interfaces/IEOFeedAdapter.sol)
+# IEOFeedAdapterV2
+[Git Source](https://github.com/Eoracle/target-contracts/blob/88beedd8b816225fb92696d7d314b9def6318a7e/src/adapters/interfaces/IEOFeedAdapterV2.sol)
 
 Interface for the EOFeedAdapter contract.
 
@@ -13,7 +13,7 @@ Interface for the EOFeedAdapter contract.
 ```solidity
 function initialize(
     address feedManager,
-    uint256 feedId,
+    uint16 feedId,
     uint8 inputDecimals,
     uint8 outputDecimals,
     string memory feedDescription,

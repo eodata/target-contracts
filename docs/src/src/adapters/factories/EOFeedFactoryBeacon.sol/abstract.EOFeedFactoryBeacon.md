@@ -1,40 +1,43 @@
 # EOFeedFactoryBeacon
+[Git Source](https://github.com/Eoracle/target-contracts/blob/88beedd8b816225fb92696d7d314b9def6318a7e/src/adapters/factories/EOFeedFactoryBeacon.sol)
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/de89fc9e9bc7c046937883aa064d90812f1542cc/src/adapters/factories/EOFeedFactoryBeacon.sol)
+**Inherits:**
+Initializable, [EOFeedFactoryBase](/src/adapters/factories/EOFeedFactoryBase.sol/abstract.EOFeedFactoryBase.md)
 
-**Inherits:** Initializable,
-[EOFeedFactoryBase](/src/adapters/factories/EOFeedFactoryBase.sol/abstract.EOFeedFactoryBase.md)
 
 ## State Variables
-
-### \_beacon
+### _beacon
 
 ```solidity
 address private _beacon;
 ```
 
-## Functions
 
+## Functions
 ### getBeacon
 
-_Returns the address of the beacon._
+*Returns the address of the beacon.*
+
 
 ```solidity
 function getBeacon() external view returns (address);
 ```
 
-### \_\_EOFeedFactory_init
+### __EOFeedFactory_init
 
-_Initializes the factory with the feedAdapter implementation._
+*Initializes the factory with the feedAdapter implementation.*
+
 
 ```solidity
 function __EOFeedFactory_init(address impl, address initialOwner) internal override onlyInitializing;
 ```
 
-### \_deployEOFeedAdapter
+### _deployEOFeedAdapter
 
-_Deploys a new feedAdapter instance via Beacon proxy._
+*Deploys a new feedAdapter instance via Beacon proxy.*
+
 
 ```solidity
 function _deployEOFeedAdapter() internal override returns (address);
 ```
+

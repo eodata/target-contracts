@@ -15,7 +15,7 @@ contract DeployFeedsTimelocked is Script, TimelockBase {
 
     struct LocalVars {
         address feedAdapter;
-        uint16 feedId;
+        uint256 feedId;
         uint256 feedsLength;
         address[] targets;
         bytes[] payloads;
@@ -23,7 +23,7 @@ contract DeployFeedsTimelocked is Script, TimelockBase {
         bytes32 salt;
         bytes32 predecessor;
         uint256 delay;
-        uint16[] feedIds;
+        uint256[] feedIds;
         bool[] feedBools;
     }
 
@@ -35,7 +35,7 @@ contract DeployFeedsTimelocked is Script, TimelockBase {
 
     bool public isExecutionMode;
 
-    error FeedIsNotSupported(uint16 feedId);
+    error FeedIsNotSupported(uint256 feedId);
 
     function run(bool isExecution) external {
         vm.startBroadcast();
@@ -70,7 +70,7 @@ contract DeployFeedsTimelocked is Script, TimelockBase {
         }
 
         for (uint256 i = 0; i < vars.feedsLength; i++) {
-            vars.feedId = uint16(configStructured.supportedFeedsData[i].feedId);
+            vars.feedId = configStructured.supportedFeedsData[i].feedId;
             vars.feedAdapter = address(feedRegistryAdapter.getFeedById(vars.feedId));
             if (vars.feedAdapter == address(0)) {
                 vars.payloads.push(
@@ -122,10 +122,10 @@ contract DeployFeedsTimelocked is Script, TimelockBase {
     }
 
     function updateSupportedFeedsData(EOJsonUtils.Config memory _configData) internal returns (bytes memory data) {
-        uint16 feedId;
+        uint256 feedId;
 
         for (uint256 i = 0; i < _configData.supportedFeedIds.length; i++) {
-            feedId = uint16(_configData.supportedFeedIds[i]);
+            feedId = _configData.supportedFeedIds[i];
             if (!feedManager.isSupportedFeed(feedId)) {
                 vars.feedIds.push(feedId);
                 vars.feedBools.push(true);

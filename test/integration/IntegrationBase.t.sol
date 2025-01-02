@@ -107,7 +107,7 @@ abstract contract IntegrationBaseTests is Test, Utils {
         _feedVerifier.setNewValidatorSet(_validatorSet);
     }
 
-    function _setSupportedFeeds(uint16[] memory feedsSupported) internal {
+    function _setSupportedFeeds(uint256[] memory feedsSupported) internal {
         bool[] memory isSupported = new bool[](feedsSupported.length);
         for (uint256 i = 0; i < feedsSupported.length; i++) {
             isSupported[i] = true;

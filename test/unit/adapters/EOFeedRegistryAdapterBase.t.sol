@@ -22,8 +22,8 @@ import { Options } from "openzeppelin-foundry-upgrades/Options.sol";
 // solhint-disable no-empty-blocks
 
 abstract contract EOFeedRegistryAdapterBaseTest is Test {
-    uint16 public constant FEED_ID1 = 1;
-    uint16 public constant FEED_ID2 = 2;
+    uint256 public constant FEED_ID1 = 1;
+    uint256 public constant FEED_ID2 = 2;
     string public constant DESCRIPTION1 = "ETH/USD";
     string public constant DESCRIPTION2 = "BTC/USD";
     uint256 public constant RATE1 = 100_000_000;
@@ -44,7 +44,7 @@ abstract contract EOFeedRegistryAdapterBaseTest is Test {
     uint256 internal _lastBlockNumber;
 
     event FeedManagerSet(address indexed _feedManager);
-    event FeedAdapterDeployed(uint16 indexed feedId, address indexed feedAdapter, address base, address quote);
+    event FeedAdapterDeployed(uint256 indexed feedId, address indexed feedAdapter, address base, address quote);
 
     function setUp() public virtual {
         _feedManager = new MockEOFeedManager();
@@ -134,7 +134,7 @@ abstract contract EOFeedRegistryAdapterBaseTest is Test {
     }
 
     function test_RevertWhen_DeployFeedAdapter_NotSupportedFeed() public {
-        uint16 feedId = MockEOFeedManager(address(_feedManager)).NOT_SUPPORTED_FEED();
+        uint256 feedId = MockEOFeedManager(address(_feedManager)).NOT_SUPPORTED_FEED();
         vm.expectRevert(abi.encodeWithSelector(FeedNotSupported.selector, feedId));
         _deployEOFeedAdapter(_base1Address, _quote1Address, feedId, DESCRIPTION1, DECIMALS, DECIMALS, VERSION);
     }
@@ -261,10 +261,10 @@ abstract contract EOFeedRegistryAdapterBaseTest is Test {
         );
     }
 
-    function _updatePriceFeed(uint16 feedId, uint256 rate, uint256 timestamp) internal {
+    function _updatePriceFeed(uint256 feedId, uint256 rate, uint256 timestamp) internal {
         IEOFeedVerifier.LeafInput memory input;
         input.unhashedLeaf = abi.encode(feedId, rate, timestamp);
-        _feedManager.updatePriceFeed(
+        _feedManager.updateFeed(
             input,
             IEOFeedVerifier.VerificationParams({
                 eventRoot: bytes32(0),
@@ -282,7 +282,7 @@ abstract contract EOFeedRegistryAdapterBaseTest is Test {
     function _deployEOFeedAdapter(
         address base,
         address quote,
-        uint16 feedId,
+        uint256 feedId,
         string memory description,
         uint8 inputDecimals,
         uint8 outputDecimals,

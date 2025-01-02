@@ -10,7 +10,7 @@ import { IEOFeedVerifier } from "../../../src/interfaces/IEOFeedVerifier.sol";
 
 contract EoracleConsumerExampleFeedManagerTest is Test {
     uint8 public constant DECIMALS = 8;
-    uint16 public constant FEED_ID = 1;
+    uint256 public constant FEED_ID = 1;
     string public constant DESCRIPTION = "ETH/USD";
     uint256 public constant VERSION = 1;
     uint256 public constant RATE1 = 100_000_000;
@@ -44,7 +44,7 @@ contract EoracleConsumerExampleFeedManagerTest is Test {
     }
 
     function test_GetPrices() public view {
-        uint16[] memory feedIds = new uint16[](1);
+        uint256[] memory feedIds = new uint256[](1);
         feedIds[0] = FEED_ID;
         IEOFeedManager.PriceFeed[] memory priceFeeds = _consumerExampleFeedManager.getPrices(feedIds);
         assertEq(priceFeeds.length, 1);
@@ -52,10 +52,10 @@ contract EoracleConsumerExampleFeedManagerTest is Test {
         assertEq(priceFeeds[0].timestamp, _lastTimestamp);
     }
 
-    function _updatePriceFeed(uint16 feedId, uint256 rate, uint256 timestamp) internal {
+    function _updatePriceFeed(uint256 feedId, uint256 rate, uint256 timestamp) internal {
         IEOFeedVerifier.LeafInput memory input;
         input.unhashedLeaf = abi.encode(feedId, rate, timestamp);
-        _feedManager.updatePriceFeed(
+        _feedManager.updateFeed(
             input,
             IEOFeedVerifier.VerificationParams({
                 eventRoot: bytes32(0),

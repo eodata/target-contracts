@@ -1,18 +1,18 @@
 # EoracleConsumerExampleFeedManager
+[Git Source](https://github.com/Eoracle/target-contracts/blob/88beedd8b816225fb92696d7d314b9def6318a7e/src/examples/EoracleConsumerExampleFeedManager.sol)
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/de89fc9e9bc7c046937883aa064d90812f1542cc/src/examples/EoracleConsumerExampleFeedManager.sol)
 
 ## State Variables
-
-### \_feedManager
+### _feedManager
 
 ```solidity
 IEOFeedManager private _feedManager;
 ```
 
-## Functions
 
+## Functions
 ### constructor
+
 
 ```solidity
 constructor(address feedManager);
@@ -20,11 +20,13 @@ constructor(address feedManager);
 
 ### setFeedManager
 
+
 ```solidity
 function setFeedManager(address feedManager) external;
 ```
 
 ### getFeedManager
+
 
 ```solidity
 function getFeedManager() external view returns (IEOFeedManager);
@@ -32,12 +34,15 @@ function getFeedManager() external view returns (IEOFeedManager);
 
 ### getPrice
 
+
 ```solidity
-function getPrice(uint16 feedId) external view returns (IEOFeedManager.PriceFeed memory);
+function getPrice(uint256 feedId) external view returns (IEOFeedManager.PriceFeed memory);
 ```
 
 ### getPrices
 
+
 ```solidity
-function getPrices(uint16[] calldata feedIds) external view returns (IEOFeedManager.PriceFeed[] memory);
+function getPrices(uint256[] calldata feedIds) external view returns (IEOFeedManager.PriceFeed[] memory);
 ```
+

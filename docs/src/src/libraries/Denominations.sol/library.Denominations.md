@@ -1,14 +1,14 @@
 # Denominations
+[Git Source](https://github.com/Eoracle/target-contracts/blob/88beedd8b816225fb92696d7d314b9def6318a7e/src/libraries/Denominations.sol)
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/de89fc9e9bc7c046937883aa064d90812f1542cc/src/libraries/Denominations.sol)
 
 ## State Variables
-
 ### ETH
 
 ```solidity
 address public constant ETH = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
 ```
+
 
 ### BTC
 
@@ -16,11 +16,13 @@ address public constant ETH = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
 address public constant BTC = 0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB;
 ```
 
+
 ### DOGE
 
 ```solidity
 address public constant DOGE = 0xDDdDddDdDdddDDddDDddDDDDdDdDDdDDdDDDDDDd;
 ```
+
 
 ### USD
 
@@ -28,11 +30,13 @@ address public constant DOGE = 0xDDdDddDdDdddDDddDDddDDDDdDdDDdDDdDDDDDDd;
 address public constant USD = address(840);
 ```
 
+
 ### GBP
 
 ```solidity
 address public constant GBP = address(826);
 ```
+
 
 ### EUR
 
@@ -40,11 +44,13 @@ address public constant GBP = address(826);
 address public constant EUR = address(978);
 ```
 
+
 ### JPY
 
 ```solidity
 address public constant JPY = address(392);
 ```
+
 
 ### KRW
 
@@ -52,11 +58,13 @@ address public constant JPY = address(392);
 address public constant KRW = address(410);
 ```
 
+
 ### CNY
 
 ```solidity
 address public constant CNY = address(156);
 ```
+
 
 ### AUD
 
@@ -64,11 +72,13 @@ address public constant CNY = address(156);
 address public constant AUD = address(36);
 ```
 
+
 ### CAD
 
 ```solidity
 address public constant CAD = address(124);
 ```
+
 
 ### CHF
 
@@ -76,11 +86,13 @@ address public constant CAD = address(124);
 address public constant CHF = address(756);
 ```
 
+
 ### ARS
 
 ```solidity
 address public constant ARS = address(32);
 ```
+
 
 ### PHP
 
@@ -88,11 +100,13 @@ address public constant ARS = address(32);
 address public constant PHP = address(608);
 ```
 
+
 ### NZD
 
 ```solidity
 address public constant NZD = address(554);
 ```
+
 
 ### SGD
 
@@ -100,11 +114,13 @@ address public constant NZD = address(554);
 address public constant SGD = address(702);
 ```
 
+
 ### NGN
 
 ```solidity
 address public constant NGN = address(566);
 ```
+
 
 ### ZAR
 
@@ -112,11 +128,13 @@ address public constant NGN = address(566);
 address public constant ZAR = address(710);
 ```
 
+
 ### RUB
 
 ```solidity
 address public constant RUB = address(643);
 ```
+
 
 ### INR
 
@@ -124,16 +142,19 @@ address public constant RUB = address(643);
 address public constant INR = address(356);
 ```
 
+
 ### BRL
 
 ```solidity
 address public constant BRL = address(986);
 ```
 
-## Functions
 
+## Functions
 ### isETH
+
 
 ```solidity
 function isETH(address token) internal pure returns (bool);
 ```
+

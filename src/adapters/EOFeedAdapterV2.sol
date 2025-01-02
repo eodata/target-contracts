@@ -2,16 +2,16 @@
 pragma solidity 0.8.25;
 
 import { IEOFeedManager } from "../interfaces/IEOFeedManager.sol";
-import { IEOFeedAdapter } from "./interfaces/IEOFeedAdapter.sol";
+import { IEOFeedAdapterV2 } from "./interfaces/IEOFeedAdapterV2.sol";
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
 import { InvalidAddress } from "../interfaces/Errors.sol";
 
 /**
- * @title EOFeedAdapter
+ * @title EOFeedAdapterV2
  * @notice Price feed adapter contract
  */
-contract EOFeedAdapter is IEOFeedAdapter, Initializable {
+contract EOFeedAdapterV2 is IEOFeedAdapterV2, Initializable {
     /// @dev Feed manager contract
     IEOFeedManager private _feedManager;
 
@@ -23,7 +23,7 @@ contract EOFeedAdapter is IEOFeedAdapter, Initializable {
 
     // next 2 variables will be packed in 1 slot
     /// @dev Feed id
-    uint256 private _feedId;
+    uint16 private _feedId;
 
     /// @dev Decimals of the rate
     uint8 private _inputDecimals;
@@ -46,7 +46,7 @@ contract EOFeedAdapter is IEOFeedAdapter, Initializable {
      */
     function initialize(
         address feedManager,
-        uint256 feedId,
+        uint16 feedId,
         uint8 inputDecimals,
         uint8 outputDecimals,
         string memory feedDescription,

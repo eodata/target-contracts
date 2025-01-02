@@ -1,14 +1,14 @@
 # IEOFeedRegistryAdapter
-
-[Git Source](https://github.com/Eoracle/target-contracts/blob/de89fc9e9bc7c046937883aa064d90812f1542cc/src/adapters/interfaces/IEOFeedRegistryAdapter.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/88beedd8b816225fb92696d7d314b9def6318a7e/src/adapters/interfaces/IEOFeedRegistryAdapter.sol)
 
 Interface for the FeedManager contract.
 
-_Simplified version of FeedRegistryInterface from CL._
+*Simplified version of FeedRegistryInterface from CL.*
+
 
 ## Functions
-
 ### decimals
+
 
 ```solidity
 function decimals(address base, address quote) external view returns (uint8);
@@ -16,17 +16,20 @@ function decimals(address base, address quote) external view returns (uint8);
 
 ### description
 
+
 ```solidity
 function description(address base, address quote) external view returns (string memory);
 ```
 
 ### version
 
+
 ```solidity
 function version(address base, address quote) external view returns (uint256);
 ```
 
 ### latestRoundData
+
 
 ```solidity
 function latestRoundData(
@@ -39,6 +42,7 @@ function latestRoundData(
 ```
 
 ### getRoundData
+
 
 ```solidity
 function getRoundData(
@@ -53,11 +57,13 @@ function getRoundData(
 
 ### latestAnswer
 
+
 ```solidity
 function latestAnswer(address base, address quote) external view returns (int256 answer);
 ```
 
 ### latestTimestamp
+
 
 ```solidity
 function latestTimestamp(address base, address quote) external view returns (uint256 timestamp);
@@ -65,11 +71,13 @@ function latestTimestamp(address base, address quote) external view returns (uin
 
 ### latestRound
 
+
 ```solidity
 function latestRound(address base, address quote) external view returns (uint256 roundId);
 ```
 
 ### getAnswer
+
 
 ```solidity
 function getAnswer(address base, address quote, uint256 roundId) external view returns (int256 answer);
@@ -77,11 +85,13 @@ function getAnswer(address base, address quote, uint256 roundId) external view r
 
 ### getTimestamp
 
+
 ```solidity
 function getTimestamp(address base, address quote, uint256 roundId) external view returns (uint256 timestamp);
 ```
 
 ### getFeed
+
 
 ```solidity
 function getFeed(address base, address quote) external view returns (IEOFeedAdapter feedAdapter);
@@ -89,12 +99,15 @@ function getFeed(address base, address quote) external view returns (IEOFeedAdap
 
 ### isFeedEnabled
 
+
 ```solidity
 function isFeedEnabled(address feedAdapter) external view returns (bool);
 ```
 
 ### getRoundFeed
 
+
 ```solidity
 function getRoundFeed(address base, address quote, uint80 roundId) external view returns (IEOFeedAdapter feedAdapter);
 ```
+
