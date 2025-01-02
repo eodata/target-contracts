@@ -3,7 +3,7 @@ pragma solidity ^0.8.25;
 
 import { stdJson } from "forge-std/Script.sol";
 import { ExecuteAny } from "./ExecuteAny.s.sol";
-import { WhitelistPublishersTimelocked } from "../deployment/timelocked/WhitelistPublishersTimelocked.s.sol";
+import { WhitelistPublishersTimelocked } from "../timelocked/WhitelistPublishersTimelocked.s.sol";
 import { EOJsonUtils } from "../utils/EOJsonUtils.sol";
 
 /*

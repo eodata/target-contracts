@@ -16,7 +16,8 @@ import {
     InvalidAddress,
     CallerIsNotWhitelisted,
     FeedNotSupported,
-    MissingLeafInputs
+    MissingLeafInputs,
+    CallerIsNotFeedDeployer
 } from "../../src/interfaces/Errors.sol";
 
 // solhint-disable max-states-count
@@ -48,7 +49,7 @@ contract EOFeedManagerTest is Test, Utils {
         address[] memory pausers = new address[](1);
         pausers[0] = owner;
         address pauserRegistry = address(new PauserRegistry(pausers, owner));
-        registry = EOFeedManager(deployer.run(proxyAdmin, address(verifier), owner, pauserRegistry));
+        registry = EOFeedManager(deployer.run(proxyAdmin, address(verifier), owner, pauserRegistry, owner));
     }
 
     function test_RevertWhen_NotOwner_SetFeedVerifier() public {
@@ -131,6 +132,26 @@ contract EOFeedManagerTest is Test, Utils {
         }
         vm.prank(owner);
         registry.setSupportedFeeds(feedIds, isSupported);
+        for (uint256 i = 0; i < 5; i++) {
+            assert(registry.isSupportedFeed(feedIds[i]));
+        }
+        assertEq(registry.isSupportedFeed(6), false);
+    }
+
+    function test_RevertWhen_NotDeployer_AddSupportedFeeds() public {
+        vm.expectRevert(abi.encodeWithSelector(CallerIsNotFeedDeployer.selector));
+        uint16[] memory feedIds = new uint16[](1);
+        feedIds[0] = 1;
+        registry.addSupportedFeeds(feedIds);
+    }
+
+    function test_addSupportedFeeds() public {
+        uint16[] memory feedIds = new uint16[](5);
+        for (uint256 i = 0; i < 5; i++) {
+            feedIds[i] = uint16(i);
+        }
+        vm.prank(owner);
+        registry.addSupportedFeeds(feedIds);
         for (uint256 i = 0; i < 5; i++) {
             assert(registry.isSupportedFeed(feedIds[i]));
         }

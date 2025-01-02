@@ -27,7 +27,9 @@ contract EOFeedAdapterCloneTest is EOFeedAdapterTest {
         EOFeedRegistryAdapterClone feedRegistryAdapter = EOFeedRegistryAdapterClone(
             Upgrades.deployTransparentProxy("EOFeedRegistryAdapterClone.sol", proxyAdmin, "")
         );
-        feedRegistryAdapter.initialize(address(_feedManager), address(feedAdapterImplementation), address(this));
+        feedRegistryAdapter.initialize(
+            address(_feedManager), address(feedAdapterImplementation), address(this), address(this)
+        );
 
         _feedAdapter = EOFeedAdapter(
             address(

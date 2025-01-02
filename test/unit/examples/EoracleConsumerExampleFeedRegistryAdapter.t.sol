@@ -38,7 +38,7 @@ contract EoracleConsumerExampleFeedRegistryAdapterTest is Test {
         _feedRegistryAdapter =
             EOFeedRegistryAdapter(Upgrades.deployTransparentProxy("EOFeedRegistryAdapter.sol", proxyAdmin, ""));
 
-        _feedRegistryAdapter.initialize(address(_feedManager), address(_feedAdapterImplementation), _owner);
+        _feedRegistryAdapter.initialize(address(_feedManager), address(_feedAdapterImplementation), _owner, _owner);
 
         vm.prank(_owner);
         IEOFeedAdapter feedAdapter = _feedRegistryAdapter.deployEOFeedAdapter(

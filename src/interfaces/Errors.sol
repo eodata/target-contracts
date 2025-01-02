@@ -9,7 +9,7 @@ error MissingLeafInputs();
 error FeedNotSupported(uint16 feedId);
 error CallerIsNotPauser();
 error CallerIsNotUnpauser();
-
+error CallerIsNotFeedDeployer();
 /*//////////////////////////////////////////////////////////////////////////
                                 EOFeedVerifier
 //////////////////////////////////////////////////////////////////////////*/
@@ -33,3 +33,4 @@ error SenderNotAllowed(address sender);
 error FeedAlreadyExists();
 error BaseQuotePairExists();
 error FeedDoesNotExist();
+error NotFeedDeployer();

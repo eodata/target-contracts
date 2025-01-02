@@ -46,4 +46,6 @@ interface IEOFeedAdapter {
     function getAnswer(uint256 roundId) external view returns (int256);
 
     function getTimestamp(uint256 roundId) external view returns (uint256);
+
+    function isPaused() external view returns (bool);
 }

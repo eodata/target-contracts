@@ -25,7 +25,9 @@ contract EOFeedAdapterBeaconTest is EOFeedAdapterTest {
 
         EOFeedRegistryAdapter feedRegistryAdapter =
             EOFeedRegistryAdapter(Upgrades.deployTransparentProxy("EOFeedRegistryAdapter.sol", proxyAdmin, ""));
-        feedRegistryAdapter.initialize(address(_feedManager), address(feedAdapterImplementation), address(this));
+        feedRegistryAdapter.initialize(
+            address(_feedManager), address(feedAdapterImplementation), address(this), address(this)
+        );
 
         _feedAdapter = EOFeedAdapter(
             address(

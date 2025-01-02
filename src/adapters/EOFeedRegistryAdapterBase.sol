@@ -11,7 +11,8 @@ import {
     FeedAlreadyExists,
     BaseQuotePairExists,
     FeedNotSupported,
-    FeedDoesNotExist
+    FeedDoesNotExist,
+    NotFeedDeployer
 } from "../interfaces/Errors.sol";
 
 /**
@@ -23,12 +24,19 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
     mapping(uint16 => IEOFeedAdapter) internal _feedAdapters;
     mapping(address => bool) internal _feedEnabled;
     mapping(address => mapping(address => uint16)) internal _tokenAddressesToFeedIds;
+    address internal _feedDeployer;
 
     event FeedManagerSet(address indexed feedManager);
+    event FeedDeployerSet(address indexed feedDeployer);
     event FeedAdapterDeployed(uint16 indexed feedId, address indexed feedAdapter, address base, address quote);
 
     modifier onlyNonZeroAddress(address addr) {
         if (addr == address(0)) revert InvalidAddress();
+        _;
+    }
+
+    modifier onlyFeedDeployer() {
+        if (msg.sender != _feedDeployer) revert NotFeedDeployer();
         _;
     }
 
@@ -42,20 +50,24 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
      * @param feedManager The feed manager address
      * @param feedAdapterImplementation The feedAdapter implementation address
      * @param owner Owner of the contract
+     * @param feedDeployer The feed deployer address
      */
     function initialize(
         address feedManager,
         address feedAdapterImplementation,
-        address owner
+        address owner,
+        address feedDeployer
     )
         external
         initializer
         onlyNonZeroAddress(feedManager)
         onlyNonZeroAddress(feedAdapterImplementation)
+        onlyNonZeroAddress(feedDeployer)
     {
         __Ownable_init(owner);
         __EOFeedFactory_init(feedAdapterImplementation, owner);
         _feedManager = IEOFeedManager(feedManager);
+        _feedDeployer = feedDeployer;
         emit FeedManagerSet(feedManager);
     }
 
@@ -66,6 +78,15 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
     function setFeedManager(address feedManager) external onlyOwner onlyNonZeroAddress(feedManager) {
         _feedManager = IEOFeedManager(feedManager);
         emit FeedManagerSet(feedManager);
+    }
+
+    /**
+     * @notice Set the feed deployer
+     * @param feedDeployer The feed deployer address
+     */
+    function setFeedDeployer(address feedDeployer) external onlyOwner onlyNonZeroAddress(feedDeployer) {
+        _feedDeployer = feedDeployer;
+        emit FeedDeployerSet(feedDeployer);
     }
 
     /**
@@ -92,7 +113,7 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
         uint256 feedVersion
     )
         external
-        onlyOwner
+        onlyFeedDeployer
         returns (IEOFeedAdapter)
     {
         // check if feedId exists in feedManager contract

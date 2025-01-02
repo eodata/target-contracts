@@ -5,10 +5,10 @@ pragma solidity 0.8.25;
 import { Script } from "forge-std/Script.sol";
 import { stdJson } from "forge-std/Script.sol";
 import { TimelockController } from "openzeppelin-contracts/contracts/governance/TimelockController.sol";
-import { EOJsonUtils } from "../../utils/EOJsonUtils.sol";
+import { EOJsonUtils } from "../utils/EOJsonUtils.sol";
 
 // usage:
-// forge script script/deployment/timelocked/CancelTimelockedTransaction.s.sol:CancelTimelockedTransaction
+// forge script script/timelocked/CancelTimelockedTransaction.s.sol:CancelTimelockedTransaction
 // <transactionId>
 // --sig 'run(bool)'
 // --rpc-url $RPC_URL

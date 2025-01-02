@@ -13,7 +13,8 @@ import {
     FeedNotSupported,
     InvalidInput,
     CallerIsNotPauser,
-    CallerIsNotUnpauser
+    CallerIsNotUnpauser,
+    CallerIsNotFeedDeployer
 } from "./interfaces/Errors.sol";
 
 /**
@@ -40,6 +41,9 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
     /// (for pausing).
     IPauserRegistry internal _pauserRegistry;
 
+    /// @dev Address of the feed deployer
+    address internal _feedDeployer;
+
     /// @dev Allows only whitelisted publishers to call the function
     modifier onlyWhitelisted() {
         if (!_whitelistedPublishers[msg.sender]) revert CallerIsNotWhitelisted(msg.sender);
@@ -62,6 +66,11 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
         _;
     }
 
+    modifier onlyFeedDeployer() {
+        if (msg.sender != _feedDeployer) revert CallerIsNotFeedDeployer();
+        _;
+    }
+
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         _disableInitializers();
@@ -77,7 +86,8 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
     function initialize(
         address feedVerifier,
         address owner,
-        address pauserRegistry
+        address pauserRegistry,
+        address feedDeployer
     )
         external
         onlyNonZeroAddress(feedVerifier)
@@ -87,6 +97,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
         __Pausable_init();
         _feedVerifier = IEOFeedVerifier(feedVerifier);
         _pauserRegistry = IPauserRegistry(pauserRegistry);
+        _feedDeployer = feedDeployer;
     }
 
     /**
@@ -98,6 +109,14 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
     }
 
     /**
+     * @notice Set the feed deployer
+     * @param feedDeployer The feed deployer address
+     */
+    function setFeedDeployer(address feedDeployer) external onlyOwner onlyNonZeroAddress(feedDeployer) {
+        _feedDeployer = feedDeployer;
+    }
+
+    /**
      * @notice Set the supported feeds
      * @param feedIds Array of feed ids
      * @param isSupported Array of booleans indicating whether the feed is supported
@@ -106,6 +125,16 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
         if (feedIds.length != isSupported.length) revert InvalidInput();
         for (uint256 i = 0; i < feedIds.length; i++) {
             _supportedFeedIds[feedIds[i]] = isSupported[i];
+        }
+    }
+
+    /**
+     * @notice Add supported feeds
+     * @param feedIds Array of feed ids
+     */
+    function addSupportedFeeds(uint16[] calldata feedIds) external onlyFeedDeployer {
+        for (uint256 i = 0; i < feedIds.length; i++) {
+            _supportedFeedIds[feedIds[i]] = true;
         }
     }
 

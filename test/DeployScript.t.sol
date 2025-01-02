@@ -9,8 +9,7 @@ import { DeployFeeds } from "../script/deployment/DeployFeeds.s.sol";
 import { SetupCoreContracts } from "../script/deployment/setup/SetupCoreContracts.s.sol";
 import { DeployTimelock } from "../script/deployment/DeployTimelock.s.sol";
 import { TransferOwnershipToTimelock } from "../script/deployment/setup/TransferOwnershipToTimelock.s.sol";
-import { DeployFeedsTimelocked } from "../script/deployment/timelocked/DeployFeedsTimelocked.s.sol";
-import { WhitelistPublishersTimelocked } from "../script/deployment/timelocked/WhitelistPublishersTimelocked.s.sol";
+import { WhitelistPublishersTimelocked } from "../script/timelocked/WhitelistPublishersTimelocked.s.sol";
 import { EOFeedVerifier } from "../src/EOFeedVerifier.sol";
 import { EOFeedManager } from "../src/EOFeedManager.sol";
 import { EOFeedRegistryAdapter } from "../src/adapters/EOFeedRegistryAdapter.sol";
@@ -127,34 +126,6 @@ contract DeployScriptTest is Test {
 
         for (uint256 i = 0; i < configStructured.publishers.length; i++) {
             assertTrue(EOFeedManager(feedManagerProxy).isWhitelistedPublisher(configStructured.publishers[i]));
-        }
-    }
-
-    function test_DeployFeedsTimelocked() public {
-        EOJsonUtils.Config memory configStructured = EOJsonUtils.getParsedConfig();
-        // remove the first feed and add it again using timelock
-        address base = configStructured.supportedFeedsData[0].base;
-        address quote = configStructured.supportedFeedsData[0].quote;
-        EOFeedRegistryAdapter(adapterProxy).removeFeedAdapter(base, quote);
-        uint16[] memory feedIds = new uint16[](1);
-        feedIds[0] = 1;
-        bool[] memory isSupported = new bool[](1);
-        isSupported[0] = false;
-        EOFeedManager(feedManagerProxy).setSupportedFeeds(feedIds, isSupported);
-        // transfer ownership to timelock
-        transferOwnership.run(address(this));
-
-        DeployFeedsTimelocked deployFeedsTimelocked = new DeployFeedsTimelocked();
-        deployFeedsTimelocked.run(configStructured.timelock.proposers[0], false);
-
-        vm.warp(block.timestamp + configStructured.timelock.minDelay + 1);
-        deployFeedsTimelocked.run(configStructured.timelock.executors[0], true);
-        assertEq(EOFeedRegistryAdapter(adapterProxy).getFeed(base, quote).getFeedId(), 1);
-
-        uint16 feedId;
-        for (uint256 i = 0; i < configStructured.supportedFeedIds.length; i++) {
-            feedId = uint16(configStructured.supportedFeedIds[i]);
-            assertTrue(EOFeedManager(feedManagerProxy).isSupportedFeed(feedId));
         }
     }
 }

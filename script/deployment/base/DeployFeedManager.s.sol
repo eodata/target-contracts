@@ -11,12 +11,14 @@ abstract contract FeedManagerDeployer is Script {
         address proxyAdmin,
         address feedVerifier,
         address owner,
-        address pauserRegistry
+        address pauserRegistry,
+        address feedDeployer
     )
         internal
         returns (address proxyAddr)
     {
-        bytes memory initData = abi.encodeCall(EOFeedManager.initialize, (feedVerifier, owner, pauserRegistry));
+        bytes memory initData =
+            abi.encodeCall(EOFeedManager.initialize, (feedVerifier, owner, pauserRegistry, feedDeployer));
 
         proxyAddr = Upgrades.deployTransparentProxy("EOFeedManager.sol", proxyAdmin, initData);
     }
@@ -27,11 +29,12 @@ contract DeployFeedManager is FeedManagerDeployer {
         address proxyAdmin,
         address feedVerifier,
         address owner,
-        address pauserRegistry
+        address pauserRegistry,
+        address feedDeployer
     )
         external
         returns (address proxyAddr)
     {
-        return deployFeedManager(proxyAdmin, feedVerifier, owner, pauserRegistry);
+        return deployFeedManager(proxyAdmin, feedVerifier, owner, pauserRegistry, feedDeployer);
     }
 }
