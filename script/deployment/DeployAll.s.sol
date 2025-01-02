@@ -32,10 +32,10 @@ contract DeployAll is Script {
         timelockDeployer = new DeployTimelock();
         transferOwnership = new TransferOwnershipToTimelock();
 
-        timelockDeployer.run();
-        mainDeployer.run();
-        coreContractsSetup.run();
-        adapterDeployer.run();
+        timelockDeployer.run(msg.sender);
+        mainDeployer.run(msg.sender);
+        coreContractsSetup.run(msg.sender);
+        adapterDeployer.run(msg.sender);
         feedsDeployer.run();
         setValidators.run();
         transferOwnership.run();

@@ -10,6 +10,8 @@ import { EOFeedFactoryBeacon } from "../../../src/adapters/factories/EOFeedFacto
 import { Script } from "forge-std/Script.sol";
 import { stdJson } from "forge-std/Script.sol";
 import { EOJsonUtils } from "../../utils/EOJsonUtils.sol";
+import { EOFeedManager } from "../../../src/EOFeedManager.sol";
+import { EOFeedRegistryAdapter } from "../../../src/adapters/EOFeedRegistryAdapter.sol";
 
 contract TransferOwnershipToTimelock is Script {
     using stdJson for string;
@@ -29,11 +31,15 @@ contract TransferOwnershipToTimelock is Script {
 
     function execute() public {
         string memory outputConfig = EOJsonUtils.initOutputConfig();
+        EOJsonUtils.Config memory configStructured = EOJsonUtils.getParsedConfig();
 
         address feedManager = outputConfig.readAddress(".feedManager");
         address feedVerifier = outputConfig.readAddress(".feedVerifier");
         address feedRegistryAdapter = outputConfig.readAddress(".feedRegistryAdapter");
         address timelock = outputConfig.readAddress(".timelock");
+
+        EOFeedManager(feedManager).setFeedDeployer(configStructured.feedDeployer);
+        EOFeedRegistryAdapter(feedRegistryAdapter).setFeedDeployer(configStructured.feedDeployer);
 
         OwnableUpgradeable(feedManager).transferOwnership(timelock);
         OwnableUpgradeable(feedVerifier).transferOwnership(timelock);

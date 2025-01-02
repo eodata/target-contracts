@@ -13,16 +13,21 @@ contract DeployFeedRegistryAdapter is Script {
     using stdJson for string;
 
     function run() external {
-        run(vm.addr(vm.envUint("PRIVATE_KEY")));
+        vm.startBroadcast();
+        execute(msg.sender);
+        vm.stopBroadcast();
     }
 
+    // for testing purposes
     function run(address broadcastFrom) public returns (address feedAdapterImplementation, address adapterProxy) {
-        string memory outputConfig = EOJsonUtils.initOutputConfig();
-        EOJsonUtils.Config memory configStructured = EOJsonUtils.getParsedConfig();
-        address feedDeployer = configStructured.feedDeployer;
-        address deployer = broadcastFrom;
-
         vm.startBroadcast(broadcastFrom);
+        (feedAdapterImplementation, adapterProxy) = execute(broadcastFrom);
+        vm.stopBroadcast();
+    }
+
+    function execute(address broadcastFrom) public returns (address feedAdapterImplementation, address adapterProxy) {
+        string memory outputConfig = EOJsonUtils.initOutputConfig();
+
         feedAdapterImplementation = address(new EOFeedAdapter());
         EOJsonUtils.OUTPUT_CONFIG.serialize("feedAdapterImplementation", feedAdapterImplementation);
 
@@ -30,7 +35,7 @@ contract DeployFeedRegistryAdapter is Script {
         address timelock = outputConfig.readAddress(".timelock");
 
         bytes memory initData = abi.encodeCall(
-            EOFeedRegistryAdapterBase.initialize, (feedManager, feedAdapterImplementation, deployer, feedDeployer)
+            EOFeedRegistryAdapterBase.initialize, (feedManager, feedAdapterImplementation, broadcastFrom, broadcastFrom)
         );
         adapterProxy = Upgrades.deployTransparentProxy("EOFeedRegistryAdapter.sol", timelock, initData);
         EOJsonUtils.OUTPUT_CONFIG.serialize("feedRegistryAdapter", adapterProxy);
@@ -38,6 +43,5 @@ contract DeployFeedRegistryAdapter is Script {
         string memory outputConfigJson =
             EOJsonUtils.OUTPUT_CONFIG.serialize("feedRegistryAdapterImplementation", implementationAddress);
         EOJsonUtils.writeConfig(outputConfigJson);
-        vm.stopBroadcast();
     }
 }
