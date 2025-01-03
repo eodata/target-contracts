@@ -36,7 +36,7 @@ contract EOFeedAdapterCloneTest is EOFeedAdapterTest {
                 )
             )
         );
-        _updatePriceFeed(FEED_ID, RATE1, block.timestamp);
+        _updateFeed(FEED_ID, RATE1, block.timestamp);
         _lastTimestamp = block.timestamp;
     }
 }

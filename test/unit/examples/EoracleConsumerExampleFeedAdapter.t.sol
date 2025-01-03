@@ -44,7 +44,7 @@ contract EoracleConsumerExampleFeedAdapterTest is Test {
 
         _consumerExampleFeed = new EoracleConsumerExampleFeedAdapter(address(feedAdapter));
 
-        _updatePriceFeed(FEED_ID, RATE1, block.timestamp);
+        _updateFeed(FEED_ID, RATE1, block.timestamp);
     }
 
     function test_SetGetFeed() public {
@@ -58,13 +58,13 @@ contract EoracleConsumerExampleFeedAdapterTest is Test {
         assertEq(price, int256(RATE1));
     }
 
-    function test_UpdatePriceFeed() public {
-        _updatePriceFeed(FEED_ID, RATE2, block.timestamp);
+    function test_UpdateFeed() public {
+        _updateFeed(FEED_ID, RATE2, block.timestamp);
         int256 price = _consumerExampleFeed.getPrice();
         assertEq(price, int256(RATE2));
     }
 
-    function _updatePriceFeed(uint256 feedId, uint256 rate, uint256 timestamp) internal {
+    function _updateFeed(uint256 feedId, uint256 rate, uint256 timestamp) internal {
         IEOFeedVerifier.LeafInput memory input;
         input.unhashedLeaf = abi.encode(feedId, rate, timestamp);
         _feedManager.updateFeed(

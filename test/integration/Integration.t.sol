@@ -7,7 +7,7 @@ import { InvalidProof } from "../../src/interfaces/Errors.sol";
 
 // solhint-disable max-states-count
 contract IntegrationMultipleLeavesSingleCheckpointTests is IntegrationBaseTests {
-    function test_updatePriceFeed() public {
+    function test_updateFeed() public {
         vm.prank(_publisher);
         _feedManager.updateFeed(input[0], vParams[0]);
         (uint256 feedId, uint256 rate,) = abi.decode(input[0].unhashedLeaf, (uint256, uint256, uint256));
@@ -19,7 +19,7 @@ contract IntegrationMultipleLeavesSingleCheckpointTests is IntegrationBaseTests 
     /**
      * @notice update price for first feed and then second feed
      */
-    function test_updatePriceFeed_SeparateCalls() public {
+    function test_updateFeed_SeparateCalls() public {
         for (uint256 i = 0; i < input.length; i++) {
             vm.prank(_publisher);
             _feedManager.updateFeed(input[i], vParams[0]);
@@ -33,7 +33,7 @@ contract IntegrationMultipleLeavesSingleCheckpointTests is IntegrationBaseTests 
     /**
      * @notice update price feeds in reverse order
      */
-    function test_updatePriceFeed_SeparateCallsReverse() public {
+    function test_updateFeed_SeparateCallsReverse() public {
         for (uint256 i = input.length; i > 0;) {
             i--;
             vm.prank(_publisher);
@@ -49,7 +49,7 @@ contract IntegrationMultipleLeavesSingleCheckpointTests is IntegrationBaseTests 
     /**
      * @notice update symbol in the same block
      */
-    function test_updatePriceFeed_SameBlock() public {
+    function test_updateFeed_SameBlock() public {
         vm.startPrank(_publisher);
         // it should verify signature during the first call
         _feedManager.updateFeed(input[0], vParams[0]);
@@ -70,7 +70,7 @@ contract IntegrationMultipleLeavesSingleCheckpointTests is IntegrationBaseTests 
     /**
      * @notice should not allow to update feed with data not related to merkle root
      */
-    function testFuzz_RevertWhen_updatePriceFeed_UnvParams(bytes memory data) public {
+    function testFuzz_RevertWhen_updateFeed_UnvParams(bytes memory data) public {
         vm.assume(keccak256(input[0].unhashedLeaf) != keccak256(data));
         input[0].unhashedLeaf = data;
         vm.startPrank(_publisher);
@@ -82,7 +82,7 @@ contract IntegrationMultipleLeavesSingleCheckpointTests is IntegrationBaseTests 
     /**
      * @notice update first and second price feeds simultaneously
      */
-    function test_updatePriceFeeds() public {
+    function test_updateFeeds() public {
         vm.prank(_publisher);
         _feedManager.updateFeeds(input, vParams[0]);
         IEOFeedManager.PriceFeed memory feedAdapter;
