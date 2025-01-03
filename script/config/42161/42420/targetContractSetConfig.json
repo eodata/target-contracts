@@ -1,0 +1,44 @@
+{
+  "usePrecompiledModexp": true,
+  "proxyAdminOwner": "0x0DD98fa21cCBD42831c6C95d1bdBA24D30887a50",
+  "targetContractsOwner": "0x0DD98fa21cCBD42831c6C95d1bdBA24D30887a50",
+  "eoracleChainId": 42420,
+  "targetChainId": 42161,
+  "publishers": ["0x15b8CFA0178C248B0089000a7Ad8a497b0deb56f"],
+  "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
+  "supportedFeedIds": [2, 54, 72, 83],
+  "supportedFeedsData": [
+    {
+      "feedId": 2,
+      "description": "ETH/USD",
+      "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 54,
+      "description": "USDC/USD",
+      "base": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 72,
+      "description": "TBTC/USD",
+      "base": "0x18084fba666a33d37592fa2633fd49a74dd93a88",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 83,
+      "description": "WBTC/USD",
+      "base": "0xDa4AaEd3A53962c83B35697Cd138cc6df43aF71f",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    }
+  ]
+}
