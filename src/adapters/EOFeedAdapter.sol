@@ -23,7 +23,7 @@ contract EOFeedAdapter is IEOFeedAdapter, Initializable {
 
     // next 2 variables will be packed in 1 slot
     /// @dev Feed id
-    uint16 private _feedId;
+    uint256 private _feedId;
 
     /// @dev Decimals of the rate
     uint8 private _inputDecimals;
@@ -46,7 +46,7 @@ contract EOFeedAdapter is IEOFeedAdapter, Initializable {
      */
     function initialize(
         address feedManager,
-        uint16 feedId,
+        uint256 feedId,
         uint8 inputDecimals,
         uint8 outputDecimals,
         string memory feedDescription,
@@ -145,9 +145,9 @@ contract EOFeedAdapter is IEOFeedAdapter, Initializable {
 
     /**
      * @notice Get the id of the feed
-     * @return uint16 The feed id
+     * @return uint256 The feed id
      */
-    function getFeedId() external view returns (uint16) {
+    function getFeedId() external view returns (uint256) {
         return _feedId;
     }
 
@@ -200,7 +200,8 @@ contract EOFeedAdapter is IEOFeedAdapter, Initializable {
         }
     }
 
+    // solhint-disable ordering
     // slither-disable-next-line unused-state,naming-convention
-    // solhint-disable-next-line ordering
     uint256[50] private __gap;
+    // solhint-disable ordering
 }

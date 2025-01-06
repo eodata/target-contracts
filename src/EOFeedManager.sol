@@ -26,13 +26,13 @@ import {
  */
 contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeable {
     /// @dev Map of feed id to price feed (feed id => PriceFeed)
-    mapping(uint16 => PriceFeed) internal _priceFeeds;
+    mapping(uint256 => PriceFeed) internal _priceFeeds;
 
     /// @dev Map of whitelisted publishers (publisher => is whitelisted)
     mapping(address => bool) internal _whitelistedPublishers;
 
     /// @dev Map of supported feeds, (feed id => is supported)
-    mapping(uint16 => bool) internal _supportedFeedIds;
+    mapping(uint256 => bool) internal _supportedFeedIds;
 
     /// @dev feed verifier contract
     IEOFeedVerifier internal _feedVerifier;
@@ -121,7 +121,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
      * @param feedIds Array of feed ids
      * @param isSupported Array of booleans indicating whether the feed is supported
      */
-    function setSupportedFeeds(uint16[] calldata feedIds, bool[] calldata isSupported) external onlyOwner {
+    function setSupportedFeeds(uint256[] calldata feedIds, bool[] calldata isSupported) external onlyOwner {
         if (feedIds.length != isSupported.length) revert InvalidInput();
         for (uint256 i = 0; i < feedIds.length; i++) {
             _supportedFeedIds[feedIds[i]] = isSupported[i];
@@ -132,7 +132,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
      * @notice Add supported feeds
      * @param feedIds Array of feed ids
      */
-    function addSupportedFeeds(uint16[] calldata feedIds) external onlyFeedDeployer {
+    function addSupportedFeeds(uint256[] calldata feedIds) external onlyFeedDeployer {
         for (uint256 i = 0; i < feedIds.length; i++) {
             _supportedFeedIds[feedIds[i]] = true;
         }
@@ -154,7 +154,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
      */
     // Reentrancy is not an issue because _feedVerifier is set by the owner
     // slither-disable-next-line reentrancy-benign,reentrancy-events
-    function updatePriceFeed(
+    function updateFeed(
         IEOFeedVerifier.LeafInput calldata input,
         IEOFeedVerifier.VerificationParams calldata vParams
     )
@@ -171,7 +171,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
      */
     // Reentrancy is not an issue because _feedVerifier is set by the owner
     // slither-disable-next-line reentrancy-benign,reentrancy-events
-    function updatePriceFeeds(
+    function updateFeeds(
         IEOFeedVerifier.LeafInput[] calldata inputs,
         IEOFeedVerifier.VerificationParams calldata vParams
     )
@@ -220,14 +220,14 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
     /**
      * @inheritdoc IEOFeedManager
      */
-    function getLatestPriceFeed(uint16 feedId) external view returns (PriceFeed memory) {
+    function getLatestPriceFeed(uint256 feedId) external view returns (PriceFeed memory) {
         return _getLatestPriceFeed(feedId);
     }
 
     /**
      * @inheritdoc IEOFeedManager
      */
-    function getLatestPriceFeeds(uint16[] calldata feedIds) external view returns (PriceFeed[] memory) {
+    function getLatestPriceFeeds(uint256[] calldata feedIds) external view returns (PriceFeed[] memory) {
         PriceFeed[] memory retVal = new PriceFeed[](feedIds.length);
         for (uint256 i = 0; i < feedIds.length; i++) {
             retVal[i] = _getLatestPriceFeed(feedIds[i]);
@@ -245,7 +245,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
     /**
      * @inheritdoc IEOFeedManager
      */
-    function isSupportedFeed(uint16 feedId) external view returns (bool) {
+    function isSupportedFeed(uint256 feedId) external view returns (bool) {
         return _supportedFeedIds[feedId];
     }
 
@@ -258,12 +258,20 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
     }
 
     /**
+     * @notice Get the feed deployer
+     * @return Address of the feed deployer
+     */
+    function getFeedDeployer() external view returns (address) {
+        return _feedDeployer;
+    }
+
+    /**
      * @notice Process the verified rate, check and save it
-     * @param data Verified rate data, abi encoded (uint16 feedId, uint256 rate, uint256 timestamp)
+     * @param data Verified rate data, abi encoded (uint256 feedId, uint256 rate, uint256 timestamp)
      * @param blockNumber eoracle chain block number
      */
     function _processVerifiedRate(bytes memory data, uint256 blockNumber) internal {
-        (uint16 feedId, uint256 rate, uint256 timestamp) = abi.decode(data, (uint16, uint256, uint256));
+        (uint256 feedId, uint256 rate, uint256 timestamp) = abi.decode(data, (uint256, uint256, uint256));
         if (!_supportedFeedIds[feedId]) revert FeedNotSupported(feedId);
         if (_priceFeeds[feedId].timestamp < timestamp) {
             _priceFeeds[feedId] = PriceFeed(rate, timestamp, blockNumber);
@@ -278,12 +286,13 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
      * @param feedId Feed id
      * @return PriceFeed struct
      */
-    function _getLatestPriceFeed(uint16 feedId) internal view returns (PriceFeed memory) {
+    function _getLatestPriceFeed(uint256 feedId) internal view returns (PriceFeed memory) {
         if (!_supportedFeedIds[feedId]) revert FeedNotSupported(feedId);
         return _priceFeeds[feedId];
     }
 
+    // solhint-disable ordering
     // slither-disable-next-line unused-state,naming-convention
-    // solhint-disable-next-line ordering
     uint256[50] private __gap;
+    // solhint-disable enable
 }

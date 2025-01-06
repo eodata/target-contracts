@@ -30,7 +30,7 @@ contract EOFeedManagerTest is Test, Utils {
     address private owner = makeAddr("owner");
     address private proxyAdmin = makeAddr("proxyAdmin");
     address private notOwner = makeAddr("notOwner");
-    uint16 private feedId = 1;
+    uint256 private feedId = 1;
     uint256 private rate = 1_000_000;
     uint256 private timestamp = 9_999_999_999;
     bytes32 private blockHash = keccak256("BLOCK_HASH");
@@ -40,8 +40,8 @@ contract EOFeedManagerTest is Test, Utils {
     uint256 private epochNumber = 1;
     uint256 private blockNumber = 1;
 
-    event RateUpdated(uint16 indexed feedId, uint256 rate, uint256 timestamp);
-    event SymbolReplay(uint16 indexed feedId, uint256 rate, uint256 timestamp, uint256 latestTimestamp);
+    event RateUpdated(uint256 indexed feedId, uint256 rate, uint256 timestamp);
+    event SymbolReplay(uint256 indexed feedId, uint256 rate, uint256 timestamp, uint256 latestTimestamp);
 
     function setUp() public {
         verifier = new MockFeedVerifier();
@@ -116,7 +116,7 @@ contract EOFeedManagerTest is Test, Utils {
     }
 
     function test_RevertWhen_SetSupportedFeedsInvalidInput() public {
-        uint16[] memory feedIds = new uint16[](5);
+        uint256[] memory feedIds = new uint256[](5);
         bool[] memory isSupported = new bool[](4);
         vm.expectRevert(abi.encodeWithSelector(InvalidInput.selector));
         vm.prank(owner);
@@ -124,10 +124,10 @@ contract EOFeedManagerTest is Test, Utils {
     }
 
     function test_setSupportedFeeds() public {
-        uint16[] memory feedIds = new uint16[](5);
+        uint256[] memory feedIds = new uint256[](5);
         bool[] memory isSupported = new bool[](5);
         for (uint256 i = 0; i < 5; i++) {
-            feedIds[i] = uint16(i);
+            feedIds[i] = uint256(i);
             isSupported[i] = true;
         }
         vm.prank(owner);
@@ -140,15 +140,15 @@ contract EOFeedManagerTest is Test, Utils {
 
     function test_RevertWhen_NotDeployer_AddSupportedFeeds() public {
         vm.expectRevert(abi.encodeWithSelector(CallerIsNotFeedDeployer.selector));
-        uint16[] memory feedIds = new uint16[](1);
+        uint256[] memory feedIds = new uint256[](1);
         feedIds[0] = 1;
         registry.addSupportedFeeds(feedIds);
     }
 
     function test_addSupportedFeeds() public {
-        uint16[] memory feedIds = new uint16[](5);
+        uint256[] memory feedIds = new uint256[](5);
         for (uint256 i = 0; i < 5; i++) {
-            feedIds[i] = uint16(i);
+            feedIds[i] = uint256(i);
         }
         vm.prank(owner);
         registry.addSupportedFeeds(feedIds);
@@ -158,20 +158,18 @@ contract EOFeedManagerTest is Test, Utils {
         assertEq(registry.isSupportedFeed(6), false);
     }
 
-    function test_RevertWhen_NotWhitelisted_UpdatePriceFeed() public {
-        bytes memory ratesData = abi.encode(feedId, rate, timestamp);
-        bytes memory unhashedLeaf = abi.encode(1, address(0), address(0), ratesData);
+    function test_RevertWhen_NotWhitelisted_UpdateFeed() public {
+        bytes memory unhashedLeaf = abi.encode(feedId, rate, timestamp);
 
         IEOFeedVerifier.VerificationParams memory vParams = _getDefaultVerificationParams();
         IEOFeedVerifier.LeafInput memory input =
             IEOFeedVerifier.LeafInput({ unhashedLeaf: unhashedLeaf, leafIndex: 1, proof: new bytes32[](0) });
         vm.expectRevert(abi.encodeWithSelector(CallerIsNotWhitelisted.selector, address(this)));
-        registry.updatePriceFeed(input, vParams);
+        registry.updateFeed(input, vParams);
     }
 
-    function test_RevertWhen_FeedNotSupported_UpdatePriceFeed() public {
-        bytes memory ratesData = abi.encode(feedId, rate, timestamp);
-        bytes memory unhashedLeaf = abi.encode(1, address(0), address(0), ratesData);
+    function test_RevertWhen_FeedNotSupported_UpdateFeed() public {
+        bytes memory unhashedLeaf = abi.encode(feedId, rate, timestamp);
 
         IEOFeedVerifier.VerificationParams memory vParams = _getDefaultVerificationParams();
         IEOFeedVerifier.LeafInput memory input =
@@ -180,12 +178,11 @@ contract EOFeedManagerTest is Test, Utils {
         _whitelistPublisher(owner, publisher);
         vm.expectRevert(abi.encodeWithSelector(FeedNotSupported.selector, feedId));
         vm.prank(publisher);
-        registry.updatePriceFeed(input, vParams);
+        registry.updateFeed(input, vParams);
     }
 
-    function test_UpdatePriceFeed() public {
-        bytes memory ratesData = abi.encode(feedId, rate, timestamp);
-        bytes memory unhashedLeaf = abi.encode(1, address(0), address(0), ratesData);
+    function test_UpdateFeed() public {
+        bytes memory unhashedLeaf = abi.encode(feedId, rate, timestamp);
 
         IEOFeedVerifier.VerificationParams memory vParams = _getDefaultVerificationParams();
         IEOFeedVerifier.LeafInput memory input =
@@ -195,15 +192,14 @@ contract EOFeedManagerTest is Test, Utils {
         vm.expectEmit(true, false, false, true);
         emit RateUpdated(feedId, rate, timestamp);
         vm.prank(publisher);
-        registry.updatePriceFeed(input, vParams);
+        registry.updateFeed(input, vParams);
         IEOFeedManager.PriceFeed memory feedAdapter = registry.getLatestPriceFeed(1);
         assertEq(feedAdapter.value, rate);
         assertEq(feedAdapter.eoracleBlockNumber, vParams.blockNumber);
     }
 
-    function test_RevertWhen_SymbolReplay_UpdatePriceFeed() public {
-        bytes memory ratesData = abi.encode(feedId, rate, timestamp);
-        bytes memory unhashedLeaf = abi.encode(1, address(0), address(0), ratesData);
+    function test_RevertWhen_SymbolReplay_UpdateFeed() public {
+        bytes memory unhashedLeaf = abi.encode(feedId, rate, timestamp);
 
         IEOFeedVerifier.VerificationParams memory vParams = _getDefaultVerificationParams();
         IEOFeedVerifier.LeafInput memory input =
@@ -211,13 +207,13 @@ contract EOFeedManagerTest is Test, Utils {
         _whitelistPublisher(owner, publisher);
         _setSupportedFeed(owner, feedId);
         vm.startPrank(publisher);
-        registry.updatePriceFeed(input, vParams);
+        registry.updateFeed(input, vParams);
         vm.expectEmit(true, false, false, true);
         emit SymbolReplay(feedId, rate, timestamp, timestamp);
-        registry.updatePriceFeed(input, vParams);
+        registry.updateFeed(input, vParams);
     }
 
-    function test_RevertWhen_Paused_UpdatePriceFeed() public {
+    function test_RevertWhen_Paused_UpdateFeed() public {
         vm.startPrank(owner);
         registry.pause();
         vm.stopPrank();
@@ -227,14 +223,12 @@ contract EOFeedManagerTest is Test, Utils {
         _whitelistPublisher(owner, publisher);
         vm.expectRevert(PausableUpgradeable.EnforcedPause.selector);
         vm.prank(publisher);
-        registry.updatePriceFeed(input, vParams);
+        registry.updateFeed(input, vParams);
     }
 
-    function test_UpdatePriceFeeds() public {
-        bytes memory ratesData0 = abi.encode(feedId, rate, timestamp);
-        bytes memory unhashedLeaf0 = abi.encode(1, address(0), address(0), ratesData0);
-        bytes memory ratesData1 = abi.encode(feedId + 1, rate + 1, timestamp + 1);
-        bytes memory unhashedLeaf1 = abi.encode(2, address(0), address(0), ratesData1);
+    function test_UpdateFeeds() public {
+        bytes memory unhashedLeaf0 = abi.encode(feedId, rate, timestamp);
+        bytes memory unhashedLeaf1 = abi.encode(feedId + 1, rate + 1, timestamp + 1);
 
         IEOFeedVerifier.VerificationParams memory vParams = _getDefaultVerificationParams();
 
@@ -246,8 +240,8 @@ contract EOFeedManagerTest is Test, Utils {
         _setSupportedFeed(owner, feedId);
         _setSupportedFeed(owner, feedId + 1);
         vm.prank(publisher);
-        registry.updatePriceFeeds(inputs, vParams);
-        uint16[] memory feedIds = new uint16[](2);
+        registry.updateFeeds(inputs, vParams);
+        uint256[] memory feedIds = new uint256[](2);
         feedIds[0] = feedId;
         feedIds[1] = feedId + 1;
         IEOFeedManager.PriceFeed[] memory feeds = registry.getLatestPriceFeeds(feedIds);
@@ -257,11 +251,9 @@ contract EOFeedManagerTest is Test, Utils {
         assertEq(feeds[1].eoracleBlockNumber, vParams.blockNumber);
     }
 
-    function test_RevertWhen_NotWhitelisted_UpdatePriceFeeds() public {
-        bytes memory ratesData0 = abi.encode(feedId, rate, timestamp);
-        bytes memory unhashedLeaf0 = abi.encode(1, address(0), address(0), ratesData0);
-        bytes memory ratesData1 = abi.encode(feedId + 1, rate + 1, timestamp + 1);
-        bytes memory unhashedLeaf1 = abi.encode(2, address(0), address(0), ratesData1);
+    function test_RevertWhen_NotWhitelisted_UpdateFeeds() public {
+        bytes memory unhashedLeaf0 = abi.encode(feedId, rate, timestamp);
+        bytes memory unhashedLeaf1 = abi.encode(feedId + 1, rate + 1, timestamp + 1);
 
         IEOFeedVerifier.VerificationParams memory vParams = _getDefaultVerificationParams();
         IEOFeedVerifier.LeafInput[] memory inputs = new IEOFeedVerifier.LeafInput[](2);
@@ -272,10 +264,10 @@ contract EOFeedManagerTest is Test, Utils {
         _setSupportedFeed(owner, feedId);
         _setSupportedFeed(owner, feedId + 1);
         vm.expectRevert(abi.encodeWithSelector(CallerIsNotWhitelisted.selector, address(this)));
-        registry.updatePriceFeeds(inputs, vParams);
+        registry.updateFeeds(inputs, vParams);
     }
 
-    function test_RevertWhen_Paused_UpdatePriceFeeds() public {
+    function test_RevertWhen_Paused_UpdateFeeds() public {
         vm.startPrank(owner);
         registry.pause();
         vm.stopPrank();
@@ -285,10 +277,10 @@ contract EOFeedManagerTest is Test, Utils {
         _whitelistPublisher(owner, publisher);
         vm.expectRevert(PausableUpgradeable.EnforcedPause.selector);
         vm.prank(publisher);
-        registry.updatePriceFeeds(inputs, vParams);
+        registry.updateFeeds(inputs, vParams);
     }
 
-    function test_RevertWhen_IncorrectInput_UpdatePriceFeeds() public {
+    function test_RevertWhen_IncorrectInput_UpdateFeeds() public {
         IEOFeedVerifier.VerificationParams memory vParams = _getDefaultVerificationParams();
 
         _whitelistPublisher(owner, publisher);
@@ -296,7 +288,7 @@ contract EOFeedManagerTest is Test, Utils {
 
         IEOFeedVerifier.LeafInput[] memory inputs;
         vm.expectRevert(MissingLeafInputs.selector);
-        registry.updatePriceFeeds(inputs, vParams);
+        registry.updateFeeds(inputs, vParams);
     }
 
     function test_RevertWhen_FeedNotSupported_GetLatestPriceFeed() public {
@@ -313,8 +305,8 @@ contract EOFeedManagerTest is Test, Utils {
         registry.whitelistPublishers(publishers, isWhitelisted);
     }
 
-    function _setSupportedFeed(address _executer, uint16 _feedId) private {
-        uint16[] memory feedIds = new uint16[](1);
+    function _setSupportedFeed(address _executer, uint256 _feedId) private {
+        uint256[] memory feedIds = new uint256[](1);
         bool[] memory isSupported = new bool[](1);
         feedIds[0] = _feedId;
         isSupported[0] = true;

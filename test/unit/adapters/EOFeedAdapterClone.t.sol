@@ -19,7 +19,7 @@ contract EOFeedAdapterCloneTest is EOFeedAdapterTest {
         _quoteAddress = makeAddr("quote");
         _owner = makeAddr("_owner");
 
-        _feedManager = new MockEOFeedManager();
+        _feedManager = new MockEOFeedManager(address(this));
 
         IEOFeedAdapter feedAdapterImplementation =
             EOFeedAdapter(Upgrades.deployImplementation("EOFeedAdapter.sol", opts));
@@ -27,9 +27,7 @@ contract EOFeedAdapterCloneTest is EOFeedAdapterTest {
         EOFeedRegistryAdapterClone feedRegistryAdapter = EOFeedRegistryAdapterClone(
             Upgrades.deployTransparentProxy("EOFeedRegistryAdapterClone.sol", proxyAdmin, "")
         );
-        feedRegistryAdapter.initialize(
-            address(_feedManager), address(feedAdapterImplementation), address(this), address(this)
-        );
+        feedRegistryAdapter.initialize(address(_feedManager), address(feedAdapterImplementation), address(this));
 
         _feedAdapter = EOFeedAdapter(
             address(
@@ -38,7 +36,7 @@ contract EOFeedAdapterCloneTest is EOFeedAdapterTest {
                 )
             )
         );
-        _updatePriceFeed(FEED_ID, RATE1, block.timestamp);
+        _updateFeed(FEED_ID, RATE1, block.timestamp);
         _lastTimestamp = block.timestamp;
     }
 }

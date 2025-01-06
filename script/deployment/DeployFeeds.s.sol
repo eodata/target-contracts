@@ -13,9 +13,9 @@ contract DeployFeeds is Script {
 
     EOFeedManager public feedManager;
     EOFeedRegistryAdapter public feedRegistryAdapter;
-    uint16[] public feedIds;
+    uint256[] public feedIds;
 
-    error FeedIsNotSupported(uint16 feedId);
+    error FeedIsNotSupported(uint256 feedId);
 
     function run() external {
         uint256 pk = vm.envUint("PRIVATE_KEY");
@@ -40,7 +40,7 @@ contract DeployFeeds is Script {
         feedRegistryAdapter = EOFeedRegistryAdapter(outputConfig.readAddress(".feedRegistryAdapter"));
 
         // Set supported feedIds in FeedManager which are not set yet
-        uint16 feedId;
+        uint256 feedId;
 
         for (uint256 i = 0; i < configStructured.supportedFeedIds.length; i++) {
             feedId = uint16(configStructured.supportedFeedIds[i]);
@@ -60,14 +60,14 @@ contract DeployFeeds is Script {
 
         // revert if at least one feedId is not supported.
         for (uint256 i = 0; i < feedsLength; i++) {
-            feedId = uint16(configStructured.supportedFeedsData[i].feedId);
+            feedId = uint256(configStructured.supportedFeedsData[i].feedId);
             if (!feedManager.isSupportedFeed(feedId)) {
                 revert FeedIsNotSupported(feedId);
             }
         }
 
         for (uint256 i = 0; i < feedsLength; i++) {
-            feedId = uint16(configStructured.supportedFeedsData[i].feedId);
+            feedId = uint256(configStructured.supportedFeedsData[i].feedId);
             feedAdapter = address(feedRegistryAdapter.getFeedById(feedId));
             if (feedAdapter == address(0)) {
                 feedAdapter = address(

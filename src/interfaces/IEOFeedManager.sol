@@ -22,7 +22,7 @@ interface IEOFeedManager {
      * @param rate Price feed value
      * @param timestamp Price feed timestamp
      */
-    event RateUpdated(uint16 indexed feedId, uint256 rate, uint256 timestamp);
+    event RateUpdated(uint256 indexed feedId, uint256 rate, uint256 timestamp);
 
     /**
      * @dev Event emitted when a price feed is replayed
@@ -31,14 +31,14 @@ interface IEOFeedManager {
      * @param timestamp Price feed timestamp
      * @param latestTimestamp Latest price feed timestamp
      */
-    event SymbolReplay(uint16 indexed feedId, uint256 rate, uint256 timestamp, uint256 latestTimestamp);
+    event SymbolReplay(uint256 indexed feedId, uint256 rate, uint256 timestamp, uint256 latestTimestamp);
 
     /**
      * @notice Update the price for a feed
      * @param input A merkle leaf containing price data and its merkle proof
      * @param vParams Verification parameters
      */
-    function updatePriceFeed(
+    function updateFeed(
         IEOFeedVerifier.LeafInput calldata input,
         IEOFeedVerifier.VerificationParams calldata vParams
     )
@@ -49,7 +49,7 @@ interface IEOFeedManager {
      * @param inputs Array of leafs to prove the price feeds
      * @param vParams Verification parameters
      */
-    function updatePriceFeeds(
+    function updateFeeds(
         IEOFeedVerifier.LeafInput[] calldata inputs,
         IEOFeedVerifier.VerificationParams calldata vParams
     )
@@ -67,14 +67,14 @@ interface IEOFeedManager {
      * @param feedId Feed id
      * @return PriceFeed struct
      */
-    function getLatestPriceFeed(uint16 feedId) external view returns (PriceFeed memory);
+    function getLatestPriceFeed(uint256 feedId) external view returns (PriceFeed memory);
 
     /**
      * @notice Get the latest price feeds for multiple feeds
      * @param feedIds Array of feed ids
      * @return Array of PriceFeed structs
      */
-    function getLatestPriceFeeds(uint16[] calldata feedIds) external view returns (PriceFeed[] memory);
+    function getLatestPriceFeeds(uint256[] calldata feedIds) external view returns (PriceFeed[] memory);
 
     /**
      * @notice Check if a publisher is whitelisted
@@ -88,5 +88,11 @@ interface IEOFeedManager {
      * @param feedId feed Id to check
      * @return Boolean indicating whether the feed is supported
      */
-    function isSupportedFeed(uint16 feedId) external view returns (bool);
+    function isSupportedFeed(uint256 feedId) external view returns (bool);
+
+    /**
+     * @notice Get the feed deployer
+     * @return Address of the feed deployer
+     */
+    function getFeedDeployer() external view returns (address);
 }

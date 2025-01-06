@@ -9,7 +9,7 @@
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
-    "@openzeppelin/upgrades-core": "^1.32.3",
+    "@openzeppelin/upgrades-core": "^1.41.0",
     "dotenv": "^16.3.1",
     "ethereum-block-by-date": "^1.0.0",
     "ethers": "^6.13.2",
@@ -88,7 +88,7 @@
     "test:coverage:report": "forge clean && forge build && FOUNDRY_PROFILE='full_test' EORACLE_CHAIN_ID=42420 forge coverage --report lcov && lcov --rc lcov_branch_coverage=1 --remove lcov.info  -o lcov.info 'test/*'  'script/*' 'src/examples/*' 'src/libraries/*' && genhtml lcov.info --branch-coverage --output-dir coverage",
     "docs": "forge doc --build",
     "gas-snapshot": "forge snapshot --force",
-    "pre-commit": "if ! git diff --cached --quiet --exit-code -- '*.sol'; then npm run gas-snapshot && git add .gas-snapshot; fi && npx lint-staged",
+    "pre-commit": "npx lint-staged",
     "pre-push": "git diff HEAD --ignore-submodules --quiet && FOUNDRY_PROFILE='full_test' EORACLE_CHAIN_ID=42420 forge test  --force --watch-delay 500ms",
     "prepare": "husky",
     "commitlint": "commitlint --edit"

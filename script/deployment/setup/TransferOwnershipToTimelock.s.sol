@@ -11,7 +11,6 @@ import { Script } from "forge-std/Script.sol";
 import { stdJson } from "forge-std/Script.sol";
 import { EOJsonUtils } from "../../utils/EOJsonUtils.sol";
 import { EOFeedManager } from "../../../src/EOFeedManager.sol";
-import { EOFeedRegistryAdapter } from "../../../src/adapters/EOFeedRegistryAdapter.sol";
 
 contract TransferOwnershipToTimelock is Script {
     using stdJson for string;
@@ -39,7 +38,6 @@ contract TransferOwnershipToTimelock is Script {
         address timelock = outputConfig.readAddress(".timelock");
 
         EOFeedManager(feedManager).setFeedDeployer(configStructured.feedDeployer);
-        EOFeedRegistryAdapter(feedRegistryAdapter).setFeedDeployer(configStructured.feedDeployer);
 
         OwnableUpgradeable(feedManager).transferOwnership(timelock);
         OwnableUpgradeable(feedVerifier).transferOwnership(timelock);

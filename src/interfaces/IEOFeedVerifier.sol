@@ -7,7 +7,7 @@ interface IEOFeedVerifier {
      * @param leafIndex Index of the leaf
      * @param unhashedLeaf Unhashed leaf data
      *         abi encoded (uint256 id, address sender, address receiver, bytes memory data)
-     *              where bytes memory data =  abi encoded (uint16 feedId, uint256 rate, uint256 timestamp)
+     *              where bytes memory data =  abi encoded (uint256 feedId, uint256 rate, uint256 timestamp)
      * @param proof Merkle proof of the leaf
      */
     struct LeafInput {
@@ -70,7 +70,7 @@ interface IEOFeedVerifier {
      * @notice verify single leaf signature from a block merkle tree
      * @param input leaf input data and proof (LeafInput)
      * @param vParams verification params
-     * @return leafData Leaf data, abi encoded (uint16 feedId, uint256 rate, uint256 timestamp)
+     * @return leafData Leaf data, abi encoded (uint256 feedId, uint256 rate, uint256 timestamp)
      */
     function verify(
         LeafInput memory input,

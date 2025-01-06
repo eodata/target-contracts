@@ -78,9 +78,9 @@ contract DeployScriptTest is Test {
 
     function test_SetupCoreContracts() public view {
         EOJsonUtils.Config memory configStructured = EOJsonUtils.getParsedConfig();
-        uint16 feedId;
+        uint256 feedId;
         for (uint256 i = 0; i < configStructured.supportedFeedIds.length; i++) {
-            feedId = uint16(configStructured.supportedFeedIds[i]);
+            feedId = uint256(configStructured.supportedFeedIds[i]);
             assertTrue(EOFeedManager(feedManagerProxy).isSupportedFeed(feedId));
         }
         for (uint256 i = 0; i < configStructured.publishers.length; i++) {
@@ -93,7 +93,7 @@ contract DeployScriptTest is Test {
         uint256 feedsLength = configStructured.supportedFeedsData.length;
 
         for (uint256 i = 0; i < feedsLength; i++) {
-            uint16 feedId = uint16(configStructured.supportedFeedsData[i].feedId);
+            uint256 feedId = uint256(configStructured.supportedFeedsData[i].feedId);
             IEOFeedAdapter feedAdapter = EOFeedRegistryAdapter(adapterProxy).getFeedById(feedId);
             IEOFeedAdapter feedByAddresses = EOFeedRegistryAdapter(adapterProxy).getFeed(
                 configStructured.supportedFeedsData[i].base, configStructured.supportedFeedsData[i].quote

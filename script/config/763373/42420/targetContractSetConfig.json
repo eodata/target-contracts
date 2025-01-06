@@ -1,0 +1,28 @@
+{
+  "usePrecompiledModexp": false,
+  "proxyAdminOwner": "0x8f70a356C20e3BDa1674E47b7793F705756c64b9",
+  "targetContractsOwner": "0x8f70a356C20e3BDa1674E47b7793F705756c64b9",
+  "eoracleChainId": 42420,
+  "targetChainId": 763373,
+  "publishers": ["0xF6c055BAa8E1976cba104C5113Fea53Ca4aD0492"],
+  "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
+  "supportedFeedIds": [1, 2],
+  "supportedFeedsData": [
+    {
+      "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "BTC/USD",
+      "feedId": 1
+    },
+    {
+      "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "ETH/USD",
+      "feedId": 2
+    }
+  ]
+}
