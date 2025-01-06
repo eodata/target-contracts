@@ -144,6 +144,7 @@ export class TimelockTxs {
 async function getChainId(signer: ethers.Signer) {
     return await signer.provider?.getNetwork().then(network => network.chainId);
 }
+
 async function main() {
     const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
     const eoracleChainId = Number(process.env.EORACLE_CHAIN_ID);
