@@ -10,6 +10,7 @@ library EOJsonUtils {
 
     struct Config {
         uint256 eoracleChainId;
+        address feedDeployer;
         PauserRegistry pauserRegistry;
         address[] publishers;
         uint256[] supportedFeedIds;

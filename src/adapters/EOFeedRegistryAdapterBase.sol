@@ -11,7 +11,8 @@ import {
     FeedAlreadyExists,
     BaseQuotePairExists,
     FeedNotSupported,
-    FeedDoesNotExist
+    FeedDoesNotExist,
+    NotFeedDeployer
 } from "../interfaces/Errors.sol";
 
 /**
@@ -29,6 +30,11 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
 
     modifier onlyNonZeroAddress(address addr) {
         if (addr == address(0)) revert InvalidAddress();
+        _;
+    }
+
+    modifier onlyFeedDeployer() {
+        if (msg.sender != _feedManager.getFeedDeployer()) revert NotFeedDeployer();
         _;
     }
 
@@ -92,7 +98,7 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
         uint256 feedVersion
     )
         external
-        onlyOwner
+        onlyFeedDeployer
         returns (IEOFeedAdapter)
     {
         // check if feedId exists in feedManager contract

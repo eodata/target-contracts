@@ -34,6 +34,12 @@ interface IEOFeedManager {
     event SymbolReplay(uint256 indexed feedId, uint256 rate, uint256 timestamp, uint256 latestTimestamp);
 
     /**
+     * @dev Event emitted when the feed deployer is set
+     * @param feedDeployer Address of the feed deployer
+     */
+    event FeedDeployerSet(address indexed feedDeployer);
+
+    /**
      * @notice Update the price for a feed
      * @param input A merkle leaf containing price data and its merkle proof
      * @param vParams Verification parameters
@@ -89,4 +95,10 @@ interface IEOFeedManager {
      * @return Boolean indicating whether the feed is supported
      */
     function isSupportedFeed(uint256 feedId) external view returns (bool);
+
+    /**
+     * @notice Get the feed deployer
+     * @return Address of the feed deployer
+     */
+    function getFeedDeployer() external view returns (address);
 }

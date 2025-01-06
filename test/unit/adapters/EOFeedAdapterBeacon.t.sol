@@ -18,7 +18,7 @@ contract EOFeedAdapterBeaconTest is EOFeedAdapterTest {
         _baseAddress = makeAddr("base");
         _quoteAddress = makeAddr("quote");
 
-        _feedManager = new MockEOFeedManager();
+        _feedManager = new MockEOFeedManager(address(this));
 
         IEOFeedAdapter feedAdapterImplementation =
             EOFeedAdapter(Upgrades.deployImplementation("EOFeedAdapter.sol", opts));

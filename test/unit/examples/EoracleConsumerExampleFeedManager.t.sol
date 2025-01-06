@@ -24,7 +24,7 @@ contract EoracleConsumerExampleFeedManagerTest is Test {
     function setUp() public virtual {
         _owner = makeAddr("_owner");
 
-        _feedManager = new MockEOFeedManager();
+        _feedManager = new MockEOFeedManager(address(this));
         _consumerExampleFeedManager = new EoracleConsumerExampleFeedManager(address(_feedManager));
 
         _updateFeed(FEED_ID, RATE1, block.timestamp);

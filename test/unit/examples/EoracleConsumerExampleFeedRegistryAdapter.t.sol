@@ -33,14 +33,13 @@ contract EoracleConsumerExampleFeedRegistryAdapterTest is Test {
     function setUp() public virtual {
         _owner = makeAddr("_owner");
 
-        _feedManager = new MockEOFeedManager();
+        _feedManager = new MockEOFeedManager(address(this));
         _feedAdapterImplementation = new EOFeedAdapter();
         _feedRegistryAdapter =
             EOFeedRegistryAdapter(Upgrades.deployTransparentProxy("EOFeedRegistryAdapter.sol", proxyAdmin, ""));
 
         _feedRegistryAdapter.initialize(address(_feedManager), address(_feedAdapterImplementation), _owner);
 
-        vm.prank(_owner);
         IEOFeedAdapter feedAdapter = _feedRegistryAdapter.deployEOFeedAdapter(
             Denominations.ETH, Denominations.USD, FEED_ID, DESCRIPTION, DECIMALS, DECIMALS, VERSION
         );

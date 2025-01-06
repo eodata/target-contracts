@@ -3,8 +3,7 @@ pragma solidity ^0.8.25;
 
 import { stdJson } from "forge-std/Script.sol";
 import { ExecuteAny } from "./ExecuteAny.s.sol";
-import { UpgradeFeedRegistryAdapterTimelocked } from
-    "../deployment/timelocked/UpgradeFeedRegistryAdapterTimelocked.s.sol";
+import { UpgradeFeedRegistryAdapterTimelocked } from "../timelocked/UpgradeFeedRegistryAdapterTimelocked.s.sol";
 import { EOJsonUtils } from "../utils/EOJsonUtils.sol";
 
 /*

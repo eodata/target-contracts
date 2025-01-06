@@ -4,10 +4,10 @@ pragma solidity 0.8.25;
 
 import { OwnableUpgradeable } from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import { UpgradeableBeacon } from "@openzeppelin/contracts/proxy/beacon/UpgradeableBeacon.sol";
-import { EOFeedFactoryBeacon } from "../../../src/adapters/factories/EOFeedFactoryBeacon.sol";
+import { EOFeedFactoryBeacon } from "../../src/adapters/factories/EOFeedFactoryBeacon.sol";
 import { Script } from "forge-std/Script.sol";
 import { stdJson } from "forge-std/Script.sol";
-import { EOJsonUtils } from "../../utils/EOJsonUtils.sol";
+import { EOJsonUtils } from "../utils/EOJsonUtils.sol";
 import { TimelockController } from "@openzeppelin/contracts/governance/TimelockController.sol";
 import { TimelockBase } from "./TimelockBase.sol";
 

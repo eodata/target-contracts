@@ -2,12 +2,8 @@
   "usePrecompiledModexp": true,
   "eoracleChainId": 42420,
   "targetChainId": 11155111,
-  "publishers": [
-    "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
-    "0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65",
-    "0xE1021cC1E78DA8eD9026189E8244fbaB1dD59ec5"
-  ],
-  "allowedSenders": ["0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"],
+  "feedDeployer": "0x59cAE195Ad704Ae629a9F263EB5C978A2543dC34",
+  "publishers": ["0x077758247f36a5ec1d11b0A583f717eeD66578bf", "0x59cAE195Ad704Ae629a9F263EB5C978A2543dC34"],
   "supportedFeedIds": [1, 2, 3, 6],
   "supportedFeedsData": [
     {
@@ -45,11 +41,15 @@
   ],
   "timelock": {
     "minDelay": 1,
-    "proposers": ["0xE1021cC1E78DA8eD9026189E8244fbaB1dD59ec5"],
+    "proposers": ["0xE1021cC1E78DA8eD9026189E8244fbaB1dD59ec5", "0x59cAE195Ad704Ae629a9F263EB5C978A2543dC34"],
     "executors": ["0xb46D9eE58a54161dEB2906de5656E78246AEDd0B"]
   },
   "pauserRegistry": {
-    "pausers": ["0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"],
-    "unpauser": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
+    "pausers": [
+      "0xE1021cC1E78DA8eD9026189E8244fbaB1dD59ec5",
+      "0xE1ac61e66204E9BCA63E4eC5f60e6c9146EF1B90",
+      "0x59cAE195Ad704Ae629a9F263EB5C978A2543dC34"
+    ],
+    "unpauser": "0xb46D9eE58a54161dEB2906de5656E78246AEDd0B"
   }
 }

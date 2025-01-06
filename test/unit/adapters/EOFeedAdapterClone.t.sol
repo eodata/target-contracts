@@ -19,7 +19,7 @@ contract EOFeedAdapterCloneTest is EOFeedAdapterTest {
         _quoteAddress = makeAddr("quote");
         _owner = makeAddr("_owner");
 
-        _feedManager = new MockEOFeedManager();
+        _feedManager = new MockEOFeedManager(address(this));
 
         IEOFeedAdapter feedAdapterImplementation =
             EOFeedAdapter(Upgrades.deployImplementation("EOFeedAdapter.sol", opts));

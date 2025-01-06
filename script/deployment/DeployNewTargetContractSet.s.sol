@@ -18,10 +18,22 @@ contract DeployNewTargetContractSet is FeedVerifierDeployer, FeedManagerDeployer
     using stdJson for string;
 
     function run() external {
-        run(vm.addr(vm.envUint("DEPLOYER_PRIVATE_KEY")));
+        vm.startBroadcast();
+        execute(msg.sender);
+        vm.stopBroadcast();
     }
 
+    // for testing purposes
     function run(address broadcastFrom)
+        public
+        returns (address bls, address feedVerifierProxy, address feedManagerProxy)
+    {
+        vm.startBroadcast(broadcastFrom);
+        (bls, feedVerifierProxy, feedManagerProxy) = execute(broadcastFrom);
+        vm.stopBroadcast();
+    }
+
+    function execute(address broadcastFrom)
         public
         returns (address bls, address feedVerifierProxy, address feedManagerProxy)
     {
@@ -32,8 +44,6 @@ contract DeployNewTargetContractSet is FeedVerifierDeployer, FeedManagerDeployer
         require(
             configStructured.eoracleChainId == vm.envUint("EORACLE_CHAIN_ID"), "Wrong EORACLE_CHAIN_ID for this config."
         );
-
-        vm.startBroadcast(broadcastFrom);
 
         string memory outputConfig = EOJsonUtils.initOutputConfig();
         address timelock = outputConfig.readAddress(".timelock");
@@ -58,12 +68,11 @@ contract DeployNewTargetContractSet is FeedVerifierDeployer, FeedManagerDeployer
         /*//////////////////////////////////////////////////////////////////////////
                                         EOFeedManager
         //////////////////////////////////////////////////////////////////////////*/
-        feedManagerProxy = deployFeedManager(timelock, feedVerifierProxy, broadcastFrom, pauserRegistry);
+        feedManagerProxy = deployFeedManager(timelock, feedVerifierProxy, broadcastFrom, pauserRegistry, broadcastFrom);
 
         // set feedManager in feedVerifier
         IEOFeedVerifier(feedVerifierProxy).setFeedManager(feedManagerProxy);
 
-        vm.stopBroadcast();
         EOJsonUtils.OUTPUT_CONFIG.serialize("feedManager", feedManagerProxy);
 
         implementationAddress = Upgrades.getImplementationAddress(feedManagerProxy);

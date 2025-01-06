@@ -4,7 +4,7 @@ pragma solidity 0.8.25;
 import { IEOFeedManager } from "../interfaces/IEOFeedManager.sol";
 import { IEOFeedAdapter } from "./interfaces/IEOFeedAdapter.sol";
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-
+import { PausableUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
 import { InvalidAddress } from "../interfaces/Errors.sol";
 
 /**
@@ -182,6 +182,14 @@ contract EOFeedAdapter is IEOFeedAdapter, Initializable {
     function latestRound() external view returns (uint256) {
         IEOFeedManager.PriceFeed memory priceData = _feedManager.getLatestPriceFeed(_feedId);
         return priceData.eoracleBlockNumber;
+    }
+
+    /**
+     * @notice Get the paused status of the feed
+     * @return bool The paused status
+     */
+    function isPaused() external view returns (bool) {
+        return PausableUpgradeable(address(_feedManager)).paused();
     }
 
     function _normalizePrice(uint256 price) internal view returns (int256) {

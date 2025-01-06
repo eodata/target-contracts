@@ -14,7 +14,8 @@ import {
     FeedAlreadyExists,
     BaseQuotePairExists,
     FeedNotSupported,
-    FeedDoesNotExist
+    FeedDoesNotExist,
+    NotFeedDeployer
 } from "../../../src/interfaces/Errors.sol";
 import { Upgrades } from "openzeppelin-foundry-upgrades/Upgrades.sol";
 import { Options } from "openzeppelin-foundry-upgrades/Options.sol";
@@ -47,7 +48,7 @@ abstract contract EOFeedRegistryAdapterBaseTest is Test {
     event FeedAdapterDeployed(uint256 indexed feedId, address indexed feedAdapter, address base, address quote);
 
     function setUp() public virtual {
-        _feedManager = new MockEOFeedManager();
+        _feedManager = new MockEOFeedManager(address(this));
         Options memory opts;
         _feedAdapterImplementation = EOFeedAdapter(Upgrades.deployImplementation("EOFeedAdapter.sol", opts));
 
@@ -69,7 +70,7 @@ abstract contract EOFeedRegistryAdapterBaseTest is Test {
     function test_FactoryInitialized() public view virtual { }
 
     function test_SetFeedManager() public {
-        IEOFeedManager newFeedManager = new MockEOFeedManager();
+        IEOFeedManager newFeedManager = new MockEOFeedManager(address(this));
         vm.expectEmit();
         emit FeedManagerSet(address(newFeedManager));
         _feedRegistryAdapter.setFeedManager(address(newFeedManager));
@@ -140,9 +141,7 @@ abstract contract EOFeedRegistryAdapterBaseTest is Test {
     }
 
     function test_RevertWhen_DeployFeedAdapter_NotOwner() public {
-        vm.expectRevert(
-            abi.encodeWithSelector(OwnableUpgradeable.OwnableUnauthorizedAccount.selector, address(_notOwner))
-        );
+        vm.expectRevert(NotFeedDeployer.selector);
         vm.prank(_notOwner);
         _deployEOFeedAdapter(_base1Address, _quote1Address, FEED_ID1, DESCRIPTION1, DECIMALS, DECIMALS, VERSION);
     }

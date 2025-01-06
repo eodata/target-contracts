@@ -7,9 +7,9 @@ import { ITransparentUpgradeableProxy } from "@openzeppelin/contracts/proxy/tran
 import { ProxyAdmin } from "@openzeppelin/contracts/proxy/transparent/ProxyAdmin.sol";
 import { Script } from "forge-std/Script.sol";
 import { stdJson } from "forge-std/Script.sol";
-import { EOJsonUtils } from "../../utils/EOJsonUtils.sol";
+import { EOJsonUtils } from "../utils/EOJsonUtils.sol";
 import { TimelockController } from "@openzeppelin/contracts/governance/TimelockController.sol";
-import { EOFeedVerifier } from "../../../src/EOFeedVerifier.sol";
+import { EOFeedVerifier } from "../../src/EOFeedVerifier.sol";
 import { TimelockBase } from "./TimelockBase.sol";
 
 contract UpgradeFeedVerifierTimelocked is Script, TimelockBase {

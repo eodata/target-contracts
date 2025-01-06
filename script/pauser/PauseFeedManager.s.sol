@@ -4,10 +4,10 @@ pragma solidity 0.8.25;
 
 import { Script } from "forge-std/Script.sol";
 import { stdJson } from "forge-std/Script.sol";
-import { EOJsonUtils } from "../../utils/EOJsonUtils.sol";
-import { EOFeedManager } from "../../../src/EOFeedManager.sol";
+import { EOJsonUtils } from "../utils/EOJsonUtils.sol";
+import { EOFeedManager } from "../../src/EOFeedManager.sol";
 
-contract UnpauseFeedManager is Script {
+contract PauseFeedManager is Script {
     using stdJson for string;
 
     function run() public {
@@ -15,7 +15,7 @@ contract UnpauseFeedManager is Script {
         EOFeedManager feedManager = EOFeedManager(outputConfig.readAddress(".feedManager"));
 
         vm.startBroadcast();
-        feedManager.unpause();
+        feedManager.pause();
         vm.stopBroadcast();
     }
 }

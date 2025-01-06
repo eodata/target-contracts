@@ -10,6 +10,11 @@ import { IEOFeedVerifier } from "../../src/interfaces/IEOFeedVerifier.sol";
 contract MockEOFeedManager is IEOFeedManager {
     uint256 public constant NOT_SUPPORTED_FEED = 1000;
     mapping(uint256 => PriceFeed) public priceFeeds;
+    address internal _feedDeployer;
+
+    constructor(address feedDeployer) {
+        _feedDeployer = feedDeployer;
+    }
 
     function updateFeed(
         IEOFeedVerifier.LeafInput calldata input,
@@ -56,5 +61,9 @@ contract MockEOFeedManager is IEOFeedManager {
 
     function isSupportedFeed(uint256 feedId) external pure returns (bool) {
         return feedId != NOT_SUPPORTED_FEED;
+    }
+
+    function getFeedDeployer() external view returns (address) {
+        return _feedDeployer;
     }
 }

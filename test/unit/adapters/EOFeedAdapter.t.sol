@@ -31,7 +31,7 @@ abstract contract EOFeedAdapterTestUninitialized is Test {
     function setUp() public virtual {
         _owner = makeAddr("_owner");
 
-        _feedManager = new MockEOFeedManager();
+        _feedManager = new MockEOFeedManager(address(this));
         _feedAdapter = EOFeedAdapter(Upgrades.deployTransparentProxy("EOFeedAdapter.sol", proxyAdmin, ""));
 
         _lastTimestamp = block.timestamp;

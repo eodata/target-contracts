@@ -7,12 +7,12 @@ import { ITransparentUpgradeableProxy } from "@openzeppelin/contracts/proxy/tran
 import { ProxyAdmin } from "@openzeppelin/contracts/proxy/transparent/ProxyAdmin.sol";
 import { Script } from "forge-std/Script.sol";
 import { stdJson } from "forge-std/Script.sol";
-import { EOJsonUtils } from "../../utils/EOJsonUtils.sol";
+import { EOJsonUtils } from "../utils/EOJsonUtils.sol";
 import { TimelockController } from "@openzeppelin/contracts/governance/TimelockController.sol";
-import { EOFeedManager } from "../../../src/EOFeedManager.sol";
+import { EOFeedRegistryAdapter } from "../../src/adapters/EOFeedRegistryAdapter.sol";
 import { TimelockBase } from "./TimelockBase.sol";
 
-contract UpgradeFeedManagerTimelocked is Script, TimelockBase {
+contract UpgradeFeedRegistryAdapterTimelocked is Script, TimelockBase {
     using stdJson for string;
 
     bool internal isExecutionMode;
@@ -35,17 +35,17 @@ contract UpgradeFeedManagerTimelocked is Script, TimelockBase {
         isExecutionMode = isExecution;
 
         string memory config = EOJsonUtils.initOutputConfig();
-        address proxyAddress = config.readAddress(".feedManager");
+        address proxyAddress = config.readAddress(".feedRegistryAdapter");
         timelock = TimelockController(payable(config.readAddress(".timelock")));
         address admin = Upgrades.getAdminAddress(proxyAddress);
 
         address implementationAddress;
         if (isExecutionMode) {
-            implementationAddress = config.readAddress(".feedManagerImplementation");
+            implementationAddress = config.readAddress(".feedRegistryAdapterImplementation");
         } else {
-            implementationAddress = address(new EOFeedManager());
+            implementationAddress = address(new EOFeedRegistryAdapter());
             string memory outputConfigJson =
-                EOJsonUtils.OUTPUT_CONFIG.serialize("feedManagerImplementation", implementationAddress);
+                EOJsonUtils.OUTPUT_CONFIG.serialize("feedRegistryAdapterImplementation", implementationAddress);
             EOJsonUtils.writeConfig(outputConfigJson);
         }
         bytes memory initData;
@@ -53,7 +53,7 @@ contract UpgradeFeedManagerTimelocked is Script, TimelockBase {
             ProxyAdmin(admin).upgradeAndCall,
             (ITransparentUpgradeableProxy(payable(proxyAddress)), implementationAddress, initData)
         );
-        bytes memory txn = callTimelock(timelock, isExecutionMode, send, address(admin), data, "feedRegistryManager");
+        bytes memory txn = callTimelock(timelock, isExecutionMode, send, address(admin), data, "feedRegistryAdapter");
         return txn;
     }
 }

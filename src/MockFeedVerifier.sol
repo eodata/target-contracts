@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.25;
 
-import { IEOFeedVerifier } from "../../src/interfaces/IEOFeedVerifier.sol";
+import { IEOFeedVerifier } from "./interfaces/IEOFeedVerifier.sol";
 
 contract MockFeedVerifier is IEOFeedVerifier {
     Validator[] public validatorSet;
