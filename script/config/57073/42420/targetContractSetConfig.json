@@ -6,7 +6,7 @@
   "targetChainId": 57073,
   "publishers": ["0x402B8802a7B699400c330c22F62D7Dd66b76E1Bf"],
   "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
-  "supportedFeedIds": [1, 2, 54],
+  "supportedFeedIds": [1, 2, 17, 54],
   "supportedFeedsData": [
     {
       "feedId": 1,
@@ -23,6 +23,14 @@
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8
+    },
+    {
+      "base": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "feedId": 17,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "USDT/USD"
     },
     {
       "feedId": 54,
