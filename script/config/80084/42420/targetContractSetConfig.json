@@ -5,33 +5,37 @@
   "eoracleChainId": 42420,
   "targetChainId": 80084,
   "publishers": ["0xCC243bcFf9718d559A434f4124EC257cEd1A0776"],
-  "supportedFeedIds": [1, 2, 17, 41, 42, 54, 55],
+  "supportedFeedIds": [1, 2, 17, 41, 42, 54, 55, 103, 104, 105],
   "supportedFeedsData": [
     {
       "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
       "quote": "0x0000000000000000000000000000000000000348",
-      "decimals": 18,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
       "description": "BTC/USD",
       "feedId": 1
     },
     {
       "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
       "quote": "0x0000000000000000000000000000000000000348",
-      "decimals": 18,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
       "description": "ETH/USD",
       "feedId": 2
     },
     {
       "base": "0xa663b02cf0a4b149d2ad41910cb81e23e1c41c32",
       "quote": "0x853d955acef822db058eb8505911ed77f175b99e",
-      "decimals": 18,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
       "description": "sFRAX/FRAX",
       "feedId": 41
     },
     {
       "base": "0xac3e018457b222d93114458476f3e3416abbe38f",
       "quote": "0xcf7ecee185f19e2e970a301ee37f93536ed66179",
-      "decimals": 18,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
       "description": "sfrxETH/frxETH",
       "feedId": 42
     },
@@ -39,22 +43,49 @@
       "base": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
       "quote": "0x0000000000000000000000000000000000000348",
       "feedId": 17,
-      "decimals": 18,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
       "description": "USDT/USD"
     },
     {
       "base": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
       "quote": "0x0000000000000000000000000000000000000348",
       "feedId": 54,
-      "decimals": 18,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
       "description": "USDC/USD"
     },
     {
       "base": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
       "quote": "0x0000000000000000000000000000000000000348",
       "feedId": 55,
-      "decimals": 18,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
       "description": "DAI/USD"
+    },
+    {
+      "base": "0x0E4aaF1351de4c0264C5c7056Ef3777b41BD8e03",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "feedId": 103,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "HONEY/USD"
+    },
+    {
+      "base": "0x7507c1dc16935B82698e4C63f2746A2fCf994dF8",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "feedId": 104,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "WBERA/USD"
+    },
+    {
+      "base": "0x46eFC86F0D7455F135CC9df501673739d513E982",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "feedId": 105,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "iBGT/USD"
     }
   ]
 }
