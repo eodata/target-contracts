@@ -217,7 +217,7 @@ contract EOTwitterFeedManager is IEOTwitterFeedManager, OwnableUpgradeable {
         emit FeedPostUpdated(leafData.feedId, postData.postId, post);
     }
 
+    // solhint-disable ordering
     // slither-disable-next-line unused-state,naming-convention
-    // solhint-disable-next-line ordering
     uint256[50] private __gap;
 }

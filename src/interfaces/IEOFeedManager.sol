@@ -34,6 +34,12 @@ interface IEOFeedManager {
     event SymbolReplay(uint256 indexed feedId, uint256 rate, uint256 timestamp, uint256 latestTimestamp);
 
     /**
+     * @dev Event emitted when the feed deployer is set
+     * @param feedDeployer Address of the feed deployer
+     */
+    event FeedDeployerSet(address indexed feedDeployer);
+
+    /**
      * @notice Update the price for a feed
      * @param input A merkle leaf containing price data and its merkle proof
      * @param vParams Verification parameters

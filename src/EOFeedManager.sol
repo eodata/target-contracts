@@ -91,6 +91,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
     )
         external
         onlyNonZeroAddress(feedVerifier)
+        onlyNonZeroAddress(feedDeployer)
         initializer
     {
         __Ownable_init(owner);
@@ -114,6 +115,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
      */
     function setFeedDeployer(address feedDeployer) external onlyOwner onlyNonZeroAddress(feedDeployer) {
         _feedDeployer = feedDeployer;
+        emit FeedDeployerSet(feedDeployer);
     }
 
     /**
