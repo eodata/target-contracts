@@ -1,51 +1,38 @@
 # IEOFeedVerifier
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/de89fc9e9bc7c046937883aa064d90812f1542cc/src/interfaces/IEOFeedVerifier.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/88beedd8b816225fb92696d7d314b9def6318a7e/src/interfaces/IEOFeedVerifier.sol)
 
 ## Functions
 
 ### verify
 
-Verifies leaf, processes checkpoint, returns leaf data in case if checkpoint is valid and leaf is part of the merkle
-tree
+verify single leaf signature from a block merkle tree
 
 ```solidity
-function verify(
-    LeafInput memory input,
-    Checkpoint calldata checkpoint,
-    uint256[2] calldata signature,
-    bytes calldata bitmap
-)
-    external
-    returns (bytes memory leafData);
+function verify(LeafInput memory input, VerificationParams calldata vParams) external returns (bytes memory leafData);
 ```
 
 **Parameters**
 
-| Name         | Type         | Description                                        |
-| ------------ | ------------ | -------------------------------------------------- |
-| `input`      | `LeafInput`  | leaf input data and proof (LeafInput)              |
-| `checkpoint` | `Checkpoint` | Checkpoint data (Checkpoint)                       |
-| `signature`  | `uint256[2]` | Aggregated signature of the checkpoint             |
-| `bitmap`     | `bytes`      | Bitmap of the validators who signed the checkpoint |
+| Name      | Type                 | Description                           |
+| --------- | -------------------- | ------------------------------------- |
+| `input`   | `LeafInput`          | leaf input data and proof (LeafInput) |
+| `vParams` | `VerificationParams` | verification params                   |
 
 **Returns**
 
-| Name       | Type    | Description                                                             |
-| ---------- | ------- | ----------------------------------------------------------------------- |
-| `leafData` | `bytes` | Leaf data, abi encoded (uint16 feedId, uint256 rate, uint256 timestamp) |
+| Name       | Type    | Description                                                              |
+| ---------- | ------- | ------------------------------------------------------------------------ |
+| `leafData` | `bytes` | Leaf data, abi encoded (uint256 feedId, uint256 rate, uint256 timestamp) |
 
 ### batchVerify
 
-Verifies multiple leaves, processes checkpoint, returns leaf data in case if checkpoint is valid and leaves are part of
-the merkle tree
+batch verify signature of multiple leaves from the same block merkle tree
 
 ```solidity
 function batchVerify(
     LeafInput[] memory inputs,
-    Checkpoint calldata checkpoint,
-    uint256[2] calldata signature,
-    bytes calldata bitmap
+    VerificationParams calldata vParams
 )
     external
     returns (bytes[] memory);
@@ -53,12 +40,10 @@ function batchVerify(
 
 **Parameters**
 
-| Name         | Type          | Description                                        |
-| ------------ | ------------- | -------------------------------------------------- |
-| `inputs`     | `LeafInput[]` | Exit leaves inputs                                 |
-| `checkpoint` | `Checkpoint`  | Checkpoint data                                    |
-| `signature`  | `uint256[2]`  | Aggregated signature of the checkpoint             |
-| `bitmap`     | `bytes`       | Bitmap of the validators who signed the checkpoint |
+| Name      | Type                 | Description         |
+| --------- | -------------------- | ------------------- |
+| `inputs`  | `LeafInput[]`        | feed leaves         |
+| `vParams` | `VerificationParams` | verification params |
 
 ### setNewValidatorSet
 
@@ -136,52 +121,62 @@ struct LeafInput {
 
 **Properties**
 
-| Name           | Type        | Description                                                                                                                                                                             |
-| -------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `leafIndex`    | `uint256`   | Index of the leaf                                                                                                                                                                       |
-| `unhashedLeaf` | `bytes`     | Unhashed leaf data abi encoded (uint256 id, address sender, address receiver, bytes memory data) where bytes memory data = abi encoded (uint16 feedId, uint256 rate, uint256 timestamp) |
-| `proof`        | `bytes32[]` | Merkle proof of the leaf                                                                                                                                                                |
+| Name           | Type        | Description                                                                                                                                                                              |
+| -------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `leafIndex`    | `uint256`   | Index of the leaf                                                                                                                                                                        |
+| `unhashedLeaf` | `bytes`     | Unhashed leaf data abi encoded (uint256 id, address sender, address receiver, bytes memory data) where bytes memory data = abi encoded (uint256 feedId, uint256 rate, uint256 timestamp) |
+| `proof`        | `bytes32[]` | Merkle proof of the leaf                                                                                                                                                                 |
 
-### Checkpoint
+### VerificationParams
 
-_Checkpoint structure_
+_Signed Data structure_
 
 ```solidity
-struct Checkpoint {
-    uint256 epoch;
-    uint256 blockNumber;
+struct VerificationParams {
+    uint64 blockNumber;
+    uint32 chainId;
+    address aggregator;
     bytes32 eventRoot;
     bytes32 blockHash;
-    uint256 blockRound;
+    uint256[2] signature;
+    uint256[4] apkG2;
+    bytes nonSignersBitmap;
 }
 ```
 
 **Properties**
 
-| Name          | Type      | Description                   |
-| ------------- | --------- | ----------------------------- |
-| `epoch`       | `uint256` | Epoch number                  |
-| `blockNumber` | `uint256` | Block number                  |
-| `eventRoot`   | `bytes32` | Event root of the merkle tree |
-| `blockHash`   | `bytes32` | Block hash                    |
-| `blockRound`  | `uint256` | Block round                   |
+| Name               | Type         | Description                                                     |
+| ------------------ | ------------ | --------------------------------------------------------------- |
+| `blockNumber`      | `uint64`     | the block number this merkle tree originated from (on EO chain) |
+| `chainId`          | `uint32`     |                                                                 |
+| `aggregator`       | `address`    |                                                                 |
+| `eventRoot`        | `bytes32`    | merkle tree root for events                                     |
+| `blockHash`        | `bytes32`    |                                                                 |
+| `signature`        | `uint256[2]` | G1 hashed payload of abi.encode(eventRoot, blockNumber)         |
+| `apkG2`            | `uint256[4]` | G2 apk provided from off-chain                                  |
+| `nonSignersBitmap` | `bytes`      | used to construct G1 apk onchain                                |
 
 ### Validator
+
+consider adding a small gap for future fields to ease upgrades in the future.
 
 _Validator structure_
 
 ```solidity
 struct Validator {
     address _address;
-    uint256[4] blsKey;
+    uint256[2] g1pk;
+    uint256[4] g2pk;
     uint256 votingPower;
 }
 ```
 
 **Properties**
 
-| Name          | Type         | Description            |
-| ------------- | ------------ | ---------------------- |
-| `_address`    | `address`    | Validator address      |
-| `blsKey`      | `uint256[4]` | Validator BLS key      |
-| `votingPower` | `uint256`    | Validator voting power |
+| Name          | Type         | Description                                                    |
+| ------------- | ------------ | -------------------------------------------------------------- |
+| `_address`    | `address`    | validator address                                              |
+| `g1pk`        | `uint256[2]` | validator G1 public key                                        |
+| `g2pk`        | `uint256[4]` | validator G2 public key (not used for now but good to have it) |
+| `votingPower` | `uint256`    | Validator voting power                                         |

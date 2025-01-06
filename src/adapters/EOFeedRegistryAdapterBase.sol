@@ -20,12 +20,12 @@ import {
  */
 abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactoryBase, IEOFeedRegistryAdapter {
     IEOFeedManager internal _feedManager;
-    mapping(uint16 => IEOFeedAdapter) internal _feedAdapters;
+    mapping(uint256 => IEOFeedAdapter) internal _feedAdapters;
     mapping(address => bool) internal _feedEnabled;
-    mapping(address => mapping(address => uint16)) internal _tokenAddressesToFeedIds;
+    mapping(address => mapping(address => uint256)) internal _tokenAddressesToFeedIds;
 
     event FeedManagerSet(address indexed feedManager);
-    event FeedAdapterDeployed(uint16 indexed feedId, address indexed feedAdapter, address base, address quote);
+    event FeedAdapterDeployed(uint256 indexed feedId, address indexed feedAdapter, address base, address quote);
 
     modifier onlyNonZeroAddress(address addr) {
         if (addr == address(0)) revert InvalidAddress();
@@ -85,7 +85,7 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
     function deployEOFeedAdapter(
         address base,
         address quote,
-        uint16 feedId,
+        uint256 feedId,
         string calldata feedDescription,
         uint8 inputDecimals,
         uint8 outputDecimals,
@@ -126,7 +126,7 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
      * @param quote The quote asset address
      */
     function removeFeedAdapter(address base, address quote) external onlyOwner {
-        uint16 feedId = _tokenAddressesToFeedIds[base][quote];
+        uint256 feedId = _tokenAddressesToFeedIds[base][quote];
         if (feedId == 0) revert FeedDoesNotExist();
         address feedAdapter = address(_feedAdapters[feedId]);
         delete _feedEnabled[feedAdapter];
@@ -147,7 +147,7 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
      * @param feedId The feed id
      * @return IEOFeedAdapter The feedAdapter
      */
-    function getFeedById(uint16 feedId) external view returns (IEOFeedAdapter) {
+    function getFeedById(uint256 feedId) external view returns (IEOFeedAdapter) {
         return _feedAdapters[feedId];
     }
 

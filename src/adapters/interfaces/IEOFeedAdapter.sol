@@ -10,7 +10,7 @@ interface IEOFeedAdapter {
     // slither-disable-next-line missing-inheritance
     function initialize(
         address feedManager,
-        uint16 feedId,
+        uint256 feedId,
         uint8 inputDecimals,
         uint8 outputDecimals,
         string memory feedDescription,
@@ -18,7 +18,7 @@ interface IEOFeedAdapter {
     )
         external;
 
-    function getFeedId() external view returns (uint16);
+    function getFeedId() external view returns (uint256);
     function decimals() external view returns (uint8);
     function description() external view returns (string memory);
     function version() external view returns (uint256);

@@ -1,6 +1,6 @@
 # IEOFeedAdapter
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/de89fc9e9bc7c046937883aa064d90812f1542cc/src/adapters/interfaces/IEOFeedAdapter.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/88beedd8b816225fb92696d7d314b9def6318a7e/src/adapters/interfaces/IEOFeedAdapter.sol)
 
 Interface for the EOFeedAdapter contract.
 
@@ -13,8 +13,9 @@ _compatible of AggregatorV3Interface from CL._
 ```solidity
 function initialize(
     address feedManager,
-    uint16 feedId,
-    uint8 feedDecimals,
+    uint256 feedId,
+    uint8 inputDecimals,
+    uint8 outputDecimals,
     string memory feedDescription,
     uint256 feedVersion
 )
@@ -24,7 +25,7 @@ function initialize(
 ### getFeedId
 
 ```solidity
-function getFeedId() external view returns (uint16);
+function getFeedId() external view returns (uint256);
 ```
 
 ### decimals

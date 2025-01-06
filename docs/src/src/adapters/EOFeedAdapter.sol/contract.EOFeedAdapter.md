@@ -1,6 +1,6 @@
 # EOFeedAdapter
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/de89fc9e9bc7c046937883aa064d90812f1542cc/src/adapters/EOFeedAdapter.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/88beedd8b816225fb92696d7d314b9def6318a7e/src/adapters/EOFeedAdapter.sol)
 
 **Inherits:** [IEOFeedAdapter](/src/adapters/interfaces/IEOFeedAdapter.sol/interface.IEOFeedAdapter.md), Initializable
 
@@ -37,18 +37,42 @@ string private _description;
 _Feed id_
 
 ```solidity
-uint16 private _feedId;
+uint256 private _feedId;
 ```
 
-### \_decimals
+### \_inputDecimals
 
 _Decimals of the rate_
 
 ```solidity
-uint8 private _decimals;
+uint8 private _inputDecimals;
+```
+
+### \_outputDecimals
+
+```solidity
+uint8 private _outputDecimals;
+```
+
+### \_decimalsDiff
+
+```solidity
+int256 private _decimalsDiff;
+```
+
+### \_\_gap
+
+```solidity
+uint256[50] private __gap;
 ```
 
 ## Functions
+
+### constructor
+
+```solidity
+constructor();
+```
 
 ### initialize
 
@@ -57,8 +81,9 @@ Initialize the contract
 ```solidity
 function initialize(
     address feedManager,
-    uint16 feedId,
-    uint8 feedDecimals,
+    uint256 feedId,
+    uint8 inputDecimals,
+    uint8 outputDecimals,
     string memory feedDescription,
     uint256 feedVersion
 )
@@ -68,13 +93,14 @@ function initialize(
 
 **Parameters**
 
-| Name              | Type      | Description              |
-| ----------------- | --------- | ------------------------ |
-| `feedManager`     | `address` | The feed manager address |
-| `feedId`          | `uint16`  | Feed id                  |
-| `feedDecimals`    | `uint8`   | The decimals of the rate |
-| `feedDescription` | `string`  | The description of feed  |
-| `feedVersion`     | `uint256` | The version of feed      |
+| Name              | Type      | Description                              |
+| ----------------- | --------- | ---------------------------------------- |
+| `feedManager`     | `address` | The feed manager address                 |
+| `feedId`          | `uint256` | Feed id                                  |
+| `inputDecimals`   | `uint8`   | The input decimal precision of the rate  |
+| `outputDecimals`  | `uint8`   | The output decimal precision of the rate |
+| `feedDescription` | `string`  | The description of feed                  |
+| `feedVersion`     | `uint256` | The version of feed                      |
 
 ### getRoundData
 
@@ -191,14 +217,14 @@ function getTimestamp(uint256) external view returns (uint256);
 Get the id of the feed
 
 ```solidity
-function getFeedId() external view returns (uint16);
+function getFeedId() external view returns (uint256);
 ```
 
 **Returns**
 
-| Name     | Type     | Description        |
-| -------- | -------- | ------------------ |
-| `<none>` | `uint16` | uint16 The feed id |
+| Name     | Type      | Description         |
+| -------- | --------- | ------------------- |
+| `<none>` | `uint256` | uint256 The feed id |
 
 ### decimals
 
@@ -255,3 +281,9 @@ function latestRound() external view returns (uint256);
 | Name     | Type      | Description                                |
 | -------- | --------- | ------------------------------------------ |
 | `<none>` | `uint256` | uint256 The round id, eoracle block number |
+
+### \_normalizePrice
+
+```solidity
+function _normalizePrice(uint256 price) internal view returns (int256);
+```

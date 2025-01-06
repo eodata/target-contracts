@@ -17,7 +17,7 @@ abstract contract EOFeedAdapterTestUninitialized is Test {
     uint8 public constant DECIMALS = 8;
     string public constant DESCRIPTION = "ETH/USD";
     uint256 public constant VERSION = 1;
-    uint16 public constant FEED_ID = 1;
+    uint256 public constant FEED_ID = 1;
     uint256 public constant RATE1 = 100_000_000_000_000_000;
     uint256 public constant RATE2 = 200_000_000_000_000_000;
     address public proxyAdmin = makeAddr("proxyAdmin");
@@ -63,7 +63,7 @@ contract EOFeedAdapterTest is EOFeedAdapterTestUninitialized {
     function setUp() public virtual override {
         super.setUp();
         _feedAdapter.initialize(address(_feedManager), FEED_ID, DECIMALS, DECIMALS, DESCRIPTION, VERSION);
-        _updatePriceFeed(FEED_ID, RATE1, block.timestamp);
+        _updateFeed(FEED_ID, RATE1, block.timestamp);
     }
 
     function test_GetRoundData() public view {
@@ -125,7 +125,7 @@ contract EOFeedAdapterTest is EOFeedAdapterTestUninitialized {
     }
 
     function test_UpdatePrice() public {
-        _updatePriceFeed(FEED_ID, RATE2, block.timestamp);
+        _updateFeed(FEED_ID, RATE2, block.timestamp);
         (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound) =
             _feedAdapter.getRoundData(2);
         assertEq(roundId, _lastBlockNumber);
@@ -149,7 +149,7 @@ contract EOFeedAdapterTest is EOFeedAdapterTestUninitialized {
     }
 
     function testFuzz_GetRoundData(uint256 rate, uint256 timestamp) public {
-        _updatePriceFeed(FEED_ID, rate, timestamp);
+        _updateFeed(FEED_ID, rate, timestamp);
         (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound) =
             _feedAdapter.getRoundData(3);
         assertEq(roundId, _lastBlockNumber);
@@ -160,7 +160,7 @@ contract EOFeedAdapterTest is EOFeedAdapterTestUninitialized {
     }
 
     function testFuzz_LatestRoundData(uint256 rate, uint256 timestamp) public {
-        _updatePriceFeed(FEED_ID, rate, timestamp);
+        _updateFeed(FEED_ID, rate, timestamp);
         (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound) =
             _feedAdapter.latestRoundData();
         assertEq(roundId, _lastBlockNumber);
@@ -170,10 +170,10 @@ contract EOFeedAdapterTest is EOFeedAdapterTestUninitialized {
         assertEq(answeredInRound, _lastBlockNumber);
     }
 
-    function _updatePriceFeed(uint16 feedId, uint256 rate, uint256 timestamp) internal {
+    function _updateFeed(uint256 feedId, uint256 rate, uint256 timestamp) internal {
         IEOFeedVerifier.LeafInput memory input;
         input.unhashedLeaf = abi.encode(feedId, rate, timestamp);
-        _feedManager.updatePriceFeed(
+        _feedManager.updateFeed(
             input,
             IEOFeedVerifier.VerificationParams({
                 eventRoot: bytes32(0),
@@ -191,7 +191,7 @@ contract EOFeedAdapterTest is EOFeedAdapterTestUninitialized {
     function test_InputDecimalsBiggerThanOutput_LatestRoundData() public {
         EOFeedAdapter feedAdapter = EOFeedAdapter(Upgrades.deployTransparentProxy("EOFeedAdapter.sol", proxyAdmin, ""));
         feedAdapter.initialize(address(_feedManager), FEED_ID, 10, 8, DESCRIPTION, VERSION);
-        _updatePriceFeed(FEED_ID, 1_234_567_890, block.timestamp);
+        _updateFeed(FEED_ID, 1_234_567_890, block.timestamp);
 
         (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound) =
             feedAdapter.latestRoundData();
@@ -205,7 +205,7 @@ contract EOFeedAdapterTest is EOFeedAdapterTestUninitialized {
     function test_OutputDecimalsBiggerThanInput_LatestRoundData() public {
         EOFeedAdapter feedAdapter = EOFeedAdapter(Upgrades.deployTransparentProxy("EOFeedAdapter.sol", proxyAdmin, ""));
         feedAdapter.initialize(address(_feedManager), FEED_ID, 8, 10, DESCRIPTION, VERSION);
-        _updatePriceFeed(FEED_ID, 12_345_678, block.timestamp);
+        _updateFeed(FEED_ID, 12_345_678, block.timestamp);
 
         (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound) =
             feedAdapter.latestRoundData();
@@ -219,7 +219,7 @@ contract EOFeedAdapterTest is EOFeedAdapterTestUninitialized {
     function test_InputDecimalsBiggerThanOutput_GetRoundData() public {
         EOFeedAdapter feedAdapter = EOFeedAdapter(Upgrades.deployTransparentProxy("EOFeedAdapter.sol", proxyAdmin, ""));
         feedAdapter.initialize(address(_feedManager), FEED_ID, 10, 8, DESCRIPTION, VERSION);
-        _updatePriceFeed(FEED_ID, 1_234_567_890, block.timestamp);
+        _updateFeed(FEED_ID, 1_234_567_890, block.timestamp);
 
         (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound) =
             feedAdapter.getRoundData(1);
@@ -233,7 +233,7 @@ contract EOFeedAdapterTest is EOFeedAdapterTestUninitialized {
     function test_OutputDecimalsBiggerThanInput_GetRoundData() public {
         EOFeedAdapter feedAdapter = EOFeedAdapter(Upgrades.deployTransparentProxy("EOFeedAdapter.sol", proxyAdmin, ""));
         feedAdapter.initialize(address(_feedManager), FEED_ID, 8, 10, DESCRIPTION, VERSION);
-        _updatePriceFeed(FEED_ID, 12_345_678, block.timestamp);
+        _updateFeed(FEED_ID, 12_345_678, block.timestamp);
 
         (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound) =
             feedAdapter.getRoundData(1);
@@ -247,7 +247,7 @@ contract EOFeedAdapterTest is EOFeedAdapterTestUninitialized {
     function test_InputDecimalsBiggerThanOutput_LatestAnswer() public {
         EOFeedAdapter feedAdapter = EOFeedAdapter(Upgrades.deployTransparentProxy("EOFeedAdapter.sol", proxyAdmin, ""));
         feedAdapter.initialize(address(_feedManager), FEED_ID, 10, 8, DESCRIPTION, VERSION);
-        _updatePriceFeed(FEED_ID, 1_234_567_890, block.timestamp);
+        _updateFeed(FEED_ID, 1_234_567_890, block.timestamp);
 
         assertEq(feedAdapter.latestAnswer(), 12_345_678);
     }
@@ -255,7 +255,7 @@ contract EOFeedAdapterTest is EOFeedAdapterTestUninitialized {
     function test_OutputDecimalsBiggerThanInput_LatestAnswer() public {
         EOFeedAdapter feedAdapter = EOFeedAdapter(Upgrades.deployTransparentProxy("EOFeedAdapter.sol", proxyAdmin, ""));
         feedAdapter.initialize(address(_feedManager), FEED_ID, 8, 10, DESCRIPTION, VERSION);
-        _updatePriceFeed(FEED_ID, 12_345_678, block.timestamp);
+        _updateFeed(FEED_ID, 12_345_678, block.timestamp);
 
         assertEq(feedAdapter.latestAnswer(), 1_234_567_800);
     }
@@ -263,7 +263,7 @@ contract EOFeedAdapterTest is EOFeedAdapterTestUninitialized {
     function test_InputDecimalsBiggerThanOutput_GetAnswer() public {
         EOFeedAdapter feedAdapter = EOFeedAdapter(Upgrades.deployTransparentProxy("EOFeedAdapter.sol", proxyAdmin, ""));
         feedAdapter.initialize(address(_feedManager), FEED_ID, 10, 8, DESCRIPTION, VERSION);
-        _updatePriceFeed(FEED_ID, 1_234_567_890, block.timestamp);
+        _updateFeed(FEED_ID, 1_234_567_890, block.timestamp);
 
         assertEq(feedAdapter.getAnswer(1), 12_345_678);
     }
@@ -271,7 +271,7 @@ contract EOFeedAdapterTest is EOFeedAdapterTestUninitialized {
     function test_OutputDecimalsBiggerThanInput_GetAnswer() public {
         EOFeedAdapter feedAdapter = EOFeedAdapter(Upgrades.deployTransparentProxy("EOFeedAdapter.sol", proxyAdmin, ""));
         feedAdapter.initialize(address(_feedManager), FEED_ID, 8, 10, DESCRIPTION, VERSION);
-        _updatePriceFeed(FEED_ID, 12_345_678, block.timestamp);
+        _updateFeed(FEED_ID, 12_345_678, block.timestamp);
 
         assertEq(feedAdapter.getAnswer(1), 1_234_567_800);
     }

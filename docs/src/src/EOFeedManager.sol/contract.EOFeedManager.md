@@ -1,9 +1,9 @@
 # EOFeedManager
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/de89fc9e9bc7c046937883aa064d90812f1542cc/src/EOFeedManager.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/88beedd8b816225fb92696d7d314b9def6318a7e/src/EOFeedManager.sol)
 
-**Inherits:** Initializable, OwnableUpgradeable,
-[IEOFeedManager](/src/interfaces/IEOFeedManager.sol/interface.IEOFeedManager.md)
+**Inherits:** [IEOFeedManager](/src/interfaces/IEOFeedManager.sol/interface.IEOFeedManager.md), OwnableUpgradeable,
+PausableUpgradeable
 
 The EOFeedManager contract is responsible for receiving feed updates from whitelisted publishers. These updates are
 verified using the logic in the EOFeedVerifier. Upon successful verification, the feed data is stored in the
@@ -17,7 +17,7 @@ manager.
 _Map of feed id to price feed (feed id => PriceFeed)_
 
 ```solidity
-mapping(uint16 => PriceFeed) internal _priceFeeds;
+mapping(uint256 => PriceFeed) internal _priceFeeds;
 ```
 
 ### \_whitelistedPublishers
@@ -33,7 +33,7 @@ mapping(address => bool) internal _whitelistedPublishers;
 _Map of supported feeds, (feed id => is supported)_
 
 ```solidity
-mapping(uint16 => bool) internal _supportedFeedIds;
+mapping(uint256 => bool) internal _supportedFeedIds;
 ```
 
 ### \_feedVerifier
@@ -42,6 +42,20 @@ _feed verifier contract_
 
 ```solidity
 IEOFeedVerifier internal _feedVerifier;
+```
+
+### \_pauserRegistry
+
+Address of the `PauserRegistry` contract that this contract defers to for determining access control (for pausing).
+
+```solidity
+IPauserRegistry internal _pauserRegistry;
+```
+
+### \_\_gap
+
+```solidity
+uint256[50] private __gap;
 ```
 
 ## Functions
@@ -62,6 +76,24 @@ _Allows only non-zero addresses_
 modifier onlyNonZeroAddress(address addr);
 ```
 
+### onlyPauser
+
+```solidity
+modifier onlyPauser();
+```
+
+### onlyUnpauser
+
+```solidity
+modifier onlyUnpauser();
+```
+
+### constructor
+
+```solidity
+constructor();
+```
+
 ### initialize
 
 Initialize the contract with the feed verifier address
@@ -69,15 +101,23 @@ Initialize the contract with the feed verifier address
 _The feed verifier contract must be deployed first_
 
 ```solidity
-function initialize(address feedVerifier, address owner) external onlyNonZeroAddress(feedVerifier) initializer;
+function initialize(
+    address feedVerifier,
+    address owner,
+    address pauserRegistry
+)
+    external
+    onlyNonZeroAddress(feedVerifier)
+    initializer;
 ```
 
 **Parameters**
 
-| Name           | Type      | Description                           |
-| -------------- | --------- | ------------------------------------- |
-| `feedVerifier` | `address` | Address of the feed verifier contract |
-| `owner`        | `address` | Owner of the contract                 |
+| Name             | Type      | Description                             |
+| ---------------- | --------- | --------------------------------------- |
+| `feedVerifier`   | `address` | Address of the feed verifier contract   |
+| `owner`          | `address` | Owner of the contract                   |
+| `pauserRegistry` | `address` | Address of the pauser registry contract |
 
 ### setFeedVerifier
 
@@ -98,92 +138,130 @@ function setFeedVerifier(address feedVerifier) external onlyOwner onlyNonZeroAdd
 Set the supported feeds
 
 ```solidity
-function setSupportedFeeds(uint16[] calldata feedIds, bool[] calldata isSupported) external onlyOwner;
+function setSupportedFeeds(uint256[] calldata feedIds, bool[] calldata isSupported) external onlyOwner;
 ```
 
 **Parameters**
 
-| Name          | Type       | Description                                                |
-| ------------- | ---------- | ---------------------------------------------------------- |
-| `feedIds`     | `uint16[]` | Array of feed ids                                          |
-| `isSupported` | `bool[]`   | Array of booleans indicating whether the feed is supported |
+| Name          | Type        | Description                                                |
+| ------------- | ----------- | ---------------------------------------------------------- |
+| `feedIds`     | `uint256[]` | Array of feed ids                                          |
+| `isSupported` | `bool[]`    | Array of booleans indicating whether the feed is supported |
 
 ### whitelistPublishers
 
-Set the whitelisted publishers
+Whitelist or remove publishers
 
 ```solidity
-function whitelistPublishers(address[] memory publishers, bool[] memory isWhitelisted) external onlyOwner;
+function whitelistPublishers(address[] calldata publishers, bool[] calldata isWhitelisted) external onlyOwner;
 ```
 
 **Parameters**
 
-| Name            | Type        | Description                                                       |
-| --------------- | ----------- | ----------------------------------------------------------------- |
-| `publishers`    | `address[]` | Array of publisher addresses                                      |
-| `isWhitelisted` | `bool[]`    | Array of booleans indicating whether the publisher is whitelisted |
+| Name            | Type        | Description                                                               |
+| --------------- | ----------- | ------------------------------------------------------------------------- |
+| `publishers`    | `address[]` | Array of publisher addresses                                              |
+| `isWhitelisted` | `bool[]`    | Array of booleans indicating whether each publisher should be whitelisted |
 
-### updatePriceFeed
+### updateFeed
 
 Update the price for a feed
 
 ```solidity
-function updatePriceFeed(
-    IEOFeedVerifier.LeafInput memory input,
-    IEOFeedVerifier.Checkpoint calldata checkpoint,
-    uint256[2] calldata signature,
-    bytes calldata bitmap
+function updateFeed(
+    IEOFeedVerifier.LeafInput calldata input,
+    IEOFeedVerifier.VerificationParams calldata vParams
 )
     external
-    onlyWhitelisted;
+    onlyWhitelisted
+    whenNotPaused;
 ```
 
 **Parameters**
 
-| Name         | Type                         | Description                                                                |
-| ------------ | ---------------------------- | -------------------------------------------------------------------------- |
-| `input`      | `IEOFeedVerifier.LeafInput`  | A merkle leaf containing price data and its merkle proof                   |
-| `checkpoint` | `IEOFeedVerifier.Checkpoint` | Checkpoint data containing eoracle chain metadata and the data merkle root |
-| `signature`  | `uint256[2]`                 | Aggregated signature of the checkpoint                                     |
-| `bitmap`     | `bytes`                      | Bitmap of the validators who signed the checkpoint                         |
+| Name      | Type                                 | Description                                              |
+| --------- | ------------------------------------ | -------------------------------------------------------- |
+| `input`   | `IEOFeedVerifier.LeafInput`          | A merkle leaf containing price data and its merkle proof |
+| `vParams` | `IEOFeedVerifier.VerificationParams` | Verification parameters                                  |
 
-### updatePriceFeeds
+### updateFeeds
 
 Update the price for multiple feeds
 
 ```solidity
-function updatePriceFeeds(
+function updateFeeds(
     IEOFeedVerifier.LeafInput[] calldata inputs,
-    IEOFeedVerifier.Checkpoint calldata checkpoint,
-    uint256[2] calldata signature,
-    bytes calldata bitmap
+    IEOFeedVerifier.VerificationParams calldata vParams
 )
     external
-    onlyWhitelisted;
+    onlyWhitelisted
+    whenNotPaused;
 ```
 
 **Parameters**
 
-| Name         | Type                          | Description                                        |
-| ------------ | ----------------------------- | -------------------------------------------------- |
-| `inputs`     | `IEOFeedVerifier.LeafInput[]` | Array of leafs to prove the price feeds            |
-| `checkpoint` | `IEOFeedVerifier.Checkpoint`  | Checkpoint data                                    |
-| `signature`  | `uint256[2]`                  | Aggregated signature of the checkpoint             |
-| `bitmap`     | `bytes`                       | Bitmap of the validators who signed the checkpoint |
+| Name      | Type                                 | Description                             |
+| --------- | ------------------------------------ | --------------------------------------- |
+| `inputs`  | `IEOFeedVerifier.LeafInput[]`        | Array of leafs to prove the price feeds |
+| `vParams` | `IEOFeedVerifier.VerificationParams` | Verification parameters                 |
+
+### setPauserRegistry
+
+Set the pauser registry contract address
+
+```solidity
+function setPauserRegistry(address pauserRegistry) external onlyOwner;
+```
+
+**Parameters**
+
+| Name             | Type      | Description                             |
+| ---------------- | --------- | --------------------------------------- |
+| `pauserRegistry` | `address` | Address of the pauser registry contract |
+
+### pause
+
+Pause the feed manager
+
+```solidity
+function pause() external onlyPauser;
+```
+
+### unpause
+
+Unpause the feed manager
+
+```solidity
+function unpause() external onlyUnpauser;
+```
+
+### getPauserRegistry
+
+Get the pauser registry contract address
+
+```solidity
+function getPauserRegistry() external view returns (IPauserRegistry);
+```
+
+**Returns**
+
+| Name     | Type              | Description                             |
+| -------- | ----------------- | --------------------------------------- |
+| `<none>` | `IPauserRegistry` | Address of the pauser registry contract |
 
 ### getLatestPriceFeed
 
 Get the latest price for a feed
 
 ```solidity
-function getLatestPriceFeed(uint16 feedId) external view returns (PriceFeed memory);
+function getLatestPriceFeed(uint256 feedId) external view returns (PriceFeed memory);
 ```
 
 **Parameters**
 
-| Name     | Type     | Description |
-| -------- | -------- | ----------- |
-| `feedId` | `uint16` | Feed id     |
+| Name     | Type      | Description |
+| -------- | --------- | ----------- |
+| `feedId` | `uint256` | Feed id     |
 
 **Returns**
 
@@ -196,14 +274,14 @@ function getLatestPriceFeed(uint16 feedId) external view returns (PriceFeed memo
 Get the latest price feeds for multiple feeds
 
 ```solidity
-function getLatestPriceFeeds(uint16[] calldata feedIds) external view returns (PriceFeed[] memory);
+function getLatestPriceFeeds(uint256[] calldata feedIds) external view returns (PriceFeed[] memory);
 ```
 
 **Parameters**
 
-| Name      | Type       | Description       |
-| --------- | ---------- | ----------------- |
-| `feedIds` | `uint16[]` | Array of feed ids |
+| Name      | Type        | Description       |
+| --------- | ----------- | ----------------- |
+| `feedIds` | `uint256[]` | Array of feed ids |
 
 **Returns**
 
@@ -236,14 +314,14 @@ function isWhitelistedPublisher(address publisher) external view returns (bool);
 Check if a feed is supported
 
 ```solidity
-function isSupportedFeed(uint16 feedId) external view returns (bool);
+function isSupportedFeed(uint256 feedId) external view returns (bool);
 ```
 
 **Parameters**
 
-| Name     | Type     | Description      |
-| -------- | -------- | ---------------- |
-| `feedId` | `uint16` | feed Id to check |
+| Name     | Type      | Description      |
+| -------- | --------- | ---------------- |
+| `feedId` | `uint256` | feed Id to check |
 
 **Returns**
 
@@ -275,24 +353,24 @@ function _processVerifiedRate(bytes memory data, uint256 blockNumber) internal;
 
 **Parameters**
 
-| Name          | Type      | Description                                                                      |
-| ------------- | --------- | -------------------------------------------------------------------------------- |
-| `data`        | `bytes`   | Verified rate data, abi encoded (uint16 feedId, uint256 rate, uint256 timestamp) |
-| `blockNumber` | `uint256` | eoracle chain block number                                                       |
+| Name          | Type      | Description                                                                       |
+| ------------- | --------- | --------------------------------------------------------------------------------- |
+| `data`        | `bytes`   | Verified rate data, abi encoded (uint256 feedId, uint256 rate, uint256 timestamp) |
+| `blockNumber` | `uint256` | eoracle chain block number                                                        |
 
 ### \_getLatestPriceFeed
 
 Get the latest price feed
 
 ```solidity
-function _getLatestPriceFeed(uint16 feedId) internal view returns (PriceFeed memory);
+function _getLatestPriceFeed(uint256 feedId) internal view returns (PriceFeed memory);
 ```
 
 **Parameters**
 
-| Name     | Type     | Description |
-| -------- | -------- | ----------- |
-| `feedId` | `uint16` | Feed id     |
+| Name     | Type      | Description |
+| -------- | --------- | ----------- |
+| `feedId` | `uint256` | Feed id     |
 
 **Returns**
 

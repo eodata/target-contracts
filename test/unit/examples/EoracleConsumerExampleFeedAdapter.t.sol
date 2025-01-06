@@ -13,7 +13,7 @@ import { Denominations } from "../../../src/libraries/Denominations.sol";
 import { Upgrades } from "openzeppelin-foundry-upgrades/Upgrades.sol";
 
 contract EoracleConsumerExampleFeedAdapterTest is Test {
-    uint16 public constant FEED_ID = 1;
+    uint256 public constant FEED_ID = 1;
     string public constant DESCRIPTION = "ETH/USD";
     uint256 public constant VERSION = 1;
     uint256 public constant RATE1 = 100_000_000;
@@ -44,7 +44,7 @@ contract EoracleConsumerExampleFeedAdapterTest is Test {
 
         _consumerExampleFeed = new EoracleConsumerExampleFeedAdapter(address(feedAdapter));
 
-        _updatePriceFeed(FEED_ID, RATE1, block.timestamp);
+        _updateFeed(FEED_ID, RATE1, block.timestamp);
     }
 
     function test_SetGetFeed() public {
@@ -58,16 +58,16 @@ contract EoracleConsumerExampleFeedAdapterTest is Test {
         assertEq(price, int256(RATE1));
     }
 
-    function test_UpdatePriceFeed() public {
-        _updatePriceFeed(FEED_ID, RATE2, block.timestamp);
+    function test_UpdateFeed() public {
+        _updateFeed(FEED_ID, RATE2, block.timestamp);
         int256 price = _consumerExampleFeed.getPrice();
         assertEq(price, int256(RATE2));
     }
 
-    function _updatePriceFeed(uint16 feedId, uint256 rate, uint256 timestamp) internal {
+    function _updateFeed(uint256 feedId, uint256 rate, uint256 timestamp) internal {
         IEOFeedVerifier.LeafInput memory input;
         input.unhashedLeaf = abi.encode(feedId, rate, timestamp);
-        _feedManager.updatePriceFeed(
+        _feedManager.updateFeed(
             input,
             IEOFeedVerifier.VerificationParams({
                 eventRoot: bytes32(0),

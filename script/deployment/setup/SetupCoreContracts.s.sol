@@ -10,7 +10,7 @@ import { EOFeedManager } from "../../../src/EOFeedManager.sol";
 contract SetupCoreContracts is Script {
     using stdJson for string;
 
-    uint16[] public feedIds;
+    uint256[] public feedIds;
     bool[] public feedBools;
     address[] public publishers;
     bool[] public publishersBools;
@@ -45,10 +45,10 @@ contract SetupCoreContracts is Script {
     }
 
     function _updateSupportedFeeds(EOJsonUtils.Config memory _configData) internal {
-        uint16 feedId;
+        uint256 feedId;
 
         for (uint256 i = 0; i < _configData.supportedFeedIds.length; i++) {
-            feedId = uint16(_configData.supportedFeedIds[i]);
+            feedId = (_configData.supportedFeedIds[i]);
             if (!feedManager.isSupportedFeed(feedId)) {
                 feedIds.push(feedId);
                 feedBools.push(true);

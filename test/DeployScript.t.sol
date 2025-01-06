@@ -79,9 +79,9 @@ contract DeployScriptTest is Test {
 
     function test_SetupCoreContracts() public view {
         EOJsonUtils.Config memory configStructured = EOJsonUtils.getParsedConfig();
-        uint16 feedId;
+        uint256 feedId;
         for (uint256 i = 0; i < configStructured.supportedFeedIds.length; i++) {
-            feedId = uint16(configStructured.supportedFeedIds[i]);
+            feedId = uint256(configStructured.supportedFeedIds[i]);
             assertTrue(EOFeedManager(feedManagerProxy).isSupportedFeed(feedId));
         }
         for (uint256 i = 0; i < configStructured.publishers.length; i++) {
@@ -94,7 +94,7 @@ contract DeployScriptTest is Test {
         uint256 feedsLength = configStructured.supportedFeedsData.length;
 
         for (uint256 i = 0; i < feedsLength; i++) {
-            uint16 feedId = uint16(configStructured.supportedFeedsData[i].feedId);
+            uint256 feedId = uint256(configStructured.supportedFeedsData[i].feedId);
             IEOFeedAdapter feedAdapter = EOFeedRegistryAdapter(adapterProxy).getFeedById(feedId);
             IEOFeedAdapter feedByAddresses = EOFeedRegistryAdapter(adapterProxy).getFeed(
                 configStructured.supportedFeedsData[i].base, configStructured.supportedFeedsData[i].quote
@@ -136,7 +136,7 @@ contract DeployScriptTest is Test {
         address base = configStructured.supportedFeedsData[0].base;
         address quote = configStructured.supportedFeedsData[0].quote;
         EOFeedRegistryAdapter(adapterProxy).removeFeedAdapter(base, quote);
-        uint16[] memory feedIds = new uint16[](1);
+        uint256[] memory feedIds = new uint256[](1);
         feedIds[0] = 1;
         bool[] memory isSupported = new bool[](1);
         isSupported[0] = false;
@@ -151,9 +151,9 @@ contract DeployScriptTest is Test {
         deployFeedsTimelocked.run(configStructured.timelock.executors[0], true);
         assertEq(EOFeedRegistryAdapter(adapterProxy).getFeed(base, quote).getFeedId(), 1);
 
-        uint16 feedId;
+        uint256 feedId;
         for (uint256 i = 0; i < configStructured.supportedFeedIds.length; i++) {
-            feedId = uint16(configStructured.supportedFeedIds[i]);
+            feedId = uint256(configStructured.supportedFeedIds[i]);
             assertTrue(EOFeedManager(feedManagerProxy).isSupportedFeed(feedId));
         }
     }

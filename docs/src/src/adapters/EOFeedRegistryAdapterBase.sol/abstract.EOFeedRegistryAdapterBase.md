@@ -1,6 +1,6 @@
 # EOFeedRegistryAdapterBase
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/de89fc9e9bc7c046937883aa064d90812f1542cc/src/adapters/EOFeedRegistryAdapterBase.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/88beedd8b816225fb92696d7d314b9def6318a7e/src/adapters/EOFeedRegistryAdapterBase.sol)
 
 **Inherits:** OwnableUpgradeable,
 [EOFeedFactoryBase](/src/adapters/factories/EOFeedFactoryBase.sol/abstract.EOFeedFactoryBase.md),
@@ -19,7 +19,7 @@ IEOFeedManager internal _feedManager;
 ### \_feedAdapters
 
 ```solidity
-mapping(uint16 => IEOFeedAdapter) internal _feedAdapters;
+mapping(uint256 => IEOFeedAdapter) internal _feedAdapters;
 ```
 
 ### \_feedEnabled
@@ -31,7 +31,7 @@ mapping(address => bool) internal _feedEnabled;
 ### \_tokenAddressesToFeedIds
 
 ```solidity
-mapping(address => mapping(address => uint16)) internal _tokenAddressesToFeedIds;
+mapping(address => mapping(address => uint256)) internal _tokenAddressesToFeedIds;
 ```
 
 ### \_\_gap
@@ -46,6 +46,12 @@ uint256[50] private __gap;
 
 ```solidity
 modifier onlyNonZeroAddress(address addr);
+```
+
+### constructor
+
+```solidity
+constructor();
 ```
 
 ### initialize
@@ -94,9 +100,10 @@ deploy EOFeedAdapter
 function deployEOFeedAdapter(
     address base,
     address quote,
-    uint16 feedId,
+    uint256 feedId,
     string calldata feedDescription,
-    uint8 feedDecimals,
+    uint8 inputDecimals,
+    uint8 outputDecimals,
     uint256 feedVersion
 )
     external
@@ -110,9 +117,10 @@ function deployEOFeedAdapter(
 | ----------------- | --------- | ----------------------- |
 | `base`            | `address` | The base asset address  |
 | `quote`           | `address` | The quote asset address |
-| `feedId`          | `uint16`  | The feed id             |
+| `feedId`          | `uint256` | The feed id             |
 | `feedDescription` | `string`  | The description of feed |
-| `feedDecimals`    | `uint8`   | The decimals            |
+| `inputDecimals`   | `uint8`   | The input decimals      |
+| `outputDecimals`  | `uint8`   | The output decimals     |
 | `feedVersion`     | `uint256` | The version of the feed |
 
 **Returns**
@@ -120,6 +128,21 @@ function deployEOFeedAdapter(
 | Name     | Type             | Description                     |
 | -------- | ---------------- | ------------------------------- |
 | `<none>` | `IEOFeedAdapter` | IEOFeedAdapter The feed adapter |
+
+### removeFeedAdapter
+
+Remove the feedAdapter
+
+```solidity
+function removeFeedAdapter(address base, address quote) external onlyOwner;
+```
+
+**Parameters**
+
+| Name    | Type      | Description             |
+| ------- | --------- | ----------------------- |
+| `base`  | `address` | The base asset address  |
+| `quote` | `address` | The quote asset address |
 
 ### getFeedManager
 
@@ -140,14 +163,14 @@ function getFeedManager() external view returns (IEOFeedManager);
 Get the feedAdapter for a given id
 
 ```solidity
-function getFeedById(uint16 feedId) external view returns (IEOFeedAdapter);
+function getFeedById(uint256 feedId) external view returns (IEOFeedAdapter);
 ```
 
 **Parameters**
 
-| Name     | Type     | Description |
-| -------- | -------- | ----------- |
-| `feedId` | `uint16` | The feed id |
+| Name     | Type      | Description |
+| -------- | --------- | ----------- |
+| `feedId` | `uint256` | The feed id |
 
 **Returns**
 
@@ -508,5 +531,5 @@ event FeedManagerSet(address indexed feedManager);
 ### FeedAdapterDeployed
 
 ```solidity
-event FeedAdapterDeployed(uint16 indexed feedId, address indexed feedAdapter, address base, address quote);
+event FeedAdapterDeployed(uint256 indexed feedId, address indexed feedAdapter, address base, address quote);
 ```

@@ -1,78 +1,100 @@
 # BLS
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/de89fc9e9bc7c046937883aa064d90812f1542cc/src/common/BLS.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/88beedd8b816225fb92696d7d314b9def6318a7e/src/common/BLS.sol)
 
 **Inherits:** [IBLS](/src/interfaces/IBLS.sol/interface.IBLS.md)
 
 ## State Variables
 
+### PAIRING_EQUALITY_CHECK_GAS
+
+```solidity
+uint256 internal constant PAIRING_EQUALITY_CHECK_GAS = 120_000;
+```
+
 ### N
 
 ```solidity
-uint256 private constant N =
+uint256 internal constant N =
     21_888_242_871_839_275_222_246_405_745_257_275_088_696_311_157_297_823_662_689_037_894_645_226_208_583;
 ```
 
-### N_G2_X1
+### G1_X
 
 ```solidity
-uint256 private constant N_G2_X1 =
-    11_559_732_032_986_387_107_991_004_021_392_285_783_925_812_861_821_192_530_917_403_151_452_391_805_634;
+uint256 internal constant G1_X = 1;
+```
+
+### G1_Y
+
+```solidity
+uint256 internal constant G1_Y = 2;
 ```
 
 ### N_G2_X0
 
 ```solidity
-uint256 private constant N_G2_X0 =
+uint256 internal constant N_G2_X0 =
     10_857_046_999_023_057_135_944_570_762_232_829_481_370_756_359_578_518_086_990_519_993_285_655_852_781;
 ```
 
-### N_G2_Y1
+### N_G2_X1
 
 ```solidity
-uint256 private constant N_G2_Y1 =
-    17_805_874_995_975_841_540_914_202_342_111_839_520_379_459_829_704_422_454_583_296_818_431_106_115_052;
+uint256 internal constant N_G2_X1 =
+    11_559_732_032_986_387_107_991_004_021_392_285_783_925_812_861_821_192_530_917_403_151_452_391_805_634;
 ```
 
 ### N_G2_Y0
 
 ```solidity
-uint256 private constant N_G2_Y0 =
+uint256 internal constant N_G2_Y0 =
     13_392_588_948_715_843_804_641_432_497_768_002_650_278_120_570_034_223_513_918_757_245_338_268_106_653;
+```
+
+### N_G2_Y1
+
+```solidity
+uint256 internal constant N_G2_Y1 =
+    17_805_874_995_975_841_540_914_202_342_111_839_520_379_459_829_704_422_454_583_296_818_431_106_115_052;
 ```
 
 ### Z0
 
 ```solidity
-uint256 private constant Z0 = 0x0000000000000000b3c4d79d41a91759a9e4c7e359b6b89eaec68e62effffffd;
+uint256 internal constant Z0 = 0x0000000000000000b3c4d79d41a91759a9e4c7e359b6b89eaec68e62effffffd;
 ```
 
 ### Z1
 
 ```solidity
-uint256 private constant Z1 = 0x000000000000000059e26bcea0d48bacd4f263f1acdb5c4f5763473177fffffe;
+uint256 internal constant Z1 = 0x000000000000000059e26bcea0d48bacd4f263f1acdb5c4f5763473177fffffe;
 ```
 
 ### T24
 
 ```solidity
-uint256 private constant T24 = 0x1000000000000000000000000000000000000000000000000;
+uint256 internal constant T24 = 0x1000000000000000000000000000000000000000000000000;
 ```
 
 ### MASK24
 
 ```solidity
-uint256 private constant MASK24 = 0xffffffffffffffffffffffffffffffffffffffffffffffff;
+uint256 internal constant MASK24 = 0xffffffffffffffffffffffffffffffffffffffffffffffff;
 ```
 
 ## Functions
 
-### verifySingle
-
-verifies a single signature
+### hashToPoint
 
 ```solidity
-function verifySingle(
+function hashToPoint(bytes32 domain, bytes memory message) external view returns (uint256[2] memory);
+```
+
+### verifySignature
+
+```solidity
+function verifySignature(
     uint256[2] calldata signature,
     uint256[4] calldata pubkey,
     uint256[2] calldata message
@@ -82,185 +104,173 @@ function verifySingle(
     returns (bool, bool);
 ```
 
-**Parameters**
-
-| Name        | Type         | Description                            |
-| ----------- | ------------ | -------------------------------------- |
-| `signature` | `uint256[2]` | 64-byte G1 group element (small sig)   |
-| `pubkey`    | `uint256[4]` | 128-byte G2 group element (big pubkey) |
-| `message`   | `uint256[2]` | message signed to produce signature    |
-
-**Returns**
-
-| Name     | Type   | Description           |
-| -------- | ------ | --------------------- |
-| `<none>` | `bool` | bool sig verification |
-| `<none>` | `bool` |                       |
-
-### verifyMultiple
-
-verifies multiple non-aggregated signatures where each message is unique
+### verifySignatureAndVeracity
 
 ```solidity
-function verifyMultiple(
+function verifySignatureAndVeracity(
+    uint256[2] calldata pk,
     uint256[2] calldata signature,
-    uint256[4][] calldata pubkeys,
-    uint256[2][] calldata messages
+    uint256[2] calldata msgHash,
+    uint256[4] calldata pkG2
 )
     external
     view
-    returns (bool checkResult, bool callSuccess);
+    returns (bool, bool);
+```
+
+### ecadd
+
+Adds two G1 points on the elliptic curve
+
+```solidity
+function ecadd(uint256[2] memory p1, uint256[2] memory p2) public view returns (uint256[2] memory r);
 ```
 
 **Parameters**
 
-| Name        | Type           | Description                                     |
-| ----------- | -------------- | ----------------------------------------------- |
-| `signature` | `uint256[2]`   | 64-byte G1 group element (small sig)            |
-| `pubkeys`   | `uint256[4][]` | array of 128-byte G2 group element (big pubkey) |
-| `messages`  | `uint256[2][]` | array of messages signed to produce signature   |
+| Name | Type         | Description  |
+| ---- | ------------ | ------------ |
+| `p1` | `uint256[2]` | First point  |
+| `p2` | `uint256[2]` | Second point |
 
 **Returns**
 
-| Name          | Type   | Description                      |
-| ------------- | ------ | -------------------------------- |
-| `checkResult` | `bool` | bool indicating sig verification |
-| `callSuccess` | `bool` | bool indicating call success     |
+| Name | Type         | Description            |
+| ---- | ------------ | ---------------------- |
+| `r`  | `uint256[2]` | Result of the addition |
 
-### verifyMultipleSameMsg
-
-verifies an aggregated signature where the same message is signed
+### ecmul
 
 ```solidity
-function verifyMultipleSameMsg(
-    uint256[2] calldata signature,
-    uint256[4][] calldata pubkeys,
-    uint256[2] calldata message
+function ecmul(uint256[2] memory p, uint256 s) public view returns (uint256[2] memory r);
+```
+
+**Parameters**
+
+| Name | Type         | Description |
+| ---- | ------------ | ----------- |
+| `p`  | `uint256[2]` | G1 point    |
+| `s`  | `uint256`    | scalar      |
+
+**Returns**
+
+| Name | Type         | Description                               |
+| ---- | ------------ | ----------------------------------------- |
+| `r`  | `uint256[2]` | the product of a point on G1 and a scalar |
+
+### neg
+
+```solidity
+function neg(uint256[2] memory p) public pure returns (uint256[2] memory);
+```
+
+**Parameters**
+
+| Name | Type         | Description       |
+| ---- | ------------ | ----------------- |
+| `p`  | `uint256[2]` | Some point in G1. |
+
+**Returns**
+
+| Name     | Type         | Description         |
+| -------- | ------------ | ------------------- |
+| `<none>` | `uint256[2]` | The negation of `p` |
+
+### ecpairing
+
+Performs elliptic curve pairing check
+
+```solidity
+function ecpairing(
+    uint256[2] memory a1,
+    uint256[4] memory a2,
+    uint256[2] memory b1,
+    uint256[4] memory b2,
+    uint256 pairingGas
 )
-    external
+    internal
     view
-    returns (bool checkResult, bool callSuccess);
+    returns (bool success, bool result);
 ```
 
 **Parameters**
 
-| Name        | Type           | Description                                     |
-| ----------- | -------------- | ----------------------------------------------- |
-| `signature` | `uint256[2]`   | 64-byte G1 group element (small sig)            |
-| `pubkeys`   | `uint256[4][]` | array of 128-byte G2 group element (big pubkey) |
-| `message`   | `uint256[2]`   | message signed by all to produce signature      |
+| Name         | Type         | Description                         |
+| ------------ | ------------ | ----------------------------------- |
+| `a1`         | `uint256[2]` | First point in G1                   |
+| `a2`         | `uint256[4]` | First point in G2                   |
+| `b1`         | `uint256[2]` | Second point in G1                  |
+| `b2`         | `uint256[4]` | Second point in G2                  |
+| `pairingGas` | `uint256`    | Gas limit for the pairing operation |
 
 **Returns**
 
-| Name          | Type   | Description             |
-| ------------- | ------ | ----------------------- |
-| `checkResult` | `bool` | sig verification        |
-| `callSuccess` | `bool` | indicating call success |
+| Name      | Type   | Description                              |
+| --------- | ------ | ---------------------------------------- |
+| `success` | `bool` | Whether the pairing check was successful |
+| `result`  | `bool` | Whether the pairing equality holds       |
 
-### hashToPoint
+### hashToField
 
-hashes an arbitrary message to a point on the curve
-
-_Fouque-Tibouchi Hash to Curve_
+Hashes a message to a field element
 
 ```solidity
-function hashToPoint(bytes32 domain, bytes memory message) external view returns (uint256[2] memory);
+function hashToField(bytes32 domain, bytes memory messages) internal pure returns (uint256[2] memory);
 ```
 
 **Parameters**
 
-| Name      | Type      | Description                   |
-| --------- | --------- | ----------------------------- |
-| `domain`  | `bytes32` | domain separator for the hash |
-| `message` | `bytes`   | the message to map            |
+| Name       | Type      | Description      |
+| ---------- | --------- | ---------------- |
+| `domain`   | `bytes32` | Domain separator |
+| `messages` | `bytes`   | Message to hash  |
 
 **Returns**
 
-| Name     | Type         | Description                                                  |
-| -------- | ------------ | ------------------------------------------------------------ |
-| `<none>` | `uint256[2]` | uint256[2] (x,y) point on the curve that the message maps to |
+| Name     | Type         | Description                              |
+| -------- | ------------ | ---------------------------------------- |
+| `<none>` | `uint256[2]` | Array representing the G1 hashed message |
+
+### expandMsgTo96
+
+Expands a message to 96 bytes
+
+```solidity
+function expandMsgTo96(bytes32 domain, bytes memory message) internal pure returns (bytes memory);
+```
+
+**Parameters**
+
+| Name      | Type      | Description       |
+| --------- | --------- | ----------------- |
+| `domain`  | `bytes32` | Domain separator  |
+| `message` | `bytes`   | Message to expand |
+
+**Returns**
+
+| Name     | Type    | Description      |
+| -------- | ------- | ---------------- |
+| `<none>` | `bytes` | Expanded message |
 
 ### mapToPoint
 
-maps a field element to the curve
+Maps a field element to a point on the curve
 
 ```solidity
-function mapToPoint(uint256 _x) external pure returns (uint256[2] memory p);
+function mapToPoint(uint256 _x) internal pure returns (uint256[2] memory p);
 ```
 
 **Parameters**
 
-| Name | Type      | Description           |
-| ---- | --------- | --------------------- |
-| `_x` | `uint256` | a valid field element |
+| Name | Type      | Description          |
+| ---- | --------- | -------------------- |
+| `_x` | `uint256` | Field element to map |
 
 **Returns**
 
-| Name | Type         | Description                                   |
-| ---- | ------------ | --------------------------------------------- |
-| `p`  | `uint256[2]` | the point on the curve the point is mapped to |
-
-### isValidSignature
-
-checks if a signature is formatted correctly and valid
-
-_will revert if improperly formatted, will return false if invalid_
-
-```solidity
-function isValidSignature(uint256[2] memory signature) external view returns (bool);
-```
-
-**Parameters**
-
-| Name        | Type         | Description       |
-| ----------- | ------------ | ----------------- |
-| `signature` | `uint256[2]` | the BLS signature |
-
-**Returns**
-
-| Name     | Type   | Description                                      |
-| -------- | ------ | ------------------------------------------------ |
-| `<none>` | `bool` | bool indicating if the signature is valid or not |
-
-### isOnCurveG1
-
-checks if point in the finite field Fq (x,y) is on the G1 curve
-
-```solidity
-function isOnCurveG1(uint256[2] memory point) external pure returns (bool _isOnCurve);
-```
-
-**Parameters**
-
-| Name    | Type         | Description                            |
-| ------- | ------------ | -------------------------------------- |
-| `point` | `uint256[2]` | array with x and y values of the point |
-
-**Returns**
-
-| Name         | Type   | Description                                         |
-| ------------ | ------ | --------------------------------------------------- |
-| `_isOnCurve` | `bool` | bool indicating if the point is on the curve or not |
-
-### isOnCurveG2
-
-checks if point in the finite field Fq (x,y) is on the G2 curve
-
-```solidity
-function isOnCurveG2(uint256[4] memory point) external pure returns (bool _isOnCurve);
-```
-
-**Parameters**
-
-| Name    | Type         | Description                            |
-| ------- | ------------ | -------------------------------------- |
-| `point` | `uint256[4]` | array with x and y values of the point |
-
-**Returns**
-
-| Name         | Type   | Description                                         |
-| ------------ | ------ | --------------------------------------------------- |
-| `_isOnCurve` | `bool` | bool indicating if the point is on the curve or not |
+| Name | Type         | Description                  |
+| ---- | ------------ | ---------------------------- |
+| `p`  | `uint256[2]` | Resulting point on the curve |
 
 ### sqrt
 
@@ -302,45 +312,3 @@ function inverse(uint256 a) internal pure returns (uint256);
 | Name     | Type      | Description                         |
 | -------- | --------- | ----------------------------------- |
 | `<none>` | `uint256` | uint256 of the value of the inverse |
-
-### hashToField
-
-hashes an arbitrary message to a field element
-
-```solidity
-function hashToField(bytes32 domain, bytes memory messages) external view returns (uint256[2] memory);
-```
-
-**Parameters**
-
-| Name       | Type      | Description                   |
-| ---------- | --------- | ----------------------------- |
-| `domain`   | `bytes32` | domain separator for the hash |
-| `messages` | `bytes`   | the messages to map           |
-
-**Returns**
-
-| Name     | Type         | Description                                                          |
-| -------- | ------------ | -------------------------------------------------------------------- |
-| `<none>` | `uint256[2]` | uint256[2] (x,y) point of the field element that the message maps to |
-
-### expandMsgTo96
-
-pads messages less than 96 bytes to 96 bytes for hashing
-
-```solidity
-function expandMsgTo96(bytes32 domain, bytes memory message) external pure returns (bytes memory);
-```
-
-**Parameters**
-
-| Name      | Type      | Description                   |
-| --------- | --------- | ----------------------------- |
-| `domain`  | `bytes32` | domain separator for the hash |
-| `message` | `bytes`   | the message to pad            |
-
-**Returns**
-
-| Name     | Type    | Description              |
-| -------- | ------- | ------------------------ |
-| `<none>` | `bytes` | bytes the padded message |
