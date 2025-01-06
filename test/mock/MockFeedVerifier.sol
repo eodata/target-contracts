@@ -21,8 +21,7 @@ contract MockFeedVerifier is IEOFeedVerifier {
         pure
         returns (bytes memory leafData)
     {
-        (,,, bytes memory data) = abi.decode(input.unhashedLeaf, (uint256, address, address, bytes));
-        return data;
+        return input.unhashedLeaf;
     }
 
     function batchVerify(
@@ -36,8 +35,7 @@ contract MockFeedVerifier is IEOFeedVerifier {
         uint256 length = inputs.length;
         bytes[] memory returnData = new bytes[](length);
         for (uint256 i = 0; i < length; i++) {
-            (,,, bytes memory data) = abi.decode(inputs[i].unhashedLeaf, (uint256, address, address, bytes));
-            returnData[i] = data;
+            returnData[i] = inputs[i].unhashedLeaf;
         }
         return returnData;
     }
