@@ -4,23 +4,30 @@ pragma solidity 0.8.25;
 import { IEOFeedVerifier } from "./IEOFeedVerifier.sol";
 
 interface IEOTwitterFeedManager {
+    enum PostAction {
+        Creation,
+        UpdateContent,
+        UpdateStatistics,
+        Deletion
+    }
+
     struct Feed {
         mapping(uint64 postId => Post) posts;
         uint64[] postIds;
     }
 
     struct Post {
+        uint256 eoracleBlockNumber;
+        string content;
         uint32 timestampCreated;
         uint32 timestampUpdatedContent;
         uint32 timestampUpdatedStatistics;
-        uint32 timestampDeleted;
         uint32 replies; // 4 bytes
         uint32 bookmarks; // 4 bytes
         uint32 reposts; // 4 bytes
         uint32 likes; // 4 bytes
         uint32 views; // 4 bytes
-        string content;
-        uint256 eoracleBlockNumber;
+        uint32 timestampDeleted;
     }
 
     struct LeafData {
@@ -29,16 +36,9 @@ interface IEOTwitterFeedManager {
     }
 
     struct PostData {
-        uint64 postId;
-        PostAction action; // 4 bytes
         bytes content; // encoded Post
-    }
-
-    enum PostAction {
-        Creation,
-        UpdateContent,
-        UpdateStatistics,
-        Deletion
+        uint64 postId; // 8 bytes
+        PostAction action; // 1 byte
     }
 
     struct PostCreation {
