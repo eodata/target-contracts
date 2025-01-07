@@ -15,7 +15,6 @@ error CallerIsNotFeedDeployer();
 //////////////////////////////////////////////////////////////////////////*/
 error CallerIsNotFeedManager();
 error InvalidInput();
-error InvalidTimestamp();
 error InvalidProof();
 error InvalidAddress();
 error InvalidEventRoot();

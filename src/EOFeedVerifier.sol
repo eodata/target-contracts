@@ -32,7 +32,7 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
     bytes32 public constant DOMAIN = keccak256("EORACLE_FEED_VERIFIER");
 
     /// @dev Minimum number of validators
-    // @audit-info: it was a constant before. what is the reason of making it a variable? we don't have setter
+    // @audit-info it was a constant before. what is the reason of making it a variable? we don't have setter
     uint256 internal _minNumOfValidators;
 
     /// @dev ID of eoracle chain
@@ -142,7 +142,7 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
         uint256[2] memory apk = [uint256(0), uint256(0)];
 
         for (uint256 i = 0; i < length; i++) {
-            // @audit-info: better to have check for duplicated addresses, since the array with the same
+            // @audit-info it is better to have a check for duplicated addresses, since the array with the same
             // addresses can be passed and the requirement for minNumOfValidators will be met
             if (newValidatorSet[i]._address == address(0)) revert InvalidAddress();
             uint256 votingPower = newValidatorSet[i].votingPower;

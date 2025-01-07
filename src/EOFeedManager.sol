@@ -12,7 +12,6 @@ import {
     MissingLeafInputs,
     FeedNotSupported,
     InvalidInput,
-    InvalidTimestamp,
     CallerIsNotPauser,
     CallerIsNotUnpauser,
     CallerIsNotFeedDeployer
@@ -278,7 +277,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
     function _processVerifiedRate(bytes memory data, uint256 blockNumber) internal {
         (uint256 feedId, uint256 rate, uint256 timestamp) = abi.decode(data, (uint256, uint256, uint256));
         if (!_supportedFeedIds[feedId]) revert FeedNotSupported(feedId);
-        if (timestamp > block.timestamp) revert InvalidTimestamp();
+        // @audit-info if (timestamp > block.timestamp) revert InvalidTimestamp();
         if (_priceFeeds[feedId].timestamp < timestamp) {
             _priceFeeds[feedId] = PriceFeed(rate, timestamp, blockNumber);
             emit RateUpdated(feedId, rate, timestamp);
