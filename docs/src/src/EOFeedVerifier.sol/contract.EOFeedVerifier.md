@@ -1,6 +1,6 @@
 # EOFeedVerifier
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/88beedd8b816225fb92696d7d314b9def6318a7e/src/EOFeedVerifier.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/6aa770eda8f0c2ec3d6b8a6ee534d020a26eb2db/src/EOFeedVerifier.sol)
 
 **Inherits:** [IEOFeedVerifier](/src/interfaces/IEOFeedVerifier.sol/interface.IEOFeedVerifier.md), OwnableUpgradeable
 
@@ -17,6 +17,8 @@ bytes32 public constant DOMAIN = keccak256("EORACLE_FEED_VERIFIER");
 ```
 
 ### \_minNumOfValidators
+
+_Minimum number of validators_
 
 ```solidity
 uint256 internal _minNumOfValidators;

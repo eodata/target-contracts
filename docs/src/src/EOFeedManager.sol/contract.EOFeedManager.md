@@ -1,6 +1,6 @@
 # EOFeedManager
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/88beedd8b816225fb92696d7d314b9def6318a7e/src/EOFeedManager.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/6aa770eda8f0c2ec3d6b8a6ee534d020a26eb2db/src/EOFeedManager.sol)
 
 **Inherits:** [IEOFeedManager](/src/interfaces/IEOFeedManager.sol/interface.IEOFeedManager.md), OwnableUpgradeable,
 PausableUpgradeable
@@ -52,6 +52,14 @@ Address of the `PauserRegistry` contract that this contract defers to for determ
 IPauserRegistry internal _pauserRegistry;
 ```
 
+### \_feedDeployer
+
+_Address of the feed deployer_
+
+```solidity
+address internal _feedDeployer;
+```
+
 ### \_\_gap
 
 ```solidity
@@ -88,6 +96,12 @@ modifier onlyPauser();
 modifier onlyUnpauser();
 ```
 
+### onlyFeedDeployer
+
+```solidity
+modifier onlyFeedDeployer();
+```
+
 ### constructor
 
 ```solidity
@@ -104,10 +118,13 @@ _The feed verifier contract must be deployed first_
 function initialize(
     address feedVerifier,
     address owner,
-    address pauserRegistry
+    address pauserRegistry,
+    address feedDeployer
 )
     external
     onlyNonZeroAddress(feedVerifier)
+    onlyNonZeroAddress(feedDeployer)
+    onlyNonZeroAddress(pauserRegistry)
     initializer;
 ```
 
@@ -118,6 +135,7 @@ function initialize(
 | `feedVerifier`   | `address` | Address of the feed verifier contract   |
 | `owner`          | `address` | Owner of the contract                   |
 | `pauserRegistry` | `address` | Address of the pauser registry contract |
+| `feedDeployer`   | `address` |                                         |
 
 ### setFeedVerifier
 
@@ -133,6 +151,20 @@ function setFeedVerifier(address feedVerifier) external onlyOwner onlyNonZeroAdd
 | -------------- | --------- | ------------------------------------- |
 | `feedVerifier` | `address` | Address of the feed verifier contract |
 
+### setFeedDeployer
+
+Set the feed deployer
+
+```solidity
+function setFeedDeployer(address feedDeployer) external onlyOwner onlyNonZeroAddress(feedDeployer);
+```
+
+**Parameters**
+
+| Name           | Type      | Description               |
+| -------------- | --------- | ------------------------- |
+| `feedDeployer` | `address` | The feed deployer address |
+
 ### setSupportedFeeds
 
 Set the supported feeds
@@ -147,6 +179,20 @@ function setSupportedFeeds(uint256[] calldata feedIds, bool[] calldata isSupport
 | ------------- | ----------- | ---------------------------------------------------------- |
 | `feedIds`     | `uint256[]` | Array of feed ids                                          |
 | `isSupported` | `bool[]`    | Array of booleans indicating whether the feed is supported |
+
+### addSupportedFeeds
+
+Add supported feeds
+
+```solidity
+function addSupportedFeeds(uint256[] calldata feedIds) external onlyFeedDeployer;
+```
+
+**Parameters**
+
+| Name      | Type        | Description       |
+| --------- | ----------- | ----------------- |
+| `feedIds` | `uint256[]` | Array of feed ids |
 
 ### whitelistPublishers
 
@@ -210,7 +256,7 @@ function updateFeeds(
 Set the pauser registry contract address
 
 ```solidity
-function setPauserRegistry(address pauserRegistry) external onlyOwner;
+function setPauserRegistry(address pauserRegistry) external onlyOwner onlyNonZeroAddress(pauserRegistry);
 ```
 
 **Parameters**
@@ -342,6 +388,20 @@ function getFeedVerifier() external view returns (IEOFeedVerifier);
 | Name     | Type              | Description                           |
 | -------- | ----------------- | ------------------------------------- |
 | `<none>` | `IEOFeedVerifier` | Address of the feed verifier contract |
+
+### getFeedDeployer
+
+Get the feed deployer
+
+```solidity
+function getFeedDeployer() external view returns (address);
+```
+
+**Returns**
+
+| Name     | Type      | Description                  |
+| -------- | --------- | ---------------------------- |
+| `<none>` | `address` | Address of the feed deployer |
 
 ### \_processVerifiedRate
 

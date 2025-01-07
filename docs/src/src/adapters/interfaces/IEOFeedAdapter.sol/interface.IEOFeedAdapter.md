@@ -1,6 +1,6 @@
 # IEOFeedAdapter
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/88beedd8b816225fb92696d7d314b9def6318a7e/src/adapters/interfaces/IEOFeedAdapter.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/6aa770eda8f0c2ec3d6b8a6ee534d020a26eb2db/src/adapters/interfaces/IEOFeedAdapter.sol)
 
 Interface for the EOFeedAdapter contract.
 
@@ -92,4 +92,10 @@ function getAnswer(uint256 roundId) external view returns (int256);
 
 ```solidity
 function getTimestamp(uint256 roundId) external view returns (uint256);
+```
+
+### isPaused
+
+```solidity
+function isPaused() external view returns (bool);
 ```

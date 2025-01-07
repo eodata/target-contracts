@@ -1,6 +1,6 @@
 # IEOFeedManager
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/88beedd8b816225fb92696d7d314b9def6318a7e/src/interfaces/IEOFeedManager.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/6aa770eda8f0c2ec3d6b8a6ee534d020a26eb2db/src/interfaces/IEOFeedManager.sol)
 
 ## Functions
 
@@ -137,6 +137,20 @@ function isSupportedFeed(uint256 feedId) external view returns (bool);
 | -------- | ------ | ------------------------------------------------ |
 | `<none>` | `bool` | Boolean indicating whether the feed is supported |
 
+### getFeedDeployer
+
+Get the feed deployer
+
+```solidity
+function getFeedDeployer() external view returns (address);
+```
+
+**Returns**
+
+| Name     | Type      | Description                  |
+| -------- | --------- | ---------------------------- |
+| `<none>` | `address` | Address of the feed deployer |
+
 ## Events
 
 ### RateUpdated
@@ -171,6 +185,34 @@ event SymbolReplay(uint256 indexed feedId, uint256 rate, uint256 timestamp, uint
 | `rate`            | `uint256` | Price feed value            |
 | `timestamp`       | `uint256` | Price feed timestamp        |
 | `latestTimestamp` | `uint256` | Latest price feed timestamp |
+
+### FeedDeployerSet
+
+_Event emitted when the feed deployer is set_
+
+```solidity
+event FeedDeployerSet(address indexed feedDeployer);
+```
+
+**Parameters**
+
+| Name           | Type      | Description                  |
+| -------------- | --------- | ---------------------------- |
+| `feedDeployer` | `address` | Address of the feed deployer |
+
+### FeedVerifierSet
+
+_Event emitted when the feed verifier is set_
+
+```solidity
+event FeedVerifierSet(address indexed feedVerifier);
+```
+
+**Parameters**
+
+| Name           | Type      | Description                  |
+| -------------- | --------- | ---------------------------- |
+| `feedVerifier` | `address` | Address of the feed verifier |
 
 ## Structs
 
