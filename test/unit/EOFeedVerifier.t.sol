@@ -16,8 +16,7 @@ import {
     CallerIsNotFeedManager,
     InvalidEventRoot,
     ValidatorIndexOutOfBounds,
-    ValidatorSetTooSmall,
-    SenderNotAllowed
+    ValidatorSetTooSmall
 } from "../../src/interfaces/Errors.sol";
 
 contract EOFeedVerifierInitialize is UninitializedFeedVerifier {

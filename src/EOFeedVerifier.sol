@@ -32,7 +32,7 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
     bytes32 public constant DOMAIN = keccak256("EORACLE_FEED_VERIFIER");
 
     /// @dev Minimum number of validators
-    // @audit-info: it was a constant before. what is the reason of making it a variable? we don't have setter for it
+    // @audit-info: it was a constant before. what is the reason of making it a variable? we don't have setter
     uint256 internal _minNumOfValidators;
 
     /// @dev ID of eoracle chain
@@ -81,12 +81,12 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
      * @param owner Owner of the contract
      * @param eoracleChainId_ Chain ID of the eoracle chain
      */
-    function initialize(address owner, IBLS bls, uint256 eoracleChainId) external initializer {
-        if (address(bls) == address(0) || address(bls).code.length == 0) {
+    function initialize(address owner, IBLS bls_, uint256 eoracleChainId_) external initializer {
+        if (address(bls_) == address(0) || address(bls_).code.length == 0) {
             revert InvalidAddress();
         }
-        _eoracleChainId = eoracleChainId;
-        _bls = bls;
+        _eoracleChainId = eoracleChainId_;
+        _bls = bls_;
         _minNumOfValidators = 3;
         __Ownable_init(owner);
     }
@@ -161,10 +161,10 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
     /**
      * @inheritdoc IEOFeedVerifier
      */
-    function setFeedManager(address feedManager) external onlyOwner {
-        if (feedManager == address(0)) revert InvalidAddress();
-        _feedManager = feedManager;
-        emit FeedManagerSet(feedManager);
+    function setFeedManager(address feedManager_) external onlyOwner {
+        if (feedManager_ == address(0)) revert InvalidAddress();
+        _feedManager = feedManager_;
+        emit FeedManagerSet(feedManager_);
     }
 
     /**
