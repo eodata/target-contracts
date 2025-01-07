@@ -108,7 +108,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
      */
     function setFeedVerifier(address feedVerifier) external onlyOwner onlyNonZeroAddress(feedVerifier) {
         _feedVerifier = IEOFeedVerifier(feedVerifier);
-        // @audit-info do we want to add emit FeedVerifierSet(feedVerifier);
+        emit FeedVerifierSet(feedVerifier);
     }
 
     /**
