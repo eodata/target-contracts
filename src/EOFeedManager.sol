@@ -108,7 +108,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
      */
     function setFeedVerifier(address feedVerifier) external onlyOwner onlyNonZeroAddress(feedVerifier) {
         _feedVerifier = IEOFeedVerifier(feedVerifier);
-        emit FeedVerifierSet(feedVerifier);
+        // @audit-info do we want to add emit FeedVerifierSet(feedVerifier);
     }
 
     /**
@@ -197,6 +197,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
      */
     function setPauserRegistry(address pauserRegistry) external onlyOwner onlyNonZeroAddress(pauserRegistry) {
         _pauserRegistry = IPauserRegistry(pauserRegistry);
+        // @audit-info do we want to add emit PauserRegistrySet(pauserRegistry);
     }
 
     /**
