@@ -12,6 +12,7 @@ import {
     MissingLeafInputs,
     FeedNotSupported,
     InvalidInput,
+    InvalidTimestamp,
     CallerIsNotPauser,
     CallerIsNotUnpauser,
     CallerIsNotFeedDeployer
@@ -92,6 +93,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
         external
         onlyNonZeroAddress(feedVerifier)
         onlyNonZeroAddress(feedDeployer)
+        onlyNonZeroAddress(pauserRegistry)
         initializer
     {
         __Ownable_init(owner);
@@ -107,6 +109,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
      */
     function setFeedVerifier(address feedVerifier) external onlyOwner onlyNonZeroAddress(feedVerifier) {
         _feedVerifier = IEOFeedVerifier(feedVerifier);
+        emit FeedVerifierSet(feedVerifier);
     }
 
     /**
@@ -193,7 +196,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
      * @notice Set the pauser registry contract address
      * @param pauserRegistry Address of the pauser registry contract
      */
-    function setPauserRegistry(address pauserRegistry) external onlyOwner {
+    function setPauserRegistry(address pauserRegistry) external onlyOwner onlyNonZeroAddress(pauserRegistry) {
         _pauserRegistry = IPauserRegistry(pauserRegistry);
     }
 
@@ -275,6 +278,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
     function _processVerifiedRate(bytes memory data, uint256 blockNumber) internal {
         (uint256 feedId, uint256 rate, uint256 timestamp) = abi.decode(data, (uint256, uint256, uint256));
         if (!_supportedFeedIds[feedId]) revert FeedNotSupported(feedId);
+        if (timestamp > block.timestamp) revert InvalidTimestamp();
         if (_priceFeeds[feedId].timestamp < timestamp) {
             _priceFeeds[feedId] = PriceFeed(rate, timestamp, blockNumber);
             emit RateUpdated(feedId, rate, timestamp);

@@ -15,17 +15,16 @@ error CallerIsNotFeedDeployer();
 //////////////////////////////////////////////////////////////////////////*/
 error CallerIsNotFeedManager();
 error InvalidInput();
+error InvalidTimestamp();
 error InvalidProof();
 error InvalidAddress();
 error InvalidEventRoot();
 error VotingPowerIsZero();
-error AggVotingPowerIsZero();
 error InsufficientVotingPower();
 error SignatureVerificationFailed();
 error SignaturePairingFailed();
 error ValidatorIndexOutOfBounds();
 error ValidatorSetTooSmall();
-error SenderNotAllowed(address sender);
 
 /*//////////////////////////////////////////////////////////////////////////
                                 EOFeedRegistryAdapter

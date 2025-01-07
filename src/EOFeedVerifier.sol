@@ -10,6 +10,7 @@ import { MerkleProof } from "@openzeppelin/contracts/utils/cryptography/MerklePr
 import {
     CallerIsNotFeedManager,
     InvalidProof,
+    InvalidInput,
     InvalidAddress,
     InvalidEventRoot,
     VotingPowerIsZero,
@@ -30,6 +31,8 @@ import {
 contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
     bytes32 public constant DOMAIN = keccak256("EORACLE_FEED_VERIFIER");
 
+    /// @dev Minimum number of validators
+    // @audit-info: it was a constant before. what is the reason of making it a variable? we don't have setter for it
     uint256 internal _minNumOfValidators;
 
     /// @dev ID of eoracle chain
@@ -78,12 +81,12 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
      * @param owner Owner of the contract
      * @param eoracleChainId_ Chain ID of the eoracle chain
      */
-    function initialize(address owner, IBLS bls_, uint256 eoracleChainId_) external initializer {
-        if (address(bls_) == address(0) || address(bls_).code.length == 0) {
+    function initialize(address owner, IBLS bls, uint256 eoracleChainId) external initializer {
+        if (address(bls) == address(0) || address(bls).code.length == 0) {
             revert InvalidAddress();
         }
-        _eoracleChainId = eoracleChainId_;
-        _bls = bls_;
+        _eoracleChainId = eoracleChainId;
+        _bls = bls;
         _minNumOfValidators = 3;
         __Ownable_init(owner);
     }
@@ -139,6 +142,8 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
         uint256[2] memory apk = [uint256(0), uint256(0)];
 
         for (uint256 i = 0; i < length; i++) {
+            // @audit-info: better to have check for duplicated addresses, since the array with the same
+            // addresses can be passed and the requirement for minNumOfValidators will be met
             if (newValidatorSet[i]._address == address(0)) revert InvalidAddress();
             uint256 votingPower = newValidatorSet[i].votingPower;
             if (votingPower == 0) revert VotingPowerIsZero();
@@ -156,10 +161,10 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
     /**
      * @inheritdoc IEOFeedVerifier
      */
-    function setFeedManager(address feedManager_) external onlyOwner {
-        if (feedManager_ == address(0)) revert InvalidAddress();
-        _feedManager = feedManager_;
-        emit FeedManagerSet(feedManager_);
+    function setFeedManager(address feedManager) external onlyOwner {
+        if (feedManager == address(0)) revert InvalidAddress();
+        _feedManager = feedManager;
+        emit FeedManagerSet(feedManager);
     }
 
     /**
@@ -303,6 +308,7 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
      * @return Array of the leaf data fields of all submitted leaves
      */
     function _verifyLeaves(LeafInput[] calldata inputs, bytes32 eventRoot) internal pure returns (bytes[] memory) {
+        if (inputs.length == 0) revert InvalidInput();
         uint256 length = inputs.length;
         bytes[] memory returnData = new bytes[](length);
         for (uint256 i = 0; i < length; i++) {
