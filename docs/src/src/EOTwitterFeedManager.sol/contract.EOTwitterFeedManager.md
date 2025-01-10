@@ -1,6 +1,6 @@
 # EOTwitterFeedManager
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/6aa770eda8f0c2ec3d6b8a6ee534d020a26eb2db/src/EOTwitterFeedManager.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/badb6375447660efebd9adbe5de6f290257bb3a9/src/EOTwitterFeedManager.sol)
 
 **Inherits:** [IEOTwitterFeedManager](/src/interfaces/IEOTwitterFeedManager.sol/interface.IEOTwitterFeedManager.md),
 OwnableUpgradeable

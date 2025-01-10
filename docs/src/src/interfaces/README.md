@@ -18,6 +18,7 @@
 - [SignaturePairingFailed](Errors.sol/error.SignaturePairingFailed.md)
 - [ValidatorIndexOutOfBounds](Errors.sol/error.ValidatorIndexOutOfBounds.md)
 - [ValidatorSetTooSmall](Errors.sol/error.ValidatorSetTooSmall.md)
+- [DuplicatedAddresses](Errors.sol/error.DuplicatedAddresses.md)
 - [FeedAlreadyExists](Errors.sol/error.FeedAlreadyExists.md)
 - [BaseQuotePairExists](Errors.sol/error.BaseQuotePairExists.md)
 - [FeedDoesNotExist](Errors.sol/error.FeedDoesNotExist.md)

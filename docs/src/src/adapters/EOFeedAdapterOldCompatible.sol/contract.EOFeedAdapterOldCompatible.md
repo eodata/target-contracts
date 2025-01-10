@@ -1,8 +1,10 @@
-# EOFeedAdapter
+# EOFeedAdapterOldCompatible
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/badb6375447660efebd9adbe5de6f290257bb3a9/src/adapters/EOFeedAdapter.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/badb6375447660efebd9adbe5de6f290257bb3a9/src/adapters/EOFeedAdapterOldCompatible.sol)
 
-**Inherits:** [IEOFeedAdapter](/src/adapters/interfaces/IEOFeedAdapter.sol/interface.IEOFeedAdapter.md), Initializable
+**Inherits:**
+[IEOFeedAdapterOldCompatible](/src/adapters/interfaces/IEOFeedAdapterOldCompatible.sol/interface.IEOFeedAdapterOldCompatible.md),
+Initializable
 
 Price feed adapter contract
 
@@ -37,7 +39,7 @@ string private _description;
 _Feed id_
 
 ```solidity
-uint256 private _feedId;
+uint16 private _feedId;
 ```
 
 ### \_inputDecimals
@@ -81,7 +83,7 @@ Initialize the contract
 ```solidity
 function initialize(
     address feedManager,
-    uint256 feedId,
+    uint16 feedId,
     uint8 inputDecimals,
     uint8 outputDecimals,
     string memory feedDescription,
@@ -96,7 +98,7 @@ function initialize(
 | Name              | Type      | Description                              |
 | ----------------- | --------- | ---------------------------------------- |
 | `feedManager`     | `address` | The feed manager address                 |
-| `feedId`          | `uint256` | Feed id                                  |
+| `feedId`          | `uint16`  | Feed id                                  |
 | `inputDecimals`   | `uint8`   | The input decimal precision of the rate  |
 | `outputDecimals`  | `uint8`   | The output decimal precision of the rate |
 | `feedDescription` | `string`  | The description of feed                  |
@@ -281,20 +283,6 @@ function latestRound() external view returns (uint256);
 | Name     | Type      | Description                                |
 | -------- | --------- | ------------------------------------------ |
 | `<none>` | `uint256` | uint256 The round id, eoracle block number |
-
-### isPaused
-
-Get the paused status of the feed
-
-```solidity
-function isPaused() external view returns (bool);
-```
-
-**Returns**
-
-| Name     | Type   | Description            |
-| -------- | ------ | ---------------------- |
-| `<none>` | `bool` | bool The paused status |
 
 ### \_normalizePrice
 

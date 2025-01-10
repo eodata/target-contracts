@@ -1,6 +1,6 @@
 # IEOFeedManager
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/6aa770eda8f0c2ec3d6b8a6ee534d020a26eb2db/src/interfaces/IEOFeedManager.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/badb6375447660efebd9adbe5de6f290257bb3a9/src/interfaces/IEOFeedManager.sol)
 
 ## Functions
 
@@ -213,6 +213,35 @@ event FeedVerifierSet(address indexed feedVerifier);
 | Name           | Type      | Description                  |
 | -------------- | --------- | ---------------------------- |
 | `feedVerifier` | `address` | Address of the feed verifier |
+
+### PauserRegistrySet
+
+_Event emitted when the pauser registry is set_
+
+```solidity
+event PauserRegistrySet(address indexed pauserRegistry);
+```
+
+**Parameters**
+
+| Name             | Type      | Description                    |
+| ---------------- | --------- | ------------------------------ |
+| `pauserRegistry` | `address` | Address of the pauser registry |
+
+### SupportedFeedsUpdated
+
+_Event emitted when the supported feeds are updated_
+
+```solidity
+event SupportedFeedsUpdated(uint256 indexed feedId, bool isSupported);
+```
+
+**Parameters**
+
+| Name          | Type      | Description                                      |
+| ------------- | --------- | ------------------------------------------------ |
+| `feedId`      | `uint256` | Feed id                                          |
+| `isSupported` | `bool`    | Boolean indicating whether the feed is supported |
 
 ## Structs
 

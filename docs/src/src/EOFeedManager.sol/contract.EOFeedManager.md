@@ -1,6 +1,6 @@
 # EOFeedManager
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/6aa770eda8f0c2ec3d6b8a6ee534d020a26eb2db/src/EOFeedManager.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/badb6375447660efebd9adbe5de6f290257bb3a9/src/EOFeedManager.sol)
 
 **Inherits:** [IEOFeedManager](/src/interfaces/IEOFeedManager.sol/interface.IEOFeedManager.md), OwnableUpgradeable,
 PausableUpgradeable
@@ -135,7 +135,7 @@ function initialize(
 | `feedVerifier`   | `address` | Address of the feed verifier contract   |
 | `owner`          | `address` | Owner of the contract                   |
 | `pauserRegistry` | `address` | Address of the pauser registry contract |
-| `feedDeployer`   | `address` |                                         |
+| `feedDeployer`   | `address` | Address of the feed deployer            |
 
 ### setFeedVerifier
 
