@@ -2,16 +2,16 @@
 pragma solidity 0.8.25;
 
 import { IEOFeedManager } from "../interfaces/IEOFeedManager.sol";
-import { IEOFeedAdapterOldCompatible } from "./interfaces/IEOFeedAdapterOldCompatible.sol";
+import { IEOFeedAdapter } from "./interfaces/IEOFeedAdapter.sol";
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-
+import { PausableUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
 import { InvalidAddress } from "../interfaces/Errors.sol";
 
 /**
- * @title EOFeedAdapterOldCompatible
+ * @title EOFeedAdapter
  * @notice Price feed adapter contract
  */
-contract EOFeedAdapterOldCompatible is IEOFeedAdapterOldCompatible, Initializable {
+contract EOFeedAdapterOldCompatible is IEOFeedAdapter, Initializable {
     /// @dev Feed manager contract
     IEOFeedManager private _feedManager;
 
@@ -46,7 +46,7 @@ contract EOFeedAdapterOldCompatible is IEOFeedAdapterOldCompatible, Initializabl
      */
     function initialize(
         address feedManager,
-        uint16 feedId,
+        uint256 feedId,
         uint8 inputDecimals,
         uint8 outputDecimals,
         string memory feedDescription,
@@ -57,7 +57,11 @@ contract EOFeedAdapterOldCompatible is IEOFeedAdapterOldCompatible, Initializabl
     {
         if (feedManager == address(0)) revert InvalidAddress();
         _feedManager = IEOFeedManager(feedManager);
-        _feedId = feedId;
+
+        // safe to downcast because this implementation will be used to support already deployed feeds
+        // with feedId < 65535 (uint16 max value),
+        // moreover which are already initialized, and the method will not be used anymore
+        _feedId = uint16(feedId);
         _outputDecimals = outputDecimals;
         _inputDecimals = inputDecimals;
         uint256 diff = inputDecimals > outputDecimals ? inputDecimals - outputDecimals : outputDecimals - inputDecimals;
@@ -182,6 +186,14 @@ contract EOFeedAdapterOldCompatible is IEOFeedAdapterOldCompatible, Initializabl
     function latestRound() external view returns (uint256) {
         IEOFeedManager.PriceFeed memory priceData = _feedManager.getLatestPriceFeed(_feedId);
         return priceData.eoracleBlockNumber;
+    }
+
+    /**
+     * @notice Get the paused status of the feed
+     * @return bool The paused status
+     */
+    function isPaused() external view returns (bool) {
+        return PausableUpgradeable(address(_feedManager)).paused();
     }
 
     function _normalizePrice(uint256 price) internal view returns (int256) {

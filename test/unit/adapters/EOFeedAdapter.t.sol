@@ -3,6 +3,8 @@ pragma solidity 0.8.25;
 
 import { Test } from "forge-std/Test.sol";
 import { EOFeedAdapter } from "../../../src/adapters/EOFeedAdapter.sol";
+import { IEOFeedAdapter } from "../../../src/adapters/interfaces/IEOFeedAdapter.sol";
+import { EOFeedAdapterOldCompatible } from "../../../src/adapters/EOFeedAdapterOldCompatible.sol";
 import { MockEOFeedManager } from "../../mock/MockEOFeedManager.sol";
 import { IEOFeedManager } from "../../../src/interfaces/IEOFeedManager.sol";
 import { IEOFeedVerifier } from "../../../src/interfaces/IEOFeedVerifier.sol";
@@ -17,12 +19,12 @@ abstract contract EOFeedAdapterTestUninitialized is Test {
     uint8 public constant DECIMALS = 8;
     string public constant DESCRIPTION = "ETH/USD";
     uint256 public constant VERSION = 1;
-    uint256 public constant FEED_ID = 1;
+    uint16 public constant FEED_ID = 1;
     uint256 public constant RATE1 = 100_000_000_000_000_000;
     uint256 public constant RATE2 = 200_000_000_000_000_000;
     address public proxyAdmin = makeAddr("proxyAdmin");
 
-    EOFeedAdapter internal _feedAdapter;
+    IEOFeedAdapter internal _feedAdapter;
     IEOFeedManager internal _feedManager;
     address internal _owner;
     uint256 internal _lastTimestamp;
@@ -274,5 +276,40 @@ contract EOFeedAdapterTest is EOFeedAdapterTestUninitialized {
         _updateFeed(FEED_ID, 12_345_678, block.timestamp);
 
         assertEq(feedAdapter.getAnswer(1), 1_234_567_800);
+    }
+}
+
+abstract contract EOFeedAdapterOldCompatibleTestUninitialized is EOFeedAdapterTestUninitialized {
+    function setUp() public virtual override {
+        _owner = makeAddr("_owner");
+
+        _feedManager = new MockEOFeedManager(address(this));
+        _feedAdapter = EOFeedAdapterOldCompatible(
+            Upgrades.deployTransparentProxy("EOFeedAdapterOldCompatible.sol", proxyAdmin, "")
+        );
+
+        _lastTimestamp = block.timestamp;
+        _lastBlockNumber = uint64(block.number);
+    }
+}
+
+contract EOFeedAdapterOldCompatibleInitializationTest is
+    EOFeedAdapterOldCompatibleTestUninitialized,
+    EOFeedAdapterInitializationTest
+{
+    function setUp()
+        public
+        virtual
+        override(EOFeedAdapterTestUninitialized, EOFeedAdapterOldCompatibleTestUninitialized)
+    {
+        EOFeedAdapterOldCompatibleTestUninitialized.setUp();
+    }
+}
+
+contract EOFeedAdapterOldCompatibleTest is EOFeedAdapterOldCompatibleTestUninitialized, EOFeedAdapterTest {
+    function setUp() public virtual override(EOFeedAdapterOldCompatibleTestUninitialized, EOFeedAdapterTest) {
+        EOFeedAdapterOldCompatibleTestUninitialized.setUp();
+        _feedAdapter.initialize(address(_feedManager), FEED_ID, DECIMALS, DECIMALS, DESCRIPTION, VERSION);
+        _updateFeed(FEED_ID, RATE1, block.timestamp);
     }
 }
