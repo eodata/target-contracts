@@ -18,7 +18,8 @@ import {
     SignatureVerificationFailed,
     SignaturePairingFailed,
     ValidatorIndexOutOfBounds,
-    ValidatorSetTooSmall
+    ValidatorSetTooSmall,
+    DuplicatedAddresses
 } from "./interfaces/Errors.sol";
 
 /**
@@ -30,10 +31,7 @@ import {
  */
 contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
     bytes32 public constant DOMAIN = keccak256("EORACLE_FEED_VERIFIER");
-
-    /// @dev Minimum number of validators
-    // @audit-info it was a constant before. what is the reason of making it a variable? we don't have setter
-    uint256 internal _minNumOfValidators;
+    uint256 public constant MIN_VALIDATORS = 3;
 
     /// @dev ID of eoracle chain
     uint256 internal _eoracleChainId;
@@ -87,7 +85,6 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
         }
         _eoracleChainId = eoracleChainId_;
         _bls = bls_;
-        _minNumOfValidators = 3;
         __Ownable_init(owner);
     }
 
@@ -127,8 +124,8 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
      */
     function setNewValidatorSet(Validator[] calldata newValidatorSet) external onlyOwner {
         uint256 length = newValidatorSet.length;
-        if (length < _minNumOfValidators) revert ValidatorSetTooSmall();
-
+        if (length < MIN_VALIDATORS) revert ValidatorSetTooSmall();
+        if (!_hasNoAddressDuplicates(newValidatorSet)) revert DuplicatedAddresses();
         if (length < _currentValidatorSetLength) {
             for (uint256 i = length; i < _currentValidatorSetLength; i++) {
                 // slither-disable-next-line costly-loop
@@ -142,8 +139,6 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
         uint256[2] memory apk = [uint256(0), uint256(0)];
 
         for (uint256 i = 0; i < length; i++) {
-            // @audit-info it is better to have a check for duplicated addresses, since the array with the same
-            // addresses can be passed and the requirement for minNumOfValidators will be met
             if (newValidatorSet[i]._address == address(0)) revert InvalidAddress();
             uint256 votingPower = newValidatorSet[i].votingPower;
             if (votingPower == 0) revert VotingPowerIsZero();
@@ -350,6 +345,17 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
         }
         // safe to downcast as bitmap[byteNumber] is byte and less than 256
         return uint8(bitmap[byteNumber]) & (1 << bitNumber) > 0;
+    }
+
+    function _hasNoAddressDuplicates(Validator[] calldata validators) private pure returns (bool) {
+        for (uint256 i = 0; i < validators.length; i++) {
+            for (uint256 j = i + 1; j < validators.length; j++) {
+                if (validators[i]._address == validators[j]._address) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     // solhint-disable ordering

@@ -24,6 +24,7 @@ error SignatureVerificationFailed();
 error SignaturePairingFailed();
 error ValidatorIndexOutOfBounds();
 error ValidatorSetTooSmall();
+error DuplicatedAddresses();
 
 /*//////////////////////////////////////////////////////////////////////////
                                 EOFeedRegistryAdapter

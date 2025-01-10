@@ -82,6 +82,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
      * @param feedVerifier Address of the feed verifier contract
      * @param owner Owner of the contract
      * @param pauserRegistry Address of the pauser registry contract
+     * @param feedDeployer Address of the feed deployer
      */
     function initialize(
         address feedVerifier,
@@ -129,6 +130,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
         if (feedIds.length != isSupported.length) revert InvalidInput();
         for (uint256 i = 0; i < feedIds.length; i++) {
             _supportedFeedIds[feedIds[i]] = isSupported[i];
+            emit SupportedFeedsUpdated(feedIds[i], isSupported[i]);
         }
     }
 
@@ -139,6 +141,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
     function addSupportedFeeds(uint256[] calldata feedIds) external onlyFeedDeployer {
         for (uint256 i = 0; i < feedIds.length; i++) {
             _supportedFeedIds[feedIds[i]] = true;
+            emit SupportedFeedsUpdated(feedIds[i], true);
         }
     }
 
@@ -197,7 +200,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
      */
     function setPauserRegistry(address pauserRegistry) external onlyOwner onlyNonZeroAddress(pauserRegistry) {
         _pauserRegistry = IPauserRegistry(pauserRegistry);
-        // @audit-info do we want to add emit PauserRegistrySet(pauserRegistry);
+        emit PauserRegistrySet(pauserRegistry);
     }
 
     /**
@@ -278,7 +281,6 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
     function _processVerifiedRate(bytes memory data, uint256 blockNumber) internal {
         (uint256 feedId, uint256 rate, uint256 timestamp) = abi.decode(data, (uint256, uint256, uint256));
         if (!_supportedFeedIds[feedId]) revert FeedNotSupported(feedId);
-        // @audit-info if (timestamp > block.timestamp) revert InvalidTimestamp();
         if (_priceFeeds[feedId].timestamp < timestamp) {
             _priceFeeds[feedId] = PriceFeed(rate, timestamp, blockNumber);
             emit RateUpdated(feedId, rate, timestamp);

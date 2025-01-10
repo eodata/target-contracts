@@ -16,7 +16,8 @@ import {
     CallerIsNotFeedManager,
     InvalidEventRoot,
     ValidatorIndexOutOfBounds,
-    ValidatorSetTooSmall
+    ValidatorSetTooSmall,
+    DuplicatedAddresses
 } from "../../src/interfaces/Errors.sol";
 
 contract EOFeedVerifierInitialize is UninitializedFeedVerifier {
@@ -171,6 +172,12 @@ contract EOFeedVerifierTest is InitializedFeedVerifier {
     function test_RevertWhen_ZeroAddress_SetNewValidatorSet() public {
         validatorSet[0]._address = address(0);
         vm.expectRevert(InvalidAddress.selector);
+        feedVerifier.setNewValidatorSet(validatorSet);
+    }
+
+    function test_RevertWhen_DuplicatedAddresses_SetNewValidatorSet() public {
+        validatorSet[0]._address = validatorSet[1]._address;
+        vm.expectRevert(DuplicatedAddresses.selector);
         feedVerifier.setNewValidatorSet(validatorSet);
     }
 

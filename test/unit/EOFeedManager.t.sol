@@ -42,6 +42,7 @@ contract EOFeedManagerTest is Test, Utils {
 
     event RateUpdated(uint256 indexed feedId, uint256 rate, uint256 timestamp);
     event SymbolReplay(uint256 indexed feedId, uint256 rate, uint256 timestamp, uint256 latestTimestamp);
+    event SupportedFeedsUpdated(uint256 indexed feedId, bool isSupported);
 
     function setUp() public {
         verifier = new MockFeedVerifier();
@@ -131,11 +132,14 @@ contract EOFeedManagerTest is Test, Utils {
             isSupported[i] = true;
         }
         vm.prank(owner);
+        vm.expectEmit();
+        emit SupportedFeedsUpdated(feedIds[0], true);
         registry.setSupportedFeeds(feedIds, isSupported);
         for (uint256 i = 0; i < 5; i++) {
             assert(registry.isSupportedFeed(feedIds[i]));
         }
         assertEq(registry.isSupportedFeed(6), false);
+        //expect event to be emitted
     }
 
     function test_RevertWhen_NotDeployer_AddSupportedFeeds() public {

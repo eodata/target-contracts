@@ -2,16 +2,16 @@
 pragma solidity 0.8.25;
 
 import { IEOFeedManager } from "../interfaces/IEOFeedManager.sol";
-import { IEOFeedAdapterV2 } from "./interfaces/IEOFeedAdapterV2.sol";
+import { IEOFeedAdapterOldCompatible } from "./interfaces/IEOFeedAdapterOldCompatible.sol";
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
 import { InvalidAddress } from "../interfaces/Errors.sol";
 
 /**
- * @title EOFeedAdapterV2
+ * @title EOFeedAdapterOldCompatible
  * @notice Price feed adapter contract
  */
-contract EOFeedAdapterV2 is IEOFeedAdapterV2, Initializable {
+contract EOFeedAdapterOldCompatible is IEOFeedAdapterOldCompatible, Initializable {
     /// @dev Feed manager contract
     IEOFeedManager private _feedManager;
 
