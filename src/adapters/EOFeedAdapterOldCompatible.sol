@@ -8,8 +8,8 @@ import { PausableUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/P
 import { InvalidAddress } from "../interfaces/Errors.sol";
 
 /**
- * @title EOFeedAdapter
- * @notice Price feed adapter contract
+ * @title EOFeedAdapterOldCompatible
+ * @notice Price feed adapter contract compatible with old EOFeedManager
  */
 contract EOFeedAdapterOldCompatible is IEOFeedAdapter, Initializable {
     /// @dev Feed manager contract
@@ -196,6 +196,11 @@ contract EOFeedAdapterOldCompatible is IEOFeedAdapter, Initializable {
         return PausableUpgradeable(address(_feedManager)).paused();
     }
 
+    /**
+     * @notice Normalize the price to the output decimals
+     * @param price The price to normalize
+     * @return int256 The normalized price
+     */
     function _normalizePrice(uint256 price) internal view returns (int256) {
         if (_inputDecimals > _outputDecimals) {
             return int256(price) / _decimalsDiff;

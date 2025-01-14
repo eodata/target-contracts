@@ -347,6 +347,11 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
         return uint8(bitmap[byteNumber]) & (1 << bitNumber) > 0;
     }
 
+    /**
+     * @dev Checks if there are no duplicate addresses in the validator set.
+     * @param validators The array of validators to check for duplicates.
+     * @return bool True if there are no duplicate addresses, false otherwise.
+     */
     function _hasNoAddressDuplicates(Validator[] calldata validators) private pure returns (bool) {
         for (uint256 i = 0; i < validators.length; i++) {
             for (uint256 j = i + 1; j < validators.length; j++) {
