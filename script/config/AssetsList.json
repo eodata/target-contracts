@@ -817,12 +817,12 @@
       "outputDecimals": 8
     },
     {
+      "feedId": 112, 
+      "description": "inwstETHs/wstETH"
       "base": "0x8E0789d39db454DBE9f4a77aCEF6dc7c69f6D552",
       "quote": "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
-      "feedId": 112,
       "inputDecimals": 18,
-      "outputDecimals": 18,
-      "description": "inwstETHs/wstETH"
+      "outputDecimals": 18
     }
   ]
 }
