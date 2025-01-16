@@ -40,7 +40,6 @@ abstract contract UninitializedFeedVerifier is Test, Utils {
         uint256[4] apkG2_3;
     }
 
-    uint256 public eoracleChainId = 1;
     address public constant EOCHAIN_SENDER = 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266;
 
     EOFeedVerifier public feedVerifier;
@@ -196,7 +195,7 @@ abstract contract InitializedFeedVerifier is UninitializedFeedVerifier {
     function setUp() public virtual override {
         super.setUp();
 
-        feedVerifier.initialize(address(this), bls, eoracleChainId);
+        feedVerifier.initialize(address(this), bls);
         feedVerifier.setNewValidatorSet(validatorSet);
         feedVerifier.setFeedManager(address(this));
     }

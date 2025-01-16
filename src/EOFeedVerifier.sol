@@ -33,9 +33,6 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
     bytes32 public constant DOMAIN = keccak256("EORACLE_FEED_VERIFIER");
     uint256 public constant MIN_VALIDATORS = 3;
 
-    /// @dev ID of eoracle chain
-    uint256 internal _eoracleChainId;
-
     /// @dev BLS library contract
     IBLS internal _bls;
 
@@ -77,13 +74,11 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
 
     /**
      * @param owner Owner of the contract
-     * @param eoracleChainId_ Chain ID of the eoracle chain
      */
-    function initialize(address owner, IBLS bls_, uint256 eoracleChainId_) external initializer {
+    function initialize(address owner, IBLS bls_) external initializer {
         if (address(bls_) == address(0) || address(bls_).code.length == 0) {
             revert InvalidAddress();
         }
-        _eoracleChainId = eoracleChainId_;
         _bls = bls_;
         __Ownable_init(owner);
     }
@@ -160,14 +155,6 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
         if (feedManager_ == address(0)) revert InvalidAddress();
         _feedManager = feedManager_;
         emit FeedManagerSet(feedManager_);
-    }
-
-    /**
-     * @notice Returns the ID of the eoracle chain.
-     * @return The eoracle chain ID.
-     */
-    function eoracleChainId() external view returns (uint256) {
-        return _eoracleChainId;
     }
 
     /**

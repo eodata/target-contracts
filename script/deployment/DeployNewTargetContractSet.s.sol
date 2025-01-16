@@ -41,10 +41,6 @@ contract DeployNewTargetContractSet is FeedVerifierDeployer, FeedManagerDeployer
 
         require(configStructured.targetChainId == block.chainid, "Wrong chain id for this config.");
 
-        require(
-            configStructured.eoracleChainId == vm.envUint("EORACLE_CHAIN_ID"), "Wrong EORACLE_CHAIN_ID for this config."
-        );
-
         string memory outputConfig = EOJsonUtils.initOutputConfig();
         address timelock = outputConfig.readAddress(".timelock");
 
@@ -59,7 +55,7 @@ contract DeployNewTargetContractSet is FeedVerifierDeployer, FeedManagerDeployer
         /*//////////////////////////////////////////////////////////////////////////
                                         EOFeedVerifier
         //////////////////////////////////////////////////////////////////////////*/
-        feedVerifierProxy = deployFeedVerifier(timelock, broadcastFrom, IBLS(bls), configStructured.eoracleChainId);
+        feedVerifierProxy = deployFeedVerifier(timelock, broadcastFrom, IBLS(bls));
         EOJsonUtils.OUTPUT_CONFIG.serialize("feedVerifier", feedVerifierProxy);
 
         address implementationAddress = Upgrades.getImplementationAddress(feedVerifierProxy);
