@@ -40,6 +40,25 @@ interface IEOFeedManager {
     event FeedDeployerSet(address indexed feedDeployer);
 
     /**
+     * @dev Event emitted when the feed verifier is set
+     * @param feedVerifier Address of the feed verifier
+     */
+    event FeedVerifierSet(address indexed feedVerifier);
+
+    /**
+     * @dev Event emitted when the pauser registry is set
+     * @param pauserRegistry Address of the pauser registry
+     */
+    event PauserRegistrySet(address indexed pauserRegistry);
+
+    /**
+     * @dev Event emitted when the supported feeds are updated
+     * @param feedId Feed id
+     * @param isSupported Boolean indicating whether the feed is supported
+     */
+    event SupportedFeedsUpdated(uint256 indexed feedId, bool isSupported);
+
+    /**
      * @notice Update the price for a feed
      * @param input A merkle leaf containing price data and its merkle proof
      * @param vParams Verification parameters

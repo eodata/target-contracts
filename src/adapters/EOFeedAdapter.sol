@@ -192,6 +192,11 @@ contract EOFeedAdapter is IEOFeedAdapter, Initializable {
         return PausableUpgradeable(address(_feedManager)).paused();
     }
 
+    /**
+     * @notice Normalize the price to the output decimals
+     * @param price The price to normalize
+     * @return int256 The normalized price
+     */
     function _normalizePrice(uint256 price) internal view returns (int256) {
         if (_inputDecimals > _outputDecimals) {
             return int256(price) / _decimalsDiff;

@@ -82,6 +82,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
      * @param feedVerifier Address of the feed verifier contract
      * @param owner Owner of the contract
      * @param pauserRegistry Address of the pauser registry contract
+     * @param feedDeployer Address of the feed deployer
      */
     function initialize(
         address feedVerifier,
@@ -92,6 +93,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
         external
         onlyNonZeroAddress(feedVerifier)
         onlyNonZeroAddress(feedDeployer)
+        onlyNonZeroAddress(pauserRegistry)
         initializer
     {
         __Ownable_init(owner);
@@ -107,6 +109,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
      */
     function setFeedVerifier(address feedVerifier) external onlyOwner onlyNonZeroAddress(feedVerifier) {
         _feedVerifier = IEOFeedVerifier(feedVerifier);
+        emit FeedVerifierSet(feedVerifier);
     }
 
     /**
@@ -127,6 +130,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
         if (feedIds.length != isSupported.length) revert InvalidInput();
         for (uint256 i = 0; i < feedIds.length; i++) {
             _supportedFeedIds[feedIds[i]] = isSupported[i];
+            emit SupportedFeedsUpdated(feedIds[i], isSupported[i]);
         }
     }
 
@@ -137,6 +141,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
     function addSupportedFeeds(uint256[] calldata feedIds) external onlyFeedDeployer {
         for (uint256 i = 0; i < feedIds.length; i++) {
             _supportedFeedIds[feedIds[i]] = true;
+            emit SupportedFeedsUpdated(feedIds[i], true);
         }
     }
 
@@ -193,8 +198,9 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
      * @notice Set the pauser registry contract address
      * @param pauserRegistry Address of the pauser registry contract
      */
-    function setPauserRegistry(address pauserRegistry) external onlyOwner {
+    function setPauserRegistry(address pauserRegistry) external onlyOwner onlyNonZeroAddress(pauserRegistry) {
         _pauserRegistry = IPauserRegistry(pauserRegistry);
+        emit PauserRegistrySet(pauserRegistry);
     }
 
     /**

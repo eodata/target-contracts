@@ -8,3 +8,4 @@
 - [libraries](/src/libraries)
 - [EOFeedManager](EOFeedManager.sol/contract.EOFeedManager.md)
 - [EOFeedVerifier](EOFeedVerifier.sol/contract.EOFeedVerifier.md)
+- [EOTwitterFeedManager](EOTwitterFeedManager.sol/contract.EOTwitterFeedManager.md)

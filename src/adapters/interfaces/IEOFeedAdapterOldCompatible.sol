@@ -6,7 +6,7 @@ pragma solidity 0.8.25;
  * @notice Interface for the EOFeedAdapter contract.
  * @dev compatible of AggregatorV3Interface from CL.
  */
-interface IEOFeedAdapterV2 {
+interface IEOFeedAdapterOldCompatible {
     // slither-disable-next-line missing-inheritance
     function initialize(
         address feedManager,

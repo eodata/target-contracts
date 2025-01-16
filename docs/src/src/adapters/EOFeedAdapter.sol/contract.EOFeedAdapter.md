@@ -1,6 +1,6 @@
 # EOFeedAdapter
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/88beedd8b816225fb92696d7d314b9def6318a7e/src/adapters/EOFeedAdapter.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/badb6375447660efebd9adbe5de6f290257bb3a9/src/adapters/EOFeedAdapter.sol)
 
 **Inherits:** [IEOFeedAdapter](/src/adapters/interfaces/IEOFeedAdapter.sol/interface.IEOFeedAdapter.md), Initializable
 
@@ -281,6 +281,20 @@ function latestRound() external view returns (uint256);
 | Name     | Type      | Description                                |
 | -------- | --------- | ------------------------------------------ |
 | `<none>` | `uint256` | uint256 The round id, eoracle block number |
+
+### isPaused
+
+Get the paused status of the feed
+
+```solidity
+function isPaused() external view returns (bool);
+```
+
+**Returns**
+
+| Name     | Type   | Description            |
+| -------- | ------ | ---------------------- |
+| `<none>` | `bool` | bool The paused status |
 
 ### \_normalizePrice
 
