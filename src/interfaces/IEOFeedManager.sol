@@ -2,8 +2,11 @@
 pragma solidity 0.8.25;
 
 import { IEOFeedVerifier } from "./IEOFeedVerifier.sol";
+import { IPauserRegistry } from "eigenlayer-contracts/interfaces/IPauserRegistry.sol";
 
 interface IEOFeedManager {
+    /* ============ Structs ============ */
+
     /**
      * @dev Price feed structure
      * @param value Price feed value
@@ -15,6 +18,8 @@ interface IEOFeedManager {
         uint256 timestamp;
         uint256 eoracleBlockNumber;
     }
+
+    /* ============ Events ============ */
 
     /**
      * @dev Event emitted when a price feed is updated
@@ -57,6 +62,15 @@ interface IEOFeedManager {
      * @param isSupported Boolean indicating whether the feed is supported
      */
     event SupportedFeedsUpdated(uint256 indexed feedId, bool isSupported);
+
+    /**
+     * @dev Event emitted when a publisher is whitelisted
+     * @param publisher Address of the publisher
+     * @param isWhitelisted Boolean indicating whether the publisher is whitelisted
+     */
+    event PublisherWhitelisted(address indexed publisher, bool isWhitelisted);
+
+    /* ============ External Functions ============ */
 
     /**
      * @notice Update the price for a feed
@@ -120,4 +134,16 @@ interface IEOFeedManager {
      * @return Address of the feed deployer
      */
     function getFeedDeployer() external view returns (address);
+
+    /**
+     * @notice Get the feed verifier contract address
+     * @return Address of the feed verifier contract
+     */
+    function getFeedVerifier() external view returns (IEOFeedVerifier);
+
+    /**
+     * @notice Get the pauser registry contract address
+     * @return Address of the pauser registry contract
+     */
+    function getPauserRegistry() external view returns (IPauserRegistry);
 }
