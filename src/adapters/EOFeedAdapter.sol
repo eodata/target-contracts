@@ -205,8 +205,12 @@ contract EOFeedAdapter is IEOFeedAdapter, Initializable {
         }
     }
 
+    /**
+     * @dev Gap for future storage variables in upgradeable contract.
+     * See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps
+     */
     // solhint-disable ordering
     // slither-disable-next-line unused-state,naming-convention
-    uint256[50] private __gap;
+    uint256[48] private __gap;
     // solhint-disable ordering
 }
