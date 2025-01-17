@@ -23,7 +23,7 @@ import {
 } from "./interfaces/Errors.sol";
 
 /**
- * @title EOFeedManager
+ * @title EOFeedVerifier
  * @notice The EOFeedVerifier contract handles the verification of update payloads. The payload includes a Merkle root
  * signed by eoracle validators and a Merkle path to the leaf containing the data. The verifier stores the current
  * validator set in its storage and ensures that the Merkle root is signed by a subset of this validator set with
@@ -57,6 +57,7 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
     /// @dev address of the feed manager
     address internal _feedManager;
 
+    /// @dev full apk of the current validator set
     uint256[2] internal _fullApk;
 
     /* ============ Modifiers ============ */
@@ -123,7 +124,8 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
     }
 
     /**
-     * @inheritdoc IEOFeedVerifier
+     * @notice Function to set a new validator set
+     * @param newValidatorSet The new validator set to store
      */
     function setNewValidatorSet(Validator[] calldata newValidatorSet) external onlyOwner {
         uint256 length = newValidatorSet.length;
@@ -157,12 +159,24 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
     }
 
     /**
-     * @inheritdoc IEOFeedVerifier
+     * @notice Sets the address of the feed manager.
+     * @param feedManager_ The address of the new feed manager.
      */
     function setFeedManager(address feedManager_) external onlyOwner {
         if (feedManager_ == address(0)) revert InvalidAddress();
         _feedManager = feedManager_;
         emit FeedManagerSet(feedManager_);
+    }
+
+    /**
+     * @notice Set the BLS contract
+     * @param bls_ Address of the BLS contract
+     */
+    function setBLS(IBLS bls_) external onlyOwner {
+        if (address(bls_) == address(0) || address(bls_).code.length == 0) {
+            revert InvalidAddress();
+        }
+        _bls = bls_;
     }
 
     /**

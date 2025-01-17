@@ -96,16 +96,4 @@ interface IEOFeedVerifier {
     )
         external
         returns (bytes[] memory);
-
-    /**
-     * @notice Function to set a new validator set
-     * @param newValidatorSet The new validator set to store
-     */
-    function setNewValidatorSet(Validator[] calldata newValidatorSet) external;
-
-    /**
-     * @notice Sets the address of the feed manager.
-     * @param feedManager_ The address of the new feed manager.
-     */
-    function setFeedManager(address feedManager_) external;
 }
