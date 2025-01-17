@@ -104,14 +104,17 @@ interface IEOFeedManager {
     /**
      * @notice Get the latest price for a feed
      * @param feedId Feed id
-     * @return PriceFeed struct
+     * @return The latest price feed data containing:
+     *         - value: The price feed value
+     *         - timestamp: The timestamp when the price was aggregated
+     *         - eoracleBlockNumber: The eoracle block number when the price was recorded
      */
     function getLatestPriceFeed(uint256 feedId) external view returns (PriceFeed memory);
 
     /**
      * @notice Get the latest price feeds for multiple feeds
      * @param feedIds Array of feed ids
-     * @return Array of PriceFeed structs
+     * @return Array of PriceFeed structs corresponding to each requested feed ID
      */
     function getLatestPriceFeeds(uint256[] calldata feedIds) external view returns (PriceFeed[] memory);
 

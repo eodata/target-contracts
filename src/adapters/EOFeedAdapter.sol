@@ -21,9 +21,10 @@ contract EOFeedAdapter is IEOFeedAdapter, Initializable {
     /// @dev Feed description
     string private _description;
 
-    // next 2 variables will be packed in 1 slot
     /// @dev Feed id
     uint256 private _feedId;
+
+    /// @dev the next 2 variables will be packed in 1 slot
 
     /// @dev The input decimals of the rate
     uint8 private _inputDecimals;
