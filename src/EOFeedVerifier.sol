@@ -59,6 +59,8 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
 
     uint256[2] internal _fullApk;
 
+    /* ============ Modifiers ============ */
+
     /**
      * @dev Allows only the feed manager to call the function
      */
@@ -67,10 +69,14 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
         _;
     }
 
+    /* ============ Constructor ============ */
+
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         _disableInitializers();
     }
+
+    /* ============ Initializer ============ */
 
     /**
      * @param owner Owner of the contract
@@ -82,6 +88,8 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
         _bls = bls_;
         __Ownable_init(owner);
     }
+
+    /* ============ External Functions ============ */
 
     /**
      * @inheritdoc IEOFeedVerifier
@@ -218,6 +226,8 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
     function bls() external view returns (IBLS) {
         return _bls;
     }
+
+    /* ============ Internal Functions ============ */
 
     /**
      * @notice Function to verify the checkpoint signature

@@ -25,15 +25,23 @@ contract EOFeedAdapterOldCompatible is IEOFeedAdapter, Initializable {
     /// @dev Feed id
     uint16 private _feedId;
 
-    /// @dev Decimals of the rate
+    /// @dev The input decimals of the rate
     uint8 private _inputDecimals;
+
+    /// @dev The output decimals of the rate
     uint8 private _outputDecimals;
+
+    /// @dev The decimals difference between input and output decimals
     int256 private _decimalsDiff;
+
+    /* ============ Constructor ============ */
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         _disableInitializers();
     }
+
+    /* ============ Initializer ============ */
 
     /**
      * @notice Initialize the contract
@@ -69,6 +77,8 @@ contract EOFeedAdapterOldCompatible is IEOFeedAdapter, Initializable {
         _description = feedDescription;
         _version = feedVersion;
     }
+
+    /* ============ External Functions ============ */
 
     /**
      * @notice Get the price for the round
@@ -196,6 +206,8 @@ contract EOFeedAdapterOldCompatible is IEOFeedAdapter, Initializable {
         return PausableUpgradeable(address(_feedManager)).paused();
     }
 
+    /* ============ Internal Functions ============ */
+
     /**
      * @notice Normalize the price to the output decimals
      * @param price The price to normalize
@@ -209,6 +221,10 @@ contract EOFeedAdapterOldCompatible is IEOFeedAdapter, Initializable {
         }
     }
 
+    /**
+     * @dev Gap for future storage variables in upgradeable contract.
+     * See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps
+     */
     // solhint-disable ordering
     // slither-disable-next-line unused-state,naming-convention
     uint256[48] private __gap;

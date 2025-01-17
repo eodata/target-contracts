@@ -279,6 +279,8 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
         return _pauserRegistry;
     }
 
+    /* ============ Internal Functions ============ */
+
     /**
      * @notice Process the verified feed data, validate it and store it. If the timestamp is newer than the
      *  existing timestamp, updates the price feed and emits RateUpdated. Otherwise emits SymbolReplay without updating.

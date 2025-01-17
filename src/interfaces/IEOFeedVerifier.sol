@@ -2,6 +2,8 @@
 pragma solidity 0.8.25;
 
 interface IEOFeedVerifier {
+    /* ============ Structs ============ */
+
     /**
      * @dev Leaf input structure
      * @param leafIndex Index of the leaf
@@ -50,6 +52,8 @@ interface IEOFeedVerifier {
         uint256 votingPower;
     }
 
+    /* ============ Events ============ */
+
     /**
      * @dev Event emitted when the validator set is updated
      * @param currentValidatorSetLength Length of the current validator set
@@ -65,6 +69,8 @@ interface IEOFeedVerifier {
      * @param feedManager Address of the feed manager
      */
     event FeedManagerSet(address feedManager);
+
+    /* ============ External Functions ============ */
 
     /**
      * @notice verify single leaf signature from a block merkle tree
