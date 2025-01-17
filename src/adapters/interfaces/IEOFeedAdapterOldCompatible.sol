@@ -3,6 +3,7 @@ pragma solidity 0.8.25;
 
 /**
  * @title IEOFeedAdapter
+ * @author eOracle
  * @notice Interface for the EOFeedAdapter contract.
  * @dev compatible of AggregatorV3Interface from CL.
  */

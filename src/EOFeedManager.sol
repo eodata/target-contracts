@@ -19,6 +19,7 @@ import {
 
 /**
  * @title EOFeedManager
+ * @author eOracle
  * @notice The EOFeedManager contract is responsible for receiving feed updates from whitelisted publishers. These
  * updates are verified using the logic in the EOFeedVerifier. Upon successful verification, the feed data is stored in
  * the EOFeedManager and made available for other smart contracts to read. Only supported feed IDs can be published to

@@ -9,6 +9,7 @@ import { InvalidAddress } from "../interfaces/Errors.sol";
 
 /**
  * @title EOFeedAdapterOldCompatible
+ * @author eOracle
  * @notice Price feed adapter contract compatible with old EOFeedManager
  */
 contract EOFeedAdapterOldCompatible is IEOFeedAdapter, Initializable {

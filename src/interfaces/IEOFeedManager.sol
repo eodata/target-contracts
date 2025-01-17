@@ -4,6 +4,10 @@ pragma solidity 0.8.25;
 import { IEOFeedVerifier } from "./IEOFeedVerifier.sol";
 import { IPauserRegistry } from "eigenlayer-contracts/interfaces/IPauserRegistry.sol";
 
+/**
+ * @title IEOFeedManager
+ * @author eOracle
+ */
 interface IEOFeedManager {
     /* ============ Structs ============ */
 

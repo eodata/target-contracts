@@ -9,7 +9,11 @@ import { InvalidAddress } from "../interfaces/Errors.sol";
 
 /**
  * @title EOFeedAdapter
- * @notice Price feed adapter contract
+ * @author eOracle
+ * @notice EOFeedAdapter is a contract that provides a standardized interface for accessing feed data
+ * from the eOracle system. It acts as a compatibility layer between eOracle's native feed format and
+ * the widely-used AggregatorV3Interface format.
+ * @dev compatible with AggregatorV3Interface.
  */
 contract EOFeedAdapter is IEOFeedAdapter, Initializable {
     /// @dev Feed manager contract

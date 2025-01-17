@@ -1,11 +1,15 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.25;
 
+/**
+ * @title IEOFeedVerifier
+ * @author eOracle
+ */
 interface IEOFeedVerifier {
     /* ============ Structs ============ */
 
     /**
-     * @dev Leaf input structure
+     * @dev Input data for leaf verification
      * @param leafIndex Index of the leaf
      * @param unhashedLeaf Unhashed leaf data
      *         abi encoded (uint256 id, address sender, address receiver, bytes memory data)
@@ -38,11 +42,10 @@ interface IEOFeedVerifier {
     }
 
     /**
-     * @notice consider adding a small gap for future fields to ease upgrades in the future.
-     * @dev Validator structure
-     * @param _address validator address
+     * @notice Represents a validator in the system
+     * @param _address The validator's address
      * @param g1pk validator G1 public key
-     * @param g2pk validator G2 public key (not used for now but good to have it)
+     * @param g2pk validator G2 public key (not used in current implementation)
      * @param votingPower Validator voting power
      */
     struct Validator {

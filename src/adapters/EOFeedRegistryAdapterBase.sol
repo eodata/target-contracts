@@ -17,6 +17,7 @@ import {
 
 /**
  * @title EOFeedRegistryAdapterBase
+ * @author eOracle
  * @notice base contract which is adapter of EOFeedManager contract for CL FeedManager
  */
 abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactoryBase, IEOFeedRegistryAdapter {
