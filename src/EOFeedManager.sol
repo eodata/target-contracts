@@ -19,6 +19,7 @@ import {
 
 /**
  * @title EOFeedManager
+ * @author eOracle
  * @notice The EOFeedManager contract is responsible for receiving feed updates from whitelisted publishers. These
  * updates are verified using the logic in the EOFeedVerifier. Upon successful verification, the feed data is stored in
  * the EOFeedManager and made available for other smart contracts to read. Only supported feed IDs can be published to
@@ -43,6 +44,8 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
 
     /// @dev Address of the feed deployer
     address internal _feedDeployer;
+
+    /* ============ Modifiers ============ */
 
     /// @dev Allows only whitelisted publishers to call the function
     modifier onlyWhitelisted() {
@@ -71,10 +74,14 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
         _;
     }
 
+    /* ============ Constructor ============ */
+
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         _disableInitializers();
     }
+
+    /* ============ Initializer ============ */
 
     /**
      * @notice Initialize the contract with the feed verifier address
@@ -102,6 +109,8 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
         _pauserRegistry = IPauserRegistry(pauserRegistry);
         _feedDeployer = feedDeployer;
     }
+
+    /* ============ External Functions ============ */
 
     /**
      * @notice Set the feed verifier contract address
@@ -153,6 +162,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
         for (uint256 i = 0; i < publishers.length; i++) {
             if (publishers[i] == address(0)) revert InvalidAddress();
             _whitelistedPublishers[publishers[i]] = isWhitelisted[i];
+            emit PublisherWhitelisted(publishers[i], isWhitelisted[i]);
         }
     }
 
@@ -218,14 +228,6 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
     }
 
     /**
-     * @notice Get the pauser registry contract address
-     * @return Address of the pauser registry contract
-     */
-    function getPauserRegistry() external view returns (IPauserRegistry) {
-        return _pauserRegistry;
-    }
-
-    /**
      * @inheritdoc IEOFeedManager
      */
     function getLatestPriceFeed(uint256 feedId) external view returns (PriceFeed memory) {
@@ -258,24 +260,32 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
     }
 
     /**
-     * @notice Get the feed verifier contract address
-     * @return Address of the feed verifier contract
-     */
-    function getFeedVerifier() external view returns (IEOFeedVerifier) {
-        return _feedVerifier;
-    }
-
-    /**
-     * @notice Get the feed deployer
-     * @return Address of the feed deployer
+     * @inheritdoc IEOFeedManager
      */
     function getFeedDeployer() external view returns (address) {
         return _feedDeployer;
     }
 
     /**
-     * @notice Process the verified rate, check and save it
-     * @param data Verified rate data, abi encoded (uint256 feedId, uint256 rate, uint256 timestamp)
+     * @inheritdoc IEOFeedManager
+     */
+    function getFeedVerifier() external view returns (IEOFeedVerifier) {
+        return _feedVerifier;
+    }
+
+    /**
+     * @inheritdoc IEOFeedManager
+     */
+    function getPauserRegistry() external view returns (IPauserRegistry) {
+        return _pauserRegistry;
+    }
+
+    /* ============ Internal Functions ============ */
+
+    /**
+     * @notice Process the verified feed data, validate it and store it. If the timestamp is newer than the
+     *  existing timestamp, updates the price feed and emits RateUpdated. Otherwise emits SymbolReplay without updating.
+     * @param data verified feed data, abi encoded (uint256 feedId, uint256 rate, uint256 timestamp)
      * @param blockNumber eoracle chain block number
      */
     function _processVerifiedRate(bytes memory data, uint256 blockNumber) internal {
@@ -299,6 +309,10 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
         return _priceFeeds[feedId];
     }
 
+    /**
+     * @dev Gap for future storage variables in upgradeable contract.
+     * See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps
+     */
     // solhint-disable ordering
     // slither-disable-next-line unused-state,naming-convention
     uint256[50] private __gap;

@@ -9,7 +9,11 @@ import { InvalidAddress } from "../interfaces/Errors.sol";
 
 /**
  * @title EOFeedAdapter
- * @notice Price feed adapter contract
+ * @author eOracle
+ * @notice EOFeedAdapter is a contract that provides a standardized interface for accessing feed data
+ * from the eOracle system. It acts as a compatibility layer between eOracle's native feed format and
+ * the widely-used AggregatorV3Interface format.
+ * @dev compatible with AggregatorV3Interface.
  */
 contract EOFeedAdapter is IEOFeedAdapter, Initializable {
     /// @dev Feed manager contract
@@ -21,19 +25,28 @@ contract EOFeedAdapter is IEOFeedAdapter, Initializable {
     /// @dev Feed description
     string private _description;
 
-    // next 2 variables will be packed in 1 slot
     /// @dev Feed id
     uint256 private _feedId;
 
-    /// @dev Decimals of the rate
+    /// @dev the next 2 variables will be packed in 1 slot
+
+    /// @dev The input decimals of the rate
     uint8 private _inputDecimals;
+
+    /// @dev The output decimals of the rate
     uint8 private _outputDecimals;
+
+    /// @dev The decimals difference between input and output decimals
     int256 private _decimalsDiff;
+
+    /* ============ Constructor ============ */
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         _disableInitializers();
     }
+
+    /* ============ Initializer ============ */
 
     /**
      * @notice Initialize the contract
@@ -65,6 +78,8 @@ contract EOFeedAdapter is IEOFeedAdapter, Initializable {
         _description = feedDescription;
         _version = feedVersion;
     }
+
+    /* ============ External Functions ============ */
 
     /**
      * @notice Get the price for the round
@@ -192,6 +207,8 @@ contract EOFeedAdapter is IEOFeedAdapter, Initializable {
         return PausableUpgradeable(address(_feedManager)).paused();
     }
 
+    /* ============ Internal Functions ============ */
+
     /**
      * @notice Normalize the price to the output decimals
      * @param price The price to normalize
@@ -205,8 +222,12 @@ contract EOFeedAdapter is IEOFeedAdapter, Initializable {
         }
     }
 
+    /**
+     * @dev Gap for future storage variables in upgradeable contract.
+     * See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps
+     */
     // solhint-disable ordering
     // slither-disable-next-line unused-state,naming-convention
-    uint256[50] private __gap;
+    uint256[48] private __gap;
     // solhint-disable ordering
 }

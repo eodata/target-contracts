@@ -6,6 +6,7 @@ import { EOFeedRegistryAdapterBase } from "./EOFeedRegistryAdapterBase.sol";
 
 /**
  * @title EOFeedRegistryAdapterClone
+ * @author eOracle
  * @notice The adapter of EOFeedManager contract for CL FeedRegistry
  * @dev This contract uses the clone pattern for deploying EOFeedAdapter instances
  */

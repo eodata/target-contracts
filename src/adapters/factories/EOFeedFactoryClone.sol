@@ -6,7 +6,10 @@ import { Clones } from "@openzeppelin/contracts/proxy/Clones.sol";
 import { EOFeedFactoryBase } from "./EOFeedFactoryBase.sol";
 
 abstract contract EOFeedFactoryClone is Initializable, EOFeedFactoryBase {
+    /// @dev The address of the feed adapter implementation
     address private _feedImplementation;
+
+    /* ============ External Functions ============ */
 
     /**
      * @dev Returns the address of the feedAdapter implementation.

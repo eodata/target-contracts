@@ -9,7 +9,7 @@ import { FeedVerifierDeployer } from "./base/DeployFeedVerifier.s.sol";
 import { FeedManagerDeployer } from "./base/DeployFeedManager.s.sol";
 import { BLS } from "src/common/BLS.sol";
 import { IBLS } from "src/interfaces/IBLS.sol";
-import { IEOFeedVerifier } from "src/interfaces/IEOFeedVerifier.sol";
+import { EOFeedVerifier } from "src/EOFeedVerifier.sol";
 import { EOJsonUtils } from "script/utils/EOJsonUtils.sol";
 
 // Deployment command: FOUNDRY_PROFILE="deployment" forge script script/deployment/DeployNewTargetContractSet.s.sol
@@ -59,7 +59,7 @@ contract DeployNewTargetContractSet is FeedVerifierDeployer, FeedManagerDeployer
         /*//////////////////////////////////////////////////////////////////////////
                                         EOFeedVerifier
         //////////////////////////////////////////////////////////////////////////*/
-        feedVerifierProxy = deployFeedVerifier(timelock, broadcastFrom, IBLS(bls), configStructured.eoracleChainId);
+        feedVerifierProxy = deployFeedVerifier(timelock, broadcastFrom, IBLS(bls));
         EOJsonUtils.OUTPUT_CONFIG.serialize("feedVerifier", feedVerifierProxy);
 
         address implementationAddress = Upgrades.getImplementationAddress(feedVerifierProxy);
@@ -71,7 +71,7 @@ contract DeployNewTargetContractSet is FeedVerifierDeployer, FeedManagerDeployer
         feedManagerProxy = deployFeedManager(timelock, feedVerifierProxy, broadcastFrom, pauserRegistry, broadcastFrom);
 
         // set feedManager in feedVerifier
-        IEOFeedVerifier(feedVerifierProxy).setFeedManager(feedManagerProxy);
+        EOFeedVerifier(feedVerifierProxy).setFeedManager(feedManagerProxy);
 
         EOJsonUtils.OUTPUT_CONFIG.serialize("feedManager", feedManagerProxy);
 

@@ -23,7 +23,8 @@ import {
 } from "./interfaces/Errors.sol";
 
 /**
- * @title EOFeedManager
+ * @title EOFeedVerifier
+ * @author eOracle
  * @notice The EOFeedVerifier contract handles the verification of update payloads. The payload includes a Merkle root
  * signed by eoracle validators and a Merkle path to the leaf containing the data. The verifier stores the current
  * validator set in its storage and ensures that the Merkle root is signed by a subset of this validator set with
@@ -32,9 +33,6 @@ import {
 contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
     bytes32 public constant DOMAIN = keccak256("EORACLE_FEED_VERIFIER");
     uint256 public constant MIN_VALIDATORS = 3;
-
-    /// @dev ID of eoracle chain
-    uint256 internal _eoracleChainId;
 
     /// @dev BLS library contract
     IBLS internal _bls;
@@ -60,7 +58,10 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
     /// @dev address of the feed manager
     address internal _feedManager;
 
+    /// @dev full apk of the current validator set
     uint256[2] internal _fullApk;
+
+    /* ============ Modifiers ============ */
 
     /**
      * @dev Allows only the feed manager to call the function
@@ -70,23 +71,27 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
         _;
     }
 
+    /* ============ Constructor ============ */
+
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         _disableInitializers();
     }
 
+    /* ============ Initializer ============ */
+
     /**
      * @param owner Owner of the contract
-     * @param eoracleChainId_ Chain ID of the eoracle chain
      */
-    function initialize(address owner, IBLS bls_, uint256 eoracleChainId_) external initializer {
+    function initialize(address owner, IBLS bls_) external initializer {
         if (address(bls_) == address(0) || address(bls_).code.length == 0) {
             revert InvalidAddress();
         }
-        _eoracleChainId = eoracleChainId_;
         _bls = bls_;
         __Ownable_init(owner);
     }
+
+    /* ============ External Functions ============ */
 
     /**
      * @inheritdoc IEOFeedVerifier
@@ -120,7 +125,8 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
     }
 
     /**
-     * @inheritdoc IEOFeedVerifier
+     * @notice Function to set a new validator set
+     * @param newValidatorSet The new validator set to store
      */
     function setNewValidatorSet(Validator[] calldata newValidatorSet) external onlyOwner {
         uint256 length = newValidatorSet.length;
@@ -154,7 +160,8 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
     }
 
     /**
-     * @inheritdoc IEOFeedVerifier
+     * @notice Sets the address of the feed manager.
+     * @param feedManager_ The address of the new feed manager.
      */
     function setFeedManager(address feedManager_) external onlyOwner {
         if (feedManager_ == address(0)) revert InvalidAddress();
@@ -163,11 +170,14 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
     }
 
     /**
-     * @notice Returns the ID of the eoracle chain.
-     * @return The eoracle chain ID.
+     * @notice Set the BLS contract
+     * @param bls_ Address of the BLS contract
      */
-    function eoracleChainId() external view returns (uint256) {
-        return _eoracleChainId;
+    function setBLS(IBLS bls_) external onlyOwner {
+        if (address(bls_) == address(0) || address(bls_).code.length == 0) {
+            revert InvalidAddress();
+        }
+        _bls = bls_;
     }
 
     /**
@@ -231,6 +241,8 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
     function bls() external view returns (IBLS) {
         return _bls;
     }
+
+    /* ============ Internal Functions ============ */
 
     /**
      * @notice Function to verify the checkpoint signature
@@ -363,6 +375,10 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
         return true;
     }
 
+    /**
+     * @dev Gap for future storage variables in upgradeable contract.
+     * See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps
+     */
     // solhint-disable ordering
     // slither-disable-next-line unused-state,naming-convention
     uint256[50] private __gap;

@@ -2,8 +2,15 @@
 pragma solidity 0.8.25;
 
 import { IEOFeedVerifier } from "./IEOFeedVerifier.sol";
+import { IPauserRegistry } from "eigenlayer-contracts/interfaces/IPauserRegistry.sol";
 
+/**
+ * @title IEOFeedManager
+ * @author eOracle
+ */
 interface IEOFeedManager {
+    /* ============ Structs ============ */
+
     /**
      * @dev Price feed structure
      * @param value Price feed value
@@ -15,6 +22,8 @@ interface IEOFeedManager {
         uint256 timestamp;
         uint256 eoracleBlockNumber;
     }
+
+    /* ============ Events ============ */
 
     /**
      * @dev Event emitted when a price feed is updated
@@ -59,6 +68,15 @@ interface IEOFeedManager {
     event SupportedFeedsUpdated(uint256 indexed feedId, bool isSupported);
 
     /**
+     * @dev Event emitted when a publisher is whitelisted
+     * @param publisher Address of the publisher
+     * @param isWhitelisted Boolean indicating whether the publisher is whitelisted
+     */
+    event PublisherWhitelisted(address indexed publisher, bool isWhitelisted);
+
+    /* ============ External Functions ============ */
+
+    /**
      * @notice Update the price for a feed
      * @param input A merkle leaf containing price data and its merkle proof
      * @param vParams Verification parameters
@@ -90,14 +108,17 @@ interface IEOFeedManager {
     /**
      * @notice Get the latest price for a feed
      * @param feedId Feed id
-     * @return PriceFeed struct
+     * @return The latest price feed data containing:
+     *         - value: The price feed value
+     *         - timestamp: The timestamp when the price was aggregated
+     *         - eoracleBlockNumber: The eoracle block number when the price was recorded
      */
     function getLatestPriceFeed(uint256 feedId) external view returns (PriceFeed memory);
 
     /**
      * @notice Get the latest price feeds for multiple feeds
      * @param feedIds Array of feed ids
-     * @return Array of PriceFeed structs
+     * @return Array of PriceFeed structs corresponding to each requested feed ID
      */
     function getLatestPriceFeeds(uint256[] calldata feedIds) external view returns (PriceFeed[] memory);
 
@@ -120,4 +141,16 @@ interface IEOFeedManager {
      * @return Address of the feed deployer
      */
     function getFeedDeployer() external view returns (address);
+
+    /**
+     * @notice Get the feed verifier contract address
+     * @return Address of the feed verifier contract
+     */
+    function getFeedVerifier() external view returns (IEOFeedVerifier);
+
+    /**
+     * @notice Get the pauser registry contract address
+     * @return Address of the pauser registry contract
+     */
+    function getPauserRegistry() external view returns (IPauserRegistry);
 }

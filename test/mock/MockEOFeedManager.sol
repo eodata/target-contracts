@@ -3,6 +3,7 @@ pragma solidity 0.8.25;
 
 import { IEOFeedManager } from "../../src/interfaces/IEOFeedManager.sol";
 import { IEOFeedVerifier } from "../../src/interfaces/IEOFeedVerifier.sol";
+import { IPauserRegistry } from "eigenlayer-contracts/interfaces/IPauserRegistry.sol";
 
 // solhint-disable ordering
 // solhint-disable no-empty-blocks
@@ -11,6 +12,8 @@ contract MockEOFeedManager is IEOFeedManager {
     uint256 public constant NOT_SUPPORTED_FEED = 1000;
     mapping(uint256 => PriceFeed) public priceFeeds;
     address internal _feedDeployer;
+    IEOFeedVerifier internal _feedVerifier;
+    IPauserRegistry internal _pauserRegistry;
 
     constructor(address feedDeployer) {
         _feedDeployer = feedDeployer;
@@ -65,5 +68,13 @@ contract MockEOFeedManager is IEOFeedManager {
 
     function getFeedDeployer() external view returns (address) {
         return _feedDeployer;
+    }
+
+    function getFeedVerifier() external view returns (IEOFeedVerifier) {
+        return _feedVerifier;
+    }
+
+    function getPauserRegistry() external view returns (IPauserRegistry) {
+        return _pauserRegistry;
     }
 }
