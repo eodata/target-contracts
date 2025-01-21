@@ -22,3 +22,5 @@ broadcast/*/31337/
 
 # output config
 script/config/31337/*/targetContractAddresses.json
+script/config/17000/100/targetContractAddresses.json
+script/config/17000/100/targetContractSetConfig.json

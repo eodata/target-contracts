@@ -1,0 +1,15 @@
+{
+  "bls": "0x22776cDB713C9Acd76F63d5b3038E284Cbf2594F",
+  "bn256G2": "0xe56B5afA75e6a64f0ad12abb8Af9651d84e6afC0",
+  "feedAdapterImplementation": "0x05636529914A3655D32C34acA47161881d078631",
+  "feedManager": "0x47145eEBF68CD760705A8CFc4f4330f6f65f253f",
+  "feedManagerImplementation": "0x7A35F0E79c36430e6993342fA0d1d442f7f4b39f",
+  "feedRegistryAdapter": "0x6a669ea46d7d2eED6708dCDCfFc7FCA2B6e0894d",
+  "feedRegistryAdapterImplementation": "0x325af2bdEF599Eed4DE4c5152bE22A91c57604CC",
+  "feedVerifier": "0xc7f32A80077771ca139565572464D8A90D6C11b2",
+  "feedVerifierImplementation": "0x28A95Fe979e7762Ee304542Ce1DD6d91b383C41C",
+  "feeds": {
+    "BTC/USD": "0x3dE98a6Be59a8d42Dc3140C275f358090d387805",
+    "ETH/USD": "0x129566d0facfC615afafdBC59c5E3be75e374715"
+  }
+}
