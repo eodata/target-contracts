@@ -4,12 +4,8 @@
   "targetContractsOwner": "0xCdB78E869B427ED08035588dc0D71cc6D139E1f5",
   "eoracleChainId": 42420,
   "targetChainId": 1946,
-  "publishers": [
-    "0x7462AA7988144cb9E1E3630d203C1Ad222159832"
-  ],
-  "allowedSenders": [
-    "0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"
-  ],
+  "publishers": ["0x7462AA7988144cb9E1E3630d203C1Ad222159832"],
+  "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
   "supportedFeedIds": [1, 2, 17, 54],
   "supportedFeedsData": [
     {
