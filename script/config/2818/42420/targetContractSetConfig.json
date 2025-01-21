@@ -6,7 +6,7 @@
   "targetChainId": 2818,
   "publishers": ["0x2C5e9c2D437679BaAe64B519139Fd21fdD82f3c6"],
   "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
-  "supportedFeedIds": [1, 2, 17, 54, 55, 83, 114],
+  "supportedFeedIds": [1, 2, 17, 54, 55, 83, 85, 89, 108, 114],
   "supportedFeedsData": [
     {
       "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
@@ -55,6 +55,30 @@
       "outputDecimals": 8,
       "description": "WBTC/USD",
       "feedId": 83
+    },
+    {
+      "feedId": 85,
+      "description": "USDe/USD",
+      "base": "0x4c9EDD5852cd905f086C759E8383e09bff1E68B3",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 89,
+      "description": "weETH/USD",
+      "base": "0xCd5fE23C85820F7B72D0926FC9b05b43E359b7ee",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 108,
+      "description": "pumpBTC/USD",
+      "base": "0xF469fBD2abcd6B9de8E169d128226C0Fc90a012e",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
     },
     {
       "base": "0x54D2252757e1672EEaD234D27B1270728fF90581",
