@@ -699,6 +699,9 @@ contract BLS is IBLS {
     uint256 internal constant N =
         21_888_242_871_839_275_222_246_405_745_257_275_088_696_311_157_297_823_662_689_037_894_645_226_208_583;
 
+    uint256 internal constant R =
+        21_888_242_871_839_275_222_246_405_745_257_275_088_548_364_400_416_034_343_698_204_186_575_808_495_617;
+
     // Generator of G1
     uint256 internal constant G1_X = 1;
     uint256 internal constant G1_Y = 2;
@@ -779,7 +782,7 @@ contract BLS is IBLS {
         view
         returns (bool, bool)
     {
-        uint256 gamma = uint256(keccak256(abi.encode(msgHash, pk, pkG2, signature))) % N;
+        uint256 gamma = uint256(keccak256(abi.encode(msgHash, pk, pkG2, signature))) % R;
         // verify the signature
         return ecpairing(
             ecadd(signature, ecmul(pk, gamma)),
@@ -841,12 +844,7 @@ contract BLS is IBLS {
      * @return The negation of `p`
      */
     function neg(uint256[2] memory p) public pure returns (uint256[2] memory) {
-        // The prime q in the base field F_q for G1
-        if (p[0] == 0 && p[1] == 0) {
-            return [uint256(0), uint256(0)];
-        } else {
-            return [p[0], N - (p[1] % N)];
-        }
+        return [p[0], (N - p[1]) % N];
     }
 
     /**
