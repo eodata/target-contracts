@@ -300,7 +300,7 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
      * @notice Verify a batch of exits leaves
      * @param inputs Batch exit inputs for multiple event leaves
      * @param eventRoot the root this event should belong to
-     * @return Array of the leaf data fields of all submitted leaves
+     * @return Array of the unhashed leaves
      */
     function _verifyLeaves(LeafInput[] calldata inputs, bytes32 eventRoot) internal pure returns (bytes[] memory) {
         uint256 length = inputs.length;
@@ -315,7 +315,7 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
      * @notice Verify for one event
      * @param input Exit leaf input
      * @param eventRoot event root the leaf should belong to
-     * @return The leaf data field
+     * @return The unhashed leaf
      */
     function _verifyLeaf(LeafInput calldata input, bytes32 eventRoot) internal pure returns (bytes memory) {
         bytes32 leaf = keccak256(input.unhashedLeaf);

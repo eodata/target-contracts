@@ -34,3 +34,4 @@ error FeedAlreadyExists();
 error BaseQuotePairExists();
 error FeedDoesNotExist();
 error NotFeedDeployer();
+error NotLatestRound();

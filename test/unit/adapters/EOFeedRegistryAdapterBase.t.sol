@@ -42,7 +42,7 @@ abstract contract EOFeedRegistryAdapterBaseTest is Test {
     address internal _base2Address;
     address internal _quote2Address;
     uint256 internal _lastTimestamp;
-    uint256 internal _lastBlockNumber;
+    uint64 internal _lastBlockNumber;
 
     event FeedManagerSet(address indexed _feedManager);
     event FeedAdapterDeployed(uint256 indexed feedId, address indexed feedAdapter, address base, address quote);
@@ -59,7 +59,7 @@ abstract contract EOFeedRegistryAdapterBaseTest is Test {
         _quote1Address = makeAddr("quote");
         _base2Address = makeAddr("base2");
         _quote2Address = makeAddr("quote2");
-        _lastBlockNumber = block.number;
+        _lastBlockNumber = uint64(block.number);
     }
 
     function test_Initialized() public view {
@@ -206,7 +206,7 @@ abstract contract EOFeedRegistryAdapterBaseTest is Test {
         _deployEOFeedAdapter(_base1Address, _quote1Address, FEED_ID1, DESCRIPTION1, DECIMALS, DECIMALS, VERSION);
         _updateFeed(FEED_ID1, RATE1, block.timestamp);
         (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound) =
-            _feedRegistryAdapter.getRoundData(_base1Address, _quote1Address, 1);
+            _feedRegistryAdapter.getRoundData(_base1Address, _quote1Address, _lastBlockNumber);
         assertEq(roundId, _lastBlockNumber);
         assertEq(answer, int256(RATE1));
         assertEq(startedAt, block.timestamp);
@@ -235,13 +235,13 @@ abstract contract EOFeedRegistryAdapterBaseTest is Test {
     function test_GetAnswer() public {
         _deployEOFeedAdapter(_base1Address, _quote1Address, FEED_ID1, DESCRIPTION1, DECIMALS, DECIMALS, VERSION);
         _updateFeed(FEED_ID1, RATE1, block.timestamp);
-        assertEq(_feedRegistryAdapter.getAnswer(_base1Address, _quote1Address, 1), int256(RATE1));
+        assertEq(_feedRegistryAdapter.getAnswer(_base1Address, _quote1Address, _lastBlockNumber), int256(RATE1));
     }
 
     function test_GetTimestamp() public {
         _deployEOFeedAdapter(_base1Address, _quote1Address, FEED_ID1, DESCRIPTION1, DECIMALS, DECIMALS, VERSION);
         _updateFeed(FEED_ID1, RATE1, block.timestamp);
-        assertEq(_feedRegistryAdapter.getTimestamp(_base1Address, _quote1Address, 1), block.timestamp);
+        assertEq(_feedRegistryAdapter.getTimestamp(_base1Address, _quote1Address, _lastBlockNumber), block.timestamp);
     }
 
     function test_IsFeedEnabled() public {
@@ -254,8 +254,9 @@ abstract contract EOFeedRegistryAdapterBaseTest is Test {
         // solhint-disable-next-line func-named-parameters
         IEOFeedAdapter feedAdapter =
             _deployEOFeedAdapter(_base1Address, _quote1Address, FEED_ID1, DESCRIPTION1, DECIMALS, DECIMALS, VERSION);
+        _updateFeed(FEED_ID1, RATE1, block.timestamp);
         assertEq(
-            address(_feedRegistryAdapter.getRoundFeed(_base1Address, _quote1Address, uint80(_lastBlockNumber))),
+            address(_feedRegistryAdapter.getRoundFeed(_base1Address, _quote1Address, _lastBlockNumber)),
             address(feedAdapter)
         );
     }
@@ -267,7 +268,7 @@ abstract contract EOFeedRegistryAdapterBaseTest is Test {
             input,
             IEOFeedVerifier.VerificationParams({
                 eventRoot: bytes32(0),
-                blockNumber: uint64(_lastBlockNumber),
+                blockNumber: _lastBlockNumber,
                 blockHash: bytes32(uint256(1)),
                 chainId: uint32(1),
                 aggregator: address(1),

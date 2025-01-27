@@ -6,8 +6,7 @@ interface IEOFeedVerifier {
      * @dev Leaf input structure
      * @param leafIndex Index of the leaf
      * @param unhashedLeaf Unhashed leaf data
-     *         abi encoded (uint256 id, address sender, address receiver, bytes memory data)
-     *              where bytes memory data =  abi encoded (uint256 feedId, uint256 rate, uint256 timestamp)
+     *         abi encoded (uint256 feedId, uint256 rate, uint256 timestamp)
      * @param proof Merkle proof of the leaf
      */
     struct LeafInput {
@@ -31,7 +30,7 @@ interface IEOFeedVerifier {
         bytes32 eventRoot; // 32 bytes
         bytes32 blockHash; // 32 bytes
         uint256[2] signature; // 64 bytes
-        uint256[4] apkG2; // 64 bytes
+        uint256[4] apkG2; // 128 bytes
         bytes nonSignersBitmap; // dynamic
     }
 
