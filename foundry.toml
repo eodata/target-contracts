@@ -20,18 +20,12 @@
   fs_permissions = [{ access = "read-write", path = "./" }]
   ffi = true
   ast = true
-
-[profile.default.dependencies]
-  "OpenZeppelin/openzeppelin-foundry-upgrades" = { tag = "v0.2.2" }
-
+  
 [profile.full_test]
   test = "test"
   build_info = true
   extra_output = ["storageLayout"]
   fuzz = { runs = 10_000 }
-
-[profile.full_test.dependencies]
-  "OpenZeppelin/openzeppelin-foundry-upgrades" = { tag = "v0.2.2" }
 
 [fmt]
   bracket_spacing = true
