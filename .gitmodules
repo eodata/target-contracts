@@ -10,7 +10,7 @@
 [submodule "lib/openzeppelin-foundry-upgrades"]
 	path = lib/openzeppelin-foundry-upgrades
 	url = https://github.com/OpenZeppelin/openzeppelin-foundry-upgrades
-	tag = v0.2.2
+	commit = 332bd3306242e09520df2685b2edb99ebd7f5d37
 [submodule "lib/forge-safe"]
 	path = lib/forge-safe
 	url = https://github.com/Eoracle/forge-safe
