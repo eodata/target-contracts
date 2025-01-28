@@ -10,7 +10,7 @@
     "editor.defaultFormatter": null
   },
   "solidity.formatter": "forge",
-  "security.olympix.project.includePath": "src",
+  "security.olympix.project.includePath": "",
   "cSpell.enableFiletypes": ["solidity"],
   "cSpell.words": [
     "eoracle",
@@ -27,5 +27,7 @@
     "struct",
     "structs",
     "unhashed"
-  ]
+  ],
+  "security.olympix.project.testsPath": "/test",
+  "security.olympix.project.analyzeWholeProject": true
 }

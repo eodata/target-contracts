@@ -1,6 +1,6 @@
 # EOFeedRegistryAdapterBase
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/88beedd8b816225fb92696d7d314b9def6318a7e/src/adapters/EOFeedRegistryAdapterBase.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/badb6375447660efebd9adbe5de6f290257bb3a9/src/adapters/EOFeedRegistryAdapterBase.sol)
 
 **Inherits:** OwnableUpgradeable,
 [EOFeedFactoryBase](/src/adapters/factories/EOFeedFactoryBase.sol/abstract.EOFeedFactoryBase.md),
@@ -46,6 +46,12 @@ uint256[50] private __gap;
 
 ```solidity
 modifier onlyNonZeroAddress(address addr);
+```
+
+### onlyFeedDeployer
+
+```solidity
+modifier onlyFeedDeployer();
 ```
 
 ### constructor
@@ -107,7 +113,7 @@ function deployEOFeedAdapter(
     uint256 feedVersion
 )
     external
-    onlyOwner
+    onlyFeedDeployer
     returns (IEOFeedAdapter);
 ```
 
@@ -323,7 +329,7 @@ Get the latest price for a given base/quote pair
 _Calls the getLatestPriceFeed function from the feed manager, not from feedAdapter itself_
 
 ```solidity
-function latestAnswer(address base, address quote) external view override returns (int256);
+function latestAnswer(address base, address quote) external view returns (int256);
 ```
 
 **Parameters**
@@ -417,7 +423,7 @@ function getTimestamp(address base, address quote, uint256) external view return
 Get the feedAdapter for a given base/quote pair
 
 ```solidity
-function getFeed(address base, address quote) external view override returns (IEOFeedAdapter);
+function getFeed(address base, address quote) external view returns (IEOFeedAdapter);
 ```
 
 **Parameters**

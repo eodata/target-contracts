@@ -18,31 +18,61 @@ import {
 
 /**
  * @title EOFeedRegistryAdapterBase
+ * @author eOracle
  * @notice base contract which is adapter of EOFeedManager contract for CL FeedManager
  */
 abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactoryBase, IEOFeedRegistryAdapter {
+    /// @dev Feed manager contract
     IEOFeedManager internal _feedManager;
+
+    /// @dev Map of feed id to feed adapter (feed id => IEOFeedAdapter)
     mapping(uint256 => IEOFeedAdapter) internal _feedAdapters;
+
+    /// @dev Map of feed adapter to enabled status (feed adapter => is enabled)
     mapping(address => bool) internal _feedEnabled;
+
+    /// @dev Map of token addresses to feed ids (base => quote => feed id)
     mapping(address => mapping(address => uint256)) internal _tokenAddressesToFeedIds;
 
+    /* ============ Events ============ */
+
+    /**
+     * @dev Event emitted when the feed manager is set
+     * @param feedManager The feed manager address
+     */
     event FeedManagerSet(address indexed feedManager);
+
+    /**
+     * @dev Event emitted when a feed adapter is deployed
+     * @param feedId The feed id
+     * @param feedAdapter The feed adapter address
+     * @param base The base asset address
+     * @param quote The quote asset address
+     */
     event FeedAdapterDeployed(uint256 indexed feedId, address indexed feedAdapter, address base, address quote);
 
+    /* ============ Modifiers ============ */
+
+    /// @dev Allows only non-zero addresses
     modifier onlyNonZeroAddress(address addr) {
         if (addr == address(0)) revert InvalidAddress();
         _;
     }
 
+    /// @dev Allows only the feed deployer to call the function
     modifier onlyFeedDeployer() {
         if (msg.sender != _feedManager.getFeedDeployer()) revert NotFeedDeployer();
         _;
     }
 
+    /* ============ Constructor ============ */
+
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         _disableInitializers();
     }
+
+    /* ============ Initializer ============ */
 
     /**
      * @notice Initialize the contract
@@ -65,6 +95,8 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
         _feedManager = IEOFeedManager(feedManager);
         emit FeedManagerSet(feedManager);
     }
+
+    /* ============ External Functions ============ */
 
     /**
      * @notice Set the feed manager
@@ -263,7 +295,7 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
      * @param quote The quote asset address
      * @return int256 The latest price
      */
-    function latestAnswer(address base, address quote) external view override returns (int256) {
+    function latestAnswer(address base, address quote) external view returns (int256) {
         return int256(_feedManager.getLatestPriceFeed(_tokenAddressesToFeedIds[base][quote]).value);
     }
 
@@ -318,7 +350,7 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
      * @param quote The quote asset address
      * @return IEOFeedAdapter The feedAdapter
      */
-    function getFeed(address base, address quote) external view override returns (IEOFeedAdapter) {
+    function getFeed(address base, address quote) external view returns (IEOFeedAdapter) {
         return _getFeed(base, quote);
     }
 
@@ -358,6 +390,8 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
         return _feedManager.getLatestPriceFeed(_tokenAddressesToFeedIds[base][quote]).eoracleBlockNumber;
     }
 
+    /* ============ Internal Functions ============ */
+
     /**
      * @notice Get the feedAdapter for a given base/quote pair
      * @param base The base asset address
@@ -368,6 +402,10 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
         return _feedAdapters[_tokenAddressesToFeedIds[base][quote]];
     }
 
+    /**
+     * @dev Gap for future storage variables in upgradeable contract.
+     * See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps
+     */
     // slither-disable-next-line unused-state,naming-convention
     // solhint-disable-next-line ordering
     uint256[50] private __gap;

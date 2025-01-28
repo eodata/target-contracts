@@ -1,6 +1,6 @@
 # EOFeedVerifier
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/88beedd8b816225fb92696d7d314b9def6318a7e/src/EOFeedVerifier.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/badb6375447660efebd9adbe5de6f290257bb3a9/src/EOFeedVerifier.sol)
 
 **Inherits:** [IEOFeedVerifier](/src/interfaces/IEOFeedVerifier.sol/interface.IEOFeedVerifier.md), OwnableUpgradeable
 
@@ -16,10 +16,10 @@ its storage and ensures that the Merkle root is signed by a subset of this valid
 bytes32 public constant DOMAIN = keccak256("EORACLE_FEED_VERIFIER");
 ```
 
-### \_minNumOfValidators
+### MIN_VALIDATORS
 
 ```solidity
-uint256 internal _minNumOfValidators;
+uint256 public constant MIN_VALIDATORS = 3;
 ```
 
 ### \_eoracleChainId
@@ -436,3 +436,9 @@ function _getValueFromBitmap(bytes calldata bitmap, uint256 index) private pure 
 | Name     | Type   | Description                                                                                                                                          |
 | -------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `<none>` | `bool` | bool The boolean value of the bit at the specified index in the bitmap. Returns 'true' if the bit is set (1), and 'false' if the bit is not set (0). |
+
+### \_hasNoAddressDuplicates
+
+```solidity
+function _hasNoAddressDuplicates(Validator[] calldata validators) private pure returns (bool);
+```

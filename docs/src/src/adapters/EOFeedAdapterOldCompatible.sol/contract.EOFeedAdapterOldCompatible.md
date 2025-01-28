@@ -1,8 +1,9 @@
-# EOFeedAdapterV2
+# EOFeedAdapterOldCompatible
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/6aa770eda8f0c2ec3d6b8a6ee534d020a26eb2db/src/adapters/EOFeedAdapterV2.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/badb6375447660efebd9adbe5de6f290257bb3a9/src/adapters/EOFeedAdapterOldCompatible.sol)
 
-**Inherits:** [IEOFeedAdapterV2](/src/adapters/interfaces/IEOFeedAdapterV2.sol/interface.IEOFeedAdapterV2.md),
+**Inherits:**
+[IEOFeedAdapterOldCompatible](/src/adapters/interfaces/IEOFeedAdapterOldCompatible.sol/interface.IEOFeedAdapterOldCompatible.md),
 Initializable
 
 Price feed adapter contract

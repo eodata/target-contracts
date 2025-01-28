@@ -1,6 +1,6 @@
 # BLS
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/88beedd8b816225fb92696d7d314b9def6318a7e/src/common/BLS.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/badb6375447660efebd9adbe5de6f290257bb3a9/src/common/BLS.sol)
 
 **Inherits:** [IBLS](/src/interfaces/IBLS.sol/interface.IBLS.md)
 

@@ -2,16 +2,17 @@
 pragma solidity 0.8.25;
 
 import { IEOFeedManager } from "../interfaces/IEOFeedManager.sol";
-import { IEOFeedAdapterV2 } from "./interfaces/IEOFeedAdapterV2.sol";
+import { IEOFeedAdapter } from "./interfaces/IEOFeedAdapter.sol";
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-
+import { PausableUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
 import { InvalidAddress } from "../interfaces/Errors.sol";
 
 /**
- * @title EOFeedAdapterV2
- * @notice Price feed adapter contract
+ * @title EOFeedAdapterOldCompatible
+ * @author eOracle
+ * @notice Price feed adapter contract compatible with old EOFeedManager
  */
-contract EOFeedAdapterV2 is IEOFeedAdapterV2, Initializable {
+contract EOFeedAdapterOldCompatible is IEOFeedAdapter, Initializable {
     /// @dev Feed manager contract
     IEOFeedManager private _feedManager;
 
@@ -25,15 +26,23 @@ contract EOFeedAdapterV2 is IEOFeedAdapterV2, Initializable {
     /// @dev Feed id
     uint16 private _feedId;
 
-    /// @dev Decimals of the rate
+    /// @dev The input decimals of the rate
     uint8 private _inputDecimals;
+
+    /// @dev The output decimals of the rate
     uint8 private _outputDecimals;
+
+    /// @dev The decimals difference between input and output decimals
     int256 private _decimalsDiff;
+
+    /* ============ Constructor ============ */
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         _disableInitializers();
     }
+
+    /* ============ Initializer ============ */
 
     /**
      * @notice Initialize the contract
@@ -46,7 +55,7 @@ contract EOFeedAdapterV2 is IEOFeedAdapterV2, Initializable {
      */
     function initialize(
         address feedManager,
-        uint16 feedId,
+        uint256 feedId,
         uint8 inputDecimals,
         uint8 outputDecimals,
         string memory feedDescription,
@@ -57,7 +66,11 @@ contract EOFeedAdapterV2 is IEOFeedAdapterV2, Initializable {
     {
         if (feedManager == address(0)) revert InvalidAddress();
         _feedManager = IEOFeedManager(feedManager);
-        _feedId = feedId;
+
+        // safe to downcast because this implementation will be used to support already deployed feeds
+        // with feedId < 65535 (uint16 max value),
+        // moreover which are already initialized, and the method will not be used anymore
+        _feedId = uint16(feedId);
         _outputDecimals = outputDecimals;
         _inputDecimals = inputDecimals;
         uint256 diff = inputDecimals > outputDecimals ? inputDecimals - outputDecimals : outputDecimals - inputDecimals;
@@ -65,6 +78,8 @@ contract EOFeedAdapterV2 is IEOFeedAdapterV2, Initializable {
         _description = feedDescription;
         _version = feedVersion;
     }
+
+    /* ============ External Functions ============ */
 
     /**
      * @notice Get the price for the round
@@ -184,6 +199,21 @@ contract EOFeedAdapterV2 is IEOFeedAdapterV2, Initializable {
         return priceData.eoracleBlockNumber;
     }
 
+    /**
+     * @notice Get the paused status of the feed
+     * @return bool The paused status
+     */
+    function isPaused() external view returns (bool) {
+        return PausableUpgradeable(address(_feedManager)).paused();
+    }
+
+    /* ============ Internal Functions ============ */
+
+    /**
+     * @notice Normalize the price to the output decimals
+     * @param price The price to normalize
+     * @return int256 The normalized price
+     */
     function _normalizePrice(uint256 price) internal view returns (int256) {
         if (_inputDecimals > _outputDecimals) {
             return int256(price) / _decimalsDiff;
@@ -192,8 +222,12 @@ contract EOFeedAdapterV2 is IEOFeedAdapterV2, Initializable {
         }
     }
 
+    /**
+     * @dev Gap for future storage variables in upgradeable contract.
+     * See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps
+     */
     // solhint-disable ordering
     // slither-disable-next-line unused-state,naming-convention
-    uint256[50] private __gap;
+    uint256[48] private __gap;
     // solhint-disable ordering
 }

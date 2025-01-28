@@ -17,20 +17,19 @@ import {
     InvalidEventRoot,
     ValidatorIndexOutOfBounds,
     ValidatorSetTooSmall,
-    SenderNotAllowed
+    DuplicatedAddresses
 } from "../../src/interfaces/Errors.sol";
 
 contract EOFeedVerifierInitialize is UninitializedFeedVerifier {
     function test_RevertWhen_Initialize_InvalidAddress() public {
         IBLS blsNull;
         vm.expectRevert(InvalidAddress.selector);
-        feedVerifier.initialize(address(this), blsNull, eoracleChainId);
+        feedVerifier.initialize(address(this), blsNull);
     }
 
     function test_Initialize() public {
-        feedVerifier.initialize(address(this), bls, eoracleChainId);
+        feedVerifier.initialize(address(this), bls);
         assertEq(address(feedVerifier.bls()), address(bls));
-        assertEq(feedVerifier.eoracleChainId(), eoracleChainId);
         assertEq(feedVerifier.owner(), address(this));
     }
 
@@ -172,6 +171,12 @@ contract EOFeedVerifierTest is InitializedFeedVerifier {
     function test_RevertWhen_ZeroAddress_SetNewValidatorSet() public {
         validatorSet[0]._address = address(0);
         vm.expectRevert(InvalidAddress.selector);
+        feedVerifier.setNewValidatorSet(validatorSet);
+    }
+
+    function test_RevertWhen_DuplicatedAddresses_SetNewValidatorSet() public {
+        validatorSet[0]._address = validatorSet[1]._address;
+        vm.expectRevert(DuplicatedAddresses.selector);
         feedVerifier.setNewValidatorSet(validatorSet);
     }
 
