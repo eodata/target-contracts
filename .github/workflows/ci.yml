@@ -69,6 +69,22 @@ jobs:
         run: |
           git config --global --add safe.directory /__w/target-contracts/target-contracts
 
+      - name: "Check Submodule Version"
+        run: |
+          cd lib/openzeppelin-foundry-upgrades
+          # Specify the expected tag or commit hash
+          EXPECTED_VERSION="v0.2.2"
+
+          # Get the current version (either commit hash or tag)
+          CURRENT_VERSION=$(git describe --tags --exact-match || git rev-parse HEAD)
+
+          if [ "$CURRENT_VERSION" != "$EXPECTED_VERSION" ]; then
+            echo "Error: Submodule 'openzeppelin-foundry-upgrades' is on commit/tag $CURRENT_VERSION, but expected $EXPECTED_VERSION"
+            exit 1
+          else
+            echo "Submodule 'openzeppelin-foundry-upgrades' is on the correct version ($EXPECTED_VERSION)"
+          fi
+
       - name: "Update Foundry dependencies"
         run: "forge update"
 
