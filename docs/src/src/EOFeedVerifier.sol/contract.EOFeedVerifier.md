@@ -1,8 +1,10 @@
 # EOFeedVerifier
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/badb6375447660efebd9adbe5de6f290257bb3a9/src/EOFeedVerifier.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/44a7184a934b669887867d9bb70946619d422be3/src/EOFeedVerifier.sol)
 
 **Inherits:** [IEOFeedVerifier](/src/interfaces/IEOFeedVerifier.sol/interface.IEOFeedVerifier.md), OwnableUpgradeable
+
+**Author:** eOracle
 
 The EOFeedVerifier contract handles the verification of update payloads. The payload includes a Merkle root signed by
 eoracle validators and a Merkle path to the leaf containing the data. The verifier stores the current validator set in
@@ -20,14 +22,6 @@ bytes32 public constant DOMAIN = keccak256("EORACLE_FEED_VERIFIER");
 
 ```solidity
 uint256 public constant MIN_VALIDATORS = 3;
-```
-
-### \_eoracleChainId
-
-_ID of eoracle chain_
-
-```solidity
-uint256 internal _eoracleChainId;
 ```
 
 ### \_bls
@@ -96,11 +90,16 @@ address internal _feedManager;
 
 ### \_fullApk
 
+_full apk of the current validator set_
+
 ```solidity
 uint256[2] internal _fullApk;
 ```
 
 ### \_\_gap
+
+_Gap for future storage variables in upgradeable contract. See
+https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps_
 
 ```solidity
 uint256[50] private __gap;
@@ -125,16 +124,15 @@ constructor();
 ### initialize
 
 ```solidity
-function initialize(address owner, IBLS bls_, uint256 eoracleChainId_) external initializer;
+function initialize(address owner, IBLS bls_) external initializer;
 ```
 
 **Parameters**
 
-| Name              | Type      | Description                   |
-| ----------------- | --------- | ----------------------------- |
-| `owner`           | `address` | Owner of the contract         |
-| `bls_`            | `IBLS`    |                               |
-| `eoracleChainId_` | `uint256` | Chain ID of the eoracle chain |
+| Name    | Type      | Description           |
+| ------- | --------- | --------------------- |
+| `owner` | `address` | Owner of the contract |
+| `bls_`  | `IBLS`    |                       |
 
 ### verify
 
@@ -212,19 +210,19 @@ function setFeedManager(address feedManager_) external onlyOwner;
 | -------------- | --------- | ------------------------------------ |
 | `feedManager_` | `address` | The address of the new feed manager. |
 
-### eoracleChainId
+### setBLS
 
-Returns the ID of the eoracle chain.
+Set the BLS contract
 
 ```solidity
-function eoracleChainId() external view returns (uint256);
+function setBLS(IBLS bls_) external onlyOwner;
 ```
 
-**Returns**
+**Parameters**
 
-| Name     | Type      | Description           |
-| -------- | --------- | --------------------- |
-| `<none>` | `uint256` | The eoracle chain ID. |
+| Name   | Type   | Description                 |
+| ------ | ------ | --------------------------- |
+| `bls_` | `IBLS` | Address of the BLS contract |
 
 ### currentValidatorSetLength
 
@@ -391,9 +389,9 @@ function _verifyLeaves(LeafInput[] calldata inputs, bytes32 eventRoot) internal 
 
 **Returns**
 
-| Name     | Type      | Description                                           |
-| -------- | --------- | ----------------------------------------------------- |
-| `<none>` | `bytes[]` | Array of the leaf data fields of all submitted leaves |
+| Name     | Type      | Description                  |
+| -------- | --------- | ---------------------------- |
+| `<none>` | `bytes[]` | Array of the unhashed leaves |
 
 ### \_verifyLeaf
 
@@ -412,9 +410,9 @@ function _verifyLeaf(LeafInput calldata input, bytes32 eventRoot) internal pure 
 
 **Returns**
 
-| Name     | Type    | Description         |
-| -------- | ------- | ------------------- |
-| `<none>` | `bytes` | The leaf data field |
+| Name     | Type    | Description       |
+| -------- | ------- | ----------------- |
+| `<none>` | `bytes` | The unhashed leaf |
 
 ### \_getValueFromBitmap
 
@@ -439,6 +437,20 @@ function _getValueFromBitmap(bytes calldata bitmap, uint256 index) private pure 
 
 ### \_hasNoAddressDuplicates
 
+_Checks if there are no duplicate addresses in the validator set._
+
 ```solidity
 function _hasNoAddressDuplicates(Validator[] calldata validators) private pure returns (bool);
 ```
+
+**Parameters**
+
+| Name         | Type          | Description                                      |
+| ------------ | ------------- | ------------------------------------------------ |
+| `validators` | `Validator[]` | The array of validators to check for duplicates. |
+
+**Returns**
+
+| Name     | Type   | Description                                                     |
+| -------- | ------ | --------------------------------------------------------------- |
+| `<none>` | `bool` | bool True if there are no duplicate addresses, false otherwise. |

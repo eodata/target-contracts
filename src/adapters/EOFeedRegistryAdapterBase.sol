@@ -256,8 +256,7 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
     /**
      * @notice Get the round data for a given base/quote pair
      * @dev Calls the getLatestPriceFeed function from the feed manager, not from feedAdapter itself
-     *      currently the roundId is not used and latest round is returned
-     * @dev Supports only the latest round
+     * @dev Reverts if the roundId is not the latest one
      * @param base The base asset address
      * @param quote The quote asset address
      * @param roundId The roundId - only latest round is supported
@@ -313,8 +312,7 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
     /**
      * @notice Get the answer for a given base/quote pair and round
      * @dev Calls the getLatestPriceFeed function from the feed manager, not from feedAdapter itself
-     *      currently the roundId is not used and latest answer is returned
-     * @dev Supports only the latest round
+     * @dev Reverts if the roundId is not the latest one
      * @param base The base asset address
      * @param quote The quote asset address
      * @param roundId The roundId - only latest round is supported
@@ -330,8 +328,7 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
     /**
      * @notice Get the timestamp for a given base/quote pair and round
      * @dev Calls the getLatestPriceFeed function from the feed manager, not from feedAdapter itself
-     *      currently the roundId is not used and latest timestamp is returned
-     * @dev Supports only the latest round
+     * @dev Reverts if the roundId is not the latest one
      * @param base The base asset address
      * @param quote The quote asset address
      * @param roundId The roundId - only latest round is supported
@@ -365,7 +362,7 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
 
     /**
      * @notice Get the round feedAdapter for a given base/quote pair
-     * @dev Supports only the latest round
+     * @dev Reverts if the roundId is not the latest one
      * @param base The base asset address
      * @param quote The quote asset address
      * @param roundId The roundId - only latest round is supported
@@ -381,7 +378,6 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
     /**
      * @notice Get the latest round for a given base/quote pair
      * @dev Calls the getLatestPriceFeed function from the feed manager, not from Feed itself
-     *      currently the roundId is not used and 0 is returned
      * @param base The base asset address
      * @param quote The quote asset address
      * @return uint256 The latest round

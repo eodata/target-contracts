@@ -83,7 +83,7 @@ contract EOFeedAdapter is IEOFeedAdapter, Initializable {
 
     /**
      * @notice Get the price for the round
-     * @dev Supports only the latest round
+     * @dev Reverts if the roundId is not the latest one
      * @param roundId The roundId - only latest round is supported
      * @return roundId The round id
      * @return answer The price
@@ -141,8 +141,8 @@ contract EOFeedAdapter is IEOFeedAdapter, Initializable {
     }
 
     /**
-     * @notice Get the price for the round (round is not used, the latest price is returned)
-     * @dev Supports only the latest round
+     * @notice Get the price for the round
+     * @dev Reverts if the roundId is not the latest one
      * @param roundId The roundId - only latest round is supported
      * @return int256 The price
      */
@@ -153,8 +153,8 @@ contract EOFeedAdapter is IEOFeedAdapter, Initializable {
     }
 
     /**
-     * @notice Get the timestamp for the round (round is not used, the latest timestamp is returned)
-     * @dev Supports only the latest round
+     * @notice Get the timestamp for the round
+     * @dev Reverts if the roundId is not the latest one
      * @param roundId The roundId - only latest round is supported
      * @return uint256 The timestamp
      */

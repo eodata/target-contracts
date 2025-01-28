@@ -1,10 +1,15 @@
 # EOFeedAdapter
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/badb6375447660efebd9adbe5de6f290257bb3a9/src/adapters/EOFeedAdapter.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/44a7184a934b669887867d9bb70946619d422be3/src/adapters/EOFeedAdapter.sol)
 
 **Inherits:** [IEOFeedAdapter](/src/adapters/interfaces/IEOFeedAdapter.sol/interface.IEOFeedAdapter.md), Initializable
 
-Price feed adapter contract
+**Author:** eOracle
+
+EOFeedAdapter is a contract that provides a standardized interface for accessing feed data from the eOracle system. It
+acts as a compatibility layer between eOracle's native feed format and the widely-used AggregatorV3Interface format.
+
+_compatible with AggregatorV3Interface._
 
 ## State Variables
 
@@ -42,7 +47,9 @@ uint256 private _feedId;
 
 ### \_inputDecimals
 
-_Decimals of the rate_
+_the next 2 variables will be packed in 1 slot_
+
+_The input decimals of the rate_
 
 ```solidity
 uint8 private _inputDecimals;
@@ -50,11 +57,15 @@ uint8 private _inputDecimals;
 
 ### \_outputDecimals
 
+_The output decimals of the rate_
+
 ```solidity
 uint8 private _outputDecimals;
 ```
 
 ### \_decimalsDiff
+
+_The decimals difference between input and output decimals_
 
 ```solidity
 int256 private _decimalsDiff;
@@ -62,8 +73,11 @@ int256 private _decimalsDiff;
 
 ### \_\_gap
 
+_Gap for future storage variables in upgradeable contract. See
+https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps_
+
 ```solidity
-uint256[50] private __gap;
+uint256[48] private __gap;
 ```
 
 ## Functions
@@ -106,15 +120,17 @@ function initialize(
 
 Get the price for the round
 
+_Reverts if the roundId is not the latest one_
+
 ```solidity
-function getRoundData(uint80) external view returns (uint80, int256, uint256, uint256, uint80);
+function getRoundData(uint80 roundId) external view returns (uint80, int256, uint256, uint256, uint80);
 ```
 
 **Parameters**
 
-| Name     | Type     | Description |
-| -------- | -------- | ----------- |
-| `<none>` | `uint80` |             |
+| Name      | Type     | Description                                  |
+| --------- | -------- | -------------------------------------------- |
+| `roundId` | `uint80` | The roundId - only latest round is supported |
 
 **Returns**
 
@@ -174,17 +190,19 @@ function latestTimestamp() external view returns (uint256);
 
 ### getAnswer
 
-Get the price for the round (round is not used, the latest price is returned)
+Get the price for the round
+
+_Reverts if the roundId is not the latest one_
 
 ```solidity
-function getAnswer(uint256) external view returns (int256);
+function getAnswer(uint256 roundId) external view returns (int256);
 ```
 
 **Parameters**
 
-| Name     | Type      | Description |
-| -------- | --------- | ----------- |
-| `<none>` | `uint256` |             |
+| Name      | Type      | Description                                  |
+| --------- | --------- | -------------------------------------------- |
+| `roundId` | `uint256` | The roundId - only latest round is supported |
 
 **Returns**
 
@@ -194,17 +212,19 @@ function getAnswer(uint256) external view returns (int256);
 
 ### getTimestamp
 
-Get the timestamp for the round (round is not used, the latest timestamp is returned)
+Get the timestamp for the round
+
+_Reverts if the roundId is not the latest one_
 
 ```solidity
-function getTimestamp(uint256) external view returns (uint256);
+function getTimestamp(uint256 roundId) external view returns (uint256);
 ```
 
 **Parameters**
 
-| Name     | Type      | Description |
-| -------- | --------- | ----------- |
-| `<none>` | `uint256` |             |
+| Name      | Type      | Description                                  |
+| --------- | --------- | -------------------------------------------- |
+| `roundId` | `uint256` | The roundId - only latest round is supported |
 
 **Returns**
 
@@ -298,6 +318,20 @@ function isPaused() external view returns (bool);
 
 ### \_normalizePrice
 
+Normalize the price to the output decimals
+
 ```solidity
 function _normalizePrice(uint256 price) internal view returns (int256);
 ```
+
+**Parameters**
+
+| Name    | Type      | Description            |
+| ------- | --------- | ---------------------- |
+| `price` | `uint256` | The price to normalize |
+
+**Returns**
+
+| Name     | Type     | Description                 |
+| -------- | -------- | --------------------------- |
+| `<none>` | `int256` | int256 The normalized price |
