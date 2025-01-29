@@ -20,7 +20,7 @@
   fs_permissions = [{ access = "read-write", path = "./" }]
   ffi = true
   ast = true
-
+  
 [profile.full_test]
   test = "test"
   build_info = true

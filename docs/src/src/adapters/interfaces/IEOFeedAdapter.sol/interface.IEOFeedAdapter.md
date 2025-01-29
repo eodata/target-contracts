@@ -1,10 +1,12 @@
 # IEOFeedAdapter
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/badb6375447660efebd9adbe5de6f290257bb3a9/src/adapters/interfaces/IEOFeedAdapter.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/44a7184a934b669887867d9bb70946619d422be3/src/adapters/interfaces/IEOFeedAdapter.sol)
+
+**Author:** eOracle
 
 Interface for the EOFeedAdapter contract.
 
-_compatible of AggregatorV3Interface from CL._
+_compatible with AggregatorV3Interface._
 
 ## Functions
 

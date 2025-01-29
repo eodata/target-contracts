@@ -9,7 +9,7 @@ import { MockEOFeedManager } from "../../mock/MockEOFeedManager.sol";
 import { IEOFeedManager } from "../../../src/interfaces/IEOFeedManager.sol";
 import { IEOFeedVerifier } from "../../../src/interfaces/IEOFeedVerifier.sol";
 
-import { InvalidAddress } from "../../../src/interfaces/Errors.sol";
+import { InvalidAddress, NotLatestRound } from "../../../src/interfaces/Errors.sol";
 import { Upgrades } from "openzeppelin-foundry-upgrades/Upgrades.sol";
 import { Options } from "openzeppelin-foundry-upgrades/Options.sol";
 // solhint-disable ordering
@@ -70,12 +70,17 @@ contract EOFeedAdapterTest is EOFeedAdapterTestUninitialized {
 
     function test_GetRoundData() public view {
         (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound) =
-            _feedAdapter.getRoundData(1);
+            _feedAdapter.getRoundData(_lastBlockNumber);
         assertEq(roundId, _lastBlockNumber);
         assertEq(answer, int256(RATE1));
         assertEq(startedAt, _lastTimestamp);
         assertEq(updatedAt, _lastTimestamp);
         assertEq(answeredInRound, _lastBlockNumber);
+    }
+
+    function test_RevertWhen_NotLatestRound_GetRoundData() public {
+        vm.expectRevert(NotLatestRound.selector);
+        _feedAdapter.getRoundData(_lastBlockNumber + 1);
     }
 
     function test_LatestRoundData() public view {
@@ -107,11 +112,21 @@ contract EOFeedAdapterTest is EOFeedAdapterTestUninitialized {
     }
 
     function test_GetAnswer() public view {
-        assertEq(_feedAdapter.getAnswer(1), int256(RATE1));
+        assertEq(_feedAdapter.getAnswer(_lastBlockNumber), int256(RATE1));
+    }
+
+    function test_RevertWhen_NotLatestRound_GetAnswer() public {
+        vm.expectRevert(NotLatestRound.selector);
+        _feedAdapter.getAnswer(_lastBlockNumber + 1);
     }
 
     function test_GetTimestamp() public view {
-        assertEq(_feedAdapter.getTimestamp(1), _lastTimestamp);
+        assertEq(_feedAdapter.getTimestamp(_lastBlockNumber), _lastTimestamp);
+    }
+
+    function test_RevertWhen_NotLatestRound_GetTimestamp() public {
+        vm.expectRevert(NotLatestRound.selector);
+        _feedAdapter.getTimestamp(uint80(_lastBlockNumber + 1));
     }
 
     function test_Decimals() public view {
@@ -129,7 +144,7 @@ contract EOFeedAdapterTest is EOFeedAdapterTestUninitialized {
     function test_UpdatePrice() public {
         _updateFeed(FEED_ID, RATE2, block.timestamp);
         (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound) =
-            _feedAdapter.getRoundData(2);
+            _feedAdapter.getRoundData(_lastBlockNumber);
         assertEq(roundId, _lastBlockNumber);
         assertEq(answer, int256(RATE2));
         assertEq(startedAt, block.timestamp);
@@ -146,14 +161,14 @@ contract EOFeedAdapterTest is EOFeedAdapterTestUninitialized {
         assertEq(_feedAdapter.latestAnswer(), int256(RATE2));
         assertEq(_feedAdapter.latestTimestamp(), block.timestamp);
         assertEq(_feedAdapter.latestRound(), _lastBlockNumber);
-        assertEq(_feedAdapter.getAnswer(2), int256(RATE2));
-        assertEq(_feedAdapter.getTimestamp(2), block.timestamp);
+        assertEq(_feedAdapter.getAnswer(_lastBlockNumber), int256(RATE2));
+        assertEq(_feedAdapter.getTimestamp(_lastBlockNumber), block.timestamp);
     }
 
     function testFuzz_GetRoundData(uint256 rate, uint256 timestamp) public {
         _updateFeed(FEED_ID, rate, timestamp);
         (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound) =
-            _feedAdapter.getRoundData(3);
+            _feedAdapter.getRoundData(_lastBlockNumber);
         assertEq(roundId, _lastBlockNumber);
         assertEq(answer, int256(rate));
         assertEq(startedAt, timestamp);
@@ -224,7 +239,7 @@ contract EOFeedAdapterTest is EOFeedAdapterTestUninitialized {
         _updateFeed(FEED_ID, 1_234_567_890, block.timestamp);
 
         (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound) =
-            feedAdapter.getRoundData(1);
+            feedAdapter.getRoundData(_lastBlockNumber);
         assertEq(roundId, _lastBlockNumber);
         assertEq(answer, 12_345_678);
         assertEq(startedAt, block.timestamp);
@@ -238,7 +253,7 @@ contract EOFeedAdapterTest is EOFeedAdapterTestUninitialized {
         _updateFeed(FEED_ID, 12_345_678, block.timestamp);
 
         (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound) =
-            feedAdapter.getRoundData(1);
+            feedAdapter.getRoundData(_lastBlockNumber);
         assertEq(roundId, _lastBlockNumber);
         assertEq(answer, 1_234_567_800);
         assertEq(startedAt, block.timestamp);
@@ -267,7 +282,7 @@ contract EOFeedAdapterTest is EOFeedAdapterTestUninitialized {
         feedAdapter.initialize(address(_feedManager), FEED_ID, 10, 8, DESCRIPTION, VERSION);
         _updateFeed(FEED_ID, 1_234_567_890, block.timestamp);
 
-        assertEq(feedAdapter.getAnswer(1), 12_345_678);
+        assertEq(feedAdapter.getAnswer(_lastBlockNumber), 12_345_678);
     }
 
     function test_OutputDecimalsBiggerThanInput_GetAnswer() public {
@@ -275,7 +290,7 @@ contract EOFeedAdapterTest is EOFeedAdapterTestUninitialized {
         feedAdapter.initialize(address(_feedManager), FEED_ID, 8, 10, DESCRIPTION, VERSION);
         _updateFeed(FEED_ID, 12_345_678, block.timestamp);
 
-        assertEq(feedAdapter.getAnswer(1), 1_234_567_800);
+        assertEq(feedAdapter.getAnswer(_lastBlockNumber), 1_234_567_800);
     }
 }
 

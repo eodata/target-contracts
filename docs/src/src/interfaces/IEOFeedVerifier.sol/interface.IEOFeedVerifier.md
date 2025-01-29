@@ -1,6 +1,8 @@
 # IEOFeedVerifier
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/badb6375447660efebd9adbe5de6f290257bb3a9/src/interfaces/IEOFeedVerifier.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/44a7184a934b669887867d9bb70946619d422be3/src/interfaces/IEOFeedVerifier.sol)
+
+**Author:** eOracle
 
 ## Functions
 
@@ -45,34 +47,6 @@ function batchVerify(
 | `inputs`  | `LeafInput[]`        | feed leaves         |
 | `vParams` | `VerificationParams` | verification params |
 
-### setNewValidatorSet
-
-Function to set a new validator set
-
-```solidity
-function setNewValidatorSet(Validator[] calldata newValidatorSet) external;
-```
-
-**Parameters**
-
-| Name              | Type          | Description                    |
-| ----------------- | ------------- | ------------------------------ |
-| `newValidatorSet` | `Validator[]` | The new validator set to store |
-
-### setFeedManager
-
-Sets the address of the feed manager.
-
-```solidity
-function setFeedManager(address feedManager_) external;
-```
-
-**Parameters**
-
-| Name           | Type      | Description                          |
-| -------------- | --------- | ------------------------------------ |
-| `feedManager_` | `address` | The address of the new feed manager. |
-
 ## Events
 
 ### ValidatorSetUpdated
@@ -109,7 +83,7 @@ event FeedManagerSet(address feedManager);
 
 ### LeafInput
 
-_Leaf input structure_
+_Input data for leaf verification_
 
 ```solidity
 struct LeafInput {
@@ -121,11 +95,11 @@ struct LeafInput {
 
 **Properties**
 
-| Name           | Type        | Description                                                                                                                                                                              |
-| -------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `leafIndex`    | `uint256`   | Index of the leaf                                                                                                                                                                        |
-| `unhashedLeaf` | `bytes`     | Unhashed leaf data abi encoded (uint256 id, address sender, address receiver, bytes memory data) where bytes memory data = abi encoded (uint256 feedId, uint256 rate, uint256 timestamp) |
-| `proof`        | `bytes32[]` | Merkle proof of the leaf                                                                                                                                                                 |
+| Name           | Type        | Description                                                                      |
+| -------------- | ----------- | -------------------------------------------------------------------------------- |
+| `leafIndex`    | `uint256`   | Index of the leaf                                                                |
+| `unhashedLeaf` | `bytes`     | Unhashed leaf data abi encoded (uint256 feedId, uint256 rate, uint256 timestamp) |
+| `proof`        | `bytes32[]` | Merkle proof of the leaf                                                         |
 
 ### VerificationParams
 
@@ -159,9 +133,7 @@ struct VerificationParams {
 
 ### Validator
 
-consider adding a small gap for future fields to ease upgrades in the future.
-
-_Validator structure_
+Represents a validator in the system
 
 ```solidity
 struct Validator {
@@ -174,9 +146,9 @@ struct Validator {
 
 **Properties**
 
-| Name          | Type         | Description                                                    |
-| ------------- | ------------ | -------------------------------------------------------------- |
-| `_address`    | `address`    | validator address                                              |
-| `g1pk`        | `uint256[2]` | validator G1 public key                                        |
-| `g2pk`        | `uint256[4]` | validator G2 public key (not used for now but good to have it) |
-| `votingPower` | `uint256`    | Validator voting power                                         |
+| Name          | Type         | Description                                                  |
+| ------------- | ------------ | ------------------------------------------------------------ |
+| `_address`    | `address`    | The validator's address                                      |
+| `g1pk`        | `uint256[2]` | validator G1 public key                                      |
+| `g2pk`        | `uint256[4]` | validator G2 public key (not used in current implementation) |
+| `votingPower` | `uint256`    | Validator voting power                                       |

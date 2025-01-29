@@ -12,7 +12,8 @@ import {
     BaseQuotePairExists,
     FeedNotSupported,
     FeedDoesNotExist,
-    NotFeedDeployer
+    NotFeedDeployer,
+    NotLatestRound
 } from "../interfaces/Errors.sol";
 
 /**
@@ -79,22 +80,7 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
      * @param feedAdapterImplementation The feedAdapter implementation address
      * @param owner Owner of the contract
      */
-    function initialize(
-        address feedManager,
-        address feedAdapterImplementation,
-        address owner
-    )
-        external
-        initializer
-        onlyNonZeroAddress(feedManager)
-        onlyNonZeroAddress(feedAdapterImplementation)
-    {
-        __Ownable_init(owner);
-        __EOFeedFactory_init(feedAdapterImplementation, owner);
-        _feedManager = IEOFeedManager(feedManager);
-        emit FeedManagerSet(feedManager);
-    }
-
+    function initialize(address feedManager, address feedAdapterImplementation, address owner) external virtual;
     /* ============ External Functions ============ */
 
     /**
@@ -255,9 +241,10 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
     /**
      * @notice Get the round data for a given base/quote pair
      * @dev Calls the getLatestPriceFeed function from the feed manager, not from feedAdapter itself
-     *      currently the roundId is not used and latest round is returned
+     * @dev Reverts if the roundId is not the latest one
      * @param base The base asset address
      * @param quote The quote asset address
+     * @param roundId The roundId - only latest round is supported
      * @return roundId The roundId
      * @return answer The answer
      * @return startedAt The startedAt
@@ -267,14 +254,15 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
     function getRoundData(
         address base,
         address quote,
-        uint80
+        uint80 roundId
     )
         external
         view
-        returns (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound)
+        returns (uint80, int256, uint256, uint256, uint80)
     {
         IEOFeedManager.PriceFeed memory feedData =
             _feedManager.getLatestPriceFeed(_tokenAddressesToFeedIds[base][quote]);
+        if (roundId != feedData.eoracleBlockNumber) revert NotLatestRound();
         return (
             uint80(feedData.eoracleBlockNumber),
             int256(feedData.value),
@@ -309,27 +297,33 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
     /**
      * @notice Get the answer for a given base/quote pair and round
      * @dev Calls the getLatestPriceFeed function from the feed manager, not from feedAdapter itself
-     *      currently the roundId is not used and latest answer is returned
+     * @dev Reverts if the roundId is not the latest one
      * @param base The base asset address
      * @param quote The quote asset address
-     * @param
+     * @param roundId The roundId - only latest round is supported
      * @return int256 The answer
      */
-    function getAnswer(address base, address quote, uint256) external view returns (int256) {
-        return int256(_feedManager.getLatestPriceFeed(_tokenAddressesToFeedIds[base][quote]).value);
+    function getAnswer(address base, address quote, uint256 roundId) external view returns (int256) {
+        IEOFeedManager.PriceFeed memory feedData =
+            _feedManager.getLatestPriceFeed(_tokenAddressesToFeedIds[base][quote]);
+        if (roundId != feedData.eoracleBlockNumber) revert NotLatestRound();
+        return int256(feedData.value);
     }
 
     /**
      * @notice Get the timestamp for a given base/quote pair and round
      * @dev Calls the getLatestPriceFeed function from the feed manager, not from feedAdapter itself
-     *      currently the roundId is not used and latest timestamp is returned
+     * @dev Reverts if the roundId is not the latest one
      * @param base The base asset address
      * @param quote The quote asset address
-     * @param
+     * @param roundId The roundId - only latest round is supported
      * @return uint256 The timestamp
      */
-    function getTimestamp(address base, address quote, uint256) external view returns (uint256) {
-        return _feedManager.getLatestPriceFeed(_tokenAddressesToFeedIds[base][quote]).timestamp;
+    function getTimestamp(address base, address quote, uint256 roundId) external view returns (uint256) {
+        IEOFeedManager.PriceFeed memory feedData =
+            _feedManager.getLatestPriceFeed(_tokenAddressesToFeedIds[base][quote]);
+        if (roundId != feedData.eoracleBlockNumber) revert NotLatestRound();
+        return feedData.timestamp;
     }
 
     /**
@@ -353,19 +347,22 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
 
     /**
      * @notice Get the round feedAdapter for a given base/quote pair
+     * @dev Reverts if the roundId is not the latest one
      * @param base The base asset address
      * @param quote The quote asset address
-     * @param
+     * @param roundId The roundId - only latest round is supported
      * @return IEOFeedAdapter The feedAdapter
      */
-    function getRoundFeed(address base, address quote, uint80) external view returns (IEOFeedAdapter) {
+    function getRoundFeed(address base, address quote, uint80 roundId) external view returns (IEOFeedAdapter) {
+        IEOFeedManager.PriceFeed memory feedData =
+            _feedManager.getLatestPriceFeed(_tokenAddressesToFeedIds[base][quote]);
+        if (roundId != feedData.eoracleBlockNumber) revert NotLatestRound();
         return _getFeed(base, quote);
     }
 
     /**
      * @notice Get the latest round for a given base/quote pair
      * @dev Calls the getLatestPriceFeed function from the feed manager, not from Feed itself
-     *      currently the roundId is not used and 0 is returned
      * @param base The base asset address
      * @param quote The quote asset address
      * @return uint256 The latest round

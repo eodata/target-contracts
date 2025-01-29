@@ -315,6 +315,6 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
      */
     // solhint-disable ordering
     // slither-disable-next-line unused-state,naming-convention
-    uint256[50] private __gap;
+    uint256[48] private __gap;
     // solhint-disable enable
 }
