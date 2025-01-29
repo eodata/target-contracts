@@ -1,8 +1,14 @@
 # BLS
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/88beedd8b816225fb92696d7d314b9def6318a7e/src/common/BLS.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/44a7184a934b669887867d9bb70946619d422be3/src/common/BLS.sol)
 
 **Inherits:** [IBLS](/src/interfaces/IBLS.sol/interface.IBLS.md)
+
+**Author:** eOracle
+
+BLS signature aggregation reduces the size of signature data to store on-chain
+
+_points on G1 are used for signatures and messages, and on G2 for public keys_
 
 ## State Variables
 
@@ -17,6 +23,13 @@ uint256 internal constant PAIRING_EQUALITY_CHECK_GAS = 120_000;
 ```solidity
 uint256 internal constant N =
     21_888_242_871_839_275_222_246_405_745_257_275_088_696_311_157_297_823_662_689_037_894_645_226_208_583;
+```
+
+### R
+
+```solidity
+uint256 internal constant R =
+    21_888_242_871_839_275_222_246_405_745_257_275_088_548_364_400_416_034_343_698_204_186_575_808_495_617;
 ```
 
 ### G1_X

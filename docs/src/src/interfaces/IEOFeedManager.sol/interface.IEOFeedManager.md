@@ -1,6 +1,8 @@
 # IEOFeedManager
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/88beedd8b816225fb92696d7d314b9def6318a7e/src/interfaces/IEOFeedManager.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/44a7184a934b669887867d9bb70946619d422be3/src/interfaces/IEOFeedManager.sol)
+
+**Author:** eOracle
 
 ## Functions
 
@@ -73,9 +75,9 @@ function getLatestPriceFeed(uint256 feedId) external view returns (PriceFeed mem
 
 **Returns**
 
-| Name     | Type        | Description      |
-| -------- | ----------- | ---------------- |
-| `<none>` | `PriceFeed` | PriceFeed struct |
+| Name     | Type        | Description                                                                                                                                                                                              |
+| -------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `<none>` | `PriceFeed` | The latest price feed data containing: - value: The price feed value - timestamp: The timestamp when the price was aggregated - eoracleBlockNumber: The eoracle block number when the price was recorded |
 
 ### getLatestPriceFeeds
 
@@ -93,9 +95,9 @@ function getLatestPriceFeeds(uint256[] calldata feedIds) external view returns (
 
 **Returns**
 
-| Name     | Type          | Description                |
-| -------- | ------------- | -------------------------- |
-| `<none>` | `PriceFeed[]` | Array of PriceFeed structs |
+| Name     | Type          | Description                                                        |
+| -------- | ------------- | ------------------------------------------------------------------ |
+| `<none>` | `PriceFeed[]` | Array of PriceFeed structs corresponding to each requested feed ID |
 
 ### isWhitelistedPublisher
 
@@ -137,6 +139,48 @@ function isSupportedFeed(uint256 feedId) external view returns (bool);
 | -------- | ------ | ------------------------------------------------ |
 | `<none>` | `bool` | Boolean indicating whether the feed is supported |
 
+### getFeedDeployer
+
+Get the feed deployer
+
+```solidity
+function getFeedDeployer() external view returns (address);
+```
+
+**Returns**
+
+| Name     | Type      | Description                  |
+| -------- | --------- | ---------------------------- |
+| `<none>` | `address` | Address of the feed deployer |
+
+### getFeedVerifier
+
+Get the feed verifier contract address
+
+```solidity
+function getFeedVerifier() external view returns (IEOFeedVerifier);
+```
+
+**Returns**
+
+| Name     | Type              | Description                           |
+| -------- | ----------------- | ------------------------------------- |
+| `<none>` | `IEOFeedVerifier` | Address of the feed verifier contract |
+
+### getPauserRegistry
+
+Get the pauser registry contract address
+
+```solidity
+function getPauserRegistry() external view returns (IPauserRegistry);
+```
+
+**Returns**
+
+| Name     | Type              | Description                             |
+| -------- | ----------------- | --------------------------------------- |
+| `<none>` | `IPauserRegistry` | Address of the pauser registry contract |
+
 ## Events
 
 ### RateUpdated
@@ -171,6 +215,78 @@ event SymbolReplay(uint256 indexed feedId, uint256 rate, uint256 timestamp, uint
 | `rate`            | `uint256` | Price feed value            |
 | `timestamp`       | `uint256` | Price feed timestamp        |
 | `latestTimestamp` | `uint256` | Latest price feed timestamp |
+
+### FeedDeployerSet
+
+_Event emitted when the feed deployer is set_
+
+```solidity
+event FeedDeployerSet(address indexed feedDeployer);
+```
+
+**Parameters**
+
+| Name           | Type      | Description                  |
+| -------------- | --------- | ---------------------------- |
+| `feedDeployer` | `address` | Address of the feed deployer |
+
+### FeedVerifierSet
+
+_Event emitted when the feed verifier is set_
+
+```solidity
+event FeedVerifierSet(address indexed feedVerifier);
+```
+
+**Parameters**
+
+| Name           | Type      | Description                  |
+| -------------- | --------- | ---------------------------- |
+| `feedVerifier` | `address` | Address of the feed verifier |
+
+### PauserRegistrySet
+
+_Event emitted when the pauser registry is set_
+
+```solidity
+event PauserRegistrySet(address indexed pauserRegistry);
+```
+
+**Parameters**
+
+| Name             | Type      | Description                    |
+| ---------------- | --------- | ------------------------------ |
+| `pauserRegistry` | `address` | Address of the pauser registry |
+
+### SupportedFeedsUpdated
+
+_Event emitted when the supported feeds are updated_
+
+```solidity
+event SupportedFeedsUpdated(uint256 indexed feedId, bool isSupported);
+```
+
+**Parameters**
+
+| Name          | Type      | Description                                      |
+| ------------- | --------- | ------------------------------------------------ |
+| `feedId`      | `uint256` | Feed id                                          |
+| `isSupported` | `bool`    | Boolean indicating whether the feed is supported |
+
+### PublisherWhitelisted
+
+_Event emitted when a publisher is whitelisted_
+
+```solidity
+event PublisherWhitelisted(address indexed publisher, bool isWhitelisted);
+```
+
+**Parameters**
+
+| Name            | Type      | Description                                             |
+| --------------- | --------- | ------------------------------------------------------- |
+| `publisher`     | `address` | Address of the publisher                                |
+| `isWhitelisted` | `bool`    | Boolean indicating whether the publisher is whitelisted |
 
 ## Structs
 

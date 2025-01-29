@@ -1,9 +1,11 @@
 # EOFeedManager
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/88beedd8b816225fb92696d7d314b9def6318a7e/src/EOFeedManager.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/44a7184a934b669887867d9bb70946619d422be3/src/EOFeedManager.sol)
 
 **Inherits:** [IEOFeedManager](/src/interfaces/IEOFeedManager.sol/interface.IEOFeedManager.md), OwnableUpgradeable,
 PausableUpgradeable
+
+**Author:** eOracle
 
 The EOFeedManager contract is responsible for receiving feed updates from whitelisted publishers. These updates are
 verified using the logic in the EOFeedVerifier. Upon successful verification, the feed data is stored in the
@@ -52,10 +54,21 @@ Address of the `PauserRegistry` contract that this contract defers to for determ
 IPauserRegistry internal _pauserRegistry;
 ```
 
-### \_\_gap
+### \_feedDeployer
+
+_Address of the feed deployer_
 
 ```solidity
-uint256[50] private __gap;
+address internal _feedDeployer;
+```
+
+### \_\_gap
+
+_Gap for future storage variables in upgradeable contract. See
+https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps_
+
+```solidity
+uint256[48] private __gap;
 ```
 
 ## Functions
@@ -88,6 +101,12 @@ modifier onlyPauser();
 modifier onlyUnpauser();
 ```
 
+### onlyFeedDeployer
+
+```solidity
+modifier onlyFeedDeployer();
+```
+
 ### constructor
 
 ```solidity
@@ -104,10 +123,13 @@ _The feed verifier contract must be deployed first_
 function initialize(
     address feedVerifier,
     address owner,
-    address pauserRegistry
+    address pauserRegistry,
+    address feedDeployer
 )
     external
     onlyNonZeroAddress(feedVerifier)
+    onlyNonZeroAddress(feedDeployer)
+    onlyNonZeroAddress(pauserRegistry)
     initializer;
 ```
 
@@ -118,6 +140,7 @@ function initialize(
 | `feedVerifier`   | `address` | Address of the feed verifier contract   |
 | `owner`          | `address` | Owner of the contract                   |
 | `pauserRegistry` | `address` | Address of the pauser registry contract |
+| `feedDeployer`   | `address` | Address of the feed deployer            |
 
 ### setFeedVerifier
 
@@ -133,6 +156,20 @@ function setFeedVerifier(address feedVerifier) external onlyOwner onlyNonZeroAdd
 | -------------- | --------- | ------------------------------------- |
 | `feedVerifier` | `address` | Address of the feed verifier contract |
 
+### setFeedDeployer
+
+Set the feed deployer
+
+```solidity
+function setFeedDeployer(address feedDeployer) external onlyOwner onlyNonZeroAddress(feedDeployer);
+```
+
+**Parameters**
+
+| Name           | Type      | Description               |
+| -------------- | --------- | ------------------------- |
+| `feedDeployer` | `address` | The feed deployer address |
+
 ### setSupportedFeeds
 
 Set the supported feeds
@@ -147,6 +184,20 @@ function setSupportedFeeds(uint256[] calldata feedIds, bool[] calldata isSupport
 | ------------- | ----------- | ---------------------------------------------------------- |
 | `feedIds`     | `uint256[]` | Array of feed ids                                          |
 | `isSupported` | `bool[]`    | Array of booleans indicating whether the feed is supported |
+
+### addSupportedFeeds
+
+Add supported feeds
+
+```solidity
+function addSupportedFeeds(uint256[] calldata feedIds) external onlyFeedDeployer;
+```
+
+**Parameters**
+
+| Name      | Type        | Description       |
+| --------- | ----------- | ----------------- |
+| `feedIds` | `uint256[]` | Array of feed ids |
 
 ### whitelistPublishers
 
@@ -210,7 +261,7 @@ function updateFeeds(
 Set the pauser registry contract address
 
 ```solidity
-function setPauserRegistry(address pauserRegistry) external onlyOwner;
+function setPauserRegistry(address pauserRegistry) external onlyOwner onlyNonZeroAddress(pauserRegistry);
 ```
 
 **Parameters**
@@ -235,20 +286,6 @@ Unpause the feed manager
 function unpause() external onlyUnpauser;
 ```
 
-### getPauserRegistry
-
-Get the pauser registry contract address
-
-```solidity
-function getPauserRegistry() external view returns (IPauserRegistry);
-```
-
-**Returns**
-
-| Name     | Type              | Description                             |
-| -------- | ----------------- | --------------------------------------- |
-| `<none>` | `IPauserRegistry` | Address of the pauser registry contract |
-
 ### getLatestPriceFeed
 
 Get the latest price for a feed
@@ -265,9 +302,9 @@ function getLatestPriceFeed(uint256 feedId) external view returns (PriceFeed mem
 
 **Returns**
 
-| Name     | Type        | Description      |
-| -------- | ----------- | ---------------- |
-| `<none>` | `PriceFeed` | PriceFeed struct |
+| Name     | Type        | Description                                                                                                                                                                                              |
+| -------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `<none>` | `PriceFeed` | The latest price feed data containing: - value: The price feed value - timestamp: The timestamp when the price was aggregated - eoracleBlockNumber: The eoracle block number when the price was recorded |
 
 ### getLatestPriceFeeds
 
@@ -285,9 +322,9 @@ function getLatestPriceFeeds(uint256[] calldata feedIds) external view returns (
 
 **Returns**
 
-| Name     | Type          | Description                |
-| -------- | ------------- | -------------------------- |
-| `<none>` | `PriceFeed[]` | Array of PriceFeed structs |
+| Name     | Type          | Description                                                        |
+| -------- | ------------- | ------------------------------------------------------------------ |
+| `<none>` | `PriceFeed[]` | Array of PriceFeed structs corresponding to each requested feed ID |
 
 ### isWhitelistedPublisher
 
@@ -329,6 +366,20 @@ function isSupportedFeed(uint256 feedId) external view returns (bool);
 | -------- | ------ | ------------------------------------------------ |
 | `<none>` | `bool` | Boolean indicating whether the feed is supported |
 
+### getFeedDeployer
+
+Get the feed deployer
+
+```solidity
+function getFeedDeployer() external view returns (address);
+```
+
+**Returns**
+
+| Name     | Type      | Description                  |
+| -------- | --------- | ---------------------------- |
+| `<none>` | `address` | Address of the feed deployer |
+
 ### getFeedVerifier
 
 Get the feed verifier contract address
@@ -343,9 +394,24 @@ function getFeedVerifier() external view returns (IEOFeedVerifier);
 | -------- | ----------------- | ------------------------------------- |
 | `<none>` | `IEOFeedVerifier` | Address of the feed verifier contract |
 
+### getPauserRegistry
+
+Get the pauser registry contract address
+
+```solidity
+function getPauserRegistry() external view returns (IPauserRegistry);
+```
+
+**Returns**
+
+| Name     | Type              | Description                             |
+| -------- | ----------------- | --------------------------------------- |
+| `<none>` | `IPauserRegistry` | Address of the pauser registry contract |
+
 ### \_processVerifiedRate
 
-Process the verified rate, check and save it
+Process the verified feed data, validate it and store it. If the timestamp is newer than the existing timestamp, updates
+the price feed and emits RateUpdated. Otherwise emits SymbolReplay without updating.
 
 ```solidity
 function _processVerifiedRate(bytes memory data, uint256 blockNumber) internal;
@@ -355,7 +421,7 @@ function _processVerifiedRate(bytes memory data, uint256 blockNumber) internal;
 
 | Name          | Type      | Description                                                                       |
 | ------------- | --------- | --------------------------------------------------------------------------------- |
-| `data`        | `bytes`   | Verified rate data, abi encoded (uint256 feedId, uint256 rate, uint256 timestamp) |
+| `data`        | `bytes`   | verified feed data, abi encoded (uint256 feedId, uint256 rate, uint256 timestamp) |
 | `blockNumber` | `uint256` | eoracle chain block number                                                        |
 
 ### \_getLatestPriceFeed

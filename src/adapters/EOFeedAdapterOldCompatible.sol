@@ -2,16 +2,17 @@
 pragma solidity 0.8.25;
 
 import { IEOFeedManager } from "../interfaces/IEOFeedManager.sol";
-import { IEOFeedAdapterV2 } from "./interfaces/IEOFeedAdapterV2.sol";
+import { IEOFeedAdapter } from "./interfaces/IEOFeedAdapter.sol";
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-
-import { InvalidAddress } from "../interfaces/Errors.sol";
+import { PausableUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
+import { InvalidAddress, NotLatestRound } from "../interfaces/Errors.sol";
 
 /**
- * @title EOFeedAdapterV2
- * @notice Price feed adapter contract
+ * @title EOFeedAdapterOldCompatible
+ * @author eOracle
+ * @notice Price feed adapter contract compatible with old EOFeedManager
  */
-contract EOFeedAdapterV2 is IEOFeedAdapterV2, Initializable {
+contract EOFeedAdapterOldCompatible is IEOFeedAdapter, Initializable {
     /// @dev Feed manager contract
     IEOFeedManager private _feedManager;
 
@@ -25,15 +26,23 @@ contract EOFeedAdapterV2 is IEOFeedAdapterV2, Initializable {
     /// @dev Feed id
     uint16 private _feedId;
 
-    /// @dev Decimals of the rate
+    /// @dev The input decimals of the rate
     uint8 private _inputDecimals;
+
+    /// @dev The output decimals of the rate
     uint8 private _outputDecimals;
+
+    /// @dev The decimals difference between input and output decimals
     int256 private _decimalsDiff;
+
+    /* ============ Constructor ============ */
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         _disableInitializers();
     }
+
+    /* ============ Initializer ============ */
 
     /**
      * @notice Initialize the contract
@@ -46,7 +55,7 @@ contract EOFeedAdapterV2 is IEOFeedAdapterV2, Initializable {
      */
     function initialize(
         address feedManager,
-        uint16 feedId,
+        uint256 feedId,
         uint8 inputDecimals,
         uint8 outputDecimals,
         string memory feedDescription,
@@ -57,7 +66,11 @@ contract EOFeedAdapterV2 is IEOFeedAdapterV2, Initializable {
     {
         if (feedManager == address(0)) revert InvalidAddress();
         _feedManager = IEOFeedManager(feedManager);
-        _feedId = feedId;
+
+        // safe to downcast because this implementation will be used to support already deployed feeds
+        // with feedId < 65535 (uint16 max value),
+        // moreover which are already initialized, and the method will not be used anymore
+        _feedId = uint16(feedId);
         _outputDecimals = outputDecimals;
         _inputDecimals = inputDecimals;
         uint256 diff = inputDecimals > outputDecimals ? inputDecimals - outputDecimals : outputDecimals - inputDecimals;
@@ -66,17 +79,21 @@ contract EOFeedAdapterV2 is IEOFeedAdapterV2, Initializable {
         _version = feedVersion;
     }
 
+    /* ============ External Functions ============ */
+
     /**
      * @notice Get the price for the round
-     * @param
+     * @dev Reverts if the roundId is not the latest one
+     * @param roundId The roundId - only latest round is supported
      * @return roundId The round id
      * @return answer The price
      * @return startedAt The timestamp of the start of the round
      * @return updatedAt The timestamp of the end of the round
      * @return answeredInRound The round id in which the answer was computed
      */
-    function getRoundData(uint80) external view returns (uint80, int256, uint256, uint256, uint80) {
+    function getRoundData(uint80 roundId) external view returns (uint80, int256, uint256, uint256, uint80) {
         IEOFeedManager.PriceFeed memory priceData = _feedManager.getLatestPriceFeed(_feedId);
+        if (roundId != priceData.eoracleBlockNumber) revert NotLatestRound();
         return (
             uint80(priceData.eoracleBlockNumber),
             _normalizePrice(priceData.value),
@@ -124,22 +141,26 @@ contract EOFeedAdapterV2 is IEOFeedAdapterV2, Initializable {
     }
 
     /**
-     * @notice Get the price for the round (round is not used, the latest price is returned)
-     * @param
+     * @notice Get the price for the round
+     * @dev Reverts if the roundId is not the latest one
+     * @param roundId The roundId - only latest round is supported
      * @return int256 The price
      */
-    function getAnswer(uint256) external view returns (int256) {
+    function getAnswer(uint256 roundId) external view returns (int256) {
         IEOFeedManager.PriceFeed memory priceData = _feedManager.getLatestPriceFeed(_feedId);
+        if (roundId != priceData.eoracleBlockNumber) revert NotLatestRound();
         return _normalizePrice(priceData.value);
     }
 
     /**
-     * @notice Get the timestamp for the round (round is not used, the latest timestamp is returned)
-     * @param
+     * @notice Get the timestamp for the round
+     * @dev Reverts if the roundId is not the latest one
+     * @param roundId The roundId - only latest round is supported
      * @return uint256 The timestamp
      */
-    function getTimestamp(uint256) external view returns (uint256) {
+    function getTimestamp(uint256 roundId) external view returns (uint256) {
         IEOFeedManager.PriceFeed memory priceData = _feedManager.getLatestPriceFeed(_feedId);
+        if (roundId != priceData.eoracleBlockNumber) revert NotLatestRound();
         return priceData.timestamp;
     }
 
@@ -184,6 +205,21 @@ contract EOFeedAdapterV2 is IEOFeedAdapterV2, Initializable {
         return priceData.eoracleBlockNumber;
     }
 
+    /**
+     * @notice Get the paused status of the feed
+     * @return bool The paused status
+     */
+    function isPaused() external view returns (bool) {
+        return PausableUpgradeable(address(_feedManager)).paused();
+    }
+
+    /* ============ Internal Functions ============ */
+
+    /**
+     * @notice Normalize the price to the output decimals
+     * @param price The price to normalize
+     * @return int256 The normalized price
+     */
     function _normalizePrice(uint256 price) internal view returns (int256) {
         if (_inputDecimals > _outputDecimals) {
             return int256(price) / _decimalsDiff;
@@ -192,8 +228,12 @@ contract EOFeedAdapterV2 is IEOFeedAdapterV2, Initializable {
         }
     }
 
+    /**
+     * @dev Gap for future storage variables in upgradeable contract.
+     * See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps
+     */
     // solhint-disable ordering
     // slither-disable-next-line unused-state,naming-convention
-    uint256[50] private __gap;
+    uint256[48] private __gap;
     // solhint-disable ordering
 }

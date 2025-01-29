@@ -1,15 +1,12 @@
-# EOFeedAdapter
+# EOFeedAdapterOldCompatible
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/44a7184a934b669887867d9bb70946619d422be3/src/adapters/EOFeedAdapter.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/44a7184a934b669887867d9bb70946619d422be3/src/adapters/EOFeedAdapterOldCompatible.sol)
 
 **Inherits:** [IEOFeedAdapter](/src/adapters/interfaces/IEOFeedAdapter.sol/interface.IEOFeedAdapter.md), Initializable
 
 **Author:** eOracle
 
-EOFeedAdapter is a contract that provides a standardized interface for accessing feed data from the eOracle system. It
-acts as a compatibility layer between eOracle's native feed format and the widely-used AggregatorV3Interface format.
-
-_compatible with AggregatorV3Interface._
+Price feed adapter contract compatible with old EOFeedManager
 
 ## State Variables
 
@@ -42,12 +39,10 @@ string private _description;
 _Feed id_
 
 ```solidity
-uint256 private _feedId;
+uint16 private _feedId;
 ```
 
 ### \_inputDecimals
-
-_the next 2 variables will be packed in 1 slot_
 
 _The input decimals of the rate_
 

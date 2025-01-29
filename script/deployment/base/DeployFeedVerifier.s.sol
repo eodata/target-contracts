@@ -8,31 +8,15 @@ import { EOFeedVerifier } from "src/EOFeedVerifier.sol";
 import { IBLS } from "src/interfaces/IBLS.sol";
 
 abstract contract FeedVerifierDeployer is Script {
-    function deployFeedVerifier(
-        address proxyAdmin,
-        address owner,
-        IBLS bls,
-        uint256 eoracleChainId
-    )
-        internal
-        returns (address proxyAddr)
-    {
-        bytes memory initData = abi.encodeCall(EOFeedVerifier.initialize, (owner, bls, eoracleChainId));
+    function deployFeedVerifier(address proxyAdmin, address owner, IBLS bls) internal returns (address proxyAddr) {
+        bytes memory initData = abi.encodeCall(EOFeedVerifier.initialize, (owner, bls));
 
         proxyAddr = Upgrades.deployTransparentProxy("EOFeedVerifier.sol", proxyAdmin, initData);
     }
 }
 
 contract DeployFeedVerifier is FeedVerifierDeployer {
-    function run(
-        address proxyAdmin,
-        address owner,
-        IBLS bls,
-        uint256 eoracleChainId
-    )
-        external
-        returns (address proxyAddr)
-    {
-        return deployFeedVerifier(proxyAdmin, owner, bls, eoracleChainId);
+    function run(address proxyAdmin, address owner, IBLS bls) external returns (address proxyAddr) {
+        return deployFeedVerifier(proxyAdmin, owner, bls);
     }
 }

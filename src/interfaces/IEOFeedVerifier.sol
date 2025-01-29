@@ -1,13 +1,18 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.25;
 
+/**
+ * @title IEOFeedVerifier
+ * @author eOracle
+ */
 interface IEOFeedVerifier {
+    /* ============ Structs ============ */
+
     /**
-     * @dev Leaf input structure
+     * @dev Input data for leaf verification
      * @param leafIndex Index of the leaf
      * @param unhashedLeaf Unhashed leaf data
-     *         abi encoded (uint256 id, address sender, address receiver, bytes memory data)
-     *              where bytes memory data =  abi encoded (uint256 feedId, uint256 rate, uint256 timestamp)
+     *         abi encoded (uint256 feedId, uint256 rate, uint256 timestamp)
      * @param proof Merkle proof of the leaf
      */
     struct LeafInput {
@@ -31,16 +36,15 @@ interface IEOFeedVerifier {
         bytes32 eventRoot; // 32 bytes
         bytes32 blockHash; // 32 bytes
         uint256[2] signature; // 64 bytes
-        uint256[4] apkG2; // 64 bytes
+        uint256[4] apkG2; // 128 bytes
         bytes nonSignersBitmap; // dynamic
     }
 
     /**
-     * @notice consider adding a small gap for future fields to ease upgrades in the future.
-     * @dev Validator structure
-     * @param _address validator address
+     * @notice Represents a validator in the system
+     * @param _address The validator's address
      * @param g1pk validator G1 public key
-     * @param g2pk validator G2 public key (not used for now but good to have it)
+     * @param g2pk validator G2 public key (not used in current implementation)
      * @param votingPower Validator voting power
      */
     struct Validator {
@@ -49,6 +53,8 @@ interface IEOFeedVerifier {
         uint256[4] g2pk;
         uint256 votingPower;
     }
+
+    /* ============ Events ============ */
 
     /**
      * @dev Event emitted when the validator set is updated
@@ -65,6 +71,8 @@ interface IEOFeedVerifier {
      * @param feedManager Address of the feed manager
      */
     event FeedManagerSet(address feedManager);
+
+    /* ============ External Functions ============ */
 
     /**
      * @notice verify single leaf signature from a block merkle tree
@@ -90,16 +98,4 @@ interface IEOFeedVerifier {
     )
         external
         returns (bytes[] memory);
-
-    /**
-     * @notice Function to set a new validator set
-     * @param newValidatorSet The new validator set to store
-     */
-    function setNewValidatorSet(Validator[] calldata newValidatorSet) external;
-
-    /**
-     * @notice Sets the address of the feed manager.
-     * @param feedManager_ The address of the new feed manager.
-     */
-    function setFeedManager(address feedManager_) external;
 }

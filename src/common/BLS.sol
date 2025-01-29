@@ -2,9 +2,11 @@
 pragma solidity 0.8.25;
 
 import { IBLS } from "../interfaces/IBLS.sol";
+
+// Inspired by Hubble's lib/core-contracts/contracts/common/BLS.sol
 /* MIT License
 
-Copyright (c) 2021 Hubble-Project
+Copyright (c) 2021 Hubble-Project (natspec added by Polygon Technology)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -683,36 +685,11 @@ library ModexpSqrt {
     }
 }
 
-// File lib/core-contracts/contracts/common/BLS.sol
-
-// Original license: SPDX_License_Identifier: MIT
-
-/* MIT License
-
-Copyright (c) 2021 Hubble-Project (natspec added by Polygon Technology)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
 /**
- * @title  Boneh–Lynn–Shacham (BLS) signature scheme on Barreto-Naehrig 254 bit curve (BN-254)
- *     @notice BLS signature aggregation reduces the size of signature data to store on-chain
- *     @dev points on G1 are used for signatures and messages, and on G2 for public keys
+ * @title BLS signature scheme on Barreto-Naehrig 254 bit curve (BN-254)
+ * @author eOracle
+ * @notice BLS signature aggregation reduces the size of signature data to store on-chain
+ * @dev points on G1 are used for signatures and messages, and on G2 for public keys
  */
 contract BLS is IBLS {
     uint256 internal constant PAIRING_EQUALITY_CHECK_GAS = 120_000;
@@ -721,6 +698,9 @@ contract BLS is IBLS {
     // prettier-ignore
     uint256 internal constant N =
         21_888_242_871_839_275_222_246_405_745_257_275_088_696_311_157_297_823_662_689_037_894_645_226_208_583;
+
+    uint256 internal constant R =
+        21_888_242_871_839_275_222_246_405_745_257_275_088_548_364_400_416_034_343_698_204_186_575_808_495_617;
 
     // Generator of G1
     uint256 internal constant G1_X = 1;
@@ -802,7 +782,7 @@ contract BLS is IBLS {
         view
         returns (bool, bool)
     {
-        uint256 gamma = uint256(keccak256(abi.encode(msgHash, pk, pkG2, signature))) % N;
+        uint256 gamma = uint256(keccak256(abi.encode(msgHash, pk, pkG2, signature))) % R;
         // verify the signature
         return ecpairing(
             ecadd(signature, ecmul(pk, gamma)),
@@ -864,12 +844,7 @@ contract BLS is IBLS {
      * @return The negation of `p`
      */
     function neg(uint256[2] memory p) public pure returns (uint256[2] memory) {
-        // The prime q in the base field F_q for G1
-        if (p[0] == 0 && p[1] == 0) {
-            return [uint256(0), uint256(0)];
-        } else {
-            return [p[0], N - (p[1] % N)];
-        }
+        return [p[0], (N - p[1]) % N];
     }
 
     /**

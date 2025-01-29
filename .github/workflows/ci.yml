@@ -69,9 +69,6 @@ jobs:
         run: |
           git config --global --add safe.directory /__w/target-contracts/target-contracts
 
-      - name: "Update Foundry dependencies"
-        run: "forge update"
-
       - name: "Build the contracts and print their size"
         run: "forge build --sizes"
 

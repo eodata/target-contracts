@@ -1,6 +1,6 @@
 # InsufficientVotingPower
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/88beedd8b816225fb92696d7d314b9def6318a7e/src/interfaces/Errors.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/44a7184a934b669887867d9bb70946619d422be3/src/interfaces/Errors.sol)
 
 ```solidity
 error InsufficientVotingPower();
