@@ -5,7 +5,8 @@
   "eoracleChainId": 42420,
   "targetChainId": 34443,
   "publishers": ["0xfE9e2523eA97dE94743266a822443984ae00781d"],
-  "supportedFeedIds": [2, 17, 54, 76, 79, 84, 88, 89, 91],
+  "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
+  "supportedFeedIds": [2, 17, 54, 76, 79, 84, 88, 89, 91, 101],
   "supportedFeedsData": [
     {
       "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -78,6 +79,14 @@
       "outputDecimals": 8,
       "description": "MODE/USD",
       "feedId": 84
+    },
+    {
+      "feedId": 101,
+      "description": "uniBTC/USD",
+      "base": "0x004E9C3EF86bc1ca1f0bB5C7662861Ee93350568",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
     }
   ]
 }

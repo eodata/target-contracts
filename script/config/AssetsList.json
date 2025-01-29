@@ -815,6 +815,86 @@
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8
+    },
+    {
+      "feedId": 103,
+      "description": "HONEY/USD",
+      "base": "0x0E4aaF1351de4c0264C5c7056Ef3777b41BD8e03",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 104,
+      "description": "WBERA/USD",
+      "base": "0x7507c1dc16935B82698e4C63f2746A2fCf994dF8",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 105,
+      "description": "iBGT/USD",
+      "base": "0x46eFC86F0D7455F135CC9df501673739d513E982",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 106,
+      "description": "USD0/USD",
+      "base": "0x73A15FeD60Bf67631dC6cd7Bc5B6e8da8190aCF5",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 107,
+      "description": "swBUSD/USD",
+      "base": "0x8DB2350D78aBc13f5673A411D4700BCF87864dDE",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 108,
+      "description": "pumpBTC/USD",
+      "base": "0xF469fBD2abcd6B9de8E169d128226C0Fc90a012e",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 109,
+      "description": "SWELL/USD",
+      "base": "0x0a6E7Ba5042B38349e437ec6Db6214AEC7B35676",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 110,
+      "description": "cbBTC/USD",
+      "base": "0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 111,
+      "description": "wOETH/USD",
+      "base": "0xdcee70654261af21c44c093c300ed3bb97b78192",
+      "quote": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "inputDecimals": 18,
+      "outputDecimals": 18
+    },
+    {
+      "feedId": 112,
+      "description": "inwstETHs/wstETH",
+      "base": "0x8E0789d39db454DBE9f4a77aCEF6dc7c69f6D552",
+      "quote": "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+      "inputDecimals": 18,
+      "outputDecimals": 18
     }
   ]
 }
