@@ -32,8 +32,7 @@ contract DeployNewFeedVerifier is FeedVerifierDeployer {
         address timelock = outputConfig.readAddress(".timelock");
         address bls = outputConfig.readAddress(".bls");
 
-        address feedVerifierProxy =
-            deployFeedVerifier(timelock, broadcastFrom, IBLS(bls), configStructured.eoracleChainId);
+        address feedVerifierProxy = deployFeedVerifier(timelock, broadcastFrom, IBLS(bls));
         EOJsonUtils.OUTPUT_CONFIG.serialize("feedVerifier", feedVerifierProxy);
 
         address implementationAddress = Upgrades.getImplementationAddress(feedVerifierProxy);

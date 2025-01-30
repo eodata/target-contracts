@@ -13,7 +13,7 @@ import { EOJsonUtils } from "../utils/EOJsonUtils.sol";
 import { TimelockController } from "@openzeppelin/contracts/governance/TimelockController.sol";
 import { TimelockBase } from "./TimelockBase.sol";
 import { EOFeedManager } from "../../src/EOFeedManager.sol";
-import { EOFeedAdapterV2 } from "../../src/adapters/EOFeedAdapterV2.sol";
+import { EOFeedAdapterOldCompatible } from "../../src/adapters/EOFeedAdapterOldCompatible.sol";
 
 contract UpgradeFeedManagerAndAdaptersTimelocked is Script, TimelockBase {
     using stdJson for string;
@@ -97,7 +97,7 @@ contract UpgradeFeedManagerAndAdaptersTimelocked is Script, TimelockBase {
         if (isExecution) {
             vars.implementationAddress = vars.outputConfig.readAddress(".feedAdapterImplementation");
         } else {
-            vars.implementationAddress = address(new EOFeedAdapterV2());
+            vars.implementationAddress = address(new EOFeedAdapterOldCompatible());
             string memory outputConfigJson =
                 EOJsonUtils.OUTPUT_CONFIG.serialize("feedAdapterImplementation", vars.implementationAddress);
             EOJsonUtils.writeConfig(outputConfigJson);

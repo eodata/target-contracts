@@ -1,15 +1,17 @@
 {
-  "bls": "0x92DfEFcBcdFd5d5c6D66A8Ad7aa61B75F3329369",
+  "bls": "0x1A94c14e1EeAF575798202e256Fe0D2d4c2882f2",
   "bn256G2": "0xBf1a4F177A0D19Fe42Cef0B494554352f90c673C",
-  "feedAdapterImplementation": "0xD01639f3377ADFAD4C1B400fe94bFCacDef924c5",
+  "feedAdapterImplementation": "0xd8525bBb1908010B614bA91B7f3959f02c864528",
   "feedManager": "0x53463efd47F641a80B526ECDAA865E7B1FaF0D82",
-  "feedManagerImplementation": "0xEb36aA348a3C746E7eEC97C34c49466439243Ac8",
+  "feedManagerImplementation": "0x4F1b040Fb5971b926fB87f68BB5Bdc3FE843Ff5B",
   "feedRegistryAdapter": "0x894339F8E0fAbf5baB2a97f9DB7f3cfa350Cf880",
   "feedRegistryAdapterImplementation": "0x33Dc654dc3c45cAC30a5ECF34B24C102060d2c02",
-  "feedVerifier": "0x4e787F7D2Ec8b9733C06de25B73a867f8652BC16",
-  "feedVerifierImplementation": "0xeb26Ea362978598D336cCAB80d5b800e5c69Ecd8",
+  "feedVerifier": "0x7d800A2db19a1A30b6415bE68358c869Bbe43E10",
+  "feedVerifierImplementation": "0xb4C85346F78FDa3C2eB568dde326abe3929454f9",
   "feeds": {
     "BTC/USD": "0xD4bc859E0de1bAc03A5b9Ffaf71393328EB1B274",
     "ETH/USD": "0x71bafCA6F2181C16173Dc3FAeF49090e687238D6"
-  }
+  },
+  "pauserRegistry": "0x54f89c1951323cB87CAd0820eaA04321b94e7cD6",
+  "timelock": "0xaF87BD62887d186073432c567E43A8AEA4886143"
 }
