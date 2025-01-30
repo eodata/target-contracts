@@ -1,10 +1,10 @@
 {
   "usePrecompiledModexp": false,
-  "proxyAdminOwner": "0x31568bD4a3B47f609A79934550871b1CC6F204Fd",
-  "targetContractsOwner": "0x31568bD4a3B47f609A79934550871b1CC6F204Fd",
+  "proxyAdminOwner": "0xCdB78E869B427ED08035588dc0D71cc6D139E1f5",
+  "targetContractsOwner": "0xCdB78E869B427ED08035588dc0D71cc6D139E1f5",
   "eoracleChainId": 42420,
-  "targetChainId": 57073,
-  "publishers": ["0x402B8802a7B699400c330c22F62D7Dd66b76E1Bf"],
+  "targetChainId": 1946,
+  "publishers": ["0x7462AA7988144cb9E1E3630d203C1Ad222159832"],
   "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
   "supportedFeedIds": [1, 2, 17, 54],
   "supportedFeedsData": [
@@ -25,12 +25,12 @@
       "outputDecimals": 8
     },
     {
+      "feedId": 17,
+      "description": "USDT/USD",
       "base": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
       "quote": "0x0000000000000000000000000000000000000348",
-      "feedId": 17,
       "inputDecimals": 18,
-      "outputDecimals": 8,
-      "description": "USDT/USD"
+      "outputDecimals": 8
     },
     {
       "feedId": 54,

@@ -80,22 +80,7 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
      * @param feedAdapterImplementation The feedAdapter implementation address
      * @param owner Owner of the contract
      */
-    function initialize(
-        address feedManager,
-        address feedAdapterImplementation,
-        address owner
-    )
-        external
-        initializer
-        onlyNonZeroAddress(feedManager)
-        onlyNonZeroAddress(feedAdapterImplementation)
-    {
-        __Ownable_init(owner);
-        __EOFeedFactory_init(feedAdapterImplementation, owner);
-        _feedManager = IEOFeedManager(feedManager);
-        emit FeedManagerSet(feedManager);
-    }
-
+    function initialize(address feedManager, address feedAdapterImplementation, address owner) external virtual;
     /* ============ External Functions ============ */
 
     /**
