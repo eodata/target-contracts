@@ -6,7 +6,7 @@
   "targetChainId": 80094,
   "publishers": ["0x6A64A1E7992B1a0d277bC6444bD93269d9214C4d"],
   "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
-  "supportedFeedIds": [1, 2, 17, 54, 65, 76, 77, 89, 103, 104, 108, 115],
+  "supportedFeedIds": [1, 2, 17, 54, 61, 64, 65, 76, 77, 85, 89, 91, 100, 103, 104, 108, 115],
   "supportedFeedsData": [
     {
       "feedId": 1,
@@ -41,6 +41,22 @@
       "outputDecimals": 8
     },
     {
+      "feedId": 61,
+      "description": "rswETH/ETH",
+      "base": "0xFAe103DC9cf190eD75350761e95403b7b8aFa6c0",
+      "quote": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "inputDecimals": 18,
+      "outputDecimals": 18
+    },
+    {
+      "feedId": 64,
+      "description": "eBTC/BTC",
+      "base": "0x657e8C867D8B37dCC18fA4Caead9C45EB088C642",
+      "quote": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
       "feedId": 65,
       "description": "STONE/ETH",
       "base": "0x7122985656e38BDC0302Db86685bb972b145bD3C",
@@ -65,12 +81,36 @@
       "outputDecimals": 8
     },
     {
+      "feedId": 85,
+      "description": "USDe/USD",
+      "base": "0x4c9EDD5852cd905f086C759E8383e09bff1E68B3",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
       "feedId": 89,
       "description": "weETH/USD",
       "base": "0xCd5fE23C85820F7B72D0926FC9b05b43E359b7ee",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8
+    },
+    {
+      "feedId": 91,
+      "description": "rsETH/USD",
+      "base": "0xe7903B1F75C534Dd8159b313d92cDCfbC62cB3Cd",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "base": "0xd9D920AA40f578ab794426F5C90F6C731D159DEf",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "SolvBTCBBN/USD",
+      "feedId": 100
     },
     {
       "feedId": 103,
