@@ -105,12 +105,12 @@
       "outputDecimals": 8
     },
     {
+      "feedId": 100,
+      "description": "SolvBTCBBN/USD",
       "base": "0xd9D920AA40f578ab794426F5C90F6C731D159DEf",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
-      "outputDecimals": 8,
-      "description": "SolvBTCBBN/USD",
-      "feedId": 100
+      "outputDecimals": 8
     },
     {
       "feedId": 103,
