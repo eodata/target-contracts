@@ -6,7 +6,7 @@
   "targetChainId": 80094,
   "publishers": ["0x6A64A1E7992B1a0d277bC6444bD93269d9214C4d"],
   "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
-  "supportedFeedIds": [1, 2, 17, 54, 61, 64, 65, 76, 77, 85, 89, 91, 100, 103, 104, 108, 115],
+  "supportedFeedIds": [1, 2, 17, 54, 61, 64, 65, 76, 77, 85, 89, 91, 100, 101, 103, 104, 108, 115],
   "supportedFeedsData": [
     {
       "feedId": 1,
@@ -105,9 +105,17 @@
       "outputDecimals": 8
     },
     {
-      "feedId": 100,
-      "description": "SolvBTCBBN/USD",
       "base": "0xd9D920AA40f578ab794426F5C90F6C731D159DEf",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "SolvBTCBBN/USD",
+      "feedId": 100
+    },
+    {
+      "feedId": 101,
+      "description": "uniBTC/USD",
+      "base": "0x004E9C3EF86bc1ca1f0bB5C7662861Ee93350568",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8
