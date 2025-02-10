@@ -4,11 +4,11 @@
   "targetChainId": 325000,
   "feedDeployer": "0x95B3329acC6f0C519b36ec867EAE7Ac5d905559D",
   "publishers": ["0x13398A2CadA33c38d7F532948A941b557e7CAB3e"],
-  "supportedFeedIds": [113],
+  "supportedFeedIds": [105],
   "supportedFeedsData": [
     {
       "description": "Elon Musk",
-      "feedId": 113
+      "feedId": 105
     }
   ],
   "timelock": {

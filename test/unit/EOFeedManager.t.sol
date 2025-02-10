@@ -300,6 +300,70 @@ contract EOFeedManagerTest is Test, Utils {
         registry.getLatestPriceFeed(999);
     }
 
+    function test_RevertWhen_NotOwner_ResetFeedTimestamps() public {
+        uint256[] memory feedIds = new uint256[](1);
+        feedIds[0] = feedId;
+
+        vm.prank(notOwner);
+        vm.expectRevert(abi.encodeWithSelector(OwnableUpgradeable.OwnableUnauthorizedAccount.selector, notOwner));
+        registry.resetFeedTimestamps(feedIds);
+    }
+
+    function test_RevertWhen_FeedNotSupported_ResetFeedTimestamps() public {
+        uint256[] memory feedIds = new uint256[](1);
+        feedIds[0] = 999; // Unsupported feed ID
+
+        vm.prank(owner);
+        vm.expectRevert(abi.encodeWithSelector(FeedNotSupported.selector, 999));
+        registry.resetFeedTimestamps(feedIds);
+    }
+
+    function test_ResetFeedTimestamps() public {
+        // Set up multiple price feeds with non-zero timestamps
+        uint256 feedId2 = feedId + 1;
+
+        bytes memory unhashedLeaf1 = abi.encode(feedId, 100, timestamp);
+        bytes memory unhashedLeaf2 = abi.encode(feedId2, 200, timestamp);
+
+        IEOFeedVerifier.VerificationParams memory vParams = _getDefaultVerificationParams();
+        IEOFeedVerifier.LeafInput[] memory inputs = new IEOFeedVerifier.LeafInput[](2);
+        inputs[0] = IEOFeedVerifier.LeafInput({ unhashedLeaf: unhashedLeaf1, leafIndex: 0, proof: new bytes32[](0) });
+        inputs[1] = IEOFeedVerifier.LeafInput({ unhashedLeaf: unhashedLeaf2, leafIndex: 1, proof: new bytes32[](0) });
+
+        // Setup and update price feeds
+        _whitelistPublisher(owner, publisher);
+        _setSupportedFeed(owner, feedId);
+        _setSupportedFeed(owner, feedId2);
+        vm.prank(publisher);
+        registry.updateFeeds(inputs, vParams);
+
+        // Verify initial timestamps
+        IEOFeedManager.PriceFeed memory feed1Before = registry.getLatestPriceFeed(feedId);
+        IEOFeedManager.PriceFeed memory feed2Before = registry.getLatestPriceFeed(feedId2);
+        assertEq(feed1Before.timestamp, timestamp);
+        assertEq(feed2Before.timestamp, timestamp);
+
+        // Reset timestamp for first feed only
+        uint256[] memory feedsToReset = new uint256[](1);
+        feedsToReset[0] = feedId;
+        vm.prank(owner);
+        registry.resetFeedTimestamps(feedsToReset);
+
+        // Verify first feed timestamp is reset while second remains unchanged
+        IEOFeedManager.PriceFeed memory feed1After = registry.getLatestPriceFeed(feedId);
+        IEOFeedManager.PriceFeed memory feed2After = registry.getLatestPriceFeed(feedId2);
+
+        // First feed should be reset
+        assertEq(feed1After.timestamp, 0);
+        assertEq(feed1After.value, 100);
+        assertEq(feed1After.eoracleBlockNumber, blockNumber);
+
+        // Second feed should be unchanged
+        assertEq(feed2After.timestamp, timestamp);
+        assertEq(feed2After.value, 200);
+        assertEq(feed2After.eoracleBlockNumber, blockNumber);
+    }
+
     function _whitelistPublisher(address _executer, address _publisher) private {
         address[] memory publishers = new address[](1);
         bool[] memory isWhitelisted = new bool[](1);
