@@ -895,6 +895,22 @@
       "quote": "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
       "inputDecimals": 18,
       "outputDecimals": 18
+    },
+    {
+      "feedId": 114,
+      "description": "BGB/USD",
+      "base": "0x54d2252757e1672eead234d27b1270728ff90581",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 115,
+      "description": "NECT/USD",
+      "base": "0x1ce0a25d13ce4d52071ae7e02cf1f6606f4c79d3",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
     }
   ]
 }
