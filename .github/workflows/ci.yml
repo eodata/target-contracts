@@ -105,7 +105,7 @@ jobs:
         run: |
           git config --global --add safe.directory /__w/target-contracts/target-contracts
 
-      - name: "Show theFoundry config"
+      - name: "Show the Foundry config"
         run: "forge config"
 
       - name: "Generate a fuzz seed that changes weekly to avoid burning through RPC allowance"
