@@ -131,10 +131,26 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable, PausableUpgradeabl
     }
 
     /**
+     * @notice Reset timestamps for specified price feeds to zero
+     * @dev This function can only be called by the contract owner
+     * @dev Useful for emergency situations where you need to clear stale timestamp data
+     * @param feedIds Array of feed IDs whose timestamps should be reset
+     */
+    function resetFeedTimestamps(uint256[] calldata feedIds) external onlyOwner {
+        for (uint256 i = 0; i < feedIds.length; i++) {
+            uint256 feedId = feedIds[i];
+            if (!_supportedFeedIds[feedId]) {
+                revert FeedNotSupported(feedId);
+            }
+            _priceFeeds[feedId].timestamp = 0;
+        }
+    }
+    /**
      * @notice Set the supported feeds
      * @param feedIds Array of feed ids
      * @param isSupported Array of booleans indicating whether the feed is supported
      */
+
     function setSupportedFeeds(uint256[] calldata feedIds, bool[] calldata isSupported) external onlyOwner {
         if (feedIds.length != isSupported.length) revert InvalidInput();
         for (uint256 i = 0; i < feedIds.length; i++) {
