@@ -1,10 +1,10 @@
 {
   "usePrecompiledModexp": false,
-  "proxyAdminOwner": "0x761a37330AeC39fFb94A6acd2E5fc04D2287e2C9",
-  "targetContractsOwner": "0x761a37330AeC39fFb94A6acd2E5fc04D2287e2C9",
+  "proxyAdminOwner": "0x38002f5DbAc09Dfb2f3b26B995b76C025bF0b6Ff",
+  "targetContractsOwner": "0x38002f5DbAc09Dfb2f3b26B995b76C025bF0b6Ff",
   "eoracleChainId": 42420,
-  "targetChainId": 1301,
-  "publishers": ["0x72d432D43B0be541148160197C5E88dB89990A29"],
+  "targetChainId": 130,
+  "publishers": ["0x1268E000c70a63c045964961b0888Ccf0d8442D2"],
   "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
   "supportedFeedIds": [1, 2, 17, 54],
   "supportedFeedsData": [
