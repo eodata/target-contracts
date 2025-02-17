@@ -19,9 +19,10 @@ jobs:
           # Define a regex pattern for the expected PR title format
           regular_branch_pattern='^(DEV|Dev)-([0-9]{3,}).*$'
           hotfix_branch_pattern='^HF.*$'
+          release_candidate_branch_pattern='^RC.*$'
 
-          if [[ ! "$pr_title" =~ $regular_branch_pattern && ! "$pr_title" =~ $hotfix_branch_pattern ]]; then
-            echo "Error: PR title does not match the required format 'DEV-[ddd]' or 'HF'."
+          if [[ ! "$pr_title" =~ $regular_branch_pattern && ! "$pr_title" =~ $hotfix_branch_pattern && ! "$pr_title" =~ $release_candidate_branch_pattern ]]; then
+            echo "Error: PR title does not match the required format 'DEV-[ddd]' or 'HF' or 'RC'."
             exit 1
           fi
           echo "PR title is correct."
