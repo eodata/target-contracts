@@ -7,7 +7,7 @@
   "feedRegistryAdapter": "0x438472C0d3C7ABbb4244dC4C5FFBe5898Ed7465A",
   "feedRegistryAdapterImplementation": "0xd2d8b2129e1fc6f134be624e116ba7d91319dea3",
   "feedVerifier": "0xdE0d323F195D66348B8Ee07FBe5D745ee1BCaF77",
-  "feedVerifierImplementation": "0x8F291aFbe9d868F634Ea3402e6Fd435071C909eC",
+  "feedVerifierImplementation": "0x52c48C11a3F9c89B55c258B094510AbFFB650634",
   "feeds": {
     "BTC/USD": "0x9e60a4e24819e957ac7a8a06a94d0d92b2df93ae",
     "ETH/USD": "0x3192c85a784c2e885679dba2b04b2b5dfe9adcfa",
