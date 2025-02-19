@@ -52,6 +52,11 @@ jobs:
         with:
           submodules: "recursive"
 
+      - name: "Checkout OpenZeppelin Foundry Upgrades v0.2.2"
+        run: |
+          cd lib/openzeppelin-foundry-upgrades
+          git checkout v0.2.2
+
       - name: "Setup Node.js"
         uses: actions/setup-node@v2
         with:
@@ -90,6 +95,11 @@ jobs:
         uses: "actions/checkout@v4"
         with:
           submodules: "recursive"
+
+      - name: "Checkout OpenZeppelin Foundry Upgrades v0.2.2"
+        run: |
+          cd lib/openzeppelin-foundry-upgrades
+          git checkout v0.2.2
 
       - name: "Setup Node.js"
         uses: actions/setup-node@v2
