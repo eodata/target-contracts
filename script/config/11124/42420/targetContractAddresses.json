@@ -1,0 +1,19 @@
+{
+  "bls": "0x3220373654c16c107eBf473f59d540c6f87D0776",
+  "bn256G2": "0x0000000000000000000000000000000000000000",
+  "feedAdapterImplementation": "0x10f840f7dB69Bcf790094Af063A2b8bBDE04d54b",
+  "feedManager": "0x3A4c718AC4c489f734C4402940f7cdB8995d19e6",
+  "feedManagerImplementation": "0x6e739F0Fd955f5C5729b2e25e436088e54D4fA04",
+  "feedRegistryAdapter": "0x438472C0d3C7ABbb4244dC4C5FFBe5898Ed7465A",
+  "feedRegistryAdapterImplementation": "0xd2d8b2129e1fc6f134be624e116ba7d91319dea3",
+  "feedVerifier": "0xdE0d323F195D66348B8Ee07FBe5D745ee1BCaF77",
+  "feedVerifierImplementation": "0x52c48C11a3F9c89B55c258B094510AbFFB650634",
+  "feeds": {
+    "BTC/USD": "0x9e60a4e24819e957ac7a8a06a94d0d92b2df93ae",
+    "ETH/USD": "0x3192c85a784c2e885679dba2b04b2b5dfe9adcfa",
+    "USDC/USD": "0xd539625617389f16405a13c67cca715d1622c733",
+    "USDT/USD": "0xd8c36db4d05d0300190856fa6532011f1c2e69de"
+  },
+  "pauserRegistry": "0x3bAE3A8E374a5647cA1d86F048e4db56ea955961",
+  "timelock": "0xCDFcD85400B5d0a89441BAFb526D533f6f822892"
+}

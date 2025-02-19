@@ -1,0 +1,51 @@
+{
+  "usePrecompiledModexp": false,
+  "eoracleChainId": 42420,
+  "targetChainId": 11124,
+  "feedsDeployer": "0x96663eb6448115eE99bA7cE83473935DCC262DE8",
+  "publishers": ["0x775B2Ceca6aB39C67eDE4EE608F973Df7189B006"],
+  "supportedFeedIds": [1, 2, 17, 54],
+  "supportedFeedsData": [
+    {
+      "feedId": 1,
+      "description": "BTC/USD",
+      "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 2,
+      "description": "ETH/USD",
+      "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 17,
+      "description": "USDT/USD",
+      "base": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 54,
+      "description": "USDC/USD",
+      "base": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    }
+  ],
+  "timelock": {
+    "minDelay": 10,
+    "proposers": ["0x96663eb6448115eE99bA7cE83473935DCC262DE8"],
+    "executors": ["0x96663eb6448115eE99bA7cE83473935DCC262DE8"]
+  },
+  "pauserRegistry": {
+    "pausers": ["0x96663eb6448115eE99bA7cE83473935DCC262DE8"],
+    "unpauser": "0x96663eb6448115eE99bA7cE83473935DCC262DE8"
+  }
+}
