@@ -6,7 +6,7 @@
   "targetChainId": 43111,
   "publishers": ["0x0228955B60A038516c9E0c61C0BD4123d7C25f04"],
   "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
-  "supportedFeedIds": [1, 2, 17, 54, 83, 91, 108],
+  "supportedFeedIds": [1, 2, 17, 54, 79, 83, 91, 108, 120, 121, 123, 124],
   "supportedFeedsData": [
     {
       "feedId": 1,
@@ -41,6 +41,14 @@
       "outputDecimals": 8
     },
     {
+      "feedId": 79,
+      "description": "M-BTC/USD",
+      "base": "0xb880fd278198bd590252621d4cd071b1842e9bcd",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
       "feedId": 83,
       "description": "WBTC/USD",
       "base": "0xDa4AaEd3A53962c83B35697Cd138cc6df43aF71f",
@@ -60,6 +68,38 @@
       "feedId": 108,
       "description": "pumpBTC/USD",
       "base": "0xF469fBD2abcd6B9de8E169d128226C0Fc90a012e",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 120,
+      "description": "enzoBTC/USD",
+      "base": "0x6A9A65B84843F5fD4aC9a0471C4fc11AFfFBce4a",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 121,
+      "description": "uBTC/USD",
+      "base": "0x9BFA177621119e64CecbEabE184ab9993E2ef727",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 123,
+      "description": "oBTC/USD",
+      "base": "0xe3C0FF176eF92FC225096C6d1788cCB818808b35",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 124,
+      "description": "iBTC/USD",
+      "base": "0x8154Aaf094c2f03Ad550B6890E1d4264B5DdaD9A",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8
