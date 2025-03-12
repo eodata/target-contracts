@@ -52,6 +52,12 @@ jobs:
         with:
           submodules: "recursive"
 
+      - name: "Checkout OpenZeppelin Foundry Upgrades v0.2.2"
+        run: |
+          cd lib/openzeppelin-foundry-upgrades
+          git fetch --tags
+          git checkout v0.2.2
+
       - name: "Setup Node.js"
         uses: actions/setup-node@v2
         with:
@@ -95,8 +101,6 @@ jobs:
 
       - name: "Install Foundry"
         uses: "foundry-rs/foundry-toolchain@v1"
-        with:
-          version: "nightly-cafc2606a2187a42b236df4aa65f4e8cdfcea970"
 
       - name: "Install the Node.js dependencies"
         run: "npm install"
@@ -107,6 +111,12 @@ jobs:
 
       - name: "Update Foundry dependencies"
         run: "forge install"
+
+      - name: "Checkout OpenZeppelin Foundry Upgrades v0.2.2"
+        run: |
+          cd lib/openzeppelin-foundry-upgrades
+          git fetch --tags
+          git checkout v0.2.2
 
       - name: "Show the Foundry config"
         run: "forge config"
