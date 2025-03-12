@@ -23,5 +23,7 @@
     "sFRAX/FRAX": "0x413a4b7b6157764a208Cc2d8FbFfa9394A27df0a",
     "sfrxETH/frxETH": "0xcf317996b304EfaB1eBc98a076bb4F5843104e23",
     "uniBTC/USD": "0x95181Bed6DFAa487F56b2Fd9C32e0a7E10baf20c"
-  }
+  },
+  "pauserRegistry": "0xf0829Ae79157Af307aD8dE68D99e0df5b2f876B2",
+  "timelock": "0xf0829Ae79157Af307aD8dE68D99e0df5b2f876B2"
 }

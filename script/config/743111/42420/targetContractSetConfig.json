@@ -1,11 +1,9 @@
 {
   "usePrecompiledModexp": false,
-  "proxyAdminOwner": "0x639a7C058d258fcA9007519F601366a3B8bD82c8",
-  "targetContractsOwner": "0x639a7C058d258fcA9007519F601366a3B8bD82c8",
   "eoracleChainId": 42420,
   "targetChainId": 743111,
+  "feedsDeployer": "0x639a7C058d258fcA9007519F601366a3B8bD82c8",
   "publishers": ["0xde523181FE46c6e063F072670708Ec5e072Dc694"],
-  "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
   "supportedFeedIds": [1, 2],
   "supportedFeedsData": [
     {
@@ -24,5 +22,14 @@
       "description": "ETH/USD",
       "feedId": 2
     }
-  ]
+  ],
+  "timelock": {
+    "minDelay": 10,
+    "proposers": ["0x639a7C058d258fcA9007519F601366a3B8bD82c8"],
+    "executors": ["0x639a7C058d258fcA9007519F601366a3B8bD82c8"]
+  },
+  "pauserRegistry": {
+    "pausers": ["0x639a7C058d258fcA9007519F601366a3B8bD82c8"],
+    "unpauser": "0x639a7C058d258fcA9007519F601366a3B8bD82c8"
+  }
 }
