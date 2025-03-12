@@ -1,0 +1,68 @@
+{
+  "usePrecompiledModexp": false,
+  "proxyAdminOwner": "0xf77EB0b2889C81069263406dA43a2334996972e1",
+  "targetContractsOwner": "0xf77EB0b2889C81069263406dA43a2334996972e1",
+  "eoracleChainId": 42420,
+  "targetChainId": 43111,
+  "publishers": ["0x0228955B60A038516c9E0c61C0BD4123d7C25f04"],
+  "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
+  "supportedFeedIds": [1, 2, 17, 54, 83, 91, 108],
+  "supportedFeedsData": [
+    {
+      "feedId": 1,
+      "description": "BTC/USD",
+      "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 2,
+      "description": "ETH/USD",
+      "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 17,
+      "description": "USDT/USD",
+      "base": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 54,
+      "description": "USDC/USD",
+      "base": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 83,
+      "description": "WBTC/USD",
+      "base": "0xDa4AaEd3A53962c83B35697Cd138cc6df43aF71f",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 91,
+      "description": "rsETH/USD",
+      "base": "0xa1290d69c65a6fe4df752f95823fae25cb99e5a7",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 108,
+      "description": "pumpBTC/USD",
+      "base": "0xF469fBD2abcd6B9de8E169d128226C0Fc90a012e",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    }
+  ]
+}
