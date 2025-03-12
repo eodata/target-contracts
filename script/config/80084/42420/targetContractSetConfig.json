@@ -1,11 +1,9 @@
 {
   "usePrecompiledModexp": true,
-  "proxyAdminOwner": "0x0Bd7F986A4a4D0Ab8F772FeF683569D01072007A",
-  "targetContractsOwner": "0x0Bd7F986A4a4D0Ab8F772FeF683569D01072007A",
   "eoracleChainId": 42420,
   "targetChainId": 80084,
+  "feedsDeployer": "0x0Bd7F986A4a4D0Ab8F772FeF683569D01072007A",
   "publishers": ["0xCC243bcFf9718d559A434f4124EC257cEd1A0776"],
-  "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
   "supportedFeedIds": [1, 2, 17, 41, 42, 54, 55, 76, 77, 85, 101, 103, 104, 105],
   "supportedFeedsData": [
     {
@@ -120,5 +118,14 @@
       "outputDecimals": 8,
       "description": "iBGT/USD"
     }
-  ]
+  ],
+  "timelock": {
+    "minDelay": 10,
+    "proposers": ["0x0Bd7F986A4a4D0Ab8F772FeF683569D01072007A"],
+    "executors": ["0x0Bd7F986A4a4D0Ab8F772FeF683569D01072007A"]
+  },
+  "pauserRegistry": {
+    "pausers": ["0x0Bd7F986A4a4D0Ab8F772FeF683569D01072007A"],
+    "unpauser": "0x0Bd7F986A4a4D0Ab8F772FeF683569D01072007A"
+  }
 }
