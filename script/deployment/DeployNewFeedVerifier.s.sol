@@ -29,7 +29,7 @@ contract DeployNewFeedVerifier is FeedVerifierDeployer {
         );
 
         string memory outputConfig = EOJsonUtils.initOutputConfig();
-        address timelock = outputConfig.readAddress(".timelock");
+        address timelock = 0xfD9F25D4b939e79EA2e0DB7567D96939D5EDd153; //outputConfig.readAddress(".timelock");
         address bls = outputConfig.readAddress(".bls");
 
         address feedVerifierProxy = deployFeedVerifier(timelock, broadcastFrom, IBLS(bls));
