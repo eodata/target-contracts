@@ -15,5 +15,5 @@
 	url = https://github.com/Eoracle/forge-safe
 [submodule "lib/eigenlayer-contracts"]
 	path = lib/eigenlayer-contracts
-	url = git@github.com:Eoracle/eigenlayer-contracts.git
-	branch = dev
+	url = https://github.com/Layr-Labs/eigenlayer-contracts
+  branch = dev
