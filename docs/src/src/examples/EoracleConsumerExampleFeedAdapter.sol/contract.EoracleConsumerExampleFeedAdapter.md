@@ -1,6 +1,6 @@
 # EoracleConsumerExampleFeedAdapter
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/de89fc9e9bc7c046937883aa064d90812f1542cc/src/examples/EoracleConsumerExampleFeedAdapter.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/44a7184a934b669887867d9bb70946619d422be3/src/examples/EoracleConsumerExampleFeedAdapter.sol)
 
 ## State Variables
 

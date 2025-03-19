@@ -13,7 +13,7 @@ import { Denominations } from "../../../src/libraries/Denominations.sol";
 import { Upgrades } from "openzeppelin-foundry-upgrades/Upgrades.sol";
 
 contract EoracleConsumerExampleFeedAdapterTest is Test {
-    uint16 public constant FEED_ID = 1;
+    uint256 public constant FEED_ID = 1;
     string public constant DESCRIPTION = "ETH/USD";
     uint256 public constant VERSION = 1;
     uint256 public constant RATE1 = 100_000_000;
@@ -30,21 +30,20 @@ contract EoracleConsumerExampleFeedAdapterTest is Test {
     function setUp() public virtual {
         _owner = makeAddr("_owner");
 
-        _feedManager = new MockEOFeedManager();
+        _feedManager = new MockEOFeedManager(address(this));
         _feedAdapterImplementation = new EOFeedAdapter();
         _feedRegistryAdapter =
             EOFeedRegistryAdapter(Upgrades.deployTransparentProxy("EOFeedRegistryAdapter.sol", proxyAdmin, ""));
 
         _feedRegistryAdapter.initialize(address(_feedManager), address(_feedAdapterImplementation), _owner);
 
-        vm.prank(_owner);
         IEOFeedAdapter feedAdapter = _feedRegistryAdapter.deployEOFeedAdapter(
             Denominations.ETH, Denominations.USD, FEED_ID, DESCRIPTION, DECIMALS, DECIMALS, VERSION
         );
 
         _consumerExampleFeed = new EoracleConsumerExampleFeedAdapter(address(feedAdapter));
 
-        _updatePriceFeed(FEED_ID, RATE1, block.timestamp);
+        _updateFeed(FEED_ID, RATE1, block.timestamp);
     }
 
     function test_SetGetFeed() public {
@@ -58,26 +57,27 @@ contract EoracleConsumerExampleFeedAdapterTest is Test {
         assertEq(price, int256(RATE1));
     }
 
-    function test_UpdatePriceFeed() public {
-        _updatePriceFeed(FEED_ID, RATE2, block.timestamp);
+    function test_UpdateFeed() public {
+        _updateFeed(FEED_ID, RATE2, block.timestamp);
         int256 price = _consumerExampleFeed.getPrice();
         assertEq(price, int256(RATE2));
     }
 
-    function _updatePriceFeed(uint16 feedId, uint256 rate, uint256 timestamp) internal {
+    function _updateFeed(uint256 feedId, uint256 rate, uint256 timestamp) internal {
         IEOFeedVerifier.LeafInput memory input;
         input.unhashedLeaf = abi.encode(feedId, rate, timestamp);
-        _feedManager.updatePriceFeed(
+        _feedManager.updateFeed(
             input,
-            IEOFeedVerifier.Checkpoint({
-                blockNumber: 0,
-                epoch: 0,
+            IEOFeedVerifier.VerificationParams({
                 eventRoot: bytes32(0),
-                blockHash: bytes32(0),
-                blockRound: 0
-            }),
-            [uint256(0), uint256(0)],
-            bytes("0")
+                blockNumber: uint64(0),
+                blockHash: bytes32(uint256(1)),
+                chainId: uint32(1),
+                aggregator: address(1),
+                signature: [uint256(0), uint256(0)],
+                apkG2: [uint256(0), uint256(0), uint256(0), uint256(0)],
+                nonSignersBitmap: bytes("0")
+            })
         );
     }
 }

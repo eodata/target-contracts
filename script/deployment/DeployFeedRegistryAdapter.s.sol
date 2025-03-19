@@ -12,28 +12,36 @@ import { EOJsonUtils } from "script/utils/EOJsonUtils.sol";
 contract DeployFeedRegistryAdapter is Script {
     using stdJson for string;
 
-    function run() external returns (address feedAdapterImplementation, address adapterProxy) {
+    function run() external {
+        vm.startBroadcast();
+        execute(msg.sender);
+        vm.stopBroadcast();
+    }
+
+    // for testing purposes
+    function run(address broadcastFrom) public returns (address feedAdapterImplementation, address adapterProxy) {
+        vm.startBroadcast(broadcastFrom);
+        (feedAdapterImplementation, adapterProxy) = execute(broadcastFrom);
+        vm.stopBroadcast();
+    }
+
+    function execute(address broadcastFrom) public returns (address feedAdapterImplementation, address adapterProxy) {
         string memory outputConfig = EOJsonUtils.initOutputConfig();
 
-        vm.startBroadcast();
         feedAdapterImplementation = address(new EOFeedAdapter());
         EOJsonUtils.OUTPUT_CONFIG.serialize("feedAdapterImplementation", feedAdapterImplementation);
 
         address feedManager = outputConfig.readAddress(".feedManager");
-
-        EOJsonUtils.Config memory configStructured = EOJsonUtils.getParsedConfig();
+        address timelock = outputConfig.readAddress(".timelock");
 
         bytes memory initData = abi.encodeCall(
-            EOFeedRegistryAdapterBase.initialize,
-            (feedManager, feedAdapterImplementation, configStructured.targetContractsOwner)
+            EOFeedRegistryAdapterBase.initialize, (feedManager, feedAdapterImplementation, broadcastFrom)
         );
-        adapterProxy =
-            Upgrades.deployTransparentProxy("EOFeedRegistryAdapter.sol", configStructured.proxyAdminOwner, initData);
+        adapterProxy = Upgrades.deployTransparentProxy("EOFeedRegistryAdapter.sol", timelock, initData);
         EOJsonUtils.OUTPUT_CONFIG.serialize("feedRegistryAdapter", adapterProxy);
         address implementationAddress = Upgrades.getImplementationAddress(adapterProxy);
         string memory outputConfigJson =
             EOJsonUtils.OUTPUT_CONFIG.serialize("feedRegistryAdapterImplementation", implementationAddress);
         EOJsonUtils.writeConfig(outputConfigJson);
-        vm.stopBroadcast();
     }
 }

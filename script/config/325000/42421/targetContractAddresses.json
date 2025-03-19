@@ -1,0 +1,14 @@
+{
+  "bls": "0x6F8D441dD3227E523b4E56d1B76636dB9D34F0a3",
+  "bn256G2": "",
+  "feedAdapterImplementation": "",
+  "feedManager": "0xB97dA4A9e74aec776538DC92Ee064013c64DEc08",
+  "feedManagerImplementation": "0xCe819C1513813e960dd648AFF90a96D7f849c687",
+  "feedRegistryAdapter": "",
+  "feedRegistryAdapterImplementation": "",
+  "feedVerifier": "0xa9db2f8c94950d03B2D270334F048dB052BD1269",
+  "feedVerifierImplementation": "0x91cEe97F1Ce39386267AcAcF1490DC47dE34f5D8",
+  "feeds": {},
+  "pauserRegistry": "0xef484De5AA6d79Ab184e254487C04Bed3bd059De",
+  "timelock": "0xd5672A2cE4f436Af2450403cdAaf3A8B27Dbe9A7"
+}

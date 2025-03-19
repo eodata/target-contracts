@@ -1,13 +1,18 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.25;
 
+/**
+ * @title IEOFeedVerifier
+ * @author eOracle
+ */
 interface IEOFeedVerifier {
+    /* ============ Structs ============ */
+
     /**
-     * @dev Leaf input structure
+     * @dev Input data for leaf verification
      * @param leafIndex Index of the leaf
      * @param unhashedLeaf Unhashed leaf data
-     *         abi encoded (uint256 id, address sender, address receiver, bytes memory data)
-     *              where bytes memory data =  abi encoded (uint16 feedId, uint256 rate, uint256 timestamp)
+     *         abi encoded (uint256 feedId, uint256 rate, uint256 timestamp)
      * @param proof Merkle proof of the leaf
      */
     struct LeafInput {
@@ -17,32 +22,39 @@ interface IEOFeedVerifier {
     }
 
     /**
-     * @dev Checkpoint structure
-     * @param epoch Epoch number
-     * @param blockNumber Block number
-     * @param eventRoot Event root of the merkle tree
-     * @param blockHash Block hash
-     * @param blockRound Block round
+     * @dev Signed Data structure
+     * @param eventRoot merkle tree root for events
+     * @param blockNumber the block number this merkle tree originated from (on EO chain)
+     * @param signature G1 hashed payload of abi.encode(eventRoot, blockNumber)
+     * @param apkG2 G2 apk provided from off-chain
+     * @param nonSignersBitmap used to construct G1 apk onchain
      */
-    struct Checkpoint {
-        uint256 epoch;
-        uint256 blockNumber;
-        bytes32 eventRoot;
-        bytes32 blockHash;
-        uint256 blockRound;
+    struct VerificationParams {
+        uint64 blockNumber; // 8 bytes +
+        uint32 chainId; // 4 bytes +
+        address aggregator; // 20 bytes = 32 bytes
+        bytes32 eventRoot; // 32 bytes
+        bytes32 blockHash; // 32 bytes
+        uint256[2] signature; // 64 bytes
+        uint256[4] apkG2; // 128 bytes
+        bytes nonSignersBitmap; // dynamic
     }
 
     /**
-     * @dev Validator structure
-     * @param _address Validator address
-     * @param blsKey Validator BLS key
+     * @notice Represents a validator in the system
+     * @param _address The validator's address
+     * @param g1pk validator G1 public key
+     * @param g2pk validator G2 public key (not used in current implementation)
      * @param votingPower Validator voting power
      */
     struct Validator {
         address _address;
-        uint256[4] blsKey;
+        uint256[2] g1pk;
+        uint256[4] g2pk;
         uint256 votingPower;
     }
+
+    /* ============ Events ============ */
 
     /**
      * @dev Event emitted when the validator set is updated
@@ -60,57 +72,30 @@ interface IEOFeedVerifier {
      */
     event FeedManagerSet(address feedManager);
 
+    /* ============ External Functions ============ */
+
     /**
-     * @notice Verifies leaf, processes checkpoint,
-     *          returns leaf data in case if checkpoint is valid and leaf is part of the merkle tree
+     * @notice verify single leaf signature from a block merkle tree
      * @param input leaf input data and proof (LeafInput)
-     * @param checkpoint Checkpoint data (Checkpoint)
-     * @param signature Aggregated signature of the checkpoint
-     * @param bitmap Bitmap of the validators who signed the checkpoint
-     * @return leafData Leaf data, abi encoded (uint16 feedId, uint256 rate, uint256 timestamp)
+     * @param vParams verification params
+     * @return leafData Leaf data, abi encoded (uint256 feedId, uint256 rate, uint256 timestamp)
      */
     function verify(
         LeafInput memory input,
-        Checkpoint calldata checkpoint,
-        uint256[2] calldata signature,
-        bytes calldata bitmap
+        VerificationParams calldata vParams
     )
         external
         returns (bytes memory leafData);
 
     /**
-     * @notice Verifies multiple leaves, processes checkpoint,
-     *          returns leaf data in case if checkpoint is valid and leaves are part of the merkle tree
-     * @param inputs Exit leaves inputs
-     * @param checkpoint Checkpoint data
-     * @param signature Aggregated signature of the checkpoint
-     * @param bitmap Bitmap of the validators who signed the checkpoint
+     * @notice batch verify signature of multiple leaves from the same block merkle tree
+     * @param inputs feed leaves
+     * @param vParams verification params
      */
     function batchVerify(
         LeafInput[] memory inputs,
-        Checkpoint calldata checkpoint,
-        uint256[2] calldata signature,
-        bytes calldata bitmap
+        VerificationParams calldata vParams
     )
         external
         returns (bytes[] memory);
-
-    /**
-     * @notice Function to set a new validator set
-     * @param newValidatorSet The new validator set to store
-     */
-    function setNewValidatorSet(Validator[] calldata newValidatorSet) external;
-
-    /**
-     * @notice Sets the address of the feed manager.
-     * @param feedManager_ The address of the new feed manager.
-     */
-    function setFeedManager(address feedManager_) external;
-
-    /**
-     * @notice Sets allowed sender for exit events
-     * @param senders Addresses of the allowed senders
-     * @param allowed Boolean value to set the sender as allowed or not
-     */
-    function setAllowedSenders(address[] calldata senders, bool allowed) external;
 }

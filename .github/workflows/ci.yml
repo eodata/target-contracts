@@ -75,9 +75,6 @@ jobs:
         run: |
           git config --global --add safe.directory /__w/target-contracts/target-contracts
 
-      - name: "Update Foundry dependencies"
-        run: "forge update"
-
       - name: "Build the contracts and print their size"
         run: "forge build --sizes"
 
@@ -113,7 +110,7 @@ jobs:
           git config --global --add safe.directory /__w/target-contracts/target-contracts
 
       - name: "Update Foundry dependencies"
-        run: "forge update"
+        run: "forge install"
 
       - name: "Checkout OpenZeppelin Foundry Upgrades v0.2.2"
         run: |
@@ -131,7 +128,7 @@ jobs:
           )" >> $GITHUB_ENV
 
       - name: "Run the tests"
-        run: "forge test --ffi"
+        run: "forge test -vvv --ffi"
 
       - name: "Add test summary"
         run: |
