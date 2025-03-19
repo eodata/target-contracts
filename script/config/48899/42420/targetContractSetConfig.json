@@ -42,7 +42,7 @@
       "base": "0x7122985656e38BDC0302Db86685bb972b145bD3C",
       "quote": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
       "inputDecimals": 18,
-      "outputDecimals": 8,
+      "outputDecimals": 18,
       "description": "STONE/ETH",
       "feedId": 66
     },
