@@ -13,6 +13,3 @@
 [submodule "lib/forge-safe"]
 	path = lib/forge-safe
 	url = https://github.com/Eoracle/forge-safe
-[submodule "lib/eigenlayer-contracts"]
-	path = lib/eigenlayer-contracts
-	url = https://github.com/Layr-Labs/eigenlayer-contracts
