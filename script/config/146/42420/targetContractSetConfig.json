@@ -6,7 +6,7 @@
   "targetChainId": 146,
   "publishers": ["0xDe30437F08E55403fb6F7992363C4cf8Dbd810C9"],
   "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
-  "supportedFeedIds": [1, 2, 17, 54],
+  "supportedFeedIds": [1, 2, 17, 54, 130],
   "supportedFeedsData": [
     {
       "feedId": 1,
@@ -36,6 +36,14 @@
       "feedId": 54,
       "description": "USDC/USD",
       "base": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    }, 
+    {
+      "feedId": 130,
+      "description": "S/USD",
+      "base": "0x039e2fB66102314Ce7b64Ce5Ce3E5183bc94aD38",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8
