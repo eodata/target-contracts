@@ -3,52 +3,48 @@ pragma solidity 0.8.25;
 
 import { IEOFeedManager } from "../../src/interfaces/IEOFeedManager.sol";
 import { IEOFeedVerifier } from "../../src/interfaces/IEOFeedVerifier.sol";
-import { IPauserRegistry } from "eigenlayer-contracts/interfaces/IPauserRegistry.sol";
 
 // solhint-disable ordering
 // solhint-disable no-empty-blocks
 
 contract MockEOFeedManager is IEOFeedManager {
-    uint256 public constant NOT_SUPPORTED_FEED = 1000;
-    mapping(uint256 => PriceFeed) public priceFeeds;
-    address internal _feedDeployer;
-    IEOFeedVerifier internal _feedVerifier;
-    IPauserRegistry internal _pauserRegistry;
+    uint16 public constant NOT_SUPPORTED_FEED = 1000;
+    mapping(uint16 => PriceFeed) public priceFeeds;
 
-    constructor(address feedDeployer) {
-        _feedDeployer = feedDeployer;
-    }
-
-    function updateFeed(
+    function updatePriceFeed(
         IEOFeedVerifier.LeafInput calldata input,
-        IEOFeedVerifier.VerificationParams calldata vParams
+        IEOFeedVerifier.Checkpoint calldata checkpoint,
+        uint256[2] calldata,
+        bytes calldata
     )
         external
     {
-        (uint256 feedId, uint256 rate, uint256 timestamp) = abi.decode(input.unhashedLeaf, (uint256, uint256, uint256));
+        (uint16 feedId, uint256 rate, uint256 timestamp) = abi.decode(input.unhashedLeaf, (uint16, uint256, uint256));
 
-        priceFeeds[feedId] = PriceFeed(rate, timestamp, vParams.blockNumber);
+        priceFeeds[feedId] = PriceFeed(rate, timestamp, checkpoint.blockNumber);
     }
 
-    function updateFeeds(
+    function updatePriceFeeds(
         IEOFeedVerifier.LeafInput[] calldata inputs,
-        IEOFeedVerifier.VerificationParams calldata vParams
+        IEOFeedVerifier.Checkpoint calldata checkpoint,
+        uint256[2] calldata,
+        bytes calldata
     )
         external
     {
         for (uint256 i = 0; i < inputs.length; i++) {
-            (uint256 feedId, uint256 rate, uint256 timestamp) =
-                abi.decode(inputs[i].unhashedLeaf, (uint256, uint256, uint256));
+            (uint16 feedId, uint256 rate, uint256 timestamp) =
+                abi.decode(inputs[i].unhashedLeaf, (uint16, uint256, uint256));
 
-            priceFeeds[feedId] = PriceFeed(rate, timestamp, vParams.blockNumber);
+            priceFeeds[feedId] = PriceFeed(rate, timestamp, checkpoint.blockNumber);
         }
     }
 
-    function getLatestPriceFeed(uint256 feedId) external view returns (PriceFeed memory) {
+    function getLatestPriceFeed(uint16 feedId) external view returns (PriceFeed memory) {
         return priceFeeds[feedId];
     }
 
-    function getLatestPriceFeeds(uint256[] calldata feedIds) external view returns (PriceFeed[] memory) {
+    function getLatestPriceFeeds(uint16[] memory feedIds) external view returns (PriceFeed[] memory) {
         PriceFeed[] memory feeds = new PriceFeed[](feedIds.length);
         for (uint256 i = 0; i < feedIds.length; i++) {
             feeds[i] = priceFeeds[feedIds[i]];
@@ -56,25 +52,13 @@ contract MockEOFeedManager is IEOFeedManager {
         return feeds;
     }
 
-    function whitelistPublishers(address[] calldata, bool[] calldata) external { }
+    function whitelistPublishers(address[] memory, bool[] memory) external { }
 
     function isWhitelistedPublisher(address) external pure returns (bool) {
         return true;
     }
 
-    function isSupportedFeed(uint256 feedId) external pure returns (bool) {
+    function isSupportedFeed(uint16 feedId) external pure returns (bool) {
         return feedId != NOT_SUPPORTED_FEED;
-    }
-
-    function getFeedDeployer() external view returns (address) {
-        return _feedDeployer;
-    }
-
-    function getFeedVerifier() external view returns (IEOFeedVerifier) {
-        return _feedVerifier;
-    }
-
-    function getPauserRegistry() external view returns (IPauserRegistry) {
-        return _pauserRegistry;
     }
 }

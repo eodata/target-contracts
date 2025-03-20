@@ -10,7 +10,7 @@ import { IEOFeedVerifier } from "../../../src/interfaces/IEOFeedVerifier.sol";
 
 contract EoracleConsumerExampleFeedManagerTest is Test {
     uint8 public constant DECIMALS = 8;
-    uint256 public constant FEED_ID = 1;
+    uint16 public constant FEED_ID = 1;
     string public constant DESCRIPTION = "ETH/USD";
     uint256 public constant VERSION = 1;
     uint256 public constant RATE1 = 100_000_000;
@@ -24,10 +24,10 @@ contract EoracleConsumerExampleFeedManagerTest is Test {
     function setUp() public virtual {
         _owner = makeAddr("_owner");
 
-        _feedManager = new MockEOFeedManager(address(this));
+        _feedManager = new MockEOFeedManager();
         _consumerExampleFeedManager = new EoracleConsumerExampleFeedManager(address(_feedManager));
 
-        _updateFeed(FEED_ID, RATE1, block.timestamp);
+        _updatePriceFeed(FEED_ID, RATE1, block.timestamp);
         _lastTimestamp = block.timestamp;
     }
 
@@ -44,7 +44,7 @@ contract EoracleConsumerExampleFeedManagerTest is Test {
     }
 
     function test_GetPrices() public view {
-        uint256[] memory feedIds = new uint256[](1);
+        uint16[] memory feedIds = new uint16[](1);
         feedIds[0] = FEED_ID;
         IEOFeedManager.PriceFeed[] memory priceFeeds = _consumerExampleFeedManager.getPrices(feedIds);
         assertEq(priceFeeds.length, 1);
@@ -52,21 +52,20 @@ contract EoracleConsumerExampleFeedManagerTest is Test {
         assertEq(priceFeeds[0].timestamp, _lastTimestamp);
     }
 
-    function _updateFeed(uint256 feedId, uint256 rate, uint256 timestamp) internal {
+    function _updatePriceFeed(uint16 feedId, uint256 rate, uint256 timestamp) internal {
         IEOFeedVerifier.LeafInput memory input;
         input.unhashedLeaf = abi.encode(feedId, rate, timestamp);
-        _feedManager.updateFeed(
+        _feedManager.updatePriceFeed(
             input,
-            IEOFeedVerifier.VerificationParams({
+            IEOFeedVerifier.Checkpoint({
+                blockNumber: 0,
+                epoch: 0,
                 eventRoot: bytes32(0),
-                blockNumber: uint64(0),
-                blockHash: bytes32(uint256(1)),
-                chainId: uint32(1),
-                aggregator: address(1),
-                signature: [uint256(0), uint256(0)],
-                apkG2: [uint256(0), uint256(0), uint256(0), uint256(0)],
-                nonSignersBitmap: bytes("0")
-            })
+                blockHash: bytes32(0),
+                blockRound: 0
+            }),
+            [uint256(0), uint256(0)],
+            bytes("0")
         );
     }
 }

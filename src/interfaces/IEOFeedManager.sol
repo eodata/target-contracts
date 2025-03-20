@@ -2,15 +2,8 @@
 pragma solidity 0.8.25;
 
 import { IEOFeedVerifier } from "./IEOFeedVerifier.sol";
-import { IPauserRegistry } from "eigenlayer-contracts/interfaces/IPauserRegistry.sol";
 
-/**
- * @title IEOFeedManager
- * @author eOracle
- */
 interface IEOFeedManager {
-    /* ============ Structs ============ */
-
     /**
      * @dev Price feed structure
      * @param value Price feed value
@@ -23,104 +16,64 @@ interface IEOFeedManager {
         uint256 eoracleBlockNumber;
     }
 
-    /* ============ Events ============ */
-
     /**
      * @dev Event emitted when a price feed is updated
      * @param feedId Feed id
      * @param rate Price feed value
      * @param timestamp Price feed timestamp
      */
-    event RateUpdated(uint256 indexed feedId, uint256 rate, uint256 timestamp);
-
-    /**
-     * @dev Event emitted when a price feed is replayed
-     * @param feedId Feed id
-     * @param rate Price feed value
-     * @param timestamp Price feed timestamp
-     * @param latestTimestamp Latest price feed timestamp
-     */
-    event SymbolReplay(uint256 indexed feedId, uint256 rate, uint256 timestamp, uint256 latestTimestamp);
-
-    /**
-     * @dev Event emitted when the feed deployer is set
-     * @param feedDeployer Address of the feed deployer
-     */
-    event FeedDeployerSet(address indexed feedDeployer);
-
-    /**
-     * @dev Event emitted when the feed verifier is set
-     * @param feedVerifier Address of the feed verifier
-     */
-    event FeedVerifierSet(address indexed feedVerifier);
-
-    /**
-     * @dev Event emitted when the pauser registry is set
-     * @param pauserRegistry Address of the pauser registry
-     */
-    event PauserRegistrySet(address indexed pauserRegistry);
-
-    /**
-     * @dev Event emitted when the supported feeds are updated
-     * @param feedId Feed id
-     * @param isSupported Boolean indicating whether the feed is supported
-     */
-    event SupportedFeedsUpdated(uint256 indexed feedId, bool isSupported);
-
-    /**
-     * @dev Event emitted when a publisher is whitelisted
-     * @param publisher Address of the publisher
-     * @param isWhitelisted Boolean indicating whether the publisher is whitelisted
-     */
-    event PublisherWhitelisted(address indexed publisher, bool isWhitelisted);
-
-    /* ============ External Functions ============ */
+    event RateUpdated(uint16 indexed feedId, uint256 rate, uint256 timestamp);
 
     /**
      * @notice Update the price for a feed
      * @param input A merkle leaf containing price data and its merkle proof
-     * @param vParams Verification parameters
+     * @param checkpoint Checkpoint data containing eoracle chain metadata and the data merkle root
+     * @param signature Aggregated signature of the checkpoint
+     * @param bitmap Bitmap of the validators who signed the checkpoint
      */
-    function updateFeed(
+    function updatePriceFeed(
         IEOFeedVerifier.LeafInput calldata input,
-        IEOFeedVerifier.VerificationParams calldata vParams
+        IEOFeedVerifier.Checkpoint calldata checkpoint,
+        uint256[2] calldata signature,
+        bytes calldata bitmap
     )
         external;
 
     /**
      * @notice Update the price for multiple feeds
      * @param inputs Array of leafs to prove the price feeds
-     * @param vParams Verification parameters
+     * @param checkpoint Checkpoint data
+     * @param signature Aggregated signature of the checkpoint
+     * @param bitmap Bitmap of the validators who signed the checkpoint
      */
-    function updateFeeds(
+    function updatePriceFeeds(
         IEOFeedVerifier.LeafInput[] calldata inputs,
-        IEOFeedVerifier.VerificationParams calldata vParams
+        IEOFeedVerifier.Checkpoint calldata checkpoint,
+        uint256[2] calldata signature,
+        bytes calldata bitmap
     )
         external;
 
     /**
-     * @notice Whitelist or remove publishers
+     * @notice Set the whitelisted publishers
      * @param publishers Array of publisher addresses
-     * @param isWhitelisted Array of booleans indicating whether each publisher should be whitelisted
+     * @param isWhitelisted Array of booleans indicating whether the publisher is whitelisted
      */
-    function whitelistPublishers(address[] calldata publishers, bool[] calldata isWhitelisted) external;
+    function whitelistPublishers(address[] memory publishers, bool[] memory isWhitelisted) external;
 
     /**
      * @notice Get the latest price for a feed
      * @param feedId Feed id
-     * @return The latest price feed data containing:
-     *         - value: The price feed value
-     *         - timestamp: The timestamp when the price was aggregated
-     *         - eoracleBlockNumber: The eoracle block number when the price was recorded
+     * @return PriceFeed struct
      */
-    function getLatestPriceFeed(uint256 feedId) external view returns (PriceFeed memory);
+    function getLatestPriceFeed(uint16 feedId) external view returns (PriceFeed memory);
 
     /**
      * @notice Get the latest price feeds for multiple feeds
      * @param feedIds Array of feed ids
-     * @return Array of PriceFeed structs corresponding to each requested feed ID
+     * @return Array of PriceFeed structs
      */
-    function getLatestPriceFeeds(uint256[] calldata feedIds) external view returns (PriceFeed[] memory);
+    function getLatestPriceFeeds(uint16[] calldata feedIds) external view returns (PriceFeed[] memory);
 
     /**
      * @notice Check if a publisher is whitelisted
@@ -134,23 +87,5 @@ interface IEOFeedManager {
      * @param feedId feed Id to check
      * @return Boolean indicating whether the feed is supported
      */
-    function isSupportedFeed(uint256 feedId) external view returns (bool);
-
-    /**
-     * @notice Get the feed deployer
-     * @return Address of the feed deployer
-     */
-    function getFeedDeployer() external view returns (address);
-
-    /**
-     * @notice Get the feed verifier contract address
-     * @return Address of the feed verifier contract
-     */
-    function getFeedVerifier() external view returns (IEOFeedVerifier);
-
-    /**
-     * @notice Get the pauser registry contract address
-     * @return Address of the pauser registry contract
-     */
-    function getPauserRegistry() external view returns (IPauserRegistry);
+    function isSupportedFeed(uint16 feedId) external view returns (bool);
 }

@@ -5,7 +5,6 @@ import { IEOFeedAdapter } from "./IEOFeedAdapter.sol";
 
 /**
  * @title IEOFeedRegistryAdapter
- * @author eOracle
  * @notice Interface for the FeedManager contract.
  * @dev Simplified version of FeedRegistryInterface from CL.
  */
