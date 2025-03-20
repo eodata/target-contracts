@@ -20,12 +20,12 @@ contract EoracleConsumerExampleFeedManager {
     }
 
     //Example for using EOFeedManager.getLatestPriceFeeds by one feed Id
-    function getPrice(uint16 feedId) external view returns (IEOFeedManager.PriceFeed memory) {
+    function getPrice(uint256 feedId) external view returns (IEOFeedManager.PriceFeed memory) {
         return _feedManager.getLatestPriceFeed(feedId);
     }
 
     //Example for using EOFeedManager.getLatestPriceFeeds with a list of feed Ids
-    function getPrices(uint16[] calldata feedIds) external view returns (IEOFeedManager.PriceFeed[] memory) {
+    function getPrices(uint256[] calldata feedIds) external view returns (IEOFeedManager.PriceFeed[] memory) {
         return _feedManager.getLatestPriceFeeds(feedIds);
     }
 }

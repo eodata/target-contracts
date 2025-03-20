@@ -3,43 +3,39 @@ pragma solidity 0.8.25;
 
 import { OwnableUpgradeable } from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import { IEOFeedVerifier } from "./interfaces/IEOFeedVerifier.sol";
-import { Merkle } from "./common/Merkle.sol";
+import { IBLS } from "./interfaces/IBLS.sol";
+import { MerkleProof } from "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
+
+// solhint-disable no-unused-import
 import {
     CallerIsNotFeedManager,
     InvalidProof,
+    InvalidInput,
     InvalidAddress,
     InvalidEventRoot,
     VotingPowerIsZero,
-    AggVotingPowerIsZero,
     InsufficientVotingPower,
     SignatureVerificationFailed,
+    SignaturePairingFailed,
     ValidatorIndexOutOfBounds,
-    SenderNotAllowed,
-    ValidatorSetTooSmall
+    ValidatorSetTooSmall,
+    DuplicatedAddresses
 } from "./interfaces/Errors.sol";
-import { IBLS } from "./interfaces/IBLS.sol";
-import { IBN256G2 } from "./interfaces/IBN256G2.sol";
-
-using Merkle for bytes32;
 
 /**
- * @title EOFeedManager
+ * @title EOFeedVerifier
+ * @author eOracle
  * @notice The EOFeedVerifier contract handles the verification of update payloads. The payload includes a Merkle root
  * signed by eoracle validators and a Merkle path to the leaf containing the data. The verifier stores the current
  * validator set in its storage and ensures that the Merkle root is signed by a subset of this validator set with
  * sufficient voting power.
  */
 contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
-    bytes32 public constant DOMAIN = keccak256("DOMAIN_CHECKPOINT_MANAGER");
+    bytes32 public constant DOMAIN = keccak256("EORACLE_FEED_VERIFIER");
     uint256 public constant MIN_VALIDATORS = 3;
-    /// @dev ID of eoracle chain
-    uint256 internal _eoracleChainId;
 
     /// @dev BLS library contract
     IBLS internal _bls;
-
-    /// @dev BN256G2 library contract
-    IBN256G2 internal _bn256G2;
 
     /// @dev length of validators set
     uint256 internal _currentValidatorSetLength;
@@ -62,8 +58,10 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
     /// @dev address of the feed manager
     address internal _feedManager;
 
-    /// @dev mapping of allowed senders
-    mapping(address => bool) internal _allowedSenders;
+    /// @dev full apk of the current validator set
+    uint256[2] internal _fullApk;
+
+    /* ============ Modifiers ============ */
 
     /**
      * @dev Allows only the feed manager to call the function
@@ -73,56 +71,41 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
         _;
     }
 
+    /* ============ Constructor ============ */
+
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         _disableInitializers();
     }
 
+    /* ============ Initializer ============ */
+
     /**
      * @param owner Owner of the contract
-     * @param bls_ Address of the BLS library contract
-     * @param bn256G2_ Address of the Bn256G2 library contract
-     * @param eoracleChainId_ Chain ID of the eoracle chain
-     * @param allowedSenders List of allowed senders
      */
-    function initialize(
-        address owner,
-        IBLS bls_,
-        IBN256G2 bn256G2_,
-        uint256 eoracleChainId_,
-        address[] calldata allowedSenders
-    )
-        external
-        initializer
-    {
-        if (
-            address(bls_) == address(0) || address(bls_).code.length == 0 || address(bn256G2_) == address(0)
-                || address(bn256G2_).code.length == 0
-        ) {
+    function initialize(address owner, IBLS bls_) external initializer {
+        if (address(bls_) == address(0) || address(bls_).code.length == 0) {
             revert InvalidAddress();
         }
-        _eoracleChainId = eoracleChainId_;
         _bls = bls_;
-        _bn256G2 = bn256G2_;
-        _setAllowedSenders(allowedSenders, true);
         __Ownable_init(owner);
     }
+
+    /* ============ External Functions ============ */
 
     /**
      * @inheritdoc IEOFeedVerifier
      */
     function verify(
         LeafInput calldata input,
-        Checkpoint calldata checkpoint,
-        uint256[2] calldata signature,
-        bytes calldata bitmap
+        VerificationParams calldata vParams
     )
         external
         onlyFeedManager
         returns (bytes memory)
     {
-        _processCheckpoint(checkpoint, signature, bitmap);
-        bytes memory data = _verifyLeaf(input, checkpoint.eventRoot);
+        _verifyParams(vParams);
+        bytes memory data = _verifyLeaf(input, vParams.eventRoot);
         return data;
     }
 
@@ -131,69 +114,59 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
      */
     function batchVerify(
         LeafInput[] calldata inputs,
-        Checkpoint calldata checkpoint,
-        uint256[2] calldata signature,
-        bytes calldata bitmap
+        VerificationParams calldata vParams
     )
         external
         onlyFeedManager
         returns (bytes[] memory)
     {
-        _processCheckpoint(checkpoint, signature, bitmap);
-        return _verifyLeaves(inputs, checkpoint.eventRoot);
+        _verifyParams(vParams);
+        return _verifyLeaves(inputs, vParams.eventRoot);
     }
 
     /**
-     * @inheritdoc IEOFeedVerifier
+     * @notice Function to set a new validator set
+     * @param newValidatorSet The new validator set to store
      */
     function setNewValidatorSet(Validator[] calldata newValidatorSet) external onlyOwner {
         uint256 length = newValidatorSet.length;
         if (length < MIN_VALIDATORS) revert ValidatorSetTooSmall();
-        // delete the slots of the old validators
+        if (!_hasNoAddressDuplicates(newValidatorSet)) revert DuplicatedAddresses();
         if (length < _currentValidatorSetLength) {
             for (uint256 i = length; i < _currentValidatorSetLength; i++) {
+                // slither-disable-next-line costly-loop
                 delete _currentValidatorSet[i];
             }
         }
+
         _currentValidatorSetLength = length;
         _currentValidatorSetHash = keccak256(abi.encode(newValidatorSet));
         uint256 totalPower = 0;
+        uint256[2] memory apk = [uint256(0), uint256(0)];
+
         for (uint256 i = 0; i < length; i++) {
             if (newValidatorSet[i]._address == address(0)) revert InvalidAddress();
             uint256 votingPower = newValidatorSet[i].votingPower;
             if (votingPower == 0) revert VotingPowerIsZero();
             totalPower += votingPower;
             _currentValidatorSet[i] = newValidatorSet[i];
+            // slither-disable-next-line calls-loop
+            apk = _bls.ecadd(apk, newValidatorSet[i].g1pk);
         }
+
+        _fullApk = apk;
         _totalVotingPower = totalPower;
         emit ValidatorSetUpdated(_currentValidatorSetLength, _currentValidatorSetHash, _totalVotingPower);
     }
 
     /**
-     * @inheritdoc IEOFeedVerifier
-     */
-    function setAllowedSenders(address[] calldata senders, bool allowed) external onlyOwner {
-        _setAllowedSenders(senders, allowed);
-    }
-
-    /**
-     * @inheritdoc IEOFeedVerifier
+     * @notice Sets the address of the feed manager.
+     * @param feedManager_ The address of the new feed manager.
      */
     function setFeedManager(address feedManager_) external onlyOwner {
         if (feedManager_ == address(0)) revert InvalidAddress();
         _feedManager = feedManager_;
         emit FeedManagerSet(feedManager_);
-    }
-
-    /**
-     * @notice Set the bn256G2 contract
-     * @param bn256G2_ Address of the BN256G2 contract
-     */
-    function setBN256G2(IBN256G2 bn256G2_) external onlyOwner {
-        if (address(bn256G2_) == address(0) || address(bn256G2_).code.length == 0) {
-            revert InvalidAddress();
-        }
-        _bn256G2 = bn256G2_;
     }
 
     /**
@@ -205,30 +178,6 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
             revert InvalidAddress();
         }
         _bls = bls_;
-    }
-
-    /**
-     * @notice Returns the ID of the eoracle chain.
-     * @return The eoracle chain ID.
-     */
-    function eoracleChainId() external view returns (uint256) {
-        return _eoracleChainId;
-    }
-
-    /**
-     * @notice Returns the BLS contract.
-     * @return The BLS contract.
-     */
-    function bls() external view returns (IBLS) {
-        return _bls;
-    }
-
-    /**
-     * @notice Returns the BN256G2 contract.
-     * @return The BN256G2 contract.
-     */
-    function bn256G2() external view returns (IBN256G2) {
-        return _bn256G2;
     }
 
     /**
@@ -289,117 +238,84 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
         return _feedManager;
     }
 
-    /**
-     * @notice Returns whether the sender is allowed to submit leaves.
-     * @param sender The address of the sender.
-     */
-    function isSenderAllowed(address sender) external view returns (bool) {
-        return _allowedSenders[sender];
+    function bls() external view returns (IBLS) {
+        return _bls;
     }
+
+    /* ============ Internal Functions ============ */
 
     /**
      * @notice Function to verify the checkpoint signature
-     * @param checkpoint Checkpoint data
-     * @param signature Aggregated signature of the checkpoint
-     * @param bitmap Bitmap of the validators who signed the checkpoint
+     * @param vParams Signed data
      */
-    function _processCheckpoint(
-        IEOFeedVerifier.Checkpoint calldata checkpoint,
-        uint256[2] calldata signature,
-        bytes calldata bitmap
-    )
-        internal
-    {
+    function _verifyParams(IEOFeedVerifier.VerificationParams calldata vParams) internal {
         // if the eventRoot has not changed, we don't need to verify the whole checkpoint again
-        if (checkpoint.eventRoot == _lastProcessedEventRoot) {
+        if (vParams.eventRoot == _lastProcessedEventRoot) {
             return;
         }
-        _verifySignature(checkpoint, signature, bitmap);
-        if (checkpoint.blockNumber > _lastProcessedBlockNumber) {
-            _lastProcessedBlockNumber = checkpoint.blockNumber;
-            _lastProcessedEventRoot = checkpoint.eventRoot;
-        }
-    }
 
-    function _setAllowedSenders(address[] calldata senders, bool allowed) internal {
-        for (uint256 i; i < senders.length; i++) {
-            _allowedSenders[senders[i]] = allowed;
+        bytes32 msgHash = keccak256(
+            abi.encode(vParams.eventRoot, vParams.blockNumber, vParams.blockHash, vParams.chainId, vParams.aggregator)
+        );
+
+        if (vParams.eventRoot == bytes32(0)) revert InvalidEventRoot();
+
+        _verifySignature(msgHash, vParams.signature, vParams.apkG2, vParams.nonSignersBitmap);
+
+        if (vParams.blockNumber > _lastProcessedBlockNumber) {
+            _lastProcessedBlockNumber = vParams.blockNumber;
+            _lastProcessedEventRoot = vParams.eventRoot;
         }
     }
 
     /**
      * @notice Verify the signature of the checkpoint
-     * @param checkpoint Checkpoint data
-     * @param signature Aggregated signature of the checkpoint
-     * @param bitmap Bitmap of the validators who signed the checkpoint
+     * @param messageHash Hash of the message to verify
+     * @param signature G1 Aggregated signature of the checkpoint
+     * @param apkG2 G2 Aggregated public key of the checkpoint
+     * @param nonSignersBitmap Bitmap of the validators who did not sign the data
      */
     function _verifySignature(
-        Checkpoint calldata checkpoint,
+        bytes32 messageHash,
         uint256[2] calldata signature,
-        bytes calldata bitmap
+        uint256[4] calldata apkG2,
+        bytes calldata nonSignersBitmap
     )
         internal
         view
     {
-        if (checkpoint.eventRoot == bytes32(0)) revert InvalidEventRoot();
-        bytes memory hash = abi.encode(
-            keccak256(
-                // solhint-disable-next-line func-named-parameters
-                abi.encode(
-                    _eoracleChainId,
-                    checkpoint.blockNumber,
-                    checkpoint.blockHash,
-                    checkpoint.blockRound,
-                    checkpoint.epoch,
-                    checkpoint.eventRoot,
-                    _currentValidatorSetHash,
-                    _currentValidatorSetHash
-                )
-            )
-        );
-
-        uint256[2] memory message = _bls.hashToPoint(DOMAIN, hash);
-
-        uint256 length = _currentValidatorSetLength;
-        // slither-disable-next-line uninitialized-local
-        uint256[4] memory aggPubkey;
-        uint256 aggVotingPower = 0;
-        for (uint256 i = 0; i < length; i++) {
-            if (_getValueFromBitmap(bitmap, i)) {
-                if (aggVotingPower == 0) {
-                    aggPubkey = _currentValidatorSet[i].blsKey;
-                } else {
-                    uint256[4] memory blsKey = _currentValidatorSet[i].blsKey;
-                    (aggPubkey[0], aggPubkey[1], aggPubkey[2], aggPubkey[3]) = _bn256G2.ecTwistAdd({
-                        pt1xx: aggPubkey[0],
-                        pt1xy: aggPubkey[1],
-                        pt1yx: aggPubkey[2],
-                        pt1yy: aggPubkey[3],
-                        pt2xx: blsKey[0],
-                        pt2xy: blsKey[1],
-                        pt2yx: blsKey[2],
-                        pt2yy: blsKey[3]
-                    });
-                }
-                aggVotingPower += _currentValidatorSet[i].votingPower;
+        uint256[2] memory apk = [uint256(0), uint256(0)];
+        uint256 aggVotingPower = _totalVotingPower;
+        // first apk will hold all non signers
+        for (uint256 i = 0; i < _currentValidatorSetLength; i++) {
+            Validator memory v = _currentValidatorSet[i];
+            if (_getValueFromBitmap(nonSignersBitmap, i)) {
+                apk = _bls.ecadd(apk, v.g1pk);
+                aggVotingPower -= v.votingPower;
             }
         }
 
-        if (aggVotingPower == 0) revert AggVotingPowerIsZero();
+        // we check the agg voting power is indeed sufficient
         if (aggVotingPower <= ((2 * _totalVotingPower) / 3)) revert InsufficientVotingPower();
 
-        (bool callSuccess, bool result) = _bls.verifySingle(signature, aggPubkey, message);
+        // then we negate the non signers and add the full apk
+        apk = _bls.ecadd(_fullApk, _bls.neg(apk));
+        uint256[2] memory hashPoint = _bls.hashToPoint(DOMAIN, abi.encodePacked(messageHash));
+        (bool pairingSuccessful, bool signatureIsValid) =
+            _bls.verifySignatureAndVeracity(apk, signature, hashPoint, apkG2);
 
-        if (!callSuccess || !result) revert SignatureVerificationFailed();
+        if (!pairingSuccessful) revert SignaturePairingFailed();
+        if (!signatureIsValid) revert SignatureVerificationFailed();
     }
 
     /**
      * @notice Verify a batch of exits leaves
      * @param inputs Batch exit inputs for multiple event leaves
      * @param eventRoot the root this event should belong to
-     * @return Array of the leaf data fields of all submitted leaves
+     * @return Array of the unhashed leaves
      */
-    function _verifyLeaves(LeafInput[] calldata inputs, bytes32 eventRoot) internal view returns (bytes[] memory) {
+    function _verifyLeaves(LeafInput[] calldata inputs, bytes32 eventRoot) internal pure returns (bytes[] memory) {
+        if (inputs.length == 0) revert InvalidInput();
         uint256 length = inputs.length;
         bytes[] memory returnData = new bytes[](length);
         for (uint256 i = 0; i < length; i++) {
@@ -412,21 +328,16 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
      * @notice Verify for one event
      * @param input Exit leaf input
      * @param eventRoot event root the leaf should belong to
-     * @return The leaf data field
+     * @return The unhashed leaf
      */
-    function _verifyLeaf(LeafInput calldata input, bytes32 eventRoot) internal view returns (bytes memory) {
+    function _verifyLeaf(LeafInput calldata input, bytes32 eventRoot) internal pure returns (bytes memory) {
         bytes32 leaf = keccak256(input.unhashedLeaf);
-        if (!leaf.checkMembership(input.leafIndex, eventRoot, input.proof)) {
+
+        if (!MerkleProof.verify(input.proof, eventRoot, leaf)) {
             revert InvalidProof();
         }
 
-        ( /* uint256 id */ , address sender, /* address receiver */, bytes memory data) =
-            abi.decode(input.unhashedLeaf, (uint256, address, address, bytes));
-        if (!_allowedSenders[sender]) {
-            revert SenderNotAllowed(sender);
-        }
-
-        return data;
+        return input.unhashedLeaf;
     }
 
     /**
@@ -448,7 +359,28 @@ contract EOFeedVerifier is IEOFeedVerifier, OwnableUpgradeable {
         return uint8(bitmap[byteNumber]) & (1 << bitNumber) > 0;
     }
 
+    /**
+     * @dev Checks if there are no duplicate addresses in the validator set.
+     * @param validators The array of validators to check for duplicates.
+     * @return bool True if there are no duplicate addresses, false otherwise.
+     */
+    function _hasNoAddressDuplicates(Validator[] calldata validators) private pure returns (bool) {
+        for (uint256 i = 0; i < validators.length; i++) {
+            for (uint256 j = i + 1; j < validators.length; j++) {
+                if (validators[i]._address == validators[j]._address) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @dev Gap for future storage variables in upgradeable contract.
+     * See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps
+     */
+    // solhint-disable ordering
     // slither-disable-next-line unused-state,naming-convention
-    // solhint-disable-next-line ordering
     uint256[50] private __gap;
+    // solhint-disable enable
 }

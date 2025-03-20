@@ -1,10 +1,15 @@
 # EOFeedAdapter
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/de89fc9e9bc7c046937883aa064d90812f1542cc/src/adapters/EOFeedAdapter.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/44a7184a934b669887867d9bb70946619d422be3/src/adapters/EOFeedAdapter.sol)
 
 **Inherits:** [IEOFeedAdapter](/src/adapters/interfaces/IEOFeedAdapter.sol/interface.IEOFeedAdapter.md), Initializable
 
-Price feed adapter contract
+**Author:** eOracle
+
+EOFeedAdapter is a contract that provides a standardized interface for accessing feed data from the eOracle system. It
+acts as a compatibility layer between eOracle's native feed format and the widely-used AggregatorV3Interface format.
+
+_compatible with AggregatorV3Interface._
 
 ## State Variables
 
@@ -37,18 +42,51 @@ string private _description;
 _Feed id_
 
 ```solidity
-uint16 private _feedId;
+uint256 private _feedId;
 ```
 
-### \_decimals
+### \_inputDecimals
 
-_Decimals of the rate_
+_the next 2 variables will be packed in 1 slot_
+
+_The input decimals of the rate_
 
 ```solidity
-uint8 private _decimals;
+uint8 private _inputDecimals;
+```
+
+### \_outputDecimals
+
+_The output decimals of the rate_
+
+```solidity
+uint8 private _outputDecimals;
+```
+
+### \_decimalsDiff
+
+_The decimals difference between input and output decimals_
+
+```solidity
+int256 private _decimalsDiff;
+```
+
+### \_\_gap
+
+_Gap for future storage variables in upgradeable contract. See
+https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps_
+
+```solidity
+uint256[48] private __gap;
 ```
 
 ## Functions
+
+### constructor
+
+```solidity
+constructor();
+```
 
 ### initialize
 
@@ -57,8 +95,9 @@ Initialize the contract
 ```solidity
 function initialize(
     address feedManager,
-    uint16 feedId,
-    uint8 feedDecimals,
+    uint256 feedId,
+    uint8 inputDecimals,
+    uint8 outputDecimals,
     string memory feedDescription,
     uint256 feedVersion
 )
@@ -68,27 +107,30 @@ function initialize(
 
 **Parameters**
 
-| Name              | Type      | Description              |
-| ----------------- | --------- | ------------------------ |
-| `feedManager`     | `address` | The feed manager address |
-| `feedId`          | `uint16`  | Feed id                  |
-| `feedDecimals`    | `uint8`   | The decimals of the rate |
-| `feedDescription` | `string`  | The description of feed  |
-| `feedVersion`     | `uint256` | The version of feed      |
+| Name              | Type      | Description                              |
+| ----------------- | --------- | ---------------------------------------- |
+| `feedManager`     | `address` | The feed manager address                 |
+| `feedId`          | `uint256` | Feed id                                  |
+| `inputDecimals`   | `uint8`   | The input decimal precision of the rate  |
+| `outputDecimals`  | `uint8`   | The output decimal precision of the rate |
+| `feedDescription` | `string`  | The description of feed                  |
+| `feedVersion`     | `uint256` | The version of feed                      |
 
 ### getRoundData
 
 Get the price for the round
 
+_Reverts if the roundId is not the latest one_
+
 ```solidity
-function getRoundData(uint80) external view returns (uint80, int256, uint256, uint256, uint80);
+function getRoundData(uint80 roundId) external view returns (uint80, int256, uint256, uint256, uint80);
 ```
 
 **Parameters**
 
-| Name     | Type     | Description |
-| -------- | -------- | ----------- |
-| `<none>` | `uint80` |             |
+| Name      | Type     | Description                                  |
+| --------- | -------- | -------------------------------------------- |
+| `roundId` | `uint80` | The roundId - only latest round is supported |
 
 **Returns**
 
@@ -148,17 +190,19 @@ function latestTimestamp() external view returns (uint256);
 
 ### getAnswer
 
-Get the price for the round (round is not used, the latest price is returned)
+Get the price for the round
+
+_Reverts if the roundId is not the latest one_
 
 ```solidity
-function getAnswer(uint256) external view returns (int256);
+function getAnswer(uint256 roundId) external view returns (int256);
 ```
 
 **Parameters**
 
-| Name     | Type      | Description |
-| -------- | --------- | ----------- |
-| `<none>` | `uint256` |             |
+| Name      | Type      | Description                                  |
+| --------- | --------- | -------------------------------------------- |
+| `roundId` | `uint256` | The roundId - only latest round is supported |
 
 **Returns**
 
@@ -168,17 +212,19 @@ function getAnswer(uint256) external view returns (int256);
 
 ### getTimestamp
 
-Get the timestamp for the round (round is not used, the latest timestamp is returned)
+Get the timestamp for the round
+
+_Reverts if the roundId is not the latest one_
 
 ```solidity
-function getTimestamp(uint256) external view returns (uint256);
+function getTimestamp(uint256 roundId) external view returns (uint256);
 ```
 
 **Parameters**
 
-| Name     | Type      | Description |
-| -------- | --------- | ----------- |
-| `<none>` | `uint256` |             |
+| Name      | Type      | Description                                  |
+| --------- | --------- | -------------------------------------------- |
+| `roundId` | `uint256` | The roundId - only latest round is supported |
 
 **Returns**
 
@@ -191,14 +237,14 @@ function getTimestamp(uint256) external view returns (uint256);
 Get the id of the feed
 
 ```solidity
-function getFeedId() external view returns (uint16);
+function getFeedId() external view returns (uint256);
 ```
 
 **Returns**
 
-| Name     | Type     | Description        |
-| -------- | -------- | ------------------ |
-| `<none>` | `uint16` | uint16 The feed id |
+| Name     | Type      | Description         |
+| -------- | --------- | ------------------- |
+| `<none>` | `uint256` | uint256 The feed id |
 
 ### decimals
 
@@ -255,3 +301,37 @@ function latestRound() external view returns (uint256);
 | Name     | Type      | Description                                |
 | -------- | --------- | ------------------------------------------ |
 | `<none>` | `uint256` | uint256 The round id, eoracle block number |
+
+### isPaused
+
+Get the paused status of the feed
+
+```solidity
+function isPaused() external view returns (bool);
+```
+
+**Returns**
+
+| Name     | Type   | Description            |
+| -------- | ------ | ---------------------- |
+| `<none>` | `bool` | bool The paused status |
+
+### \_normalizePrice
+
+Normalize the price to the output decimals
+
+```solidity
+function _normalizePrice(uint256 price) internal view returns (int256);
+```
+
+**Parameters**
+
+| Name    | Type      | Description            |
+| ------- | --------- | ---------------------- |
+| `price` | `uint256` | The price to normalize |
+
+**Returns**
+
+| Name     | Type     | Description                 |
+| -------- | -------- | --------------------------- |
+| `<none>` | `int256` | int256 The normalized price |

@@ -19,7 +19,7 @@ contract EOFeedAdapterCloneTest is EOFeedAdapterTest {
         _quoteAddress = makeAddr("quote");
         _owner = makeAddr("_owner");
 
-        _feedManager = new MockEOFeedManager();
+        _feedManager = new MockEOFeedManager(address(this));
 
         IEOFeedAdapter feedAdapterImplementation =
             EOFeedAdapter(Upgrades.deployImplementation("EOFeedAdapter.sol", opts));
@@ -36,7 +36,7 @@ contract EOFeedAdapterCloneTest is EOFeedAdapterTest {
                 )
             )
         );
-        _updatePriceFeed(FEED_ID, RATE1, block.timestamp);
+        _updateFeed(FEED_ID, RATE1, block.timestamp);
         _lastTimestamp = block.timestamp;
     }
 }

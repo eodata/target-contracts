@@ -14,16 +14,18 @@ import {
     FeedAlreadyExists,
     BaseQuotePairExists,
     FeedNotSupported,
-    FeedDoesNotExist
+    FeedDoesNotExist,
+    NotFeedDeployer,
+    NotLatestRound
 } from "../../../src/interfaces/Errors.sol";
 import { Upgrades } from "openzeppelin-foundry-upgrades/Upgrades.sol";
 import { Options } from "openzeppelin-foundry-upgrades/Options.sol";
-
 // solhint-disable ordering
 // solhint-disable no-empty-blocks
+
 abstract contract EOFeedRegistryAdapterBaseTest is Test {
-    uint16 public constant FEED_ID1 = 1;
-    uint16 public constant FEED_ID2 = 2;
+    uint256 public constant FEED_ID1 = 1;
+    uint256 public constant FEED_ID2 = 2;
     string public constant DESCRIPTION1 = "ETH/USD";
     string public constant DESCRIPTION2 = "BTC/USD";
     uint256 public constant RATE1 = 100_000_000;
@@ -41,13 +43,13 @@ abstract contract EOFeedRegistryAdapterBaseTest is Test {
     address internal _base2Address;
     address internal _quote2Address;
     uint256 internal _lastTimestamp;
-    uint256 internal _lastBlockNumber;
+    uint64 internal _lastBlockNumber;
 
     event FeedManagerSet(address indexed _feedManager);
-    event FeedAdapterDeployed(uint16 indexed feedId, address indexed feedAdapter, address base, address quote);
+    event FeedAdapterDeployed(uint256 indexed feedId, address indexed feedAdapter, address base, address quote);
 
     function setUp() public virtual {
-        _feedManager = new MockEOFeedManager();
+        _feedManager = new MockEOFeedManager(address(this));
         Options memory opts;
         _feedAdapterImplementation = EOFeedAdapter(Upgrades.deployImplementation("EOFeedAdapter.sol", opts));
 
@@ -58,7 +60,7 @@ abstract contract EOFeedRegistryAdapterBaseTest is Test {
         _quote1Address = makeAddr("quote");
         _base2Address = makeAddr("base2");
         _quote2Address = makeAddr("quote2");
-        _lastBlockNumber = block.number;
+        _lastBlockNumber = uint64(block.number);
     }
 
     function test_Initialized() public view {
@@ -69,7 +71,7 @@ abstract contract EOFeedRegistryAdapterBaseTest is Test {
     function test_FactoryInitialized() public view virtual { }
 
     function test_SetFeedManager() public {
-        IEOFeedManager newFeedManager = new MockEOFeedManager();
+        IEOFeedManager newFeedManager = new MockEOFeedManager(address(this));
         vm.expectEmit();
         emit FeedManagerSet(address(newFeedManager));
         _feedRegistryAdapter.setFeedManager(address(newFeedManager));
@@ -134,15 +136,13 @@ abstract contract EOFeedRegistryAdapterBaseTest is Test {
     }
 
     function test_RevertWhen_DeployFeedAdapter_NotSupportedFeed() public {
-        uint16 feedId = MockEOFeedManager(address(_feedManager)).NOT_SUPPORTED_FEED();
+        uint256 feedId = MockEOFeedManager(address(_feedManager)).NOT_SUPPORTED_FEED();
         vm.expectRevert(abi.encodeWithSelector(FeedNotSupported.selector, feedId));
         _deployEOFeedAdapter(_base1Address, _quote1Address, feedId, DESCRIPTION1, DECIMALS, DECIMALS, VERSION);
     }
 
     function test_RevertWhen_DeployFeedAdapter_NotOwner() public {
-        vm.expectRevert(
-            abi.encodeWithSelector(OwnableUpgradeable.OwnableUnauthorizedAccount.selector, address(_notOwner))
-        );
+        vm.expectRevert(NotFeedDeployer.selector);
         vm.prank(_notOwner);
         _deployEOFeedAdapter(_base1Address, _quote1Address, FEED_ID1, DESCRIPTION1, DECIMALS, DECIMALS, VERSION);
     }
@@ -193,7 +193,7 @@ abstract contract EOFeedRegistryAdapterBaseTest is Test {
 
     function test_LatestRoundData() public {
         _deployEOFeedAdapter(_base1Address, _quote1Address, FEED_ID1, DESCRIPTION1, DECIMALS, DECIMALS, VERSION);
-        _updatePriceFeed(FEED_ID1, RATE1, block.timestamp);
+        _updateFeed(FEED_ID1, RATE1, block.timestamp);
         (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound) =
             _feedRegistryAdapter.latestRoundData(_base1Address, _quote1Address);
         assertEq(roundId, _lastBlockNumber);
@@ -205,9 +205,9 @@ abstract contract EOFeedRegistryAdapterBaseTest is Test {
 
     function test_GetRoundData() public {
         _deployEOFeedAdapter(_base1Address, _quote1Address, FEED_ID1, DESCRIPTION1, DECIMALS, DECIMALS, VERSION);
-        _updatePriceFeed(FEED_ID1, RATE1, block.timestamp);
+        _updateFeed(FEED_ID1, RATE1, block.timestamp);
         (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound) =
-            _feedRegistryAdapter.getRoundData(_base1Address, _quote1Address, 1);
+            _feedRegistryAdapter.getRoundData(_base1Address, _quote1Address, _lastBlockNumber);
         assertEq(roundId, _lastBlockNumber);
         assertEq(answer, int256(RATE1));
         assertEq(startedAt, block.timestamp);
@@ -215,34 +215,55 @@ abstract contract EOFeedRegistryAdapterBaseTest is Test {
         assertEq(answeredInRound, _lastBlockNumber);
     }
 
+    function test_RevertWhen_GetRoundData_NotLatestRound() public {
+        _deployEOFeedAdapter(_base1Address, _quote1Address, FEED_ID1, DESCRIPTION1, DECIMALS, DECIMALS, VERSION);
+        _updateFeed(FEED_ID1, RATE1, block.timestamp);
+        vm.expectRevert(NotLatestRound.selector);
+        _feedRegistryAdapter.getRoundData(_base1Address, _quote1Address, _lastBlockNumber + 1);
+    }
+
     function test_LatestAnswer() public {
         _deployEOFeedAdapter(_base1Address, _quote1Address, FEED_ID1, DESCRIPTION1, DECIMALS, DECIMALS, VERSION);
-        _updatePriceFeed(FEED_ID1, RATE1, block.timestamp);
+        _updateFeed(FEED_ID1, RATE1, block.timestamp);
         assertEq(_feedRegistryAdapter.latestAnswer(_base1Address, _quote1Address), int256(RATE1));
     }
 
     function test_LatestTimestamp() public {
         _deployEOFeedAdapter(_base1Address, _quote1Address, FEED_ID1, DESCRIPTION1, DECIMALS, DECIMALS, VERSION);
-        _updatePriceFeed(FEED_ID1, RATE1, block.timestamp);
+        _updateFeed(FEED_ID1, RATE1, block.timestamp);
         assertEq(_feedRegistryAdapter.latestTimestamp(_base1Address, _quote1Address), block.timestamp);
     }
 
     function test_LatestRound() public {
         _deployEOFeedAdapter(_base1Address, _quote1Address, FEED_ID1, DESCRIPTION1, DECIMALS, DECIMALS, VERSION);
-        _updatePriceFeed(FEED_ID1, RATE1, block.timestamp);
+        _updateFeed(FEED_ID1, RATE1, block.timestamp);
         assertEq(_feedRegistryAdapter.latestRound(_base1Address, _quote1Address), _lastBlockNumber);
     }
 
     function test_GetAnswer() public {
         _deployEOFeedAdapter(_base1Address, _quote1Address, FEED_ID1, DESCRIPTION1, DECIMALS, DECIMALS, VERSION);
-        _updatePriceFeed(FEED_ID1, RATE1, block.timestamp);
-        assertEq(_feedRegistryAdapter.getAnswer(_base1Address, _quote1Address, 1), int256(RATE1));
+        _updateFeed(FEED_ID1, RATE1, block.timestamp);
+        assertEq(_feedRegistryAdapter.getAnswer(_base1Address, _quote1Address, _lastBlockNumber), int256(RATE1));
+    }
+
+    function test_RevertWhen_GetAnswer_NotLatestRound() public {
+        _deployEOFeedAdapter(_base1Address, _quote1Address, FEED_ID1, DESCRIPTION1, DECIMALS, DECIMALS, VERSION);
+        _updateFeed(FEED_ID1, RATE1, block.timestamp);
+        vm.expectRevert(NotLatestRound.selector);
+        _feedRegistryAdapter.getAnswer(_base1Address, _quote1Address, _lastBlockNumber + 1);
     }
 
     function test_GetTimestamp() public {
         _deployEOFeedAdapter(_base1Address, _quote1Address, FEED_ID1, DESCRIPTION1, DECIMALS, DECIMALS, VERSION);
-        _updatePriceFeed(FEED_ID1, RATE1, block.timestamp);
-        assertEq(_feedRegistryAdapter.getTimestamp(_base1Address, _quote1Address, 1), block.timestamp);
+        _updateFeed(FEED_ID1, RATE1, block.timestamp);
+        assertEq(_feedRegistryAdapter.getTimestamp(_base1Address, _quote1Address, _lastBlockNumber), block.timestamp);
+    }
+
+    function test_RevertWhen_GetTimestamp_NotLatestRound() public {
+        _deployEOFeedAdapter(_base1Address, _quote1Address, FEED_ID1, DESCRIPTION1, DECIMALS, DECIMALS, VERSION);
+        _updateFeed(FEED_ID1, RATE1, block.timestamp);
+        vm.expectRevert(NotLatestRound.selector);
+        _feedRegistryAdapter.getTimestamp(_base1Address, _quote1Address, _lastBlockNumber + 1);
     }
 
     function test_IsFeedEnabled() public {
@@ -255,33 +276,42 @@ abstract contract EOFeedRegistryAdapterBaseTest is Test {
         // solhint-disable-next-line func-named-parameters
         IEOFeedAdapter feedAdapter =
             _deployEOFeedAdapter(_base1Address, _quote1Address, FEED_ID1, DESCRIPTION1, DECIMALS, DECIMALS, VERSION);
+        _updateFeed(FEED_ID1, RATE1, block.timestamp);
         assertEq(
-            address(_feedRegistryAdapter.getRoundFeed(_base1Address, _quote1Address, uint80(_lastBlockNumber))),
+            address(_feedRegistryAdapter.getRoundFeed(_base1Address, _quote1Address, _lastBlockNumber)),
             address(feedAdapter)
         );
     }
 
-    function _updatePriceFeed(uint16 feedId, uint256 rate, uint256 timestamp) internal {
+    function test_RevertWhen_GetRoundFeed_NotLatestRound() public {
+        _deployEOFeedAdapter(_base1Address, _quote1Address, FEED_ID1, DESCRIPTION1, DECIMALS, DECIMALS, VERSION);
+        _updateFeed(FEED_ID1, RATE1, block.timestamp);
+        vm.expectRevert(NotLatestRound.selector);
+        _feedRegistryAdapter.getRoundFeed(_base1Address, _quote1Address, _lastBlockNumber + 1);
+    }
+
+    function _updateFeed(uint256 feedId, uint256 rate, uint256 timestamp) internal {
         IEOFeedVerifier.LeafInput memory input;
         input.unhashedLeaf = abi.encode(feedId, rate, timestamp);
-        _feedManager.updatePriceFeed(
+        _feedManager.updateFeed(
             input,
-            IEOFeedVerifier.Checkpoint({
-                blockNumber: _lastBlockNumber,
-                epoch: 0,
+            IEOFeedVerifier.VerificationParams({
                 eventRoot: bytes32(0),
-                blockHash: bytes32(0),
-                blockRound: 0
-            }),
-            [uint256(0), uint256(0)],
-            bytes("1")
+                blockNumber: _lastBlockNumber,
+                blockHash: bytes32(uint256(1)),
+                chainId: uint32(1),
+                aggregator: address(1),
+                signature: [uint256(0), uint256(0)],
+                apkG2: [uint256(0), uint256(0), uint256(0), uint256(0)],
+                nonSignersBitmap: bytes("0")
+            })
         );
     }
 
     function _deployEOFeedAdapter(
         address base,
         address quote,
-        uint16 feedId,
+        uint256 feedId,
         string memory description,
         uint8 inputDecimals,
         uint8 outputDecimals,
