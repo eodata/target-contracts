@@ -31,7 +31,7 @@ call_contract $FEED_VERIFIER_PROXY "setFeedManager(address)" $OWNER_PRIVATE_KEY 
 # Setup core contracts
 SUPPORTED_FEED_IDS=$(echo $CONFIG | jq -r '.supportedFeedIds | join(",")')
 SUPPORTED_FEED_BOOLS=$(echo $CONFIG | jq -r '.supportedFeedIds | map(true) | join(",")')
-call_contract $FEED_MANAGER_PROXY "setSupportedFeeds(uint256[],bool[])" $OWNER_PRIVATE_KEY "[$SUPPORTED_FEED_IDS]" "[$SUPPORTED_FEED_BOOLS]"
+call_contract $FEED_MANAGER_PROXY "setSupportedFeeds(uint16[],bool[])" $OWNER_PRIVATE_KEY "[$SUPPORTED_FEED_IDS]" "[$SUPPORTED_FEED_BOOLS]"
 
 PUBLISHERS=$(echo $CONFIG | jq -r '.publishers | join(",")')
 PUBLISHERS_BOOLS=$(echo $CONFIG | jq -r '.publishers | map(true) | join(",")')

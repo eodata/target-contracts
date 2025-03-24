@@ -1,40 +1,51 @@
 # IEOFeedVerifier
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/44a7184a934b669887867d9bb70946619d422be3/src/interfaces/IEOFeedVerifier.sol)
-
-**Author:** eOracle
+[Git Source](https://github.com/Eoracle/target-contracts/blob/de89fc9e9bc7c046937883aa064d90812f1542cc/src/interfaces/IEOFeedVerifier.sol)
 
 ## Functions
 
 ### verify
 
-verify single leaf signature from a block merkle tree
+Verifies leaf, processes checkpoint, returns leaf data in case if checkpoint is valid and leaf is part of the merkle
+tree
 
 ```solidity
-function verify(LeafInput memory input, VerificationParams calldata vParams) external returns (bytes memory leafData);
+function verify(
+    LeafInput memory input,
+    Checkpoint calldata checkpoint,
+    uint256[2] calldata signature,
+    bytes calldata bitmap
+)
+    external
+    returns (bytes memory leafData);
 ```
 
 **Parameters**
 
-| Name      | Type                 | Description                           |
-| --------- | -------------------- | ------------------------------------- |
-| `input`   | `LeafInput`          | leaf input data and proof (LeafInput) |
-| `vParams` | `VerificationParams` | verification params                   |
+| Name         | Type         | Description                                        |
+| ------------ | ------------ | -------------------------------------------------- |
+| `input`      | `LeafInput`  | leaf input data and proof (LeafInput)              |
+| `checkpoint` | `Checkpoint` | Checkpoint data (Checkpoint)                       |
+| `signature`  | `uint256[2]` | Aggregated signature of the checkpoint             |
+| `bitmap`     | `bytes`      | Bitmap of the validators who signed the checkpoint |
 
 **Returns**
 
-| Name       | Type    | Description                                                              |
-| ---------- | ------- | ------------------------------------------------------------------------ |
-| `leafData` | `bytes` | Leaf data, abi encoded (uint256 feedId, uint256 rate, uint256 timestamp) |
+| Name       | Type    | Description                                                             |
+| ---------- | ------- | ----------------------------------------------------------------------- |
+| `leafData` | `bytes` | Leaf data, abi encoded (uint16 feedId, uint256 rate, uint256 timestamp) |
 
 ### batchVerify
 
-batch verify signature of multiple leaves from the same block merkle tree
+Verifies multiple leaves, processes checkpoint, returns leaf data in case if checkpoint is valid and leaves are part of
+the merkle tree
 
 ```solidity
 function batchVerify(
     LeafInput[] memory inputs,
-    VerificationParams calldata vParams
+    Checkpoint calldata checkpoint,
+    uint256[2] calldata signature,
+    bytes calldata bitmap
 )
     external
     returns (bytes[] memory);
@@ -42,10 +53,40 @@ function batchVerify(
 
 **Parameters**
 
-| Name      | Type                 | Description         |
-| --------- | -------------------- | ------------------- |
-| `inputs`  | `LeafInput[]`        | feed leaves         |
-| `vParams` | `VerificationParams` | verification params |
+| Name         | Type          | Description                                        |
+| ------------ | ------------- | -------------------------------------------------- |
+| `inputs`     | `LeafInput[]` | Exit leaves inputs                                 |
+| `checkpoint` | `Checkpoint`  | Checkpoint data                                    |
+| `signature`  | `uint256[2]`  | Aggregated signature of the checkpoint             |
+| `bitmap`     | `bytes`       | Bitmap of the validators who signed the checkpoint |
+
+### setNewValidatorSet
+
+Function to set a new validator set
+
+```solidity
+function setNewValidatorSet(Validator[] calldata newValidatorSet) external;
+```
+
+**Parameters**
+
+| Name              | Type          | Description                    |
+| ----------------- | ------------- | ------------------------------ |
+| `newValidatorSet` | `Validator[]` | The new validator set to store |
+
+### setFeedManager
+
+Sets the address of the feed manager.
+
+```solidity
+function setFeedManager(address feedManager_) external;
+```
+
+**Parameters**
+
+| Name           | Type      | Description                          |
+| -------------- | --------- | ------------------------------------ |
+| `feedManager_` | `address` | The address of the new feed manager. |
 
 ## Events
 
@@ -83,7 +124,7 @@ event FeedManagerSet(address feedManager);
 
 ### LeafInput
 
-_Input data for leaf verification_
+_Leaf input structure_
 
 ```solidity
 struct LeafInput {
@@ -95,60 +136,52 @@ struct LeafInput {
 
 **Properties**
 
-| Name           | Type        | Description                                                                      |
-| -------------- | ----------- | -------------------------------------------------------------------------------- |
-| `leafIndex`    | `uint256`   | Index of the leaf                                                                |
-| `unhashedLeaf` | `bytes`     | Unhashed leaf data abi encoded (uint256 feedId, uint256 rate, uint256 timestamp) |
-| `proof`        | `bytes32[]` | Merkle proof of the leaf                                                         |
+| Name           | Type        | Description                                                                                                                                                                             |
+| -------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `leafIndex`    | `uint256`   | Index of the leaf                                                                                                                                                                       |
+| `unhashedLeaf` | `bytes`     | Unhashed leaf data abi encoded (uint256 id, address sender, address receiver, bytes memory data) where bytes memory data = abi encoded (uint16 feedId, uint256 rate, uint256 timestamp) |
+| `proof`        | `bytes32[]` | Merkle proof of the leaf                                                                                                                                                                |
 
-### VerificationParams
+### Checkpoint
 
-_Signed Data structure_
+_Checkpoint structure_
 
 ```solidity
-struct VerificationParams {
-    uint64 blockNumber;
-    uint32 chainId;
-    address aggregator;
+struct Checkpoint {
+    uint256 epoch;
+    uint256 blockNumber;
     bytes32 eventRoot;
     bytes32 blockHash;
-    uint256[2] signature;
-    uint256[4] apkG2;
-    bytes nonSignersBitmap;
+    uint256 blockRound;
 }
 ```
 
 **Properties**
 
-| Name               | Type         | Description                                                     |
-| ------------------ | ------------ | --------------------------------------------------------------- |
-| `blockNumber`      | `uint64`     | the block number this merkle tree originated from (on EO chain) |
-| `chainId`          | `uint32`     |                                                                 |
-| `aggregator`       | `address`    |                                                                 |
-| `eventRoot`        | `bytes32`    | merkle tree root for events                                     |
-| `blockHash`        | `bytes32`    |                                                                 |
-| `signature`        | `uint256[2]` | G1 hashed payload of abi.encode(eventRoot, blockNumber)         |
-| `apkG2`            | `uint256[4]` | G2 apk provided from off-chain                                  |
-| `nonSignersBitmap` | `bytes`      | used to construct G1 apk onchain                                |
+| Name          | Type      | Description                   |
+| ------------- | --------- | ----------------------------- |
+| `epoch`       | `uint256` | Epoch number                  |
+| `blockNumber` | `uint256` | Block number                  |
+| `eventRoot`   | `bytes32` | Event root of the merkle tree |
+| `blockHash`   | `bytes32` | Block hash                    |
+| `blockRound`  | `uint256` | Block round                   |
 
 ### Validator
 
-Represents a validator in the system
+_Validator structure_
 
 ```solidity
 struct Validator {
     address _address;
-    uint256[2] g1pk;
-    uint256[4] g2pk;
+    uint256[4] blsKey;
     uint256 votingPower;
 }
 ```
 
 **Properties**
 
-| Name          | Type         | Description                                                  |
-| ------------- | ------------ | ------------------------------------------------------------ |
-| `_address`    | `address`    | The validator's address                                      |
-| `g1pk`        | `uint256[2]` | validator G1 public key                                      |
-| `g2pk`        | `uint256[4]` | validator G2 public key (not used in current implementation) |
-| `votingPower` | `uint256`    | Validator voting power                                       |
+| Name          | Type         | Description            |
+| ------------- | ------------ | ---------------------- |
+| `_address`    | `address`    | Validator address      |
+| `blsKey`      | `uint256[4]` | Validator BLS key      |
+| `votingPower` | `uint256`    | Validator voting power |
