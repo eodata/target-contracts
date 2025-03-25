@@ -1,15 +1,17 @@
 {
-  "bls": "0xfE4136AD0F1B7d803094f17715653a506A708e13",
+  "bls": "0xbc22c056a7e1ad163235ae47c7871d0fc4f3f844",
   "bn256G2": "0x38bb2343002f4010E7D110e82bb98CAEbA1b24A0",
   "feedAdapterImplementation": "0x081F3117FD38ca4805a838ccB6FD0a18239b4a77",
   "feedManager": "0x34cb0f63a81E511D501294f3256b6E7b407c9c49",
-  "feedManagerImplementation": "0x93441F4cB5ebD6570510E2356eF1f6050bF55673",
+  "feedManagerImplementation": "0xa8b5367799da6b32911a0b5b6f562976ccb72260",
   "feedRegistryAdapter": "0x242AE72A0d13f9758996246ab524Af3705a1169d",
   "feedRegistryAdapterImplementation": "0xa9156076e57e8b5a3CB6c3Ea33ff406e6349A99f",
-  "feedVerifier": "0xe7ba610C931EE11db4112AC3F75E9095B6e5A8f1",
-  "feedVerifierImplementation": "0x5b3a88672B57A05faC2825d691a1b8180aA903b7",
+  "feedVerifier": "0x9d51e277e0ae0fabe7c622155f8733fa5a94a709",
+  "feedVerifierImplementation": "0xe75abc53fd3576f8fb7b55e6c48c3cc1a1a868e9",
   "feeds": {
     "ETH/USD": "0x2D6261dce927D5c46f7f393a897887F19F3fDf2A",
     "USDC/USD": "0xA5c24F2449891483f0923f0D9dC7694BDFe1bC86"
-  }
+  },
+  "timelock": "0x56b208c14ad9e8dc3078877051e0c3c642f6accc",
+  "pauserRegistry": "0xdf5d88fce03be28ffc1f09362b90fd9e076b1a81"
 }
