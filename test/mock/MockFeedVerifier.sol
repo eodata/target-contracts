@@ -15,18 +15,23 @@ contract MockFeedVerifier is IEOFeedVerifier {
 
     function verify(
         LeafInput memory input,
-        VerificationParams calldata
+        Checkpoint calldata,
+        uint256[2] calldata,
+        bytes calldata
     )
         external
         pure
         returns (bytes memory leafData)
     {
-        return input.unhashedLeaf;
+        (,,, bytes memory data) = abi.decode(input.unhashedLeaf, (uint256, address, address, bytes));
+        return data;
     }
 
     function batchVerify(
         LeafInput[] memory inputs,
-        VerificationParams calldata
+        Checkpoint calldata,
+        uint256[2] calldata,
+        bytes calldata
     )
         external
         pure
@@ -35,12 +40,17 @@ contract MockFeedVerifier is IEOFeedVerifier {
         uint256 length = inputs.length;
         bytes[] memory returnData = new bytes[](length);
         for (uint256 i = 0; i < length; i++) {
-            returnData[i] = inputs[i].unhashedLeaf;
+            (,,, bytes memory data) = abi.decode(inputs[i].unhashedLeaf, (uint256, address, address, bytes));
+            returnData[i] = data;
         }
         return returnData;
     }
 
     function setFeedManager(address) external pure {
+        return;
+    }
+
+    function setAllowedSenders(address[] calldata, bool) external pure {
         return;
     }
 }
