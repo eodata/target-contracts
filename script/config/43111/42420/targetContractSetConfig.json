@@ -73,6 +73,14 @@
       "outputDecimals": 8
     },
     {
+      "feedId": 101,
+      "description": "uniBTC/USD",
+      "base": "0x004E9C3EF86bc1ca1f0bB5C7662861Ee93350568",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
       "feedId": 108,
       "description": "pumpBTC/USD",
       "base": "0xF469fBD2abcd6B9de8E169d128226C0Fc90a012e",
