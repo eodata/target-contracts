@@ -6,7 +6,7 @@
   "targetChainId": 80094,
   "publishers": ["0x6A64A1E7992B1a0d277bC6444bD93269d9214C4d"],
   "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
-  "supportedFeedIds": [1, 2, 17, 54, 61, 64, 65, 76, 77, 85, 89, 91, 100, 101, 103, 104, 105, 108, 115, 131, 132],
+  "supportedFeedIds": [1, 2, 17, 54, 61, 64, 65, 76, 77, 85, 89, 91, 100, 101, 103, 104, 105, 108, 115, 131, 132, 133],
   "supportedFeedsData": [
     {
       "feedId": 1,
@@ -172,6 +172,14 @@
       "feedId": 132,
       "description": "sUSDe/USDe",
       "base": "0x9D39A5DE30e57443BfF2A8307A4256c8797A3497",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 133,
+      "description": "sNECT/NECT",
+      "base": "0x597877Ccf65be938BD214C4c46907669e3E62128",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8
