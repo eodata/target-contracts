@@ -117,10 +117,10 @@ contract DeployScriptTest is Test {
 
         WhitelistPublishersTimelocked whitelistPublishersTimelocked = new WhitelistPublishersTimelocked();
 
-        whitelistPublishersTimelocked.run(configStructured.timelock.proposers[0], false);
+        whitelistPublishersTimelocked.run(configStructured.timelock.proposers[0], false, "publishers");
 
         vm.warp(block.timestamp + configStructured.timelock.minDelay + 1);
-        whitelistPublishersTimelocked.run(configStructured.timelock.executors[0], true);
+        whitelistPublishersTimelocked.run(configStructured.timelock.executors[0], true, "publishers");
 
         for (uint256 i = 0; i < configStructured.publishers.length; i++) {
             assertTrue(EOFeedManager(feedManagerProxy).isWhitelistedPublisher(configStructured.publishers[i]));

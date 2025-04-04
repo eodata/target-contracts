@@ -12,26 +12,35 @@ import { TimelockController } from "@openzeppelin/contracts/governance/TimelockC
 import { EOFeedManager } from "../../src/EOFeedManager.sol";
 import { TimelockBase } from "./TimelockBase.sol";
 
+/*
+Usage: (add --broadcast)
+forge script script/timelocked/UpgradeFeedManagerTimelocked.s.sol \
+    --sig "run(bool,string)" \
+    false \
+    <seed> \
+    --rpc-url $RPC_URL \
+    -vvvv
+*/
 contract UpgradeFeedManagerTimelocked is Script, TimelockBase {
     using stdJson for string;
 
     bool internal isExecutionMode;
     TimelockController public timelock;
 
-    function run(bool isExecution) external {
+    function run(bool isExecution, string memory seed) external {
         vm.startBroadcast();
-        execute(isExecution, true);
+        execute(isExecution, true, seed);
         vm.stopBroadcast();
     }
 
     // for testing purposes
-    function run(address broadcastFrom, bool isExecution) public {
+    function run(address broadcastFrom, bool isExecution, string memory seed) public {
         vm.startBroadcast(broadcastFrom);
-        execute(isExecution, true);
+        execute(isExecution, true, seed);
         vm.stopBroadcast();
     }
 
-    function execute(bool isExecution, bool send) public returns (bytes memory) {
+    function execute(bool isExecution, bool send, string memory seed) public returns (bytes memory) {
         isExecutionMode = isExecution;
 
         string memory config = EOJsonUtils.initOutputConfig();
@@ -53,7 +62,7 @@ contract UpgradeFeedManagerTimelocked is Script, TimelockBase {
             ProxyAdmin(admin).upgradeAndCall,
             (ITransparentUpgradeableProxy(payable(proxyAddress)), implementationAddress, initData)
         );
-        bytes memory txn = callTimelock(timelock, isExecutionMode, send, address(admin), data, "feedRegistryManager");
+        bytes memory txn = callTimelock(timelock, isExecutionMode, send, address(admin), data, seed);
         return txn;
     }
 }

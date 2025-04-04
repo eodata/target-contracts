@@ -9,17 +9,18 @@ import { EOJsonUtils } from "../utils/EOJsonUtils.sol";
 /*
 Usage: (add --broadcast)
 forge script script/multisig/WhitelistPublishers.s.sol \
-    --sig "run(bool,bool,string)" \
+    --sig "run(bool,bool,string,string)" \
     true \
     true \
     "sepolia" \
+    <seed> \
     --rpc-url $RPC_URL \
     -vvvv
 */
 contract WhitelistPublishers is ExecuteAny {
     using stdJson for string;
 
-    function run(bool send, bool isExecution, string memory chainAlias) external {
+    function run(bool send, bool isExecution, string memory chainAlias, string memory seed) external {
         string memory outputConfig = EOJsonUtils.initOutputConfig();
         address timelock = outputConfig.readAddress(".timelock");
         address multisig = outputConfig.readAddress(".multisig");
@@ -28,7 +29,7 @@ contract WhitelistPublishers is ExecuteAny {
         address[] memory targets = new address[](1);
         targets[0] = timelock;
         bytes[] memory txns = new bytes[](1);
-        txns[0] = whitelistPublishersTimelocked.execute(isExecution, false);
+        txns[0] = whitelistPublishersTimelocked.execute(isExecution, false, seed);
         run(send, multisig, chainAlias, targets, txns);
     }
 }
