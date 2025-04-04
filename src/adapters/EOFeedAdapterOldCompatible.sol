@@ -5,12 +5,13 @@ import { IEOFeedManager } from "../interfaces/IEOFeedManager.sol";
 import { IEOFeedAdapter } from "./interfaces/IEOFeedAdapter.sol";
 import { Initializable } from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import { PausableUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
-import { InvalidAddress, NotLatestRound } from "../interfaces/Errors.sol";
+import { InvalidAddress } from "../interfaces/Errors.sol";
 
 /**
  * @title EOFeedAdapterOldCompatible
  * @author eOracle
- * @notice Price feed adapter contract compatible with old EOFeedManager
+ * @notice Price feed adapter contract storage-compatible with old EOFeedAdapter addresses
+ * but which uses the new EOFeedManager interface with feedId as uint256
  */
 contract EOFeedAdapterOldCompatible is IEOFeedAdapter, Initializable {
     /// @dev Feed manager contract
@@ -22,7 +23,7 @@ contract EOFeedAdapterOldCompatible is IEOFeedAdapter, Initializable {
     /// @dev Feed description
     string private _description;
 
-    // next 2 variables will be packed in 1 slot
+    // next 3 variables will be packed in 1 slot
     /// @dev Feed id
     uint16 private _feedId;
 
@@ -83,17 +84,16 @@ contract EOFeedAdapterOldCompatible is IEOFeedAdapter, Initializable {
 
     /**
      * @notice Get the price for the round
-     * @dev Reverts if the roundId is not the latest one
-     * @param roundId The roundId - only latest round is supported
-     * @return roundId The round id
+     * @param roundId The roundId - is ignored, only latest round is supported
+     * @return roundId The latest round id
      * @return answer The price
      * @return startedAt The timestamp of the start of the round
      * @return updatedAt The timestamp of the end of the round
      * @return answeredInRound The round id in which the answer was computed
      */
+    // solhint-disable-next-line no-unused-vars
     function getRoundData(uint80 roundId) external view returns (uint80, int256, uint256, uint256, uint80) {
         IEOFeedManager.PriceFeed memory priceData = _feedManager.getLatestPriceFeed(_feedId);
-        if (roundId != priceData.eoracleBlockNumber) revert NotLatestRound();
         return (
             uint80(priceData.eoracleBlockNumber),
             _normalizePrice(priceData.value),
@@ -142,25 +142,23 @@ contract EOFeedAdapterOldCompatible is IEOFeedAdapter, Initializable {
 
     /**
      * @notice Get the price for the round
-     * @dev Reverts if the roundId is not the latest one
-     * @param roundId The roundId - only latest round is supported
+     * @param roundId The roundId - is ignored, only latest round is supported
      * @return int256 The price
      */
+    // solhint-disable-next-line no-unused-vars
     function getAnswer(uint256 roundId) external view returns (int256) {
         IEOFeedManager.PriceFeed memory priceData = _feedManager.getLatestPriceFeed(_feedId);
-        if (roundId != priceData.eoracleBlockNumber) revert NotLatestRound();
         return _normalizePrice(priceData.value);
     }
 
     /**
      * @notice Get the timestamp for the round
-     * @dev Reverts if the roundId is not the latest one
-     * @param roundId The roundId - only latest round is supported
+     * @param roundId The roundId - is ignored, only latest round is supported
      * @return uint256 The timestamp
      */
+    // solhint-disable-next-line no-unused-vars
     function getTimestamp(uint256 roundId) external view returns (uint256) {
         IEOFeedManager.PriceFeed memory priceData = _feedManager.getLatestPriceFeed(_feedId);
-        if (roundId != priceData.eoracleBlockNumber) revert NotLatestRound();
         return priceData.timestamp;
     }
 

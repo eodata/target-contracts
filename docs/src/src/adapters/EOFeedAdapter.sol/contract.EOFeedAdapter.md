@@ -1,6 +1,6 @@
 # EOFeedAdapter
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/44a7184a934b669887867d9bb70946619d422be3/src/adapters/EOFeedAdapter.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/401eb40ea1472e38057aaf0537c1644781be9b1b/src/adapters/EOFeedAdapter.sol)
 
 **Inherits:** [IEOFeedAdapter](/src/adapters/interfaces/IEOFeedAdapter.sol/interface.IEOFeedAdapter.md), Initializable
 
@@ -84,6 +84,8 @@ uint256[48] private __gap;
 
 ### constructor
 
+**Note:** oz-upgrades-unsafe-allow: constructor
+
 ```solidity
 constructor();
 ```
@@ -120,23 +122,21 @@ function initialize(
 
 Get the price for the round
 
-_Reverts if the roundId is not the latest one_
-
 ```solidity
 function getRoundData(uint80 roundId) external view returns (uint80, int256, uint256, uint256, uint80);
 ```
 
 **Parameters**
 
-| Name      | Type     | Description                                  |
-| --------- | -------- | -------------------------------------------- |
-| `roundId` | `uint80` | The roundId - only latest round is supported |
+| Name      | Type     | Description                                              |
+| --------- | -------- | -------------------------------------------------------- |
+| `roundId` | `uint80` | The roundId - is ignored, only latest round is supported |
 
 **Returns**
 
 | Name     | Type      | Description                                                   |
 | -------- | --------- | ------------------------------------------------------------- |
-| `<none>` | `uint80`  | roundId The round id                                          |
+| `<none>` | `uint80`  | roundId The latest round id                                   |
 | `<none>` | `int256`  | answer The price                                              |
 | `<none>` | `uint256` | startedAt The timestamp of the start of the round             |
 | `<none>` | `uint256` | updatedAt The timestamp of the end of the round               |
@@ -192,17 +192,15 @@ function latestTimestamp() external view returns (uint256);
 
 Get the price for the round
 
-_Reverts if the roundId is not the latest one_
-
 ```solidity
 function getAnswer(uint256 roundId) external view returns (int256);
 ```
 
 **Parameters**
 
-| Name      | Type      | Description                                  |
-| --------- | --------- | -------------------------------------------- |
-| `roundId` | `uint256` | The roundId - only latest round is supported |
+| Name      | Type      | Description                                              |
+| --------- | --------- | -------------------------------------------------------- |
+| `roundId` | `uint256` | The roundId - is ignored, only latest round is supported |
 
 **Returns**
 
@@ -214,17 +212,15 @@ function getAnswer(uint256 roundId) external view returns (int256);
 
 Get the timestamp for the round
 
-_Reverts if the roundId is not the latest one_
-
 ```solidity
 function getTimestamp(uint256 roundId) external view returns (uint256);
 ```
 
 **Parameters**
 
-| Name      | Type      | Description                                  |
-| --------- | --------- | -------------------------------------------- |
-| `roundId` | `uint256` | The roundId - only latest round is supported |
+| Name      | Type      | Description                                              |
+| --------- | --------- | -------------------------------------------------------- |
+| `roundId` | `uint256` | The roundId - is ignored, only latest round is supported |
 
 **Returns**
 
