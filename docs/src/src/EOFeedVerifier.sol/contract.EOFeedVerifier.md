@@ -1,10 +1,8 @@
 # EOFeedVerifier
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/44a7184a934b669887867d9bb70946619d422be3/src/EOFeedVerifier.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/de89fc9e9bc7c046937883aa064d90812f1542cc/src/EOFeedVerifier.sol)
 
 **Inherits:** [IEOFeedVerifier](/src/interfaces/IEOFeedVerifier.sol/interface.IEOFeedVerifier.md), OwnableUpgradeable
-
-**Author:** eOracle
 
 The EOFeedVerifier contract handles the verification of update payloads. The payload includes a Merkle root signed by
 eoracle validators and a Merkle path to the leaf containing the data. The verifier stores the current validator set in
@@ -15,13 +13,15 @@ its storage and ensures that the Merkle root is signed by a subset of this valid
 ### DOMAIN
 
 ```solidity
-bytes32 public constant DOMAIN = keccak256("EORACLE_FEED_VERIFIER");
+bytes32 public constant DOMAIN = keccak256("DOMAIN_CHECKPOINT_MANAGER");
 ```
 
-### MIN_VALIDATORS
+### \_eoracleChainId
+
+_ID of eoracle chain_
 
 ```solidity
-uint256 public constant MIN_VALIDATORS = 3;
+uint256 internal _eoracleChainId;
 ```
 
 ### \_bls
@@ -30,6 +30,14 @@ _BLS library contract_
 
 ```solidity
 IBLS internal _bls;
+```
+
+### \_bn256G2
+
+_BN256G2 library contract_
+
+```solidity
+IBN256G2 internal _bn256G2;
 ```
 
 ### \_currentValidatorSetLength
@@ -88,18 +96,7 @@ _address of the feed manager_
 address internal _feedManager;
 ```
 
-### \_fullApk
-
-_full apk of the current validator set_
-
-```solidity
-uint256[2] internal _fullApk;
-```
-
 ### \_\_gap
-
-_Gap for future storage variables in upgradeable contract. See
-https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps_
 
 ```solidity
 uint256[50] private __gap;
@@ -115,33 +112,32 @@ _Allows only the feed manager to call the function_
 modifier onlyFeedManager();
 ```
 
-### constructor
-
-```solidity
-constructor();
-```
-
 ### initialize
 
 ```solidity
-function initialize(address owner, IBLS bls_) external initializer;
+function initialize(address owner, IBLS bls_, IBN256G2 bn256G2_, uint256 eoracleChainId_) external initializer;
 ```
 
 **Parameters**
 
-| Name    | Type      | Description           |
-| ------- | --------- | --------------------- |
-| `owner` | `address` | Owner of the contract |
-| `bls_`  | `IBLS`    |                       |
+| Name              | Type       | Description                             |
+| ----------------- | ---------- | --------------------------------------- |
+| `owner`           | `address`  | Owner of the contract                   |
+| `bls_`            | `IBLS`     | Address of the BLS library contract     |
+| `bn256G2_`        | `IBN256G2` | Address of the Bn256G2 library contract |
+| `eoracleChainId_` | `uint256`  | Chain ID of the eoracle chain           |
 
 ### verify
 
-verify single leaf signature from a block merkle tree
+Verifies leaf, processes checkpoint, returns leaf data in case if checkpoint is valid and leaf is part of the merkle
+tree
 
 ```solidity
 function verify(
     LeafInput calldata input,
-    VerificationParams calldata vParams
+    Checkpoint calldata checkpoint,
+    uint256[2] calldata signature,
+    bytes calldata bitmap
 )
     external
     onlyFeedManager
@@ -150,25 +146,30 @@ function verify(
 
 **Parameters**
 
-| Name      | Type                 | Description                           |
-| --------- | -------------------- | ------------------------------------- |
-| `input`   | `LeafInput`          | leaf input data and proof (LeafInput) |
-| `vParams` | `VerificationParams` | verification params                   |
+| Name         | Type         | Description                                        |
+| ------------ | ------------ | -------------------------------------------------- |
+| `input`      | `LeafInput`  | leaf input data and proof (LeafInput)              |
+| `checkpoint` | `Checkpoint` | Checkpoint data (Checkpoint)                       |
+| `signature`  | `uint256[2]` | Aggregated signature of the checkpoint             |
+| `bitmap`     | `bytes`      | Bitmap of the validators who signed the checkpoint |
 
 **Returns**
 
-| Name     | Type    | Description                                                                       |
-| -------- | ------- | --------------------------------------------------------------------------------- |
-| `<none>` | `bytes` | leafData Leaf data, abi encoded (uint256 feedId, uint256 rate, uint256 timestamp) |
+| Name     | Type    | Description                                                                      |
+| -------- | ------- | -------------------------------------------------------------------------------- |
+| `<none>` | `bytes` | leafData Leaf data, abi encoded (uint16 feedId, uint256 rate, uint256 timestamp) |
 
 ### batchVerify
 
-batch verify signature of multiple leaves from the same block merkle tree
+Verifies multiple leaves, processes checkpoint, returns leaf data in case if checkpoint is valid and leaves are part of
+the merkle tree
 
 ```solidity
 function batchVerify(
     LeafInput[] calldata inputs,
-    VerificationParams calldata vParams
+    Checkpoint calldata checkpoint,
+    uint256[2] calldata signature,
+    bytes calldata bitmap
 )
     external
     onlyFeedManager
@@ -177,17 +178,19 @@ function batchVerify(
 
 **Parameters**
 
-| Name      | Type                 | Description         |
-| --------- | -------------------- | ------------------- |
-| `inputs`  | `LeafInput[]`        | feed leaves         |
-| `vParams` | `VerificationParams` | verification params |
+| Name         | Type          | Description                                        |
+| ------------ | ------------- | -------------------------------------------------- |
+| `inputs`     | `LeafInput[]` | Exit leaves inputs                                 |
+| `checkpoint` | `Checkpoint`  | Checkpoint data                                    |
+| `signature`  | `uint256[2]`  | Aggregated signature of the checkpoint             |
+| `bitmap`     | `bytes`       | Bitmap of the validators who signed the checkpoint |
 
 ### setNewValidatorSet
 
 Function to set a new validator set
 
 ```solidity
-function setNewValidatorSet(Validator[] calldata newValidatorSet) external onlyOwner;
+function setNewValidatorSet(Validator[] calldata newValidatorSet) external override onlyOwner;
 ```
 
 **Parameters**
@@ -210,19 +213,47 @@ function setFeedManager(address feedManager_) external onlyOwner;
 | -------------- | --------- | ------------------------------------ |
 | `feedManager_` | `address` | The address of the new feed manager. |
 
-### setBLS
+### eoracleChainId
 
-Set the BLS contract
+Returns the ID of the eoracle chain.
 
 ```solidity
-function setBLS(IBLS bls_) external onlyOwner;
+function eoracleChainId() external view returns (uint256);
 ```
 
-**Parameters**
+**Returns**
 
-| Name   | Type   | Description                 |
-| ------ | ------ | --------------------------- |
-| `bls_` | `IBLS` | Address of the BLS contract |
+| Name     | Type      | Description           |
+| -------- | --------- | --------------------- |
+| `<none>` | `uint256` | The eoracle chain ID. |
+
+### bls
+
+Returns the BLS contract.
+
+```solidity
+function bls() external view returns (IBLS);
+```
+
+**Returns**
+
+| Name     | Type   | Description       |
+| -------- | ------ | ----------------- |
+| `<none>` | `IBLS` | The BLS contract. |
+
+### bn256G2
+
+Returns the BN256G2 contract.
+
+```solidity
+function bn256G2() external view returns (IBN256G2);
+```
+
+**Returns**
+
+| Name     | Type       | Description           |
+| -------- | ---------- | --------------------- |
+| `<none>` | `IBN256G2` | The BN256G2 contract. |
 
 ### currentValidatorSetLength
 
@@ -328,25 +359,26 @@ function feedManager() external view returns (address);
 | -------- | --------- | -------------------------------- |
 | `<none>` | `address` | The address of the feed manager. |
 
-### bls
-
-```solidity
-function bls() external view returns (IBLS);
-```
-
-### \_verifyParams
+### \_processCheckpoint
 
 Function to verify the checkpoint signature
 
 ```solidity
-function _verifyParams(IEOFeedVerifier.VerificationParams calldata vParams) internal;
+function _processCheckpoint(
+    IEOFeedVerifier.Checkpoint calldata checkpoint,
+    uint256[2] calldata signature,
+    bytes calldata bitmap
+)
+    internal;
 ```
 
 **Parameters**
 
-| Name      | Type                                 | Description |
-| --------- | ------------------------------------ | ----------- |
-| `vParams` | `IEOFeedVerifier.VerificationParams` | Signed data |
+| Name         | Type                         | Description                                        |
+| ------------ | ---------------------------- | -------------------------------------------------- |
+| `checkpoint` | `IEOFeedVerifier.Checkpoint` | Checkpoint data                                    |
+| `signature`  | `uint256[2]`                 | Aggregated signature of the checkpoint             |
+| `bitmap`     | `bytes`                      | Bitmap of the validators who signed the checkpoint |
 
 ### \_verifySignature
 
@@ -354,10 +386,9 @@ Verify the signature of the checkpoint
 
 ```solidity
 function _verifySignature(
-    bytes32 messageHash,
+    Checkpoint calldata checkpoint,
     uint256[2] calldata signature,
-    uint256[4] calldata apkG2,
-    bytes calldata nonSignersBitmap
+    bytes calldata bitmap
 )
     internal
     view;
@@ -365,12 +396,11 @@ function _verifySignature(
 
 **Parameters**
 
-| Name               | Type         | Description                                        |
-| ------------------ | ------------ | -------------------------------------------------- |
-| `messageHash`      | `bytes32`    | Hash of the message to verify                      |
-| `signature`        | `uint256[2]` | G1 Aggregated signature of the checkpoint          |
-| `apkG2`            | `uint256[4]` | G2 Aggregated public key of the checkpoint         |
-| `nonSignersBitmap` | `bytes`      | Bitmap of the validators who did not sign the data |
+| Name         | Type         | Description                                        |
+| ------------ | ------------ | -------------------------------------------------- |
+| `checkpoint` | `Checkpoint` | Checkpoint data                                    |
+| `signature`  | `uint256[2]` | Aggregated signature of the checkpoint             |
+| `bitmap`     | `bytes`      | Bitmap of the validators who signed the checkpoint |
 
 ### \_verifyLeaves
 
@@ -389,9 +419,9 @@ function _verifyLeaves(LeafInput[] calldata inputs, bytes32 eventRoot) internal 
 
 **Returns**
 
-| Name     | Type      | Description                  |
-| -------- | --------- | ---------------------------- |
-| `<none>` | `bytes[]` | Array of the unhashed leaves |
+| Name     | Type      | Description                                           |
+| -------- | --------- | ----------------------------------------------------- |
+| `<none>` | `bytes[]` | Array of the leaf data fields of all submitted leaves |
 
 ### \_verifyLeaf
 
@@ -410,9 +440,9 @@ function _verifyLeaf(LeafInput calldata input, bytes32 eventRoot) internal pure 
 
 **Returns**
 
-| Name     | Type    | Description       |
-| -------- | ------- | ----------------- |
-| `<none>` | `bytes` | The unhashed leaf |
+| Name     | Type    | Description         |
+| -------- | ------- | ------------------- |
+| `<none>` | `bytes` | The leaf data field |
 
 ### \_getValueFromBitmap
 
@@ -434,23 +464,3 @@ function _getValueFromBitmap(bytes calldata bitmap, uint256 index) private pure 
 | Name     | Type   | Description                                                                                                                                          |
 | -------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `<none>` | `bool` | bool The boolean value of the bit at the specified index in the bitmap. Returns 'true' if the bit is set (1), and 'false' if the bit is not set (0). |
-
-### \_hasNoAddressDuplicates
-
-_Checks if there are no duplicate addresses in the validator set._
-
-```solidity
-function _hasNoAddressDuplicates(Validator[] calldata validators) private pure returns (bool);
-```
-
-**Parameters**
-
-| Name         | Type          | Description                                      |
-| ------------ | ------------- | ------------------------------------------------ |
-| `validators` | `Validator[]` | The array of validators to check for duplicates. |
-
-**Returns**
-
-| Name     | Type   | Description                                                     |
-| -------- | ------ | --------------------------------------------------------------- |
-| `<none>` | `bool` | bool True if there are no duplicate addresses, false otherwise. |
