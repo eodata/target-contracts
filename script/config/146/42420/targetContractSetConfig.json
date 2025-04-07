@@ -39,7 +39,7 @@
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8
-    }, 
+    },
     {
       "feedId": 130,
       "description": "S/USD",
