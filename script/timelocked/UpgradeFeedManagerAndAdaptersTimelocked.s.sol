@@ -15,6 +15,15 @@ import { TimelockBase } from "./TimelockBase.sol";
 import { EOFeedManager } from "../../src/EOFeedManager.sol";
 import { EOFeedAdapterOldCompatible } from "../../src/adapters/EOFeedAdapterOldCompatible.sol";
 
+/*
+Usage: (add --broadcast)
+forge script script/timelocked/UpgradeFeedManagerAndAdaptersTimelocked.s.sol \
+    --sig "run(bool,string)" \
+    false \
+    <seed> \
+    --rpc-url $RPC_URL \
+    -vvvv
+*/
 contract UpgradeFeedManagerAndAdaptersTimelocked is Script, TimelockBase {
     using stdJson for string;
 
@@ -38,13 +47,13 @@ contract UpgradeFeedManagerAndAdaptersTimelocked is Script, TimelockBase {
 
     LocalVars public vars;
 
-    function run(bool isExecution) external {
+    function run(bool isExecution, string memory seed) external {
         vm.startBroadcast();
-        execute(isExecution, true);
+        execute(isExecution, true, seed);
         vm.stopBroadcast();
     }
 
-    function execute(bool isExecution, bool send) public returns (bytes memory) {
+    function execute(bool isExecution, bool send, string memory seed) public returns (bytes memory) {
         EOJsonUtils.Config memory configStructured = EOJsonUtils.getParsedConfig();
         vars.outputConfig = EOJsonUtils.initOutputConfig();
         vars.feedManager = vars.outputConfig.readAddress(".feedManager");
@@ -109,9 +118,8 @@ contract UpgradeFeedManagerAndAdaptersTimelocked is Script, TimelockBase {
         vars.values.push(0);
 
         // schedule or execute
-        bytes memory txn = callTimelockBatch(
-            vars.timelock, isExecution, send, vars.targets, vars.payloads, vars.values, "feedManagerUpgrade"
-        );
+        bytes memory txn =
+            callTimelockBatch(vars.timelock, isExecution, send, vars.targets, vars.payloads, vars.values, seed);
 
         delete vars;
         return txn;
