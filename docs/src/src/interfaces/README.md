@@ -23,7 +23,6 @@
 - [BaseQuotePairExists](Errors.sol/error.BaseQuotePairExists.md)
 - [FeedDoesNotExist](Errors.sol/error.FeedDoesNotExist.md)
 - [NotFeedDeployer](Errors.sol/error.NotFeedDeployer.md)
-- [NotLatestRound](Errors.sol/error.NotLatestRound.md)
 - [IBLS](IBLS.sol/interface.IBLS.md)
 - [IEOFeedManager](IEOFeedManager.sol/interface.IEOFeedManager.md)
 - [IEOFeedVerifier](IEOFeedVerifier.sol/interface.IEOFeedVerifier.md)

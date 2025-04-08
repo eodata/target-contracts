@@ -9,18 +9,19 @@ import { EOJsonUtils } from "../utils/EOJsonUtils.sol";
 /*
 Usage: (add --broadcast)
 forge script script/multisig/TransferOwnership.s.sol \
-    --sig "run(bool,bool,string,address)" \
+    --sig "run(bool,bool,string,address,string)" \
     true \
     true \  
     "sepolia" \
     <to> \
+    <seed> \
     --rpc-url $RPC_URL \
     -vvvv
 */
 contract TransferOwnership is ExecuteAny {
     using stdJson for string;
 
-    function run(bool send, bool isExecution, string memory chainAlias, address to) external {
+    function run(bool send, bool isExecution, string memory chainAlias, address to, string memory seed) external {
         string memory outputConfig = EOJsonUtils.initOutputConfig();
         address timelock = outputConfig.readAddress(".timelock");
         address multisig = outputConfig.readAddress(".multisig");
@@ -29,7 +30,7 @@ contract TransferOwnership is ExecuteAny {
         address[] memory targets = new address[](1);
         targets[0] = timelock;
         bytes[] memory txns = new bytes[](1);
-        txns[0] = transferOwnershipTimelocked.execute(isExecution, false, to);
+        txns[0] = transferOwnershipTimelocked.execute(isExecution, false, to, seed);
         run(send, multisig, chainAlias, targets, txns);
     }
 }

@@ -1,6 +1,6 @@
 # EOFeedRegistryAdapterBase
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/44a7184a934b669887867d9bb70946619d422be3/src/adapters/EOFeedRegistryAdapterBase.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/401eb40ea1472e38057aaf0537c1644781be9b1b/src/adapters/EOFeedRegistryAdapterBase.sol)
 
 **Inherits:** OwnableUpgradeable,
 [EOFeedFactoryBase](/src/adapters/factories/EOFeedFactoryBase.sol/abstract.EOFeedFactoryBase.md),
@@ -73,6 +73,8 @@ modifier onlyFeedDeployer();
 
 ### constructor
 
+**Note:** oz-upgrades-unsafe-allow: constructor
+
 ```solidity
 constructor();
 ```
@@ -82,15 +84,7 @@ constructor();
 Initialize the contract
 
 ```solidity
-function initialize(
-    address feedManager,
-    address feedAdapterImplementation,
-    address owner
-)
-    external
-    initializer
-    onlyNonZeroAddress(feedManager)
-    onlyNonZeroAddress(feedAdapterImplementation);
+function initialize(address feedManager, address feedAdapterImplementation, address owner) external virtual;
 ```
 
 **Parameters**
@@ -309,8 +303,6 @@ Get the round data for a given base/quote pair
 
 _Calls the getLatestPriceFeed function from the feed manager, not from feedAdapter itself_
 
-_Reverts if the roundId is not the latest one_
-
 ```solidity
 function getRoundData(
     address base,
@@ -324,11 +316,11 @@ function getRoundData(
 
 **Parameters**
 
-| Name      | Type      | Description                                  |
-| --------- | --------- | -------------------------------------------- |
-| `base`    | `address` | The base asset address                       |
-| `quote`   | `address` | The quote asset address                      |
-| `roundId` | `uint80`  | The roundId - only latest round is supported |
+| Name      | Type      | Description                                              |
+| --------- | --------- | -------------------------------------------------------- |
+| `base`    | `address` | The base asset address                                   |
+| `quote`   | `address` | The quote asset address                                  |
+| `roundId` | `uint80`  | The roundId - is ignored, only latest round is supported |
 
 **Returns**
 
@@ -392,19 +384,17 @@ Get the answer for a given base/quote pair and round
 
 _Calls the getLatestPriceFeed function from the feed manager, not from feedAdapter itself_
 
-_Reverts if the roundId is not the latest one_
-
 ```solidity
 function getAnswer(address base, address quote, uint256 roundId) external view returns (int256);
 ```
 
 **Parameters**
 
-| Name      | Type      | Description                                  |
-| --------- | --------- | -------------------------------------------- |
-| `base`    | `address` | The base asset address                       |
-| `quote`   | `address` | The quote asset address                      |
-| `roundId` | `uint256` | The roundId - only latest round is supported |
+| Name      | Type      | Description                                              |
+| --------- | --------- | -------------------------------------------------------- |
+| `base`    | `address` | The base asset address                                   |
+| `quote`   | `address` | The quote asset address                                  |
+| `roundId` | `uint256` | The roundId - is ignored, only latest round is supported |
 
 **Returns**
 
@@ -418,19 +408,17 @@ Get the timestamp for a given base/quote pair and round
 
 _Calls the getLatestPriceFeed function from the feed manager, not from feedAdapter itself_
 
-_Reverts if the roundId is not the latest one_
-
 ```solidity
 function getTimestamp(address base, address quote, uint256 roundId) external view returns (uint256);
 ```
 
 **Parameters**
 
-| Name      | Type      | Description                                  |
-| --------- | --------- | -------------------------------------------- |
-| `base`    | `address` | The base asset address                       |
-| `quote`   | `address` | The quote asset address                      |
-| `roundId` | `uint256` | The roundId - only latest round is supported |
+| Name      | Type      | Description                                              |
+| --------- | --------- | -------------------------------------------------------- |
+| `base`    | `address` | The base asset address                                   |
+| `quote`   | `address` | The quote asset address                                  |
+| `roundId` | `uint256` | The roundId - is ignored, only latest round is supported |
 
 **Returns**
 
@@ -483,19 +471,17 @@ function isFeedEnabled(address feedAdapter) external view returns (bool);
 
 Get the round feedAdapter for a given base/quote pair
 
-_Reverts if the roundId is not the latest one_
-
 ```solidity
 function getRoundFeed(address base, address quote, uint80 roundId) external view returns (IEOFeedAdapter);
 ```
 
 **Parameters**
 
-| Name      | Type      | Description                                  |
-| --------- | --------- | -------------------------------------------- |
-| `base`    | `address` | The base asset address                       |
-| `quote`   | `address` | The quote asset address                      |
-| `roundId` | `uint80`  | The roundId - only latest round is supported |
+| Name      | Type      | Description                                              |
+| --------- | --------- | -------------------------------------------------------- |
+| `base`    | `address` | The base asset address                                   |
+| `quote`   | `address` | The quote asset address                                  |
+| `roundId` | `uint80`  | The roundId - is ignored, only latest round is supported |
 
 **Returns**
 

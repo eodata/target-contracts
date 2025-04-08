@@ -11,6 +11,16 @@ import { EOJsonUtils } from "../utils/EOJsonUtils.sol";
 import { TimelockController } from "@openzeppelin/contracts/governance/TimelockController.sol";
 import { TimelockBase } from "./TimelockBase.sol";
 
+/*
+Usage: (add --broadcast)
+forge script script/timelocked/TransferOwnershipTimelocked.s.sol \
+    --sig "run(bool,address,string)" \
+    false \
+    <to> \
+    <seed> \
+    --rpc-url $RPC_URL \
+    -vvvv
+*/
 contract TransferOwnershipTimelocked is Script, TimelockBase {
     using stdJson for string;
 
@@ -22,7 +32,6 @@ contract TransferOwnershipTimelocked is Script, TimelockBase {
         address[] targets;
         bytes[] payloads;
         uint256[] values;
-        bytes32 salt;
         bytes32 predecessor;
         uint256 delay;
     }
@@ -31,20 +40,20 @@ contract TransferOwnershipTimelocked is Script, TimelockBase {
 
     LocalVars public vars;
 
-    function run(bool isExecution, address to) external {
+    function run(bool isExecution, address to, string memory seed) external {
         vm.startBroadcast();
-        execute(isExecution, true, to);
+        execute(isExecution, true, to, seed);
         vm.stopBroadcast();
     }
 
     // for testing purposes
-    function run(address broadcastFrom, bool isExecution, address to) public {
+    function run(address broadcastFrom, bool isExecution, address to, string memory seed) public {
         vm.startBroadcast(broadcastFrom);
-        execute(isExecution, true, to);
+        execute(isExecution, true, to, seed);
         vm.stopBroadcast();
     }
 
-    function execute(bool isExecution, bool send, address to) public returns (bytes memory) {
+    function execute(bool isExecution, bool send, address to, string memory seed) public returns (bytes memory) {
         isExecutionMode = isExecution;
 
         string memory outputConfig = EOJsonUtils.initOutputConfig();
@@ -73,12 +82,10 @@ contract TransferOwnershipTimelocked is Script, TimelockBase {
 
         // schedule or execute
         TimelockController timelock = TimelockController(payable(vars.timelock));
-        vars.salt = keccak256(abi.encode("transferOwnership"));
         vars.delay = timelock.getMinDelay();
 
-        bytes memory txn = callTimelockBatch(
-            timelock, isExecutionMode, send, vars.targets, vars.payloads, vars.values, "transferOwnership"
-        );
+        bytes memory txn =
+            callTimelockBatch(timelock, isExecutionMode, send, vars.targets, vars.payloads, vars.values, seed);
 
         delete vars;
         return txn;

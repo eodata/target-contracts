@@ -1,6 +1,6 @@
 # EOFeedManager
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/44a7184a934b669887867d9bb70946619d422be3/src/EOFeedManager.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/401eb40ea1472e38057aaf0537c1644781be9b1b/src/EOFeedManager.sol)
 
 **Inherits:** [IEOFeedManager](/src/interfaces/IEOFeedManager.sol/interface.IEOFeedManager.md), OwnableUpgradeable,
 PausableUpgradeable
@@ -109,6 +109,8 @@ modifier onlyFeedDeployer();
 
 ### constructor
 
+**Note:** oz-upgrades-unsafe-allow: constructor
+
 ```solidity
 constructor();
 ```
@@ -169,6 +171,24 @@ function setFeedDeployer(address feedDeployer) external onlyOwner onlyNonZeroAdd
 | Name           | Type      | Description               |
 | -------------- | --------- | ------------------------- |
 | `feedDeployer` | `address` | The feed deployer address |
+
+### resetFeedTimestamps
+
+Reset timestamps for specified price feeds to zero
+
+_This function can only be called by the contract owner_
+
+_Useful for emergency situations where you need to clear stale timestamp data_
+
+```solidity
+function resetFeedTimestamps(uint256[] calldata feedIds) external onlyOwner;
+```
+
+**Parameters**
+
+| Name      | Type        | Description                                        |
+| --------- | ----------- | -------------------------------------------------- |
+| `feedIds` | `uint256[]` | Array of feed IDs whose timestamps should be reset |
 
 ### setSupportedFeeds
 
