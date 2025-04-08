@@ -12,8 +12,7 @@ import {
     BaseQuotePairExists,
     FeedNotSupported,
     FeedDoesNotExist,
-    NotFeedDeployer,
-    NotLatestRound
+    NotFeedDeployer
 } from "../interfaces/Errors.sol";
 
 /**
@@ -241,10 +240,9 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
     /**
      * @notice Get the round data for a given base/quote pair
      * @dev Calls the getLatestPriceFeed function from the feed manager, not from feedAdapter itself
-     * @dev Reverts if the roundId is not the latest one
      * @param base The base asset address
      * @param quote The quote asset address
-     * @param roundId The roundId - only latest round is supported
+     * @param roundId The roundId - is ignored, only latest round is supported
      * @return roundId The roundId
      * @return answer The answer
      * @return startedAt The startedAt
@@ -254,6 +252,7 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
     function getRoundData(
         address base,
         address quote,
+        // solhint-disable-next-line no-unused-vars
         uint80 roundId
     )
         external
@@ -262,7 +261,6 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
     {
         IEOFeedManager.PriceFeed memory feedData =
             _feedManager.getLatestPriceFeed(_tokenAddressesToFeedIds[base][quote]);
-        if (roundId != feedData.eoracleBlockNumber) revert NotLatestRound();
         return (
             uint80(feedData.eoracleBlockNumber),
             int256(feedData.value),
@@ -297,32 +295,30 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
     /**
      * @notice Get the answer for a given base/quote pair and round
      * @dev Calls the getLatestPriceFeed function from the feed manager, not from feedAdapter itself
-     * @dev Reverts if the roundId is not the latest one
      * @param base The base asset address
      * @param quote The quote asset address
-     * @param roundId The roundId - only latest round is supported
+     * @param roundId The roundId - is ignored, only latest round is supported
      * @return int256 The answer
      */
+    // solhint-disable-next-line no-unused-vars
     function getAnswer(address base, address quote, uint256 roundId) external view returns (int256) {
         IEOFeedManager.PriceFeed memory feedData =
             _feedManager.getLatestPriceFeed(_tokenAddressesToFeedIds[base][quote]);
-        if (roundId != feedData.eoracleBlockNumber) revert NotLatestRound();
         return int256(feedData.value);
     }
 
     /**
      * @notice Get the timestamp for a given base/quote pair and round
      * @dev Calls the getLatestPriceFeed function from the feed manager, not from feedAdapter itself
-     * @dev Reverts if the roundId is not the latest one
      * @param base The base asset address
      * @param quote The quote asset address
-     * @param roundId The roundId - only latest round is supported
+     * @param roundId The roundId - is ignored, only latest round is supported
      * @return uint256 The timestamp
      */
+    // solhint-disable-next-line no-unused-vars
     function getTimestamp(address base, address quote, uint256 roundId) external view returns (uint256) {
         IEOFeedManager.PriceFeed memory feedData =
             _feedManager.getLatestPriceFeed(_tokenAddressesToFeedIds[base][quote]);
-        if (roundId != feedData.eoracleBlockNumber) revert NotLatestRound();
         return feedData.timestamp;
     }
 
@@ -347,16 +343,13 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
 
     /**
      * @notice Get the round feedAdapter for a given base/quote pair
-     * @dev Reverts if the roundId is not the latest one
      * @param base The base asset address
      * @param quote The quote asset address
-     * @param roundId The roundId - only latest round is supported
+     * @param roundId The roundId - is ignored, only latest round is supported
      * @return IEOFeedAdapter The feedAdapter
      */
+    // solhint-disable-next-line no-unused-vars
     function getRoundFeed(address base, address quote, uint80 roundId) external view returns (IEOFeedAdapter) {
-        IEOFeedManager.PriceFeed memory feedData =
-            _feedManager.getLatestPriceFeed(_tokenAddressesToFeedIds[base][quote]);
-        if (roundId != feedData.eoracleBlockNumber) revert NotLatestRound();
         return _getFeed(base, quote);
     }
 

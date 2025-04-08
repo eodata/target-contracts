@@ -9,7 +9,7 @@ import { MockEOFeedManager } from "../../mock/MockEOFeedManager.sol";
 import { IEOFeedManager } from "../../../src/interfaces/IEOFeedManager.sol";
 import { IEOFeedVerifier } from "../../../src/interfaces/IEOFeedVerifier.sol";
 
-import { InvalidAddress, NotLatestRound } from "../../../src/interfaces/Errors.sol";
+import { InvalidAddress } from "../../../src/interfaces/Errors.sol";
 import { Upgrades } from "openzeppelin-foundry-upgrades/Upgrades.sol";
 import { Options } from "openzeppelin-foundry-upgrades/Options.sol";
 // solhint-disable ordering
@@ -78,11 +78,6 @@ contract EOFeedAdapterTest is EOFeedAdapterTestUninitialized {
         assertEq(answeredInRound, _lastBlockNumber);
     }
 
-    function test_RevertWhen_NotLatestRound_GetRoundData() public {
-        vm.expectRevert(NotLatestRound.selector);
-        _feedAdapter.getRoundData(_lastBlockNumber + 1);
-    }
-
     function test_LatestRoundData() public view {
         (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound) =
             _feedAdapter.latestRoundData();
@@ -115,18 +110,8 @@ contract EOFeedAdapterTest is EOFeedAdapterTestUninitialized {
         assertEq(_feedAdapter.getAnswer(_lastBlockNumber), int256(RATE1));
     }
 
-    function test_RevertWhen_NotLatestRound_GetAnswer() public {
-        vm.expectRevert(NotLatestRound.selector);
-        _feedAdapter.getAnswer(_lastBlockNumber + 1);
-    }
-
     function test_GetTimestamp() public view {
         assertEq(_feedAdapter.getTimestamp(_lastBlockNumber), _lastTimestamp);
-    }
-
-    function test_RevertWhen_NotLatestRound_GetTimestamp() public {
-        vm.expectRevert(NotLatestRound.selector);
-        _feedAdapter.getTimestamp(uint80(_lastBlockNumber + 1));
     }
 
     function test_Decimals() public view {

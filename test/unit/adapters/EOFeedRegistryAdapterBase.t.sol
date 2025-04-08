@@ -15,8 +15,7 @@ import {
     BaseQuotePairExists,
     FeedNotSupported,
     FeedDoesNotExist,
-    NotFeedDeployer,
-    NotLatestRound
+    NotFeedDeployer
 } from "../../../src/interfaces/Errors.sol";
 import { Upgrades } from "openzeppelin-foundry-upgrades/Upgrades.sol";
 import { Options } from "openzeppelin-foundry-upgrades/Options.sol";
@@ -215,13 +214,6 @@ abstract contract EOFeedRegistryAdapterBaseTest is Test {
         assertEq(answeredInRound, _lastBlockNumber);
     }
 
-    function test_RevertWhen_GetRoundData_NotLatestRound() public {
-        _deployEOFeedAdapter(_base1Address, _quote1Address, FEED_ID1, DESCRIPTION1, DECIMALS, DECIMALS, VERSION);
-        _updateFeed(FEED_ID1, RATE1, block.timestamp);
-        vm.expectRevert(NotLatestRound.selector);
-        _feedRegistryAdapter.getRoundData(_base1Address, _quote1Address, _lastBlockNumber + 1);
-    }
-
     function test_LatestAnswer() public {
         _deployEOFeedAdapter(_base1Address, _quote1Address, FEED_ID1, DESCRIPTION1, DECIMALS, DECIMALS, VERSION);
         _updateFeed(FEED_ID1, RATE1, block.timestamp);
@@ -246,24 +238,10 @@ abstract contract EOFeedRegistryAdapterBaseTest is Test {
         assertEq(_feedRegistryAdapter.getAnswer(_base1Address, _quote1Address, _lastBlockNumber), int256(RATE1));
     }
 
-    function test_RevertWhen_GetAnswer_NotLatestRound() public {
-        _deployEOFeedAdapter(_base1Address, _quote1Address, FEED_ID1, DESCRIPTION1, DECIMALS, DECIMALS, VERSION);
-        _updateFeed(FEED_ID1, RATE1, block.timestamp);
-        vm.expectRevert(NotLatestRound.selector);
-        _feedRegistryAdapter.getAnswer(_base1Address, _quote1Address, _lastBlockNumber + 1);
-    }
-
     function test_GetTimestamp() public {
         _deployEOFeedAdapter(_base1Address, _quote1Address, FEED_ID1, DESCRIPTION1, DECIMALS, DECIMALS, VERSION);
         _updateFeed(FEED_ID1, RATE1, block.timestamp);
         assertEq(_feedRegistryAdapter.getTimestamp(_base1Address, _quote1Address, _lastBlockNumber), block.timestamp);
-    }
-
-    function test_RevertWhen_GetTimestamp_NotLatestRound() public {
-        _deployEOFeedAdapter(_base1Address, _quote1Address, FEED_ID1, DESCRIPTION1, DECIMALS, DECIMALS, VERSION);
-        _updateFeed(FEED_ID1, RATE1, block.timestamp);
-        vm.expectRevert(NotLatestRound.selector);
-        _feedRegistryAdapter.getTimestamp(_base1Address, _quote1Address, _lastBlockNumber + 1);
     }
 
     function test_IsFeedEnabled() public {
@@ -281,13 +259,6 @@ abstract contract EOFeedRegistryAdapterBaseTest is Test {
             address(_feedRegistryAdapter.getRoundFeed(_base1Address, _quote1Address, _lastBlockNumber)),
             address(feedAdapter)
         );
-    }
-
-    function test_RevertWhen_GetRoundFeed_NotLatestRound() public {
-        _deployEOFeedAdapter(_base1Address, _quote1Address, FEED_ID1, DESCRIPTION1, DECIMALS, DECIMALS, VERSION);
-        _updateFeed(FEED_ID1, RATE1, block.timestamp);
-        vm.expectRevert(NotLatestRound.selector);
-        _feedRegistryAdapter.getRoundFeed(_base1Address, _quote1Address, _lastBlockNumber + 1);
     }
 
     function _updateFeed(uint256 feedId, uint256 rate, uint256 timestamp) internal {

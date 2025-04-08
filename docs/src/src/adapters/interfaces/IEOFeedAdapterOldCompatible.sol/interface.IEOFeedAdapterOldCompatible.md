@@ -1,6 +1,6 @@
 # IEOFeedAdapterOldCompatible
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/44a7184a934b669887867d9bb70946619d422be3/src/adapters/interfaces/IEOFeedAdapterOldCompatible.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/401eb40ea1472e38057aaf0537c1644781be9b1b/src/adapters/interfaces/IEOFeedAdapterOldCompatible.sol)
 
 **Author:** eOracle
 
@@ -51,7 +51,7 @@ function version() external view returns (uint256);
 ### getRoundData
 
 ```solidity
-function getRoundData(uint80 roundId_)
+function getRoundData(uint80)
     external
     view
     returns (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound);

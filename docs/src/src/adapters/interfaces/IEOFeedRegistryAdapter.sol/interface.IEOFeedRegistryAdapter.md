@@ -1,6 +1,6 @@
 # IEOFeedRegistryAdapter
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/44a7184a934b669887867d9bb70946619d422be3/src/adapters/interfaces/IEOFeedRegistryAdapter.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/401eb40ea1472e38057aaf0537c1644781be9b1b/src/adapters/interfaces/IEOFeedRegistryAdapter.sol)
 
 **Author:** eOracle
 
@@ -46,7 +46,7 @@ function latestRoundData(
 function getRoundData(
     address base,
     address quote,
-    uint80 _roundId
+    uint80
 )
     external
     view

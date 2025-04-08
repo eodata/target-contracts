@@ -29,7 +29,7 @@ interface IEOFeedRegistryAdapter {
     function getRoundData(
         address base,
         address quote,
-        uint80 _roundId
+        uint80
     )
         external
         view
