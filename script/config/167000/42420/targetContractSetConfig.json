@@ -6,7 +6,7 @@
   "targetChainId": 167000,
   "publishers": ["0xD2171e5EB129f2D76f60664E021df671D8E42171"],
   "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
-  "supportedFeedIds": [1, 2, 6, 13, 14, 16, 17, 18, 41, 42, 43, 54, 59, 68, 69, 77, 79, 88, 100, 101],
+  "supportedFeedIds": [1, 2, 6, 13, 17, 18, 41, 42, 43, 54, 59, 69, 77, 79, 88, 100, 101],
   "supportedFeedsData": [
     {
       "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
@@ -39,22 +39,6 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "EUR/USD"
-    },
-    {
-      "base": "0x0000000000000000000000000000000000000024",
-      "quote": "0x0000000000000000000000000000000000000348",
-      "feedId": 14,
-      "inputDecimals": 18,
-      "outputDecimals": 8,
-      "description": "AUD/USD"
-    },
-    {
-      "base": "0x000000000000000000000000000000000000033A",
-      "quote": "0x0000000000000000000000000000000000000348",
-      "feedId": 16,
-      "inputDecimals": 18,
-      "outputDecimals": 8,
-      "description": "GBP/USD"
     },
     {
       "base": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
@@ -111,14 +95,6 @@
       "outputDecimals": 18,
       "description": "ynETH/ETH",
       "feedId": 59
-    },
-    {
-      "base": "0xBBbbCA6A901c926F240b89EacB641d8Aec7AEafD",
-      "quote": "0x0000000000000000000000000000000000000348",
-      "inputDecimals": 18,
-      "outputDecimals": 8,
-      "description": "LRC/USD",
-      "feedId": 68
     },
     {
       "base": "0x10dea67478c5F8C5E2D90e5E9B26dBe60c54d800",
