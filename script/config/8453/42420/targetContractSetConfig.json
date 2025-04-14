@@ -33,36 +33,12 @@
       "description": "SOL/USD"
     },
     {
-      "base": "0x7D800a2559b7e3A9b50a1865Ac45C22D168Ce900",
-      "quote": "0x0000000000000000000000000000000000000348",
-      "feedId": 11,
-      "inputDecimals": 18,
-      "outputDecimals": 8,
-      "description": "XAU/USD"
-    },
-    {
       "base": "0x00000000000000000000000000000000000003d2",
       "quote": "0x0000000000000000000000000000000000000348",
       "feedId": 13,
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "EUR/USD"
-    },
-    {
-      "base": "0x0000000000000000000000000000000000000024",
-      "quote": "0x0000000000000000000000000000000000000348",
-      "feedId": 14,
-      "inputDecimals": 18,
-      "outputDecimals": 8,
-      "description": "AUD/USD"
-    },
-    {
-      "base": "0x000000000000000000000000000000000000033A",
-      "quote": "0x0000000000000000000000000000000000000348",
-      "feedId": 16,
-      "inputDecimals": 18,
-      "outputDecimals": 8,
-      "description": "GBP/USD"
     },
     {
       "base": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
