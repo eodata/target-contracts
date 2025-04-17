@@ -963,7 +963,7 @@
     {
       "feedId": 122,
       "description": "bfBTC/USD",
-      "base": "",
+      "base": "0x623F2774d9f27B59bc6b954544487532CE79d9DF",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8
