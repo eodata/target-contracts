@@ -882,9 +882,9 @@
     },
     {
       "feedId": 111,
-      "description": "wOETH/USD",
+      "description": "wOETH/ETH",
       "base": "0xdcee70654261af21c44c093c300ed3bb97b78192",
-      "quote": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "quote": "0x856c4efb76c1d1ae02e20ceb03a2a6a08b0b8dc3",
       "inputDecimals": 18,
       "outputDecimals": 18
     },
