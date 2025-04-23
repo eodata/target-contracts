@@ -13,5 +13,7 @@
     "ETH/USD": "0xd8962329088Da487E01270C6796ea15c8EeC0391",
     "USDC/USD": "0xCCcFdFd9b02dCB95f0A741e93247fD5c1035d655",
     "USDT/USD": "0x41368a71557dE1e64897726751D726F69b102e4B"
-  }
+  },
+  "timelock": "",
+  "pauserRegistry": ""
 }
