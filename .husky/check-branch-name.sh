@@ -2,8 +2,8 @@
 
 # Define branch name patterns
 regular_branch_pattern='^DEV-[0-9]{3,}.*$'
-hotfix_branch_pattern='^HF-.*$'
-release_candidate_branch_pattern='^RC-*$'
+hotfix_branch_pattern='^[Hh][Ff]-.*$'
+release_candidate_branch_pattern='^[Rr][Cc]-.*$'
 develop_branch_pattern='^develop$'
 main_branch_pattern='^main$'
 
