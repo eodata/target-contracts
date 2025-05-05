@@ -1,11 +1,9 @@
 {
   "usePrecompiledModexp": false,
-  "proxyAdminOwner": "0x1B456dCa21434983C62C746ae45224275f8f5515",
-  "targetContractsOwner": "0x1B456dCa21434983C62C746ae45224275f8f5515",
+  "feedsDeployer": "0x1B456dCa21434983C62C746ae45224275f8f5515",
   "eoracleChainId": 42420,
   "targetChainId": 1101,
   "publishers": ["0x0c88734c67dA49cf9a190fB5a1139B8AE3fBA2Ee"],
-  "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
   "supportedFeedIds": [1, 2, 41, 42],
   "supportedFeedsData": [
     {
@@ -40,5 +38,14 @@
       "description": "sfrxETH/frxETH",
       "feedId": 42
     }
-  ]
+  ],
+  "timelock": {
+    "minDelay": 10,
+    "proposers": ["0x617E1758b582174f5635c3fa0Be9F60107B78B62"],
+    "executors": ["0xB5c1f9e0Fe84EF06c1a51280e74b8392cF7a49Eb"]
+  },
+  "pauserRegistry": {
+    "pausers": ["0x358Af67e388Cd02d002e689299701F8B31B8ecC5"],
+    "unpauser": "0xA143DC79594de303742eDD8ACC7880f365385A19"
+  }
 }
