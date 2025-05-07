@@ -1,10 +1,9 @@
 {
   "usePrecompiledModexp": false,
-  "proxyAdminOwner": "0xd9c32116a01F1B924a658545158b9C9c2f073AEf",
-  "targetContractsOwner": "0xd9c32116a01F1B924a658545158b9C9c2f073AEf",
+  "feedsDeployer": "0xd9c32116a01F1B924a658545158b9C9c2f073AEf",
   "eoracleChainId": 42420,
   "targetChainId": 81457,
-  "publishers": ["0x8EA04C858c1bD08a424252DDdB85B63aEB266bfA"],
+  "publishers": ["0x8EA04C858c1bD08a424252DDdB85B63aEB266bfA", "0x625Fa29C6D7Fb1338a074227cB121b94A500eAa8"],
   "supportedFeedIds": [1, 2, 9, 35, 36, 67],
   "supportedFeedsData": [
     {
@@ -55,5 +54,14 @@
       "outputDecimals": 8,
       "description": "FTM/USD"
     }
-  ]
+  ],
+  "timelock": {
+    "minDelay": 10,
+    "proposers": ["0x86B7BDF52F679Ba62300195202C74695D37bf80F"],
+    "executors": ["0xf9B5eed4a547635020B3767407BE11f346DF58ae"]
+  },
+  "pauserRegistry": {
+    "pausers": ["0xb6bfCFC4Abb25474Acc09b10195E2981bDb7CFa7"],
+    "unpauser": "0xDE5d72f1b05C92E9fc4B695159fAb4a75D3ec9DB"
+  }
 }
