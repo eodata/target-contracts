@@ -1,11 +1,9 @@
 {
   "usePrecompiledModexp": true,
-  "proxyAdminOwner": "0x33A6671ecB46Eef7F164A88D61f364556761280d",
-  "targetContractsOwner": "0x33A6671ecB46Eef7F164A88D61f364556761280d",
+  "feedsDeployer": "0x33A6671ecB46Eef7F164A88D61f364556761280d",
   "eoracleChainId": 42420,
   "targetChainId": 2818,
-  "publishers": ["0x2C5e9c2D437679BaAe64B519139Fd21fdD82f3c6"],
-  "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
+  "publishers": ["0x2C5e9c2D437679BaAe64B519139Fd21fdD82f3c6", "0x1d869A16365C4bdc95dd6ca58Ed4d4b4aEf65c2C"],
   "supportedFeedIds": [1, 2, 17, 54, 55, 83, 85, 89, 108, 114],
   "supportedFeedsData": [
     {
@@ -88,5 +86,14 @@
       "inputDecimals": 18,
       "outputDecimals": 8
     }
-  ]
+  ],
+  "timelock": {
+    "minDelay": 10,
+    "proposers": ["0x0dc14C1e37D59FFE6bf9D6652dc615a29b7756d7"],
+    "executors": ["0x3bba1DBf1520050b038052c1F7b6B36A096ccFF6"]
+  },
+  "pauserRegistry": {
+    "pausers": ["0xdAbfC476C7318665D2DFC44530ab1514459da5A8"],
+    "unpauser": "0xa62f24643413df50Ac689Cb31ce013e169C98769"
+  }
 }
