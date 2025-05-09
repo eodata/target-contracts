@@ -6,7 +6,7 @@
   "targetChainId": 98866,
   "publishers": ["0x878305b18a5613FAB36e69450f17E1fdeEddE3eD"],
   "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
-  "supportedFeedIds": [1, 2, 17, 54, 126, 127, 129, 141, 142, 143, 145],
+  "supportedFeedIds": [1, 2, 17, 54, 126, 127, 129, 140, 141, 142, 143, 145],
   "supportedFeedsData": [
     {
       "feedId": 1,
@@ -60,6 +60,14 @@
       "feedId": 129,
       "description": "PLUME/USD",
       "base": "0xEa237441c92CAe6FC17Caaf9a7acB3f953be4bd1",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 140,
+      "description": "nALPHA/USD",
+      "base": "0x593cCcA4c4bf58b7526a4C164cEEf4003C6388db",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8
