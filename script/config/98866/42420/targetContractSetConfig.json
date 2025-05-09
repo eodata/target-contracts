@@ -6,7 +6,7 @@
   "targetChainId": 98866,
   "publishers": ["0x878305b18a5613FAB36e69450f17E1fdeEddE3eD"],
   "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
-  "supportedFeedIds": [1, 2, 17, 54, 126, 127, 129],
+  "supportedFeedIds": [1, 2, 17, 54, 126, 127, 129, 141, 142, 143, 145],
   "supportedFeedsData": [
     {
       "feedId": 1,
@@ -60,6 +60,38 @@
       "feedId": 129,
       "description": "PLUME/USD",
       "base": "0xEa237441c92CAe6FC17Caaf9a7acB3f953be4bd1",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 141,
+      "description": "nELIXIR/USD",
+      "base": "0x9fbC367B9Bb966a2A537989817A088AFCaFFDC4c",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 142,
+      "description": "nTBILL/USD",
+      "base": "0xE72Fe64840F4EF80E3Ec73a1c749491b5c938CB9",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 143,
+      "description": "pUSD/USD",
+      "base": "0xdddD73F5Df1F0DC31373357beAC77545dC5A6f3F",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 145,
+      "description": "pETH/USD",
+      "base": "0x39d1F90eF89C52dDA276194E9a832b484ee45574",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8
