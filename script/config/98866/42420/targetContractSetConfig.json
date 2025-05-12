@@ -6,7 +6,7 @@
   "targetChainId": 98866,
   "publishers": ["0x878305b18a5613FAB36e69450f17E1fdeEddE3eD"],
   "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
-  "supportedFeedIds": [1, 2, 17, 54, 126, 127, 129, 140, 141, 142, 143, 145],
+  "supportedFeedIds": [1, 2, 17, 54, 111, 126, 127, 129, 140, 141, 142, 143, 145],
   "supportedFeedsData": [
     {
       "feedId": 1,
@@ -39,6 +39,14 @@
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8
+    },
+    {
+      "feedId": 111,
+      "description": "wOETH/OETH",
+      "base": "0xdcee70654261af21c44c093c300ed3bb97b78192",
+      "quote": "0x856c4efb76c1d1ae02e20ceb03a2a6a08b0b8dc3",
+      "inputDecimals": 18,
+      "outputDecimals": 18
     },
     {
       "feedId": 126,

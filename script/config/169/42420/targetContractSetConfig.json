@@ -6,7 +6,7 @@
   "targetChainId": 169,
   "publishers": ["0x776E15bc7920B79C18a8fED3Fdeb8413A9AD9334"],
   "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
-  "supportedFeedIds": [1, 2, 17, 54, 70, 76, 77, 92],
+  "supportedFeedIds": [1, 2, 17, 54, 70, 76, 77, 92, 136],
   "supportedFeedsData": [
     {
       "feedId": 1,
@@ -68,6 +68,14 @@
       "feedId": 92,
       "description": "wstETH/USD",
       "base": "0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 136,
+      "description": "TIA/USD",
+      "base": "0x6Fae4D9935E2fcb11fC79a64e917fb2BF14DaFaa",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8
