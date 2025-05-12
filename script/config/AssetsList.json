@@ -1050,8 +1050,8 @@
     },
     {
       "feedId": 134,
-      "description": "LBTC/BTC",
-      "base": "0x8236a87084f8b84306f72007f36f2618a5634494",
+      "description": "eBTC/USD",
+      "base": "0x657e8c867d8b37dcc18fa4caead9c45eb088c642",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8
@@ -1060,9 +1060,9 @@
       "feedId": 135,
       "description": "LBTC/BTC",
       "base": "0x8236a87084f8b84306f72007f36f2618a5634494",
-      "quote": "0x0000000000000000000000000000000000000348",
+      "quote": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 18
     },
     {
       "feedId": 136,
