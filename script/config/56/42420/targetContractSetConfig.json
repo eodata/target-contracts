@@ -3,8 +3,8 @@
   "feedsDeployer": "0x741b2bBE4D02207c39792283b59571693A2CC5C4",
   "eoracleChainId": 42420,
   "targetChainId": 56,
-  "publishers": ["0xe4Fda86d8ec860F82a43311e885743D15006dCc0", "0x4444D3e2C3BC478202749a9CF2883F46A1412A1b"],
-  "supportedFeedIds": [1, 2, 17, 54, 77, 83, 116, 117],
+  "publishers": ["0xe4Fda86d8ec860F82a43311e885743D15006dCc0"],
+  "supportedFeedIds": [1, 2, 17, 54, 77, 83, 116, 117, 122],
   "supportedFeedsData": [
     {
       "feedId": 1,
@@ -66,6 +66,14 @@
       "feedId": 117,
       "description": "BTCB/USD",
       "base": "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 122,
+      "description": "bfBTC/USD",
+      "base": "0x623F2774d9f27B59bc6b954544487532CE79d9DF",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8
