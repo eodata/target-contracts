@@ -3,8 +3,8 @@
   "feedsDeployer": "0x741b2bBE4D02207c39792283b59571693A2CC5C4",
   "eoracleChainId": 42420,
   "targetChainId": 56,
-  "publishers": ["0xe4Fda86d8ec860F82a43311e885743D15006dCc0"],
-  "supportedFeedIds": [1, 2, 17, 54, 77, 83, 116, 117, 122],
+  "publishers": ["0xe4Fda86d8ec860F82a43311e885743D15006dCc0", "0x4444D3e2C3BC478202749a9CF2883F46A1412A1b"],
+  "supportedFeedIds": [1, 2, 17, 35, 54, 77, 83, 85, 116, 117, 132],
   "supportedFeedsData": [
     {
       "feedId": 1,
@@ -26,6 +26,14 @@
       "feedId": 17,
       "description": "USDT/USD",
       "base": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 35,
+      "description": "BNB/USD",
+      "base": "0xd6fAA45f5180A36CE1925ba9b4C9683CCaA3D117",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8
@@ -55,6 +63,14 @@
       "outputDecimals": 8
     },
     {
+      "feedId": 85,
+      "description": "USDe/USD",
+      "base": "0x4c9EDD5852cd905f086C759E8383e09bff1E68B3",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
       "feedId": 116,
       "description": "LBTC/USD",
       "base": "0x8236a87084f8b84306f72007f36f2618a5634494",
@@ -71,12 +87,12 @@
       "outputDecimals": 8
     },
     {
-      "feedId": 122,
-      "description": "bfBTC/USD",
-      "base": "0x623F2774d9f27B59bc6b954544487532CE79d9DF",
-      "quote": "0x0000000000000000000000000000000000000348",
+      "feedId": 132,
+      "description": "sUSDE/USDE",
+      "base": "0x597877Ccf65be938BD214C4c46907669e3E62128",
+      "quote": "0x4c9EDD5852cd905f086C759E8383e09bff1E68B3",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 18
     }
   ],
   "timelock": {
