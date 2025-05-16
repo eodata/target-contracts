@@ -4,7 +4,7 @@
   "eoracleChainId": 42420,
   "targetChainId": 56,
   "publishers": ["0xe4Fda86d8ec860F82a43311e885743D15006dCc0", "0x4444D3e2C3BC478202749a9CF2883F46A1412A1b"],
-  "supportedFeedIds": [1, 2, 17, 35, 54, 77, 83, 85, 116, 117, 132],
+  "supportedFeedIds": [1, 2, 17, 35, 54, 77, 83, 85, 116, 117, 122, 132],
   "supportedFeedsData": [
     {
       "feedId": 1,
@@ -86,6 +86,14 @@
       "inputDecimals": 18,
       "outputDecimals": 8
     },
+    {
+      "feedId": 122,
+      "description": "bfBTC/USD",
+      "base": "0x623F2774d9f27B59bc6b954544487532CE79d9DF",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    }
     {
       "feedId": 132,
       "description": "sUSDE/USDE",
