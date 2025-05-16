@@ -1098,7 +1098,7 @@
     },
     {
       "feedId": 140,
-      "description": "nALPHA/USD",
+      "description": "nRWA/USD",
       "base": "0x593cCcA4c4bf58b7526a4C164cEEf4003C6388db",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
@@ -1140,6 +1140,54 @@
       "feedId": 145,
       "description": "pETH/USD",
       "base": "0x39d1F90eF89C52dDA276194E9a832b484ee45574",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 148,
+      "description": "nALPHA/USD",
+      "base": "0xe0CF451d6E373FF04e8eE3c50340F18AFa6421E1",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 149,
+      "description": "nBASIS/USD",
+      "base": "0x11113Ff3a60C2450F4b22515cB760417259eE94B",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 150,
+      "description": "nPAYFI/USD",
+      "base": "0xb52b090837a035f93a84487e5a7d3719c32aa8a9",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 151,
+      "description": "nCREDIT/USD",
+      "base": "0xa5f78b2a0ab85429d2dfbf8b60abc70f4cec066c",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 152,
+      "description": "nINSTO/USD",
+      "base": "0xbfc5770631641719cd1cf809d8325b146aed19de",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 153,
+      "description": "nETF/USD",
+      "base": "0xdeA736937d464d288eC80138bcd1a2E109A200e3",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8
