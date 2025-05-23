@@ -6,7 +6,7 @@
   "targetChainId": 98866,
   "publishers": ["0x878305b18a5613FAB36e69450f17E1fdeEddE3eD"],
   "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
-  "supportedFeedIds": [1, 2, 17, 54, 111, 126, 127, 129, 141, 142, 143, 145, 148, 149, 150, 151, 152, 153],
+  "supportedFeedIds": [1, 2, 17, 54, 111, 126, 127, 129, 141, 142, 143, 145, 148, 149, 150, 151, 152, 153, 156],
   "supportedFeedsData": [
     {
       "feedId": 1,
@@ -148,6 +148,14 @@
       "feedId": 153,
       "description": "nETF/USD",
       "base": "0xdeA736937d464d288eC80138bcd1a2E109A200e3",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 156,
+      "description": "wsuperOETHp/USD",
+      "base": "0x2dE8A403f7A5c6C5161D4a129918Ec9f0b653918",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8
