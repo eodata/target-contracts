@@ -6,7 +6,7 @@
   "targetChainId": 59144,
   "publishers": ["0x61860cb3f16c4C9A018e04211dDf32E5BD5C328d"],
   "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
-  "supportedFeedIds": [2, 17, 35, 36, 54, 55, 67, 76, 77, 79, 80, 81, 83, 88, 89, 90, 91, 92, 93, 94, 57],
+  "supportedFeedIds": [2, 17, 35, 36, 54, 55, 67, 76, 77, 79, 80, 81, 83, 88, 89, 90, 91, 92, 93, 94, 57, 157],
   "supportedFeedsData": [
     {
       "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -175,6 +175,14 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "SolvBTCm/USD"
+    },
+    {
+      "base": "0xdC035D45d973E3EC169d2276DDab16f1e407384F",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "feedId": 157,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "USDS/USD"
     }
   ]
 }
