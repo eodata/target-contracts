@@ -4,7 +4,7 @@
   "targetChainId": 167009,
   "feedsDeployer": "0xfD9F25D4b939e79EA2e0DB7567D96939D5EDd153",
   "publishers": ["0xbEce836368CcaC20e814c57236F2B6cfA37e46CB"],
-  "supportedFeedIds": [1, 2, 6, 13, 14, 16, 17, 18, 41, 42, 43],
+  "supportedFeedIds": [1, 2, 6, 13, 17, 18, 41, 42, 43],
   "supportedFeedsData": [
     {
       "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
@@ -37,22 +37,6 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "EUR/USD"
-    },
-    {
-      "base": "0x0000000000000000000000000000000000000024",
-      "quote": "0x0000000000000000000000000000000000000348",
-      "feedId": 14,
-      "inputDecimals": 18,
-      "outputDecimals": 8,
-      "description": "AUD/USD"
-    },
-    {
-      "base": "0x000000000000000000000000000000000000033A",
-      "quote": "0x0000000000000000000000000000000000000348",
-      "feedId": 16,
-      "inputDecimals": 18,
-      "outputDecimals": 8,
-      "description": "GBP/USD"
     },
     {
       "base": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
