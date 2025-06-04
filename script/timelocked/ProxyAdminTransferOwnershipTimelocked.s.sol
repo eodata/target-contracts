@@ -13,8 +13,9 @@ import { TimelockBase } from "./TimelockBase.sol";
 /*
 Usage: (add --broadcast)
 forge script script/timelocked/ProxyAdminTransferOwnershipTimelocked.s.sol \
-    --sig "run(bool,string)" \
+    --sig "run(bool,address,string)" \
     false \
+    <newOwner> \
     <seed> \
     --rpc-url $RPC_URL \
     -vvvv
@@ -25,16 +26,16 @@ contract ProxyAdminTransferOwnershipTimelocked is Script, TimelockBase {
     bool internal isExecutionMode;
     TimelockController public timelock;
 
-    function run(bool isExecution, string memory seed) external {
+    function run(bool isExecution, address newOwner, string memory seed) external {
         vm.startBroadcast();
-        execute(isExecution, true, seed);
+        execute(isExecution, true, newOwner, seed);
         vm.stopBroadcast();
     }
 
     // for testing purposes
-    function run(address broadcastFrom, bool isExecution, string memory seed) public {
+    function run(address broadcastFrom, bool isExecution, address newOwner, string memory seed) public {
         vm.startBroadcast(broadcastFrom);
-        execute(isExecution, true, seed);
+        execute(isExecution, true, newOwner, seed);
         vm.stopBroadcast();
     }
 
