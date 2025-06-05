@@ -6,7 +6,7 @@ on:
 
 jobs:
   commitlint:
-    runs-on: "k8s-native"
+    runs-on: "k8s-native-eodata"
     container:
       image: "node:22-bullseye"
     steps:

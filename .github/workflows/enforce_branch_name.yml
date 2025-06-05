@@ -6,7 +6,7 @@ on:
 
 jobs:
   enforce_branch_name:
-    runs-on: "k8s-native"
+    runs-on: "k8s-native-eodata"
     container:
       image: "ubuntu:24.04"
 
