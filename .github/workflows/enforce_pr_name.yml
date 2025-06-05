@@ -6,7 +6,7 @@ on:
 
 jobs:
   enforce_pr_name:
-    runs-on: "k8s-native"
+    runs-on: "k8s-native-eodata"
     container:
       image: "ubuntu:24.04"
     steps:
