@@ -34,5 +34,5 @@
     "pausers": ["0x639a7C058d258fcA9007519F601366a3B8bD82c8"],
     "unpauser": "0x639a7C058d258fcA9007519F601366a3B8bD82c8"
   },
-  "deviationThreshold": "1.0"
+  "deviationThreshold": "0.5"
 }
