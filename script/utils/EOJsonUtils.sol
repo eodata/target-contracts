@@ -9,6 +9,7 @@ library EOJsonUtils {
     using stdJson for string;
 
     struct Config {
+        string deviationThreshold;
         uint256 eoracleChainId;
         address feedDeployer;
         PauserRegistry pauserRegistry;
@@ -23,6 +24,7 @@ library EOJsonUtils {
     struct FeedData {
         address base;
         string description;
+        string deviationThreshold;
         uint256 feedId;
         uint256 inputDecimals;
         uint256 outputDecimals;

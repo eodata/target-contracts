@@ -14,7 +14,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "ETH/USD",
-      "feedId": 2
+      "feedId": 2,
+      "deviationThreshold": ""
     },
     {
       "base": "0x05D032ac25d322df992303dCa074EE7392C117b9",
@@ -22,7 +23,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "USDT/USD",
-      "feedId": 17
+      "feedId": 17,
+      "deviationThreshold": ""
     },
     {
       "base": "0xBBa2eF945D523C4e2608C9E1214C2Cc64D4fc2e2",
@@ -30,7 +32,8 @@
       "feedId": 72,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "tBTC/USD"
+      "description": "tBTC/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x03C7054BCB39f7b2e5B2c7AcB37583e32D70Cfa3",
@@ -38,7 +41,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "WBTC/USD",
-      "feedId": 83
+      "feedId": 83,
+      "deviationThreshold": ""
     },
     {
       "base": "0x85008aE6198BC91aC0735CB5497CF125ddAAc528",
@@ -46,7 +50,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "wstETH/USD",
-      "feedId": 92
+      "feedId": 92,
+      "deviationThreshold": ""
     },
     {
       "base": "0xba20a5e63eeEFfFA6fD365E7e540628F8fC61474",
@@ -54,7 +59,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "SOV/USD",
-      "feedId": 95
+      "feedId": 95,
+      "deviationThreshold": ""
     },
     {
       "base": "0xe75D0fB2C24A55cA1e3F96781a2bCC7bdba058F0",
@@ -62,7 +68,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "USDCe/USD",
-      "feedId": 97
+      "feedId": 97,
+      "deviationThreshold": ""
     },
     {
       "base": "0x7122985656e38BDC0302Db86685bb972b145bD3C",
@@ -70,7 +77,9 @@
       "feedId": 76,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "STONE/USD"
+      "description": "STONE/USD",
+      "deviationThreshold": ""
     }
-  ]
+  ],
+  "deviationThreshold": "1.0"
 }

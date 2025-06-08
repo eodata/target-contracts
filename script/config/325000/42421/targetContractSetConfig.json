@@ -8,7 +8,8 @@
   "supportedFeedsData": [
     {
       "description": "Elon Musk",
-      "feedId": 105
+      "feedId": 105,
+      "deviationThreshold": ""
     }
   ],
   "timelock": {
@@ -19,5 +20,6 @@
   "pauserRegistry": {
     "pausers": ["0x95B3329acC6f0C519b36ec867EAE7Ac5d905559D"],
     "unpauser": "0x95B3329acC6f0C519b36ec867EAE7Ac5d905559D"
-  }
+  },
+  "deviationThreshold": "1.0"
 }

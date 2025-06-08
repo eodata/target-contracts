@@ -12,7 +12,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "BTC/USD",
-      "feedId": 1
+      "feedId": 1,
+      "deviationThreshold": ""
     },
     {
       "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -20,7 +21,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "ETH/USD",
-      "feedId": 2
+      "feedId": 2,
+      "deviationThreshold": ""
     },
     {
       "base": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
@@ -28,7 +30,8 @@
       "feedId": 17,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "USDT/USD"
+      "description": "USDT/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
@@ -36,7 +39,8 @@
       "feedId": 54,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "USDC/USD"
+      "description": "USDC/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
@@ -44,7 +48,8 @@
       "feedId": 55,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "DAI/USD"
+      "description": "DAI/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
@@ -52,7 +57,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "WBTC/USD",
-      "feedId": 83
+      "feedId": 83,
+      "deviationThreshold": ""
     },
     {
       "feedId": 85,
@@ -60,7 +66,8 @@
       "base": "0x4c9EDD5852cd905f086C759E8383e09bff1E68B3",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     },
     {
       "feedId": 89,
@@ -68,7 +75,8 @@
       "base": "0xCd5fE23C85820F7B72D0926FC9b05b43E359b7ee",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     },
     {
       "feedId": 108,
@@ -76,7 +84,8 @@
       "base": "0xF469fBD2abcd6B9de8E169d128226C0Fc90a012e",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     },
     {
       "feedId": 114,
@@ -84,7 +93,8 @@
       "base": "0x54D2252757e1672EEaD234D27B1270728fF90581",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     }
   ],
   "timelock": {
@@ -95,5 +105,6 @@
   "pauserRegistry": {
     "pausers": ["0xdAbfC476C7318665D2DFC44530ab1514459da5A8"],
     "unpauser": "0xa62f24643413df50Ac689Cb31ce013e169C98769"
-  }
+  },
+  "deviationThreshold": "1.0"
 }

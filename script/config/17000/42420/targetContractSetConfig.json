@@ -15,7 +15,8 @@
       "feedId": 1,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "BTC/USD"
+      "description": "BTC/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -23,7 +24,8 @@
       "feedId": 2,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "ETH/USD"
+      "description": "ETH/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xa3FCD2041abc7fd3ac76aF9DEfCe42ea241b2a5f",
@@ -31,7 +33,8 @@
       "feedId": 3,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "XRP/USD"
+      "description": "XRP/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xadADADadAdADAdadADADADadadADAdAdadaDAdAD",
@@ -39,7 +42,8 @@
       "feedId": 4,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "ADA/USD"
+      "description": "ADA/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xDDdDddDdDdddDDddDDddDDDDdDdDDdDDdDDDDDDd",
@@ -47,7 +51,8 @@
       "feedId": 5,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "DOGE/USD"
+      "description": "DOGE/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xd4094e4ffa89985583E52D491251619a4C5b0BE9",
@@ -55,7 +60,8 @@
       "feedId": 6,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "SOL/USD"
+      "description": "SOL/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x50327c6c5a14DCaDE707ABad2E27eB517df87AB5",
@@ -63,7 +69,8 @@
       "feedId": 7,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "TRX/USD"
+      "description": "TRX/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xE4A74E85E85957B0A7A52D9c566C0a3C8d6133d0",
@@ -71,7 +78,8 @@
       "feedId": 8,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "DOT/USD"
+      "description": "DOT/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0",
@@ -79,7 +87,8 @@
       "feedId": 9,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "MATIC/USD"
+      "description": "MATIC/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x2793E9D561c2235A0bcfAaA496b3e98f57eCA249",
@@ -87,7 +96,8 @@
       "feedId": 10,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "LTC/USD"
+      "description": "LTC/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x00000000000000000000000000000000000003d2",
@@ -95,7 +105,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "EUR/USD",
-      "feedId": 13
+      "feedId": 13,
+      "deviationThreshold": ""
     },
     {
       "base": "0x0000000000000000000000000000000000000024",
@@ -103,7 +114,8 @@
       "feedId": 14,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "AUD/USD"
+      "description": "AUD/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x0000000000000000000000000000000000000188",
@@ -111,7 +123,8 @@
       "feedId": 15,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "JPY/USD"
+      "description": "JPY/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
@@ -119,7 +132,8 @@
       "feedId": 17,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "USDT/USD"
+      "description": "USDT/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x514910771AF9Ca656af840dff83E8264EcF986CA",
@@ -127,7 +141,8 @@
       "feedId": 18,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "LINK/USD"
+      "description": "LINK/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x582d872A1B094FC48F5DE31D3B73F2D9bE47def1",
@@ -135,7 +150,8 @@
       "feedId": 19,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "TON/USD"
+      "description": "TON/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE",
@@ -143,7 +159,8 @@
       "feedId": 21,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "SHIB/USD"
+      "description": "SHIB/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x7540EF9ea0Ff4f8adb9d7dbD7f6C26EFb3F696aB",
@@ -151,7 +168,8 @@
       "feedId": 22,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "BCH/USD"
+      "description": "BCH/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
@@ -159,7 +177,8 @@
       "feedId": 23,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "UNI/USD"
+      "description": "UNI/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xad2c4d032800AfeEbC71119928BDf1505EcA31B0",
@@ -167,7 +186,8 @@
       "feedId": 24,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "EOS/USD"
+      "description": "EOS/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x3c935fc39419a40E0244c47D5F613a5b703BF6c2",
@@ -175,7 +195,8 @@
       "feedId": 25,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "ATOM/USD"
+      "description": "ATOM/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x876F5868355879efD89A87f2a6D06BB0b228b3a3",
@@ -183,7 +204,8 @@
       "feedId": 27,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "OP/USD"
+      "description": "OP/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xEaF1557dc24F862709890F3Be1683794DDD487E9",
@@ -191,7 +213,8 @@
       "feedId": 28,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "NEAR/USD"
+      "description": "NEAR/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x126f3AE16F30C8A98e5319C31dac3D5355dA1772",
@@ -199,7 +222,8 @@
       "feedId": 29,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "APT/USD"
+      "description": "APT/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x89bEB026A4A9A5a80906Ad56A318911E045FC4Af",
@@ -207,7 +231,8 @@
       "feedId": 30,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "NEO/USD"
+      "description": "NEO/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x6d681E3E45aAeBfC6131e887B55f28b179BB2f37",
@@ -215,7 +240,8 @@
       "feedId": 31,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "STX/USD"
+      "description": "STX/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x0D8Ce2A99Bb6e3B7Db580eD848240e4a0F9aE153",
@@ -223,7 +249,8 @@
       "feedId": 34,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "FIL/USD"
+      "description": "FIL/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xd6fAA45f5180A36CE1925ba9b4C9683CCaA3D117",
@@ -231,7 +258,8 @@
       "feedId": 35,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "BNB/USD"
+      "description": "BNB/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xDB9f97165657aeE56ce412966FD68b8715b04815",
@@ -239,7 +267,8 @@
       "feedId": 36,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "AVAX/USD"
+      "description": "AVAX/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xa663b02cf0a4b149d2ad41910cb81e23e1c41c32",
@@ -247,7 +276,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "sFRAX/FRAX",
-      "feedId": 41
+      "feedId": 41,
+      "deviationThreshold": ""
     },
     {
       "base": "0xac3e018457b222d93114458476f3e3416abbe38f",
@@ -255,7 +285,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "sfrxETH/frxETH",
-      "feedId": 42
+      "feedId": 42,
+      "deviationThreshold": ""
     },
     {
       "base": "0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84",
@@ -263,7 +294,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "stETH/ETH",
-      "feedId": 43
+      "feedId": 43,
+      "deviationThreshold": ""
     },
     {
       "base": "0xae78736Cd615f374D3085123A210448E74Fc6393",
@@ -271,7 +303,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "rETH/ETH",
-      "feedId": 44
+      "feedId": 44,
+      "deviationThreshold": ""
     },
     {
       "base": "0xBe9895146f7AF43049ca1c1AE358B0541Ea49704",
@@ -279,7 +312,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "cbETH/ETH",
-      "feedId": 45
+      "feedId": 45,
+      "deviationThreshold": ""
     },
     {
       "base": "0xA35b1B31Ce002FBF2058D22F30f95D405200A15b",
@@ -287,7 +321,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "ETHx/ETH",
-      "feedId": 46
+      "feedId": 46,
+      "deviationThreshold": ""
     },
     {
       "base": "0xE95A203B1a91a908F9B9CE46459d101078c2c3cb",
@@ -295,7 +330,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "ankerETH/ETH",
-      "feedId": 47
+      "feedId": 47,
+      "deviationThreshold": ""
     },
     {
       "base": "0x856c4Efb76C1D1AE02e20CEB03A2A6a08b0b8dC3",
@@ -303,7 +339,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "oETH/ETH",
-      "feedId": 48
+      "feedId": 48,
+      "deviationThreshold": ""
     },
     {
       "base": "0xf1C9acDc66974dFB6dEcB12aA385b9cD01190E38",
@@ -311,7 +348,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "osETH/ETH",
-      "feedId": 49
+      "feedId": 49,
+      "deviationThreshold": ""
     },
     {
       "base": "0xf951E335afb289353dc249e82926178EaC7DEd78",
@@ -319,7 +357,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "swETH/ETH",
-      "feedId": 50
+      "feedId": 50,
+      "deviationThreshold": ""
     },
     {
       "base": "0xa2E3356610840701BDf5611a53974510Ae27E2e1",
@@ -327,7 +366,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "wBETH/ETH",
-      "feedId": 51
+      "feedId": 51,
+      "deviationThreshold": ""
     },
     {
       "base": "0x8c1BEd5b9a0928467c9B1341Da1D7BD5e10b6549",
@@ -335,7 +375,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "lsETH/ETH",
-      "feedId": 52
+      "feedId": 52,
+      "deviationThreshold": ""
     },
     {
       "base": "0xd5F7838F5C461fefF7FE49ea5ebaF7728bB0ADfa",
@@ -343,7 +384,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "mETH/ETH",
-      "feedId": 53
+      "feedId": 53,
+      "deviationThreshold": ""
     },
     {
       "base": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
@@ -351,7 +393,8 @@
       "feedId": 54,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "USDC/USD"
+      "description": "USDC/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
@@ -359,7 +402,8 @@
       "feedId": 55,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "DAI/USD"
+      "description": "DAI/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xbf5495Efe5DB9ce00f80364C8B423567e58d2110",
@@ -367,7 +411,8 @@
       "feedId": 56,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "ezETH/ETH"
+      "description": "ezETH/ETH",
+      "deviationThreshold": ""
     },
     {
       "base": "0xCd5fE23C85820F7B72D0926FC9b05b43E359b7ee",
@@ -375,7 +420,8 @@
       "feedId": 57,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "weETH/ETH"
+      "description": "weETH/ETH",
+      "deviationThreshold": ""
     },
     {
       "base": "0xD9A442856C234a39a81a089C06451EBAa4306a72",
@@ -383,7 +429,8 @@
       "feedId": 58,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "pufETH/ETH"
+      "description": "pufETH/ETH",
+      "deviationThreshold": ""
     },
     {
       "base": "0x09db87A538BD693E9d08544577d5cCfAA6373A48",
@@ -391,7 +438,8 @@
       "feedId": 59,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "ynETH/ETH"
+      "description": "ynETH/ETH",
+      "deviationThreshold": ""
     },
     {
       "base": "0xF1376bceF0f78459C0Ed0ba5ddce976F1ddF51F4",
@@ -399,7 +447,8 @@
       "feedId": 60,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "uniETH/ETH"
+      "description": "uniETH/ETH",
+      "deviationThreshold": ""
     },
     {
       "base": "0xFAe103DC9cf190eD75350761e95403b7b8aFa6c0",
@@ -407,7 +456,8 @@
       "feedId": 61,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "rswETH/ETH"
+      "description": "rswETH/ETH",
+      "deviationThreshold": ""
     },
     {
       "base": "0x917ceE801a67f933F2e6b33fC0cD1ED2d5909D88",
@@ -415,7 +465,8 @@
       "feedId": 62,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "weETHs/ETH"
+      "description": "weETHs/ETH",
+      "deviationThreshold": ""
     },
     {
       "base": "0x8DB2350D78aBc13f5673A411D4700BCF87864dDE",
@@ -423,7 +474,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "swBTC/BTC",
-      "feedId": 63
+      "feedId": 63,
+      "deviationThreshold": ""
     },
     {
       "base": "0xA1290d69c65A6Fe4DF752f95823fae25cB99e5A7",
@@ -431,7 +483,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "rsETH/ETH",
-      "feedId": 64
+      "feedId": 64,
+      "deviationThreshold": ""
     },
     {
       "base": "0x657e8C867D8B37dCC18fA4Caead9C45EB088C642",
@@ -439,7 +492,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "eBTC/BTC",
-      "feedId": 65
+      "feedId": 65,
+      "deviationThreshold": ""
     },
     {
       "base": "0x7122985656e38BDC0302Db86685bb972b145bD3C",
@@ -447,7 +501,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "STONE/ETH",
-      "feedId": 66
+      "feedId": 66,
+      "deviationThreshold": ""
     },
     {
       "base": "0x4E15361FD6b4BB609Fa63C81A2be19d873717870",
@@ -455,7 +510,8 @@
       "feedId": 67,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "FTM/ETH"
+      "description": "FTM/ETH",
+      "deviationThreshold": ""
     }
   ],
   "timelock": {
@@ -466,5 +522,6 @@
   "pauserRegistry": {
     "pausers": ["0xB0462F8dD528F0602fc7867827D64c3c9b5D93B2"],
     "unpauser": "0xB0462F8dD528F0602fc7867827D64c3c9b5D93B2"
-  }
+  },
+  "deviationThreshold": "1.0"
 }
