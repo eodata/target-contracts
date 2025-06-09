@@ -74,7 +74,8 @@
       "base": "0x4c9EDD5852cd905f086C759E8383e09bff1E68B3",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     },
     {
       "feedId": 101,
@@ -82,7 +83,8 @@
       "base": "0x004E9C3EF86bc1ca1f0bB5C7662861Ee93350568",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     },
     {
       "feedId": 116,
@@ -97,6 +99,42 @@
       "feedId": 117,
       "description": "BTCB/USD",
       "base": "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 122,
+      "description": "bfBTC/USD",
+      "base": "0x623F2774d9f27B59bc6b954544487532CE79d9DF",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 132,
+      "description": "sUSDE/USDE",
+      "base": "0x597877Ccf65be938BD214C4c46907669e3E62128",
+      "quote": "0x4c9EDD5852cd905f086C759E8383e09bff1E68B3",
+      "inputDecimals": 18,
+      "outputDecimals": 18,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 154,
+      "description": "xSolvBTC/USD",
+      "base": "0x1346b618dc92810ec74163e4c27004c921d446a5",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 155,
+      "description": "wBETH/USD",
+      "base": "0xa2e3356610840701bdf5611a53974510ae27e2e1",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8,

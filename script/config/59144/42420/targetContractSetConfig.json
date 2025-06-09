@@ -196,6 +196,15 @@
       "outputDecimals": 8,
       "description": "SolvBTCm/USD",
       "deviationThreshold": ""
+    },
+    {
+      "base": "0xdC035D45d973E3EC169d2276DDab16f1e407384F",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "feedId": 157,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "USDS/USD",
+      "deviationThreshold": ""
     }
   ],
   "deviationThreshold": "1.0"
