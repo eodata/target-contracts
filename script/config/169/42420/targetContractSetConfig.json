@@ -1,10 +1,10 @@
 {
   "usePrecompiledModexp": false,
-  "feedsDeployer": "0x741b2bBE4D02207c39792283b59571693A2CC5C4",
+  "feedsDeployer": "0x76D468DD0328bE829d355Fa875b842e347a027f0",
   "eoracleChainId": 42420,
-  "targetChainId": 56,
-  "publishers": ["0xe4Fda86d8ec860F82a43311e885743D15006dCc0"],
-  "supportedFeedIds": [1, 2, 17, 35, 54, 77, 83, 85, 101, 116, 117, 122, 132, 154, 155],
+  "targetChainId": 169,
+  "publishers": ["0x776E15bc7920B79C18a8fED3Fdeb8413A9AD9334"],
+  "supportedFeedIds": [1, 2, 17, 54, 70, 76, 77, 92, 136],
   "supportedFeedsData": [
     {
       "feedId": 1,
@@ -34,17 +34,27 @@
       "deviationThreshold": ""
     },
     {
-      "feedId": 35,
-      "description": "BNB/USD",
-      "base": "0xd6fAA45f5180A36CE1925ba9b4C9683CCaA3D117",
-      "quote": "0x0000000000000000000000000000000000000348",
-      "inputDecimals": 18,
-      "outputDecimals": 8
-    },
-    {
       "feedId": 54,
       "description": "USDC/USD",
       "base": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 70,
+      "description": "MANTA/USD",
+      "base": "0x8581cc815e40615998f4561f3e24e68066293595",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 76,
+      "description": "STONE/USD",
+      "base": "0x7122985656e38BDC0302Db86685bb972b145bD3C",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8,
@@ -60,43 +70,18 @@
       "deviationThreshold": ""
     },
     {
-      "feedId": 83,
-      "description": "WBTC/USD",
-      "base": "0xDa4AaEd3A53962c83B35697Cd138cc6df43aF71f",
+      "feedId": 92,
+      "description": "wstETH/USD",
+      "base": "0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8,
       "deviationThreshold": ""
     },
     {
-      "feedId": 85,
-      "description": "USDe/USD",
-      "base": "0x4c9EDD5852cd905f086C759E8383e09bff1E68B3",
-      "quote": "0x0000000000000000000000000000000000000348",
-      "inputDecimals": 18,
-      "outputDecimals": 8
-    },
-    {
-      "feedId": 101,
-      "description": "uniBTC/USD",
-      "base": "0x004E9C3EF86bc1ca1f0bB5C7662861Ee93350568",
-      "quote": "0x0000000000000000000000000000000000000348",
-      "inputDecimals": 18,
-      "outputDecimals": 8
-    },
-    {
-      "feedId": 116,
-      "description": "LBTC/USD",
-      "base": "0x8236a87084f8b84306f72007f36f2618a5634494",
-      "quote": "0x0000000000000000000000000000000000000348",
-      "inputDecimals": 18,
-      "outputDecimals": 8,
-      "deviationThreshold": ""
-    },
-    {
-      "feedId": 117,
-      "description": "BTCB/USD",
-      "base": "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c",
+      "feedId": 136,
+      "description": "TIA/USD",
+      "base": "0x6Fae4D9935E2fcb11fC79a64e917fb2BF14DaFaa",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8,
@@ -105,12 +90,12 @@
   ],
   "timelock": {
     "minDelay": 10,
-    "proposers": ["0x8ebB3cF68F0A6f659Dc146455d591d9aF8c11180"],
-    "executors": ["0x4e420746d114721A972afeBf11c7226Dae720E34"]
+    "proposers": ["0x48dd0e0a71792377A466Eb126f29154a66354466"],
+    "executors": ["0xea4C7f3DFa47d5C18b611b8093E2d550b716d997"]
   },
   "pauserRegistry": {
-    "pausers": ["0x20b341C71685a01D4eAB5EA899e98DE4Ed04cc23"],
-    "unpauser": "0x9CE2bB2Fb376E38F7ebba258692D3Fc6e0aE46d8"
+    "pausers": ["0x2F37F484A8c265B1C0386aFe5890dF07BEc8A2F8"],
+    "unpauser": "0x685b4f0c8D6195Cea599B14871D5C23829610Fa9"
   },
-  "deviationThreshold": "0.5"
+  "deviationThreshold": "1.0"
 }

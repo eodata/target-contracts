@@ -10,7 +10,7 @@ on:
 jobs:
   notify_merged_pull_request:
     name: New Target network Slack Notification
-    runs-on: "k8s-native"
+    runs-on: "k8s-native-eodata"
     container:
       image: "ubuntu:24.04"
     if: ${{ github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'develop' }}
