@@ -12,7 +12,8 @@
       "feedId": 1,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "BTC/USD"
+      "description": "BTC/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -20,7 +21,8 @@
       "feedId": 2,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "ETH/USD"
+      "description": "ETH/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xd4094e4ffa89985583E52D491251619a4C5b0BE9",
@@ -28,7 +30,8 @@
       "feedId": 6,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "SOL/USD"
+      "description": "SOL/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x00000000000000000000000000000000000003d2",
@@ -44,7 +47,8 @@
       "feedId": 17,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "USDT/USD"
+      "description": "USDT/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x514910771AF9Ca656af840dff83E8264EcF986CA",
@@ -52,7 +56,8 @@
       "feedId": 18,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "LINK/USD"
+      "description": "LINK/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xa663b02cf0a4b149d2ad41910cb81e23e1c41c32",
@@ -60,7 +65,8 @@
       "feedId": 41,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "sFRAX/FRAX"
+      "description": "sFRAX/FRAX",
+      "deviationThreshold": ""
     },
     {
       "base": "0xac3e018457b222d93114458476f3e3416abbe38f",
@@ -68,7 +74,8 @@
       "feedId": 42,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "sfrxETH/frxETH"
+      "description": "sfrxETH/frxETH",
+      "deviationThreshold": ""
     },
     {
       "base": "0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84",
@@ -76,7 +83,8 @@
       "feedId": 43,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "stETH/ETH"
+      "description": "stETH/ETH",
+      "deviationThreshold": ""
     }
   ],
   "timelock": {
@@ -87,5 +95,6 @@
   "pauserRegistry": {
     "pausers": ["0xfD9F25D4b939e79EA2e0DB7567D96939D5EDd153"],
     "unpauser": "0xfD9F25D4b939e79EA2e0DB7567D96939D5EDd153"
-  }
+  },
+  "deviationThreshold": "1.0"
 }

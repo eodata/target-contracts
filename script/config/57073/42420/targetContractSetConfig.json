@@ -12,7 +12,8 @@
       "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     },
     {
       "feedId": 2,
@@ -20,7 +21,8 @@
       "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     },
     {
       "base": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
@@ -28,7 +30,8 @@
       "feedId": 17,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "USDT/USD"
+      "description": "USDT/USD",
+      "deviationThreshold": ""
     },
     {
       "feedId": 54,
@@ -36,7 +39,8 @@
       "base": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     }
   ],
   "timelock": {
@@ -47,5 +51,6 @@
   "pauserRegistry": {
     "pausers": ["0xce2A3547D2e162cDb343E916f65F3d5e40A0B222"],
     "unpauser": "0xD9F3AFaa4A9500d8E48B227D5309Fa8b2fe71665"
-  }
+  },
+  "deviationThreshold": "1.0"
 }

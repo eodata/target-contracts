@@ -14,7 +14,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "BTC/USD",
-      "feedId": 1
+      "feedId": 1,
+      "deviationThreshold": ""
     },
     {
       "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -22,7 +23,8 @@
       "feedId": 2,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "ETH/USD"
+      "description": "ETH/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
@@ -30,7 +32,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "USDT/USD",
-      "feedId": 17
+      "feedId": 17,
+      "deviationThreshold": ""
     },
     {
       "base": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
@@ -38,7 +41,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "USDC/USD",
-      "feedId": 54
+      "feedId": 54,
+      "deviationThreshold": ""
     },
     {
       "base": "0x236CdB93E16884266e902fEE1f5Db37a19B72878",
@@ -46,7 +50,8 @@
       "feedId": 79,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "M-BTC/USD"
+      "description": "M-BTC/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x2931a7dAb3dF4135823Ca9f36680fbbC741a2b3B",
@@ -54,7 +59,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "SolvBTCm/USD",
-      "feedId": 94
+      "feedId": 94,
+      "deviationThreshold": ""
     },
     {
       "base": "0xC2Fe4f673455Ef92299770a09CDB5E8756A525D5",
@@ -62,7 +68,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "FDUSD/USD",
-      "feedId": 96
+      "feedId": 96,
+      "deviationThreshold": ""
     },
     {
       "base": "0x7537C1F80c9E157ED7AFD93a494be3e1f04f1462",
@@ -70,7 +77,9 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "BSTONE/USD",
-      "feedId": 98
+      "feedId": 98,
+      "deviationThreshold": ""
     }
-  ]
+  ],
+  "deviationThreshold": "1.0"
 }

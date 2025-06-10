@@ -12,7 +12,8 @@
       "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     },
     {
       "feedId": 2,
@@ -20,7 +21,8 @@
       "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     },
     {
       "feedId": 17,
@@ -28,7 +30,8 @@
       "base": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     },
     {
       "feedId": 54,
@@ -36,7 +39,8 @@
       "base": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     },
     {
       "feedId": 72,
@@ -44,7 +48,8 @@
       "base": "0x18084fba666a33d37592fa2633fd49a74dd93a88",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     },
     {
       "feedId": 79,
@@ -52,7 +57,8 @@
       "base": "0xb880fd278198bd590252621d4cd071b1842e9bcd",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     },
     {
       "feedId": 83,
@@ -60,7 +66,8 @@
       "base": "0xDa4AaEd3A53962c83B35697Cd138cc6df43aF71f",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     },
     {
       "feedId": 91,
@@ -68,7 +75,8 @@
       "base": "0xa1290d69c65a6fe4df752f95823fae25cb99e5a7",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     },
     {
       "feedId": 108,
@@ -76,7 +84,8 @@
       "base": "0xF469fBD2abcd6B9de8E169d128226C0Fc90a012e",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     },
     {
       "feedId": 116,
@@ -84,7 +93,8 @@
       "base": "0x8236a87084f8b84306f72007f36f2618a5634494",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     },
     {
       "feedId": 118,
@@ -92,7 +102,8 @@
       "base": "0xAA40c0c7644e0b2B224509571e10ad20d9C4ef28",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     },
     {
       "feedId": 119,
@@ -100,7 +111,8 @@
       "base": "0x2ec37d45fcae65d9787ecf71dc85a444968f6646",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     },
     {
       "feedId": 120,
@@ -108,7 +120,8 @@
       "base": "0x6A9A65B84843F5fD4aC9a0471C4fc11AFfFBce4a",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     },
     {
       "feedId": 121,
@@ -116,7 +129,8 @@
       "base": "0x9BFA177621119e64CecbEabE184ab9993E2ef727",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     },
     {
       "feedId": 123,
@@ -124,7 +138,8 @@
       "base": "0xe3C0FF176eF92FC225096C6d1788cCB818808b35",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     },
     {
       "feedId": 124,
@@ -132,7 +147,8 @@
       "base": "0x8154Aaf094c2f03Ad550B6890E1d4264B5DdaD9A",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     },
     {
       "feedId": 125,
@@ -140,7 +156,8 @@
       "base": "0x7A06C4AeF988e7925575C50261297a946aD204A8",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     }
   ],
   "timelock": {
@@ -151,5 +168,6 @@
   "pauserRegistry": {
     "pausers": ["0xd8f497C2FbD733274813476be98accB6109cFa43"],
     "unpauser": "0xB92CfF33Bb083b1fBD9567A83bc004971C54161E"
-  }
+  },
+  "deviationThreshold": "0.5"
 }

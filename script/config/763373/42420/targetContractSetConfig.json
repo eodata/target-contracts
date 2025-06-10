@@ -12,7 +12,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "BTC/USD",
-      "feedId": 1
+      "feedId": 1,
+      "deviationThreshold": ""
     },
     {
       "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -20,7 +21,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "ETH/USD",
-      "feedId": 2
+      "feedId": 2,
+      "deviationThreshold": ""
     },
     {
       "base": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
@@ -28,7 +30,8 @@
       "feedId": 17,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "USDT/USD"
+      "description": "USDT/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
@@ -36,7 +39,8 @@
       "feedId": 54,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "USDC/USD"
+      "description": "USDC/USD",
+      "deviationThreshold": ""
     }
   ],
   "timelock": {
@@ -47,5 +51,6 @@
   "pauserRegistry": {
     "pausers": ["0x8f70a356C20e3BDa1674E47b7793F705756c64b9"],
     "unpauser": "0x8f70a356C20e3BDa1674E47b7793F705756c64b9"
-  }
+  },
+  "deviationThreshold": "1.0"
 }

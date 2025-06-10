@@ -12,7 +12,8 @@
       "feedId": 1,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "BTC/USD"
+      "description": "BTC/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -20,7 +21,8 @@
       "feedId": 2,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "ETH/USD"
+      "description": "ETH/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0",
@@ -28,7 +30,8 @@
       "feedId": 9,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "MATIC/USD"
+      "description": "MATIC/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xd6fAA45f5180A36CE1925ba9b4C9683CCaA3D117",
@@ -36,7 +39,8 @@
       "feedId": 35,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "BNB/USD"
+      "description": "BNB/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xDB9f97165657aeE56ce412966FD68b8715b04815",
@@ -44,7 +48,8 @@
       "feedId": 36,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "AVAX/USD"
+      "description": "AVAX/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x4E15361FD6b4BB609Fa63C81A2be19d873717870",
@@ -52,7 +57,8 @@
       "feedId": 67,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "FTM/USD"
+      "description": "FTM/USD",
+      "deviationThreshold": ""
     }
   ],
   "timelock": {
@@ -63,5 +69,6 @@
   "pauserRegistry": {
     "pausers": ["0xb6bfCFC4Abb25474Acc09b10195E2981bDb7CFa7"],
     "unpauser": "0xDE5d72f1b05C92E9fc4B695159fAb4a75D3ec9DB"
-  }
+  },
+  "deviationThreshold": "1.0"
 }

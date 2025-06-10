@@ -12,7 +12,8 @@
       "inputDecimals": 18,
       "outputDecimals": 18,
       "description": "BTC/USD",
-      "feedId": 1
+      "feedId": 1,
+      "deviationThreshold": ""
     },
     {
       "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -20,7 +21,8 @@
       "inputDecimals": 18,
       "outputDecimals": 18,
       "description": "ETH/USD",
-      "feedId": 2
+      "feedId": 2,
+      "deviationThreshold": ""
     },
     {
       "base": "0xa3FCD2041abc7fd3ac76aF9DEfCe42ea241b2a5f",
@@ -28,7 +30,8 @@
       "inputDecimals": 18,
       "outputDecimals": 18,
       "description": "XRP/USD",
-      "feedId": 3
+      "feedId": 3,
+      "deviationThreshold": ""
     },
     {
       "base": "0xd4094e4ffa89985583E52D491251619a4C5b0BE9",
@@ -36,7 +39,8 @@
       "feedId": 6,
       "inputDecimals": 18,
       "outputDecimals": 18,
-      "description": "SOL/USD"
+      "description": "SOL/USD",
+      "deviationThreshold": ""
     }
   ],
   "timelock": {
@@ -51,5 +55,6 @@
       "0x59cAE195Ad704Ae629a9F263EB5C978A2543dC34"
     ],
     "unpauser": "0xb46D9eE58a54161dEB2906de5656E78246AEDd0B"
-  }
+  },
+  "deviationThreshold": "1.0"
 }
