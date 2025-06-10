@@ -153,8 +153,8 @@
   ],
   "timelock": {
     "minDelay": 10,
-    "proposers": ["0xD42cfABc1996356b63E11a5A208191c5c2D47476"],
-    "executors": ["0x7A8805481224e3969F386aE5f00226ca3CEe2De0"]
+    "proposers": ["0x7A8805481224e3969F386aE5f00226ca3CEe2De0"],
+    "executors": ["0xD42cfABc1996356b63E11a5A208191c5c2D47476"]
   },
   "pauserRegistry": {
     "pausers": ["0x2881968E8a8a39eE7BeEf7dF861419Af2C0975bE"],
