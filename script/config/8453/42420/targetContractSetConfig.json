@@ -4,7 +4,7 @@
   "eoracleChainId": 42420,
   "targetChainId": 8453,
   "publishers": ["0x878305b18a5613FAB36e69450f17E1fdeEddE3eD","0x136E4d1b22beF5deF28C3e258abcfEb6dda9f41a"],
-  "supportedFeedIds": [1, 2, 6, 13, 14, 16, 17, 18, 41, 42, 43, 54, 59, 88, 89, 92],
+  "supportedFeedIds": [1, 2, 6, 13, 17, 18, 41, 42, 43, 54, 59, 88, 89, 92],
   "supportedFeedsData": [
     {
       "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
@@ -40,24 +40,6 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "EUR/USD",
-      "deviationThreshold": ""
-    },
-    {
-      "base": "0x0000000000000000000000000000000000000024",
-      "quote": "0x0000000000000000000000000000000000000348",
-      "feedId": 14,
-      "inputDecimals": 18,
-      "outputDecimals": 8,
-      "description": "AUD/USD",
-      "deviationThreshold": ""
-    },
-    {
-      "base": "0x000000000000000000000000000000000000033A",
-      "quote": "0x0000000000000000000000000000000000000348",
-      "feedId": 16,
-      "inputDecimals": 18,
-      "outputDecimals": 8,
-      "description": "GBP/USD",
       "deviationThreshold": ""
     },
     {
