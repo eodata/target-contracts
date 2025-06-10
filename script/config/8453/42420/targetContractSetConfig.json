@@ -4,7 +4,7 @@
   "eoracleChainId": 42420,
   "targetChainId": 8453,
   "publishers": ["0x878305b18a5613FAB36e69450f17E1fdeEddE3eD","0x136E4d1b22beF5deF28C3e258abcfEb6dda9f41a"],
-  "supportedFeedIds": [1, 2, 6, 13, 17, 18, 41, 42, 43, 54, 59, 88, 89, 92],
+  "supportedFeedIds": [1, 2, 6, 13, 17, 18, 41, 42, 43, 54, 59, 64, 88, 89, 92, 135],
   "supportedFeedsData": [
     {
       "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
@@ -106,6 +106,15 @@
       "deviationThreshold": ""
     },
     {
+      "feedId": 64,
+      "description": "eBTC/BTC",
+      "base": "0x657e8C867D8B37dCC18fA4Caead9C45EB088C642",
+      "quote": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
       "feedId": 88,
       "base": "0xbf5495Efe5DB9ce00f80364C8B423567e58d2110",
       "quote": "0x0000000000000000000000000000000000000348",
@@ -130,6 +139,15 @@
       "description": "wstETH/USD",
       "inputDecimals": 18,
       "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 135,
+      "description": "LBTC/BTC",
+      "base": "0x8236a87084f8b84306f72007f36f2618a5634494",
+      "quote": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+      "inputDecimals": 18,
+      "outputDecimals": 18,
       "deviationThreshold": ""
     }
   ],
