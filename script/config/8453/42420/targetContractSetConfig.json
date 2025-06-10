@@ -147,7 +147,8 @@
       "base": "0x8236a87084f8b84306f72007f36f2618a5634494",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     },
     {
       "feedId": 135,
