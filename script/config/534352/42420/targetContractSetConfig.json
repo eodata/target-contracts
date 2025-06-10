@@ -13,7 +13,8 @@
       "feedId": 2,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "ETH/USD"
+      "description": "ETH/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
@@ -21,7 +22,8 @@
       "feedId": 17,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "USDT/USD"
+      "description": "USDT/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
@@ -29,7 +31,8 @@
       "feedId": 54,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "USDC/USD"
+      "description": "USDC/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xCd5fE23C85820F7B72D0926FC9b05b43E359b7ee",
@@ -37,7 +40,8 @@
       "feedId": 89,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "weETH/USD"
+      "description": "weETH/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xD9A442856C234a39a81a089C06451EBAa4306a72",
@@ -45,7 +49,8 @@
       "feedId": 75,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "pufETH/USD"
+      "description": "pufETH/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xf1376bcef0f78459c0ed0ba5ddce976f1ddf51f4",
@@ -53,7 +58,8 @@
       "feedId": 90,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "uniETH/USD"
+      "description": "uniETH/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xa25b25548B4C98B0c7d3d27dcA5D5ca743d68b7F",
@@ -61,7 +67,8 @@
       "feedId": 91,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "wrsETH/USD"
+      "description": "wrsETH/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x7122985656e38BDC0302Db86685bb972b145bD3C",
@@ -69,7 +76,8 @@
       "feedId": 76,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "STONE/USD"
+      "description": "STONE/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x7a56e1c57c7475ccf742a1832b028f0456652f97",
@@ -77,7 +85,8 @@
       "feedId": 77,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "SolvBTC/USD"
+      "description": "SolvBTC/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xDa4AaEd3A53962c83B35697Cd138cc6df43aF71f",
@@ -85,7 +94,8 @@
       "feedId": 83,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "WBTC/USD"
+      "description": "WBTC/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x4c9EDD5852cd905f086C759E8383e09bff1E68B3",
@@ -93,7 +103,8 @@
       "feedId": 85,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "USDe/USD"
+      "description": "USDe/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0",
@@ -101,7 +112,8 @@
       "feedId": 92,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "wstETH/USD"
+      "description": "wstETH/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x3Ba89d490AB1C0c9CC2313385b30710e838370a4",
@@ -109,7 +121,8 @@
       "feedId": 93,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "SolvBTCb/USD"
+      "description": "SolvBTCb/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x2365649F604377bA6472579e8c19fACFED13C9DC",
@@ -117,7 +130,9 @@
       "feedId": 94,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "SolvBTCm/USD"
+      "description": "SolvBTCm/USD",
+      "deviationThreshold": ""
     }
-  ]
+  ],
+  "deviationThreshold": "1.0"
 }

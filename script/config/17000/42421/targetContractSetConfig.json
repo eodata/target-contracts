@@ -15,7 +15,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "BTC/USD",
-      "feedId": 1
+      "feedId": 1,
+      "deviationThreshold": ""
     },
     {
       "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -23,7 +24,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "ETH/USD",
-      "feedId": 2
+      "feedId": 2,
+      "deviationThreshold": ""
     },
     {
       "base": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
@@ -31,7 +33,8 @@
       "feedId": 17,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "USDT/USD"
+      "description": "USDT/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
@@ -39,7 +42,8 @@
       "feedId": 54,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "USDC/USD"
+      "description": "USDC/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x8581cc815e40615998f4561f3e24e68066293595",
@@ -47,7 +51,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "MANTA/USD",
-      "feedId": 70
+      "feedId": 70,
+      "deviationThreshold": ""
     },
     {
       "base": "0xB50721BCf8d664c30412Cfbc6cf7a15145234ad1",
@@ -55,7 +60,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "ARB/USD",
-      "feedId": 71
+      "feedId": 71,
+      "deviationThreshold": ""
     },
     {
       "base": "0xD9A442856C234a39a81a089C06451EBAa4306a72",
@@ -63,7 +69,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "pufETH/USD",
-      "feedId": 75
+      "feedId": 75,
+      "deviationThreshold": ""
     },
     {
       "base": "0x7122985656e38BDC0302Db86685bb972b145bD3C",
@@ -71,7 +78,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "STONE/USD",
-      "feedId": 76
+      "feedId": 76,
+      "deviationThreshold": ""
     },
     {
       "base": "0x7a56e1c57c7475ccf742a1832b028f0456652f97",
@@ -79,7 +87,8 @@
       "feedId": 77,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "SolvBTC/USD"
+      "description": "SolvBTC/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xb880fd278198bd590252621d4cd071b1842e9bcd",
@@ -87,7 +96,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "M-BTC/USD",
-      "feedId": 79
+      "feedId": 79,
+      "deviationThreshold": ""
     },
     {
       "base": "0xf5e11df1ebcf78b6b6d26e04ff19cd786a1e81dc",
@@ -95,7 +105,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "BBTC/USD",
-      "feedId": 80
+      "feedId": 80,
+      "deviationThreshold": ""
     },
     {
       "base": "0x77776b40c3d75cb07ce54dea4b2fd1d07f865222",
@@ -103,7 +114,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "BBUSD/USD",
-      "feedId": 81
+      "feedId": 81,
+      "deviationThreshold": ""
     },
     {
       "base": "0xDa4AaEd3A53962c83B35697Cd138cc6df43aF71f",
@@ -111,7 +123,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "WBTC/USD",
-      "feedId": 83
+      "feedId": 83,
+      "deviationThreshold": ""
     },
     {
       "base": "0x96155858A02c410c3C814BB32Fdc413b3241b62E",
@@ -119,7 +132,8 @@
       "feedId": 94,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "SolvBTCb/USD"
+      "description": "SolvBTCb/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x5FFcE65A40f6d3de5332766ffF6A28BF491C868c",
@@ -127,7 +141,8 @@
       "feedId": 95,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "SolvBTCm/USD"
+      "description": "SolvBTCm/USD",
+      "deviationThreshold": ""
     }
   ],
   "timelock": {
@@ -138,5 +153,6 @@
   "pauserRegistry": {
     "pausers": ["0x59cAE195Ad704Ae629a9F263EB5C978A2543dC34"],
     "unpauser": "0x59cAE195Ad704Ae629a9F263EB5C978A2543dC34"
-  }
+  },
+  "deviationThreshold": "1.0"
 }

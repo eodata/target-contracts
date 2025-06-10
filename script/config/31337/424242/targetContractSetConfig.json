@@ -12,14 +12,17 @@
       "quote": "0x0000000000000000000000000000000000000348",
       "decimals": 18,
       "description": "BTC/USD",
-      "feedId": 1
+      "feedId": 1,
+      "deviationThreshold": ""
     },
     {
       "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
       "quote": "0x0000000000000000000000000000000000000348",
       "decimals": 18,
       "description": "ETH/USD",
-      "feedId": 2
+      "feedId": 2,
+      "deviationThreshold": ""
     }
-  ]
+  ],
+  "deviationThreshold": "1.0"
 }

@@ -1,11 +1,10 @@
 {
   "usePrecompiledModexp": true,
-  "proxyAdminOwner": "0xbadED4AAe3317b8F59Ae3F4EafBc2b07ac3302d4",
-  "targetContractsOwner": "0xbadED4AAe3317b8F59Ae3F4EafBc2b07ac3302d4",
+  "feedsDeployer": "0xbadED4AAe3317b8F59Ae3F4EafBc2b07ac3302d4",
   "eoracleChainId": 42420,
   "targetChainId": 8453,
-  "publishers": ["0x878305b18a5613FAB36e69450f17E1fdeEddE3eD"],
-  "supportedFeedIds": [1, 2, 6, 11, 13, 14, 16, 17, 18, 41, 42, 43, 54, 59, 88, 89, 92],
+  "publishers": ["0x878305b18a5613FAB36e69450f17E1fdeEddE3eD","0x136E4d1b22beF5deF28C3e258abcfEb6dda9f41a"],
+  "supportedFeedIds": [1, 2, 6, 13, 17, 18, 41, 42, 43, 54, 59, 64, 88, 89, 92, 116, 135],
   "supportedFeedsData": [
     {
       "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
@@ -13,7 +12,8 @@
       "feedId": 1,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "BTC/USD"
+      "description": "BTC/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -21,7 +21,8 @@
       "feedId": 2,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "ETH/USD"
+      "description": "ETH/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xd4094e4ffa89985583E52D491251619a4C5b0BE9",
@@ -29,15 +30,8 @@
       "feedId": 6,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "SOL/USD"
-    },
-    {
-      "base": "0x7D800a2559b7e3A9b50a1865Ac45C22D168Ce900",
-      "quote": "0x0000000000000000000000000000000000000348",
-      "feedId": 11,
-      "inputDecimals": 18,
-      "outputDecimals": 8,
-      "description": "XAU/USD"
+      "description": "SOL/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x00000000000000000000000000000000000003d2",
@@ -45,23 +39,8 @@
       "feedId": 13,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "EUR/USD"
-    },
-    {
-      "base": "0x0000000000000000000000000000000000000024",
-      "quote": "0x0000000000000000000000000000000000000348",
-      "feedId": 14,
-      "inputDecimals": 18,
-      "outputDecimals": 8,
-      "description": "AUD/USD"
-    },
-    {
-      "base": "0x000000000000000000000000000000000000033A",
-      "quote": "0x0000000000000000000000000000000000000348",
-      "feedId": 16,
-      "inputDecimals": 18,
-      "outputDecimals": 8,
-      "description": "GBP/USD"
+      "description": "EUR/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
@@ -69,7 +48,8 @@
       "feedId": 17,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "USDT/USD"
+      "description": "USDT/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0x514910771AF9Ca656af840dff83E8264EcF986CA",
@@ -77,7 +57,8 @@
       "feedId": 18,
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "description": "LINK/USD"
+      "description": "LINK/USD",
+      "deviationThreshold": ""
     },
     {
       "base": "0xa663b02cf0a4b149d2ad41910cb81e23e1c41c32",
@@ -85,7 +66,8 @@
       "inputDecimals": 18,
       "outputDecimals": 18,
       "description": "sFRAX/FRAX",
-      "feedId": 41
+      "feedId": 41,
+      "deviationThreshold": ""
     },
     {
       "base": "0xac3e018457b222d93114458476f3e3416abbe38f",
@@ -93,7 +75,8 @@
       "inputDecimals": 18,
       "outputDecimals": 18,
       "description": "sfrxETH/frxETH",
-      "feedId": 42
+      "feedId": 42,
+      "deviationThreshold": ""
     },
     {
       "base": "0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84",
@@ -101,7 +84,8 @@
       "inputDecimals": 18,
       "outputDecimals": 18,
       "description": "stETH/ETH",
-      "feedId": 43
+      "feedId": 43,
+      "deviationThreshold": ""
     },
     {
       "feedId": 54,
@@ -109,7 +93,8 @@
       "quote": "0x0000000000000000000000000000000000000348",
       "description": "USDC/USD",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     },
     {
       "base": "0x09db87A538BD693E9d08544577d5cCfAA6373A48",
@@ -117,7 +102,17 @@
       "inputDecimals": 18,
       "outputDecimals": 18,
       "description": "ynETH/ETH",
-      "feedId": 59
+      "feedId": 59,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 64,
+      "description": "eBTC/BTC",
+      "base": "0x657e8C867D8B37dCC18fA4Caead9C45EB088C642",
+      "quote": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     },
     {
       "feedId": 88,
@@ -125,7 +120,8 @@
       "quote": "0x0000000000000000000000000000000000000348",
       "description": "ezETH/USD",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     },
     {
       "feedId": 89,
@@ -133,7 +129,8 @@
       "quote": "0x0000000000000000000000000000000000000348",
       "description": "weETH/USD",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     },
     {
       "feedId": 92,
@@ -141,7 +138,36 @@
       "quote": "0x0000000000000000000000000000000000000348",
       "description": "wstETH/USD",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 116,
+      "description": "LBTC/USD",
+      "base": "0x8236a87084f8b84306f72007f36f2618a5634494",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 135,
+      "description": "LBTC/BTC",
+      "base": "0x8236a87084f8b84306f72007f36f2618a5634494",
+      "quote": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+      "inputDecimals": 18,
+      "outputDecimals": 18,
+      "deviationThreshold": ""
     }
-  ]
+  ],
+  "timelock": {
+    "minDelay": 10,
+    "proposers": ["0x7A8805481224e3969F386aE5f00226ca3CEe2De0"],
+    "executors": ["0xD42cfABc1996356b63E11a5A208191c5c2D47476"]
+  },
+  "pauserRegistry": {
+    "pausers": ["0x2881968E8a8a39eE7BeEf7dF861419Af2C0975bE"],
+    "unpauser": "0xAD78DFd8CeBb15bDDa348d37D8e0DF7fB5129148"
+  },
+  "deviationThreshold": "1.0"
 }

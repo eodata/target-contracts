@@ -12,7 +12,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "BTC/USD",
-      "feedId": 1
+      "feedId": 1,
+      "deviationThreshold": ""
     },
     {
       "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -20,7 +21,8 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "ETH/USD",
-      "feedId": 2
+      "feedId": 2,
+      "deviationThreshold": ""
     }
   ],
   "timelock": {
@@ -31,5 +33,6 @@
   "pauserRegistry": {
     "pausers": ["0x639a7C058d258fcA9007519F601366a3B8bD82c8"],
     "unpauser": "0x639a7C058d258fcA9007519F601366a3B8bD82c8"
-  }
+  },
+  "deviationThreshold": "0.5"
 }
