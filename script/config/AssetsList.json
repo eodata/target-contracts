@@ -1151,6 +1151,24 @@
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8
+    },
+    {
+      "feedId": 147,
+      "description": "yUSD/USD",
+      "base": "0x19Ebd191f7A24ECE672ba13A302212b5eF7F35cb",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 158,
+      "description": "wsrUSD/USD",
+      "base": "0xd3fd63209fa2d55b07a0f6db36c2f43900be3094",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     }
   ]
 }
