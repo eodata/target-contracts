@@ -171,12 +171,12 @@
   ],
   "timelock": {
     "minDelay": 10,
-    "proposers": ["0x8ebB3cF68F0A6f659Dc146455d591d9aF8c11180"],
-    "executors": ["0x4e420746d114721A972afeBf11c7226Dae720E34"]
+    "proposers": ["0xc3050Fd4004eeFFA4B64eDF60E860a6d58f49816"],
+    "executors": ["0x34FbEE0Ef78a28738Ce773f179F157b0036DABA9"]
   },
   "pauserRegistry": {
-    "pausers": ["0x20b341C71685a01D4eAB5EA899e98DE4Ed04cc23"],
-    "unpauser": "0x9CE2bB2Fb376E38F7ebba258692D3Fc6e0aE46d8"
+    "pausers": ["0xEae86c8eba7df86D95282397e6338b7D5699B0fA"],
+    "unpauser": "0x2d1f84f7ac8995206c1c13A061e262B4ea80F9a1"
   },
   "deviationThreshold": "1.0"
 }
