@@ -1,9 +1,9 @@
 {
   "bls": "0x1E4002b0D8A231842d418a6d5f10605Ae12b1617",
   "bn256G2": "0x1620545aD368d198b7Dd4895e3C54796041ed385",
-  "feedAdapterImplementation": "0xD420B8BF616d9Ce475c2B6F66E0629acB12A04D9",
+  "feedAdapterImplementation": "0xbC275629fa5a1e3FB6223C154B0271C05B3A242f",
   "feedManager": "0x76e8f80e034ea6f0650E843857c7CA8C74b12E15",
-  "feedManagerImplementation": "0x7940853a14A7a086335d5553e0635dE6638e013d",
+  "feedManagerImplementation": "0xA95C39D4ab674b557Fa1FaD0dE419D91121ec416",
   "feedRegistryAdapter": "0x89C72bBEdE4F49653dAC2F05F0AeeC3e22a8ebC2",
   "feedRegistryAdapterImplementation": "0x334E2F21cd98b58E0C7f3031c662f5d1c2e15162",
   "feedVerifier": "0x24AF232731bb49aF8330760Ba46eff390a47Fe41",

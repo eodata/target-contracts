@@ -1162,6 +1162,15 @@
       "deviationThreshold": ""
     },
     {
+      "feedId": 156,
+      "description": "wsuperOETHp/USD",
+      "base": "0x2dE8A403f7A5c6C5161D4a129918Ec9f0b653918",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
       "feedId": 158,
       "description": "wsrUSD/USD",
       "base": "0xd3fd63209fa2d55b07a0f6db36c2f43900be3094",
