@@ -207,5 +207,14 @@
       "deviationThreshold": ""
     }
   ],
+  "timelock": {
+    "minDelay": 10,
+    "proposers": ["0x3F6c4E98C78E164FAA29D5bFEebA3f8d694FC495"],
+    "executors": ["0x2341886b712a285749F0281A65c5161266247ebb"]
+  },
+  "pauserRegistry": {
+    "pausers": ["0x0Cf9Ecc1Ce862C81b7b4dd017bCede3B2208c0e4"],
+    "unpauser": "0x2c5d78D270400bfcf7FC52b0460140d21a6F0a46"
+  },
   "deviationThreshold": "1.0"
 }
