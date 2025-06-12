@@ -178,5 +178,5 @@
     "pausers": ["0xEae86c8eba7df86D95282397e6338b7D5699B0fA"],
     "unpauser": "0x2d1f84f7ac8995206c1c13A061e262B4ea80F9a1"
   },
-  "deviationThreshold": "1.0"
+  "deviationThreshold": "0.5"
 }
