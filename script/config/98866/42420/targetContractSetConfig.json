@@ -1,12 +1,10 @@
 {
   "usePrecompiledModexp": false,
-  "proxyAdminOwner": "0xB905A34377164Db6C4386005F83b4F9cBcd4Fefd",
-  "targetContractsOwner": "0xB905A34377164Db6C4386005F83b4F9cBcd4Fefd",
+  "feedsDeployer": "0xB905A34377164Db6C4386005F83b4F9cBcd4Fefd",
   "eoracleChainId": 42420,
   "targetChainId": 98866,
-  "publishers": ["0x878305b18a5613FAB36e69450f17E1fdeEddE3eD"],
-  "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
-  "supportedFeedIds": [1, 2, 17, 54, 111, 126, 127, 129, 141, 142, 143, 145, 148, 149, 150, 151, 152, 153, 156],
+  "publishers": ["0x878305b18a5613FAB36e69450f17E1fdeEddE3eD","0x518AD4aB0af04Cc60356833485D41Bb30E60ef80"],
+  "supportedFeedIds": [1, 2, 17, 54, 111, 129, 141, 142, 143, 145, 148, 149, 150, 151, 152, 153, 156, 158],
   "supportedFeedsData": [
     {
       "feedId": 1,
@@ -51,24 +49,6 @@
       "quote": "0x856c4efb76c1d1ae02e20ceb03a2a6a08b0b8dc3",
       "inputDecimals": 18,
       "outputDecimals": 18,
-      "deviationThreshold": ""
-    },
-    {
-      "feedId": 126,
-      "description": "IBIT/USD",
-      "base": "0xa3cb87080e68ad54d00573983d935fa85d168fde",
-      "quote": "0x0000000000000000000000000000000000000348",
-      "inputDecimals": 18,
-      "outputDecimals": 8,
-      "deviationThreshold": ""
-    },
-    {
-      "feedId": 127,
-      "description": "SPY/USD",
-      "base": "0x17fd3caa66502c6f1cbd5600d8448f3af8f2aba1",
-      "quote": "0x0000000000000000000000000000000000000348",
-      "inputDecimals": 18,
-      "outputDecimals": 8,
       "deviationThreshold": ""
     },
     {
@@ -177,7 +157,25 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "deviationThreshold": ""
+    },
+    {
+      "feedId": 158,
+      "description": "wsrUSD/USD",
+      "base": "0xd3fd63209fa2d55b07a0f6db36c2f43900be3094",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     }
   ],
+  "timelock": {
+    "minDelay": 10,
+    "proposers": ["0x0F8a008Ae03A3abEe0971dd2b7Ce47fe2c2835f9"],
+    "executors": ["0x60520A727ECF10d2C3dc2eA7D1A758c2f57FEFc1"]
+  },
+  "pauserRegistry": {
+    "pausers": ["0xA09E19cD74397d73927f70ff333006C4BD14d95D"],
+    "unpauser": "0xA64e2eA34811E9af7dADEcedFbffB703802091be"
+  },
   "deviationThreshold": "1.0"
 }
