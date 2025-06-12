@@ -4,7 +4,7 @@
   "eoracleChainId": 42420,
   "targetChainId": 98866,
   "publishers": ["0x878305b18a5613FAB36e69450f17E1fdeEddE3eD","0x518AD4aB0af04Cc60356833485D41Bb30E60ef80"],
-  "supportedFeedIds": [1, 2, 17, 54, 111, 126, 127, 129, 141, 142, 143, 145, 148, 149, 150, 151, 152, 153, 156],
+  "supportedFeedIds": [1, 2, 17, 54, 111, 129, 141, 142, 143, 145, 148, 149, 150, 151, 152, 153, 156, 158],
   "supportedFeedsData": [
     {
       "feedId": 1,
@@ -49,24 +49,6 @@
       "quote": "0x856c4efb76c1d1ae02e20ceb03a2a6a08b0b8dc3",
       "inputDecimals": 18,
       "outputDecimals": 18,
-      "deviationThreshold": ""
-    },
-    {
-      "feedId": 126,
-      "description": "IBIT/USD",
-      "base": "0xa3cb87080e68ad54d00573983d935fa85d168fde",
-      "quote": "0x0000000000000000000000000000000000000348",
-      "inputDecimals": 18,
-      "outputDecimals": 8,
-      "deviationThreshold": ""
-    },
-    {
-      "feedId": 127,
-      "description": "SPY/USD",
-      "base": "0x17fd3caa66502c6f1cbd5600d8448f3af8f2aba1",
-      "quote": "0x0000000000000000000000000000000000000348",
-      "inputDecimals": 18,
-      "outputDecimals": 8,
       "deviationThreshold": ""
     },
     {
@@ -171,6 +153,15 @@
       "feedId": 156,
       "description": "wsuperOETHp/USD",
       "base": "0x2dE8A403f7A5c6C5161D4a129918Ec9f0b653918",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 158,
+      "description": "wsrUSD/USD",
+      "base": "0xd3fd63209fa2d55b07a0f6db36c2f43900be3094",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8,
