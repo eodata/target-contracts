@@ -175,6 +175,9 @@ contract EOFeedAdapterOldCompatible is IEOFeedAdapter, Initializable {
      * @return uint8 The decimals
      */
     function decimals() external view returns (uint8) {
+        if (_outputDecimals == 0) {
+            return 18;
+        }
         return _outputDecimals;
     }
 
@@ -219,6 +222,10 @@ contract EOFeedAdapterOldCompatible is IEOFeedAdapter, Initializable {
      * @return int256 The normalized price
      */
     function _normalizePrice(uint256 price) internal view returns (int256) {
+        if (_inputDecimals == 0 || _outputDecimals == 0) {
+            return int256(price);
+        }
+
         if (_inputDecimals > _outputDecimals) {
             return int256(price) / _decimalsDiff;
         } else {
