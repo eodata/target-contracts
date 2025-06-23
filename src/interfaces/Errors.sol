@@ -4,6 +4,7 @@ pragma solidity 0.8.25;
 /*//////////////////////////////////////////////////////////////////////////
                                 EOFeedManager
 //////////////////////////////////////////////////////////////////////////*/
+error Deprecated();
 error CallerIsNotWhitelisted(address caller);
 error MissingLeafInputs();
 error FeedNotSupported(uint16 feedId);
