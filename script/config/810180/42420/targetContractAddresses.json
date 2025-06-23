@@ -8,7 +8,7 @@
   "feedAdapterImplementation": "0x468d60bD510daAD4C9C3c9887e5e84b17b6038e5",
   "feedRegistryAdapterImplementation": "0xBb96dC6c1585C26D168042ca109c17Ab6772D87a",
   "feedRegistryAdapter": "0x4075Cabb1019064847AdB1e92291B1c2BaAa2Cd0",
-  "feeds": {
+  "deprecatedFeeds": {
     "BTC/USD": "0xEC4e9989e6b8433fbc0b2A1D96CcC37A4c67FAB5",
     "ETH/USD": "0xe28AEbAa3Ec11B0a4a5FaF69ef3e84D985DdE27c",
     "USDT/USD": "0x0c4516a820D22e790D495bEB7555c5edb65F1136",
