@@ -10,7 +10,8 @@ import {
     MissingLeafInputs,
     FeedNotSupported,
     SymbolReplay,
-    InvalidInput
+    InvalidInput,
+    Deprecated
 } from "./interfaces/Errors.sol";
 
 /**
@@ -21,6 +22,7 @@ import {
  * the feed manager.
  */
 contract EOFeedManager is IEOFeedManager, OwnableUpgradeable {
+    uint256 public constant IS_DEPRECATED = 1;
     /// @dev Map of feed id to price feed (feed id => PriceFeed)
     mapping(uint16 => PriceFeed) internal _priceFeeds;
 
@@ -32,6 +34,11 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable {
 
     /// @dev feed verifier contract
     IEOFeedVerifier internal _feedVerifier;
+
+    modifier revertDeprecated() {
+        if (IS_DEPRECATED == 1) revert Deprecated();
+        _;
+    }
 
     /// @dev Allows only whitelisted publishers to call the function
     modifier onlyWhitelisted() {
@@ -135,14 +142,19 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable {
     /**
      * @inheritdoc IEOFeedManager
      */
-    function getLatestPriceFeed(uint16 feedId) external view returns (PriceFeed memory) {
+    function getLatestPriceFeed(uint16 feedId) external view revertDeprecated returns (PriceFeed memory) {
         return _getLatestPriceFeed(feedId);
     }
 
     /**
      * @inheritdoc IEOFeedManager
      */
-    function getLatestPriceFeeds(uint16[] calldata feedIds) external view returns (PriceFeed[] memory) {
+    function getLatestPriceFeeds(uint16[] calldata feedIds)
+        external
+        view
+        revertDeprecated
+        returns (PriceFeed[] memory)
+    {
         PriceFeed[] memory retVal = new PriceFeed[](feedIds.length);
         for (uint256 i = 0; i < feedIds.length; i++) {
             retVal[i] = _getLatestPriceFeed(feedIds[i]);
@@ -160,7 +172,7 @@ contract EOFeedManager is IEOFeedManager, OwnableUpgradeable {
     /**
      * @inheritdoc IEOFeedManager
      */
-    function isSupportedFeed(uint16 feedId) external view returns (bool) {
+    function isSupportedFeed(uint16 feedId) external view revertDeprecated returns (bool) {
         return _supportedFeedIds[feedId];
     }
 
