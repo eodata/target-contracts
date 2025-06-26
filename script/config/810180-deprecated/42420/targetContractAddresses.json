@@ -3,12 +3,12 @@
   "bn256G2": "0x144Fe844ac29490190563d7700DE0707A6B78A1F",
   "feedVerifierImplementation": "0x9d7ad9c7aff4f886a2711e561ea7b35af910e662",
   "feedVerifier": "0x92F5FCa9fC1aa9686364767733A3F951c5F27Aff",
-  "feedManagerImplementation": "0xe8373615baa7185f76726f90b9d38f31ec24bcba",
+  "feedManagerImplementation": "0x19876E186f2f291D52A6F476ecB959Db9da344A2",
   "feedManager": "0xEECECaecf142992c25668c925d6E2eEF3A8C0DCE",
   "feedAdapterImplementation": "0x468d60bD510daAD4C9C3c9887e5e84b17b6038e5",
   "feedRegistryAdapterImplementation": "0xBb96dC6c1585C26D168042ca109c17Ab6772D87a",
   "feedRegistryAdapter": "0x4075Cabb1019064847AdB1e92291B1c2BaAa2Cd0",
-  "feeds": {
+  "deprecatedFeeds": {
     "BTC/USD": "0xEC4e9989e6b8433fbc0b2A1D96CcC37A4c67FAB5",
     "ETH/USD": "0xe28AEbAa3Ec11B0a4a5FaF69ef3e84D985DdE27c",
     "USDT/USD": "0x0c4516a820D22e790D495bEB7555c5edb65F1136",
@@ -25,4 +25,5 @@
     "WBTC/USD": "0xC9B6c0d45173C2FF5b87222281D2D9fd9a78CD7f",
     "SolvBTCm/USD": "0xd18a24341a82d4Aa5f2e6f554093E2292Cd956C7"
   }
+  "feedManagerImplementationBeforeDeprecation": "0xe8373615baa7185f76726f90b9d38f31ec24bcba",
 }
