@@ -4,7 +4,7 @@
   "eoracleChainId": 42420,
   "targetChainId": 146,
   "publishers": ["0xDe30437F08E55403fb6F7992363C4cf8Dbd810C9"],
-  "supportedFeedIds": [1, 2, 17, 54, 130, 146, 147,158],
+  "supportedFeedIds": [1, 2, 17, 54, 130, 146, 147, 158, 160],
   "supportedFeedsData": [
     {
       "feedId": 1,
@@ -76,6 +76,15 @@
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 160,
+      "description": "yUSD/USDC",
+      "base": "0x19ebd191f7a24ece672ba13a302212b5ef7f35cb",
+      "quote": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+      "inputDecimals": 18,
+      "outputDecimals": 18,
       "deviationThreshold": ""
     }
   ],
