@@ -4,7 +4,7 @@
   "eoracleChainId": 42420,
   "targetChainId": 8453,
   "publishers": ["0x878305b18a5613FAB36e69450f17E1fdeEddE3eD","0x136E4d1b22beF5deF28C3e258abcfEb6dda9f41a"],
-  "supportedFeedIds": [1, 2, 6, 13, 17, 18, 41, 42, 43, 54, 59, 64, 88, 89, 92, 116, 135],
+  "supportedFeedIds": [1, 2, 6, 13, 17, 18, 41, 42, 43, 54, 59, 64, 88, 89, 92, 116, 135, 160],
   "supportedFeedsData": [
     {
       "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
@@ -155,6 +155,15 @@
       "description": "LBTC/BTC",
       "base": "0x8236a87084f8b84306f72007f36f2618a5634494",
       "quote": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+      "inputDecimals": 18,
+      "outputDecimals": 18,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 160,
+      "description": "yUSD/USDC",
+      "base": "0x19ebd191f7a24ece672ba13a302212b5ef7f35cb",
+      "quote": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
       "inputDecimals": 18,
       "outputDecimals": 18,
       "deviationThreshold": ""
