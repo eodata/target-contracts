@@ -4,7 +4,7 @@
   "eoracleChainId": 42420,
   "targetChainId": 146,
   "publishers": ["0xDe30437F08E55403fb6F7992363C4cf8Dbd810C9"],
-  "supportedFeedIds": [1, 2, 17, 54, 130, 146, 147, 158, 160],
+  "supportedFeedIds": [1, 2, 17, 54, 130, 146, 147, 158, 160, 161, 162],
   "supportedFeedsData": [
     {
       "feedId": 1,
@@ -86,6 +86,24 @@
       "inputDecimals": 18,
       "outputDecimals": 18,
       "deviationThreshold": ""
+    },
+    {
+      "feedId": 161,
+      "description": "xETH/ETH",
+      "base": "0x7E586fBaF3084C0be7aB5C82C04FfD7592723153",
+      "quote": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "inputDecimals": 18,
+      "outputDecimals": 18,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 162,
+      "description": "xBTC/BTC",
+      "base": "0x12fd502e2052CaFB41eccC5B596023d9978057d6",
+      "quote": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     }
   ],
   "timelock": {
@@ -97,5 +115,5 @@
     "pausers": ["0x85FFf2ef2988884d7d7bB49CE71081B6C71f25Ea"],
     "unpauser": "0x63E26BBB2D5192060F5f5C1Db59B4C2475C479c9"
   },
-  "deviationThreshold": "1.0"
+  "deviationThreshold": "0.5"
 }
