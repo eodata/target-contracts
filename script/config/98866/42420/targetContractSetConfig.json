@@ -4,7 +4,7 @@
   "eoracleChainId": 42420,
   "targetChainId": 98866,
   "publishers": ["0x878305b18a5613FAB36e69450f17E1fdeEddE3eD","0x518AD4aB0af04Cc60356833485D41Bb30E60ef80"],
-  "supportedFeedIds": [1, 2, 17, 54, 111, 129, 141, 142, 143, 145, 148, 149, 150, 151, 152, 153, 156, 158],
+  "supportedFeedIds": [1, 2, 17, 54, 111, 129, 141, 142, 143, 145, 148, 149, 150, 151, 152, 153, 156, 158, 160],
   "supportedFeedsData": [
     {
       "feedId": 1,
@@ -57,7 +57,8 @@
       "base": "0xEa237441c92CAe6FC17Caaf9a7acB3f953be4bd1",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     },
     {
       "feedId": 141,
@@ -158,6 +159,7 @@
       "outputDecimals": 8,
       "deviationThreshold": ""
     },
+    
     {
       "feedId": 158,
       "description": "wsrUSD/USD",
@@ -165,6 +167,15 @@
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 160,
+      "description": "yUSD/USDC",
+      "base": "0x19ebd191f7a24ece672ba13a302212b5ef7f35cb",
+      "quote": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+      "inputDecimals": 18,
+      "outputDecimals": 18,
       "deviationThreshold": ""
     }
   ],
@@ -177,5 +188,5 @@
     "pausers": ["0xA09E19cD74397d73927f70ff333006C4BD14d95D"],
     "unpauser": "0xA64e2eA34811E9af7dADEcedFbffB703802091be"
   },
-  "deviationThreshold": "1.0"
+  "deviationThreshold": "0.5"
 }
