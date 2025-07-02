@@ -4,7 +4,7 @@
   "eoracleChainId": 42420,
   "targetChainId": 80094,
   "publishers": ["0x6A64A1E7992B1a0d277bC6444bD93269d9214C4d", "0x54e00FCE0e321e68706e70813d1C73C6900AfBaA"],
-  "supportedFeedIds": [1, 2, 17, 54, 61, 64, 65, 76, 77, 85, 89, 91, 100, 101, 103, 104, 105, 108, 115, 131, 132, 133, 137, 146],
+  "supportedFeedIds": [1, 2, 17, 54, 61, 64, 65, 76, 77, 85, 89, 91, 100, 101, 103, 104, 105, 108, 115, 131, 132, 133, 137, 146, 161, 162],
   "supportedFeedsData": [
     {
       "feedId": 1,
@@ -218,6 +218,24 @@
       "description": "xUSD/USD",
       "base": "0xE2Fc85BfB48C4cF147921fBE110cf92Ef9f26F94",
       "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 161,
+      "description": "xETH/ETH",
+      "base": "0x7E586fBaF3084C0be7aB5C82C04FfD7592723153",
+      "quote": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "inputDecimals": 18,
+      "outputDecimals": 18,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 162,
+      "description": "xBTC/BTC",
+      "base": "0x12fd502e2052CaFB41eccC5B596023d9978057d6",
+      "quote": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
       "inputDecimals": 18,
       "outputDecimals": 8,
       "deviationThreshold": ""
