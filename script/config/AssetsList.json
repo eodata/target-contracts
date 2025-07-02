@@ -1187,6 +1187,24 @@
       "inputDecimals": 18,
       "outputDecimals": 18,
       "deviationThreshold": ""
+    },
+    {
+      "feedId": 161,
+      "description": "xETH/ETH",
+      "base": "0x7E586fBaF3084C0be7aB5C82C04FfD7592723153",
+      "quote": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "inputDecimals": 18,
+      "outputDecimals": 18,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 162,
+      "description": "xBTC/BTC    ",
+      "base": "0x12fd502e2052CaFB41eccC5B596023d9978057d6",
+      "quote": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     }
   ]
 }
