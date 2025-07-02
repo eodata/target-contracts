@@ -3,7 +3,7 @@
   "feedDeployer": "0xa738b5c680ab8929D1dD6F34C23C0e546A427C9A",
   "eoracleChainId": 42420,
   "targetChainId": 1868,
-  "publishers": ["0x60482cd78246551D810eBab36B83Ee2f78EAA60b"],
+  "publishers": ["0x60482cd78246551D810eBab36B83Ee2f78EAA60b", "0xD9DE4A921BE1FeA8b0f4BbB1b2419651c9ae871b"],
   "supportedFeedIds": [1, 2, 17, 54],
   "supportedFeedsData": [
     {
