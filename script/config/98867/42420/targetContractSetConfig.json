@@ -1,6 +1,6 @@
 {
   "usePrecompiledModexp": false,
-  "feedsDeployer": "0x71bc12592B080292EE48f3a780327a2ad3fd4146",
+  "feedDeployer": "0x71bc12592B080292EE48f3a780327a2ad3fd4146",
   "eoracleChainId": 42420,
   "targetChainId": 98867,
   "publishers": ["0x3bf928c6FE116743ABc2b9E211D03e7a6060B3c1"],

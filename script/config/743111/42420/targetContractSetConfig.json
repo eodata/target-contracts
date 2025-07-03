@@ -2,7 +2,7 @@
   "usePrecompiledModexp": false,
   "eoracleChainId": 42420,
   "targetChainId": 743111,
-  "feedsDeployer": "0x639a7C058d258fcA9007519F601366a3B8bD82c8",
+  "feedDeployer": "0x639a7C058d258fcA9007519F601366a3B8bD82c8",
   "publishers": ["0xde523181FE46c6e063F072670708Ec5e072Dc694"],
   "supportedFeedIds": [1, 2],
   "supportedFeedsData": [

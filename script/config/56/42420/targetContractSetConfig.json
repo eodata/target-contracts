@@ -1,6 +1,6 @@
 {
   "usePrecompiledModexp": false,
-  "feedsDeployer": "0x741b2bBE4D02207c39792283b59571693A2CC5C4",
+  "feedDeployer": "0x741b2bBE4D02207c39792283b59571693A2CC5C4",
   "eoracleChainId": 42420,
   "targetChainId": 56,
   "publishers": ["0xe4Fda86d8ec860F82a43311e885743D15006dCc0", "0x4444D3e2C3BC478202749a9CF2883F46A1412A1b"],
@@ -39,7 +39,8 @@
       "base": "0xd6fAA45f5180A36CE1925ba9b4C9683CCaA3D117",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
-      "outputDecimals": 8
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     },
     {
       "feedId": 54,
