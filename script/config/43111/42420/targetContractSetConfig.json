@@ -4,7 +4,7 @@
   "eoracleChainId": 42420,
   "targetChainId": 43111,
   "publishers": ["0x0228955B60A038516c9E0c61C0BD4123d7C25f04"],
-  "supportedFeedIds": [1, 2, 17, 54, 72, 79, 83, 91, 108, 116, 118, 119, 120, 121, 123, 124, 125],
+  "supportedFeedIds": [1, 2, 17, 54, 72, 79, 83, 88, 91, 101, 108, 116, 118, 119, 120, 121, 122, 123, 124, 125, 128],
   "supportedFeedsData": [
     {
       "feedId": 1,
@@ -70,9 +70,27 @@
       "deviationThreshold": ""
     },
     {
+      "feedId": 88,
+      "description": "ezETH/USD",
+      "base": "0xbf5495Efe5DB9ce00f80364C8B423567e58d2110",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
       "feedId": 91,
       "description": "rsETH/USD",
       "base": "0xa1290d69c65a6fe4df752f95823fae25cb99e5a7",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 101,
+      "description": "uniBTC/USD",
+      "base": "0x004E9C3EF86bc1ca1f0bB5C7662861Ee93350568",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8,
@@ -133,6 +151,15 @@
       "deviationThreshold": ""
     },
     {
+      "feedId": 122,
+      "description": "bfBTC/USD",
+      "base": "0x623F2774d9f27B59bc6b954544487532CE79d9DF",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
       "feedId": 123,
       "description": "oBTC/USD",
       "base": "0xe3C0FF176eF92FC225096C6d1788cCB818808b35",
@@ -154,6 +181,15 @@
       "feedId": 125,
       "description": "vUSD/USD",
       "base": "0x7A06C4AeF988e7925575C50261297a946aD204A8",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 128,
+      "description": "stBTC/USD",
+      "base": "0xf6718b2701D4a6498eF77D7c152b2137Ab28b8A3",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8,
