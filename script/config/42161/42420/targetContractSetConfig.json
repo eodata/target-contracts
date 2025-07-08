@@ -70,5 +70,5 @@
     "pausers": ["0x54E1E2250EA2a25066C4108a03FE34A1a37d2e9b"],
     "unpauser": "0x8137CBC3d318dc48Bad3eF1DAaDfA54104Ca0771"
   },
-  "deviationThreshold": "1.0"
+  "deviationThreshold": "0.5"
 }
