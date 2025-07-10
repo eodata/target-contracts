@@ -1199,11 +1199,20 @@
     },
     {
       "feedId": 162,
-      "description": "xBTC/BTC    ",
+      "description": "xBTC/BTC",
       "base": "0x12fd502e2052CaFB41eccC5B596023d9978057d6",
       "quote": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
       "inputDecimals": 18,
       "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 163,
+      "description": "xUSD/USDC",
+      "base": "0xE2Fc85BfB48C4cF147921fBE110cf92Ef9f26F94",
+      "quote": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+      "inputDecimals": 18,
+      "outputDecimals": 18,
       "deviationThreshold": ""
     }
   ]
