@@ -3,7 +3,7 @@
     "eoracleChainId": 42420,
     "targetChainId": 43114,
     "feedsDeployer": "0x6dfBf87A56034fb37cdCe6a5D2088e8A3bf25584",
-    "publishers": ["0xF14E67BbE16E118864e78ea6963F9D35469a8927,0xe556bB031362d8c469218559Fb3990dA6f4613eE"],
+    "publishers": ["0x660eEa3835048d3D77e6682FFC7bc7A464aef513","0xF14E67BbE16E118864e78ea6963F9D35469a8927,0xe556bB031362d8c469218559Fb3990dA6f4613eE"],
     "supportedFeedIds": [1, 2, 17, 54, 161, 162, 163],
     "supportedFeedsData": [
       {
