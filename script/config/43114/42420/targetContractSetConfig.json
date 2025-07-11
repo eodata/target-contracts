@@ -1,0 +1,83 @@
+{
+    "usePrecompiledModexp": false,
+    "eoracleChainId": 42420,
+    "targetChainId": 43114,
+    "feedsDeployer": "0x6dfBf87A56034fb37cdCe6a5D2088e8A3bf25584",
+    "publishers": ["0xF14E67BbE16E118864e78ea6963F9D35469a8927,0xe556bB031362d8c469218559Fb3990dA6f4613eE"],
+    "supportedFeedIds": [1, 2, 17, 54, 161, 162, 163],
+    "supportedFeedsData": [
+      {
+        "feedId": 1,
+        "description": "BTC/USD",
+        "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+        "quote": "0x0000000000000000000000000000000000000348",
+        "inputDecimals": 18,
+        "outputDecimals": 8,
+        "deviationThreshold": ""
+      },
+      {
+        "feedId": 2,
+        "description": "ETH/USD",
+        "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        "quote": "0x0000000000000000000000000000000000000348",
+        "inputDecimals": 18,
+        "outputDecimals": 8,
+        "deviationThreshold": ""
+      },
+      {
+        "feedId": 17,
+        "description": "USDT/USD",
+        "base": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+        "quote": "0x0000000000000000000000000000000000000348",
+        "inputDecimals": 18,
+        "outputDecimals": 8,
+        "deviationThreshold": ""
+      },
+      {
+        "feedId": 54,
+        "description": "USDC/USD",
+        "base": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+        "quote": "0x0000000000000000000000000000000000000348",
+        "inputDecimals": 18,
+        "outputDecimals": 8,
+        "deviationThreshold": ""
+      },
+      {
+        "feedId": 161,
+        "description": "xETH/ETH",
+        "base": "0x7E586fBaF3084C0be7aB5C82C04FfD7592723153",
+        "quote": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        "inputDecimals": 18,
+        "outputDecimals": 18,
+        "deviationThreshold": ""
+      },
+      {
+        "feedId": 162,
+        "description": "xBTC/BTC",
+        "base": "0x12fd502e2052CaFB41eccC5B596023d9978057d6",
+        "quote": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+        "inputDecimals": 18,
+        "outputDecimals": 8,
+        "deviationThreshold": ""
+      },
+      {
+        "feedId": 163,
+        "description": "xUSD/USDC",
+        "base": "0xE2Fc85BfB48C4cF147921fBE110cf92Ef9f26F94",
+        "quote": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+        "inputDecimals": 18,
+        "outputDecimals": 18,
+        "deviationThreshold": ""
+      }
+    ],
+    "timelock": {
+      "minDelay": 10,
+      "proposers": ["0xbC916ED1A42658055835d607f60067f731ed059D"],
+      "executors": ["0x45eB8451a4F3eA6B81AeB4B9a464D9428120f500"]
+    },
+    "pauserRegistry": {
+      "pausers": ["0xFb93B9c3495A4f1af9D04F705Fd703D84086eF73"],
+      "unpauser": "0xe3B412fe1921B34B20e37fed20F96E1E90D49323"
+    },
+    "deviationThreshold": "0.5"
+  }
