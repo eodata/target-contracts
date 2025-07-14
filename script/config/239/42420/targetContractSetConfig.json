@@ -4,7 +4,7 @@
   "eoracleChainId": 42420,
   "targetChainId": 239,
   "publishers": ["0x7BE87D35E84041656bBEc0C6F3Af4627F9A221d2", "0xa3dE850A6D01f16A88F9b76A190D32D5b4Ea5DF3"],
-  "supportedFeedIds": [1, 2, 17, 54, 160],
+  "supportedFeedIds": [1, 2, 17, 19, 54, 66, 86, 110, 116, 160],
   "supportedFeedsData": [
     {
       "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
@@ -34,12 +34,57 @@
       "deviationThreshold": ""
     },
     {
+      "feedId": 19,
+      "description": "TON/USD",
+      "base": "0x582d872A1B094FC48F5DE31D3B73F2D9bE47def1",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
       "base": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "USDC/USD",
       "feedId": 54,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 66,
+      "description": "rsETH/ETH",
+      "base": "0xA1290d69c65A6Fe4DF752f95823fae25cB99e5A7",
+      "quote": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "inputDecimals": 18,
+      "outputDecimals": 18,
+      "deviationThreshold": ""
+    },
+    { 
+      "feedId": 86,
+      "description": "wstETH/ETH",
+      "base": "0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0",
+      "quote": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "inputDecimals": 18,
+      "outputDecimals": 18,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 110,
+      "description": "cbBTC/USD",
+      "base": "0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 116,
+      "description": "LBTC/USD",
+      "base": "0x8236a87084f8b84306f72007f36f2618a5634494",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
       "deviationThreshold": ""
     },
     {
