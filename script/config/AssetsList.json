@@ -1180,6 +1180,15 @@
       "deviationThreshold": ""
     },
     {
+      "feedId": 159,
+      "description": "XDC/USD",
+      "base": "0x951857744785E80e2De051c32EE7b25f9c458C42",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
       "feedId": 160,
       "description": "yUSD/USDC",
       "base": "0x19ebd191f7a24ece672ba13a302212b5ef7f35cb",
