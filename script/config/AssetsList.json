@@ -1017,6 +1017,14 @@
       "outputDecimals": 8
     },
     {
+      "feedId": 129,
+      "description": "PLUME/USD",
+      "base": "0xEa237441c92CAe6FC17Caaf9a7acB3f953be4bd1",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
       "feedId": 130,
       "description": "S/USD",
       "base": "0x597877Ccf65be938BD214C4c46907669e3E62128",
