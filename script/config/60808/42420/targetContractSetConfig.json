@@ -4,7 +4,7 @@
   "eoracleChainId": 42420,
   "targetChainId": 60808,
   "publishers": ["0xacDe8DC95DC44b13f5b7A205DB1ceBB6087B708C"],
-  "supportedFeedIds": [2, 17, 65, 72, 83, 92, 95, 97, 76],
+  "supportedFeedIds": [2, 17, 72, 83, 92, 95, 97, 76, 101],
   "supportedFeedsData": [
     {
       "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -77,6 +77,15 @@
       "outputDecimals": 8,
       "description": "STONE/USD",
       "deviationThreshold": ""
+    },
+    {
+      "feedId": 101,
+      "description": "uniBTC/USD",
+      "base": "0x004E9C3EF86bc1ca1f0bB5C7662861Ee93350568",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     }
   ],
   "timelock": {
@@ -88,5 +97,5 @@
     "pausers": ["0x7BFcCd24e03030B6Ce0d8Ee7344612Db6FB7514F"],
     "unpauser": "0xBDF0F57db3ce4e3C928805129a521CF7c9c898ed"
   },
-  "deviationThreshold": "1.0"
+  "deviationThreshold": "0.5"
 }
