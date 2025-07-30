@@ -1,17 +1,16 @@
 {
   "usePrecompiledModexp": false,
-  "proxyAdminOwner": "0x18fB439789322F3c9C8d1325E64cdA6C06005Be2",
-  "targetContractsOwner": "0x18fB439789322F3c9C8d1325E64cdA6C06005Be2",
+  "feedsDeployer": "0x18fB439789322F3c9C8d1325E64cdA6C06005Be2",
   "eoracleChainId": 42420,
   "targetChainId": 808813,
   "publishers": ["0xE7E8C680cAf54751013791acaE4D06AbAD8b5851"],
-  "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
   "supportedFeedIds": [1, 2, 17, 54, 55],
   "supportedFeedsData": [
     {
       "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
       "quote": "0x0000000000000000000000000000000000000348",
-      "decimals": 18,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
       "description": "BTC/USD",
       "feedId": 1,
       "deviationThreshold": ""
@@ -19,7 +18,8 @@
     {
       "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
       "quote": "0x0000000000000000000000000000000000000348",
-      "decimals": 18,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
       "description": "ETH/USD",
       "feedId": 2,
       "deviationThreshold": ""
@@ -28,7 +28,8 @@
       "base": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
       "quote": "0x0000000000000000000000000000000000000348",
       "feedId": 17,
-      "decimals": 18,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
       "description": "USDT/USD",
       "deviationThreshold": ""
     },
@@ -36,7 +37,8 @@
       "base": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
       "quote": "0x0000000000000000000000000000000000000348",
       "feedId": 54,
-      "decimals": 18,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
       "description": "USDC/USD",
       "deviationThreshold": ""
     },
@@ -44,10 +46,20 @@
       "base": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
       "quote": "0x0000000000000000000000000000000000000348",
       "feedId": 55,
-      "decimals": 18,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
       "description": "DAI/USD",
       "deviationThreshold": ""
     }
   ],
+  "timelock": {
+    "minDelay": 10,
+    "proposers": ["0x18fB439789322F3c9C8d1325E64cdA6C06005Be2"],
+    "executors": ["0x18fB439789322F3c9C8d1325E64cdA6C06005Be2"]
+  },
+  "pauserRegistry": {
+    "pausers": ["0x18fB439789322F3c9C8d1325E64cdA6C06005Be2"],
+    "unpauser": "0x18fB439789322F3c9C8d1325E64cdA6C06005Be2"
+  },
   "deviationThreshold": "1.0"
 }
