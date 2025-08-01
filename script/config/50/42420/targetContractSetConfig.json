@@ -44,7 +44,7 @@
     },
     {
       "feedId": 159,
-      "description": "WXDC/USD",
+      "description": "XDC/USD",
       "base": "0x951857744785E80e2De051c32EE7b25f9c458C42",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
