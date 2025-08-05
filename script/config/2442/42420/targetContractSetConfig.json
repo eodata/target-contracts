@@ -1,40 +1,65 @@
 {
   "usePrecompiledModexp": false,
-  "proxyAdminOwner": "0x1352B1855D489Cf15C4607f2fE4f227B671D1874",
-  "targetContractsOwner": "0x1352B1855D489Cf15C4607f2fE4f227B671D1874",
   "eoracleChainId": 42420,
   "targetChainId": 2442,
+  "feedDeployer": "0x1352B1855D489Cf15C4607f2fE4f227B671D1874",
   "publishers": ["0x1352B1855D489Cf15C4607f2fE4f227B671D1874", "0x2E457A057d1c6377cC4CcD29998d949c49B4B716"],
-  "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
-  "supportedFeedIds": [1, 2, 41, 42],
+  "supportedFeedIds": [1, 2, 41, 42, 54],
   "supportedFeedsData": [
     {
       "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
       "quote": "0x0000000000000000000000000000000000000348",
-      "decimals": 18,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
       "description": "BTC/USD",
-      "feedId": 1
+      "feedId": 1,
+      "deviationThreshold": ""
     },
     {
       "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
       "quote": "0x0000000000000000000000000000000000000348",
-      "decimals": 18,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
       "description": "ETH/USD",
-      "feedId": 2
+      "feedId": 2,
+      "deviationThreshold": ""
     },
     {
       "base": "0xa663b02cf0a4b149d2ad41910cb81e23e1c41c32",
       "quote": "0x853d955acef822db058eb8505911ed77f175b99e",
-      "decimals": 18,
+      "inputDecimals": 18,
+      "outputDecimals": 18,
       "description": "sFRAX/FRAX",
-      "feedId": 41
+      "feedId": 41,
+      "deviationThreshold": ""
     },
     {
       "base": "0xac3e018457b222d93114458476f3e3416abbe38f",
       "quote": "0xcf7ecee185f19e2e970a301ee37f93536ed66179",
-      "decimals": 18,
+      "inputDecimals": 18,
+      "outputDecimals": 18,
       "description": "sfrxETH/frxETH",
-      "feedId": 42
+      "feedId": 42,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 54,
+      "description": "USDC/USD",
+      "base": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     }
-  ]
+  ],
+  "timelock": {
+    "minDelay": 10,
+    "proposers": ["0x1352B1855D489Cf15C4607f2fE4f227B671D1874"],
+    "executors": ["0x1352B1855D489Cf15C4607f2fE4f227B671D1874"]
+  },
+  "pauserRegistry": {
+    "pausers": ["0x1352B1855D489Cf15C4607f2fE4f227B671D1874"],
+    "unpauser": "0x1352B1855D489Cf15C4607f2fE4f227B671D1874"
+  },
+  "deviationThreshold": "1.0"
 }

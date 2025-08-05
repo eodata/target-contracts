@@ -1,5 +1,5 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
-
 npm run pre-commit
+# Run branch name check
+./.husky/check-branch-name.sh
+npm run prettier:write
+npm run prettier:check

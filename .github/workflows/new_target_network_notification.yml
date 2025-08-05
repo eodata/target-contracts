@@ -1,0 +1,71 @@
+name: New Target network Slack Notification
+on:
+  workflow_dispatch:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - "develop"
+
+jobs:
+  notify_merged_pull_request:
+    name: New Target network Slack Notification
+    runs-on: "k8s-native-eodata"
+    container:
+      image: "ubuntu:24.04"
+    if: ${{ github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'develop' }}
+
+    steps:
+      - name: Install Git
+        run: |
+          apt-get update
+          apt-get install -y git
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Check that new expected files where added in this PR
+        id: check_files
+        shell: bash
+        run: |
+          echo "Checking for new files in this PR"
+
+          echo "running git diff --diff-filter=A --name-only HEAD^ HEAD"
+          git --no-pager diff --diff-filter=A --name-only "HEAD^" "HEAD"
+          git --no-pager diff --diff-filter=A --name-only "HEAD^" "HEAD" | grep -E 'targetContractAddresses.json|targetContractSetConfig.json' > new_files.txt
+          cat new_files.txt
+          if [ $(wc -l < new_files.txt) -eq 2 ]; then
+            # Get the path to targetContractAddresses.json
+            addresses_file=$(grep "targetContractAddresses.json" new_files.txt)
+            # Get the path to targetContractSetConfig.json
+            config_file=$(grep "targetContractSetConfig.json" new_files.txt)
+
+            # Extract the values using jq
+            feedManager=$(jq -r '.feedManager' "$addresses_file")
+            echo "feedManager: $feedManager"
+            targetChainId=$(jq -r '.targetChainId' "$config_file")
+            echo "targetChainId: $targetChainId"
+
+            # Export the values as GitHub Actions output variables
+            echo "feedManager=$feedManager" >> $GITHUB_ENV
+            echo "targetChainId=$targetChainId" >> $GITHUB_ENV
+            echo "::set-output name=files_found::true"
+          else
+            echo "No new files found in this PR"
+            echo "::set-output name=files_found::false"
+          fi
+
+      - name: Send custom JSON data to Slack workflow
+        id: slack
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload: |
+            {
+              "pr_title": ${{ github.event.pull_request.title }},
+              "target_chain_id": ${{ env.targetChainId }},
+              "feed_manager_address": ${{ env.feedManager }}
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}

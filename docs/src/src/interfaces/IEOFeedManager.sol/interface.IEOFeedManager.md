@@ -1,109 +1,103 @@
 # IEOFeedManager
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/de89fc9e9bc7c046937883aa064d90812f1542cc/src/interfaces/IEOFeedManager.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/401eb40ea1472e38057aaf0537c1644781be9b1b/src/interfaces/IEOFeedManager.sol)
+
+**Author:** eOracle
 
 ## Functions
 
-### updatePriceFeed
+### updateFeed
 
 Update the price for a feed
 
 ```solidity
-function updatePriceFeed(
+function updateFeed(
     IEOFeedVerifier.LeafInput calldata input,
-    IEOFeedVerifier.Checkpoint calldata checkpoint,
-    uint256[2] calldata signature,
-    bytes calldata bitmap
+    IEOFeedVerifier.VerificationParams calldata vParams
 )
     external;
 ```
 
 **Parameters**
 
-| Name         | Type                         | Description                                                                |
-| ------------ | ---------------------------- | -------------------------------------------------------------------------- |
-| `input`      | `IEOFeedVerifier.LeafInput`  | A merkle leaf containing price data and its merkle proof                   |
-| `checkpoint` | `IEOFeedVerifier.Checkpoint` | Checkpoint data containing eoracle chain metadata and the data merkle root |
-| `signature`  | `uint256[2]`                 | Aggregated signature of the checkpoint                                     |
-| `bitmap`     | `bytes`                      | Bitmap of the validators who signed the checkpoint                         |
+| Name      | Type                                 | Description                                              |
+| --------- | ------------------------------------ | -------------------------------------------------------- |
+| `input`   | `IEOFeedVerifier.LeafInput`          | A merkle leaf containing price data and its merkle proof |
+| `vParams` | `IEOFeedVerifier.VerificationParams` | Verification parameters                                  |
 
-### updatePriceFeeds
+### updateFeeds
 
 Update the price for multiple feeds
 
 ```solidity
-function updatePriceFeeds(
+function updateFeeds(
     IEOFeedVerifier.LeafInput[] calldata inputs,
-    IEOFeedVerifier.Checkpoint calldata checkpoint,
-    uint256[2] calldata signature,
-    bytes calldata bitmap
+    IEOFeedVerifier.VerificationParams calldata vParams
 )
     external;
 ```
 
 **Parameters**
 
-| Name         | Type                          | Description                                        |
-| ------------ | ----------------------------- | -------------------------------------------------- |
-| `inputs`     | `IEOFeedVerifier.LeafInput[]` | Array of leafs to prove the price feeds            |
-| `checkpoint` | `IEOFeedVerifier.Checkpoint`  | Checkpoint data                                    |
-| `signature`  | `uint256[2]`                  | Aggregated signature of the checkpoint             |
-| `bitmap`     | `bytes`                       | Bitmap of the validators who signed the checkpoint |
+| Name      | Type                                 | Description                             |
+| --------- | ------------------------------------ | --------------------------------------- |
+| `inputs`  | `IEOFeedVerifier.LeafInput[]`        | Array of leafs to prove the price feeds |
+| `vParams` | `IEOFeedVerifier.VerificationParams` | Verification parameters                 |
 
 ### whitelistPublishers
 
-Set the whitelisted publishers
+Whitelist or remove publishers
 
 ```solidity
-function whitelistPublishers(address[] memory publishers, bool[] memory isWhitelisted) external;
+function whitelistPublishers(address[] calldata publishers, bool[] calldata isWhitelisted) external;
 ```
 
 **Parameters**
 
-| Name            | Type        | Description                                                       |
-| --------------- | ----------- | ----------------------------------------------------------------- |
-| `publishers`    | `address[]` | Array of publisher addresses                                      |
-| `isWhitelisted` | `bool[]`    | Array of booleans indicating whether the publisher is whitelisted |
+| Name            | Type        | Description                                                               |
+| --------------- | ----------- | ------------------------------------------------------------------------- |
+| `publishers`    | `address[]` | Array of publisher addresses                                              |
+| `isWhitelisted` | `bool[]`    | Array of booleans indicating whether each publisher should be whitelisted |
 
 ### getLatestPriceFeed
 
 Get the latest price for a feed
 
 ```solidity
-function getLatestPriceFeed(uint16 feedId) external view returns (PriceFeed memory);
+function getLatestPriceFeed(uint256 feedId) external view returns (PriceFeed memory);
 ```
 
 **Parameters**
 
-| Name     | Type     | Description |
-| -------- | -------- | ----------- |
-| `feedId` | `uint16` | Feed id     |
+| Name     | Type      | Description |
+| -------- | --------- | ----------- |
+| `feedId` | `uint256` | Feed id     |
 
 **Returns**
 
-| Name     | Type        | Description      |
-| -------- | ----------- | ---------------- |
-| `<none>` | `PriceFeed` | PriceFeed struct |
+| Name     | Type        | Description                                                                                                                                                                                              |
+| -------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `<none>` | `PriceFeed` | The latest price feed data containing: - value: The price feed value - timestamp: The timestamp when the price was aggregated - eoracleBlockNumber: The eoracle block number when the price was recorded |
 
 ### getLatestPriceFeeds
 
 Get the latest price feeds for multiple feeds
 
 ```solidity
-function getLatestPriceFeeds(uint16[] calldata feedIds) external view returns (PriceFeed[] memory);
+function getLatestPriceFeeds(uint256[] calldata feedIds) external view returns (PriceFeed[] memory);
 ```
 
 **Parameters**
 
-| Name      | Type       | Description       |
-| --------- | ---------- | ----------------- |
-| `feedIds` | `uint16[]` | Array of feed ids |
+| Name      | Type        | Description       |
+| --------- | ----------- | ----------------- |
+| `feedIds` | `uint256[]` | Array of feed ids |
 
 **Returns**
 
-| Name     | Type          | Description                |
-| -------- | ------------- | -------------------------- |
-| `<none>` | `PriceFeed[]` | Array of PriceFeed structs |
+| Name     | Type          | Description                                                        |
+| -------- | ------------- | ------------------------------------------------------------------ |
+| `<none>` | `PriceFeed[]` | Array of PriceFeed structs corresponding to each requested feed ID |
 
 ### isWhitelistedPublisher
 
@@ -130,20 +124,62 @@ function isWhitelistedPublisher(address publisher) external view returns (bool);
 Check if a feed is supported
 
 ```solidity
-function isSupportedFeed(uint16 feedId) external view returns (bool);
+function isSupportedFeed(uint256 feedId) external view returns (bool);
 ```
 
 **Parameters**
 
-| Name     | Type     | Description      |
-| -------- | -------- | ---------------- |
-| `feedId` | `uint16` | feed Id to check |
+| Name     | Type      | Description      |
+| -------- | --------- | ---------------- |
+| `feedId` | `uint256` | feed Id to check |
 
 **Returns**
 
 | Name     | Type   | Description                                      |
 | -------- | ------ | ------------------------------------------------ |
 | `<none>` | `bool` | Boolean indicating whether the feed is supported |
+
+### getFeedDeployer
+
+Get the feed deployer
+
+```solidity
+function getFeedDeployer() external view returns (address);
+```
+
+**Returns**
+
+| Name     | Type      | Description                  |
+| -------- | --------- | ---------------------------- |
+| `<none>` | `address` | Address of the feed deployer |
+
+### getFeedVerifier
+
+Get the feed verifier contract address
+
+```solidity
+function getFeedVerifier() external view returns (IEOFeedVerifier);
+```
+
+**Returns**
+
+| Name     | Type              | Description                           |
+| -------- | ----------------- | ------------------------------------- |
+| `<none>` | `IEOFeedVerifier` | Address of the feed verifier contract |
+
+### getPauserRegistry
+
+Get the pauser registry contract address
+
+```solidity
+function getPauserRegistry() external view returns (IPauserRegistry);
+```
+
+**Returns**
+
+| Name     | Type              | Description                             |
+| -------- | ----------------- | --------------------------------------- |
+| `<none>` | `IPauserRegistry` | Address of the pauser registry contract |
 
 ## Events
 
@@ -152,16 +188,105 @@ function isSupportedFeed(uint16 feedId) external view returns (bool);
 _Event emitted when a price feed is updated_
 
 ```solidity
-event RateUpdated(uint16 indexed feedId, uint256 rate, uint256 timestamp);
+event RateUpdated(uint256 indexed feedId, uint256 rate, uint256 timestamp);
 ```
 
 **Parameters**
 
 | Name        | Type      | Description          |
 | ----------- | --------- | -------------------- |
-| `feedId`    | `uint16`  | Feed id              |
+| `feedId`    | `uint256` | Feed id              |
 | `rate`      | `uint256` | Price feed value     |
 | `timestamp` | `uint256` | Price feed timestamp |
+
+### SymbolReplay
+
+_Event emitted when a price feed is replayed_
+
+```solidity
+event SymbolReplay(uint256 indexed feedId, uint256 rate, uint256 timestamp, uint256 latestTimestamp);
+```
+
+**Parameters**
+
+| Name              | Type      | Description                 |
+| ----------------- | --------- | --------------------------- |
+| `feedId`          | `uint256` | Feed id                     |
+| `rate`            | `uint256` | Price feed value            |
+| `timestamp`       | `uint256` | Price feed timestamp        |
+| `latestTimestamp` | `uint256` | Latest price feed timestamp |
+
+### FeedDeployerSet
+
+_Event emitted when the feed deployer is set_
+
+```solidity
+event FeedDeployerSet(address indexed feedDeployer);
+```
+
+**Parameters**
+
+| Name           | Type      | Description                  |
+| -------------- | --------- | ---------------------------- |
+| `feedDeployer` | `address` | Address of the feed deployer |
+
+### FeedVerifierSet
+
+_Event emitted when the feed verifier is set_
+
+```solidity
+event FeedVerifierSet(address indexed feedVerifier);
+```
+
+**Parameters**
+
+| Name           | Type      | Description                  |
+| -------------- | --------- | ---------------------------- |
+| `feedVerifier` | `address` | Address of the feed verifier |
+
+### PauserRegistrySet
+
+_Event emitted when the pauser registry is set_
+
+```solidity
+event PauserRegistrySet(address indexed pauserRegistry);
+```
+
+**Parameters**
+
+| Name             | Type      | Description                    |
+| ---------------- | --------- | ------------------------------ |
+| `pauserRegistry` | `address` | Address of the pauser registry |
+
+### SupportedFeedsUpdated
+
+_Event emitted when the supported feeds are updated_
+
+```solidity
+event SupportedFeedsUpdated(uint256 indexed feedId, bool isSupported);
+```
+
+**Parameters**
+
+| Name          | Type      | Description                                      |
+| ------------- | --------- | ------------------------------------------------ |
+| `feedId`      | `uint256` | Feed id                                          |
+| `isSupported` | `bool`    | Boolean indicating whether the feed is supported |
+
+### PublisherWhitelisted
+
+_Event emitted when a publisher is whitelisted_
+
+```solidity
+event PublisherWhitelisted(address indexed publisher, bool isWhitelisted);
+```
+
+**Parameters**
+
+| Name            | Type      | Description                                             |
+| --------------- | --------- | ------------------------------------------------------- |
+| `publisher`     | `address` | Address of the publisher                                |
+| `isWhitelisted` | `bool`    | Boolean indicating whether the publisher is whitelisted |
 
 ## Structs
 

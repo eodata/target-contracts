@@ -1,0 +1,49 @@
+{
+  "usePrecompiledModexp": false,
+  "proxyAdminOwner": "0x71bc12592B080292EE48f3a780327a2ad3fd4146",
+  "targetContractsOwner": "0x71bc12592B080292EE48f3a780327a2ad3fd4146",
+  "eoracleChainId": 42420,
+  "targetChainId": 98864,
+  "publishers": ["0x3bf928c6FE116743ABc2b9E211D03e7a6060B3c1"],
+  "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
+  "supportedFeedIds": [1, 2, 17, 54],
+  "supportedFeedsData": [
+    {
+      "feedId": 1,
+      "description": "BTC/USD",
+      "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 2,
+      "description": "ETH/USD",
+      "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 17,
+      "description": "USDT/USD",
+      "base": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 54,
+      "description": "USDC/USD",
+      "base": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    }
+  ],
+  "deviationThreshold": "1.0"
+}

@@ -6,30 +6,72 @@ import { OwnableUpgradeable } from "@openzeppelin/contracts-upgradeable/access/O
 import { IEOFeedAdapter } from "./interfaces/IEOFeedAdapter.sol";
 import { IEOFeedRegistryAdapter } from "./interfaces/IEOFeedRegistryAdapter.sol";
 import { EOFeedFactoryBase } from "./factories/EOFeedFactoryBase.sol";
-import { InvalidAddress, FeedAlreadyExists, BaseQuotePairExists, FeedNotSupported } from "../interfaces/Errors.sol";
+import {
+    InvalidAddress,
+    FeedAlreadyExists,
+    BaseQuotePairExists,
+    FeedNotSupported,
+    FeedDoesNotExist,
+    NotFeedDeployer
+} from "../interfaces/Errors.sol";
 
 /**
  * @title EOFeedRegistryAdapterBase
+ * @author eOracle
  * @notice base contract which is adapter of EOFeedManager contract for CL FeedManager
  */
 abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactoryBase, IEOFeedRegistryAdapter {
+    /// @dev Feed manager contract
     IEOFeedManager internal _feedManager;
-    mapping(uint16 => IEOFeedAdapter) internal _feedAdapters;
+
+    /// @dev Map of feed id to feed adapter (feed id => IEOFeedAdapter)
+    mapping(uint256 => IEOFeedAdapter) internal _feedAdapters;
+
+    /// @dev Map of feed adapter to enabled status (feed adapter => is enabled)
     mapping(address => bool) internal _feedEnabled;
-    mapping(address => mapping(address => uint16)) internal _tokenAddressesToFeedIds;
 
+    /// @dev Map of token addresses to feed ids (base => quote => feed id)
+    mapping(address => mapping(address => uint256)) internal _tokenAddressesToFeedIds;
+
+    /* ============ Events ============ */
+
+    /**
+     * @dev Event emitted when the feed manager is set
+     * @param feedManager The feed manager address
+     */
     event FeedManagerSet(address indexed feedManager);
-    event FeedAdapterDeployed(uint16 indexed feedId, address indexed feedAdapter, address base, address quote);
 
+    /**
+     * @dev Event emitted when a feed adapter is deployed
+     * @param feedId The feed id
+     * @param feedAdapter The feed adapter address
+     * @param base The base asset address
+     * @param quote The quote asset address
+     */
+    event FeedAdapterDeployed(uint256 indexed feedId, address indexed feedAdapter, address base, address quote);
+
+    /* ============ Modifiers ============ */
+
+    /// @dev Allows only non-zero addresses
     modifier onlyNonZeroAddress(address addr) {
         if (addr == address(0)) revert InvalidAddress();
         _;
     }
 
+    /// @dev Allows only the feed deployer to call the function
+    modifier onlyFeedDeployer() {
+        if (msg.sender != _feedManager.getFeedDeployer()) revert NotFeedDeployer();
+        _;
+    }
+
+    /* ============ Constructor ============ */
+
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         _disableInitializers();
     }
+
+    /* ============ Initializer ============ */
 
     /**
      * @notice Initialize the contract
@@ -37,21 +79,8 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
      * @param feedAdapterImplementation The feedAdapter implementation address
      * @param owner Owner of the contract
      */
-    function initialize(
-        address feedManager,
-        address feedAdapterImplementation,
-        address owner
-    )
-        external
-        initializer
-        onlyNonZeroAddress(feedManager)
-        onlyNonZeroAddress(feedAdapterImplementation)
-    {
-        __Ownable_init(owner);
-        __EOFeedFactory_init(feedAdapterImplementation, owner);
-        _feedManager = IEOFeedManager(feedManager);
-        emit FeedManagerSet(feedManager);
-    }
+    function initialize(address feedManager, address feedAdapterImplementation, address owner) external virtual;
+    /* ============ External Functions ============ */
 
     /**
      * @notice Set the feed manager
@@ -68,7 +97,8 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
      * @param quote The quote asset address
      * @param feedId The feed id
      * @param feedDescription The description of feed
-     * @param feedDecimals The decimals
+     * @param inputDecimals The input decimals
+     * @param outputDecimals The output decimals
      * @param feedVersion The version of the feed
      * @return IEOFeedAdapter The feed adapter
      */
@@ -78,13 +108,14 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
     function deployEOFeedAdapter(
         address base,
         address quote,
-        uint16 feedId,
+        uint256 feedId,
         string calldata feedDescription,
-        uint8 feedDecimals,
+        uint8 inputDecimals,
+        uint8 outputDecimals,
         uint256 feedVersion
     )
         external
-        onlyOwner
+        onlyFeedDeployer
         returns (IEOFeedAdapter)
     {
         // check if feedId exists in feedManager contract
@@ -100,7 +131,7 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
         }
         address feedAdapter = _deployEOFeedAdapter();
         IEOFeedAdapter(feedAdapter).initialize(
-            address(_feedManager), feedId, feedDecimals, feedDescription, feedVersion
+            address(_feedManager), feedId, inputDecimals, outputDecimals, feedDescription, feedVersion
         );
 
         _feedEnabled[feedAdapter] = true;
@@ -110,6 +141,20 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
         emit FeedAdapterDeployed(feedId, feedAdapter, base, quote);
 
         return IEOFeedAdapter(feedAdapter);
+    }
+
+    /**
+     * @notice Remove the feedAdapter
+     * @param base The base asset address
+     * @param quote The quote asset address
+     */
+    function removeFeedAdapter(address base, address quote) external onlyOwner {
+        uint256 feedId = _tokenAddressesToFeedIds[base][quote];
+        if (feedId == 0) revert FeedDoesNotExist();
+        address feedAdapter = address(_feedAdapters[feedId]);
+        delete _feedEnabled[feedAdapter];
+        delete _feedAdapters[feedId];
+        delete _tokenAddressesToFeedIds[base][quote];
     }
 
     /**
@@ -125,7 +170,7 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
      * @param feedId The feed id
      * @return IEOFeedAdapter The feedAdapter
      */
-    function getFeedById(uint16 feedId) external view returns (IEOFeedAdapter) {
+    function getFeedById(uint256 feedId) external view returns (IEOFeedAdapter) {
         return _feedAdapters[feedId];
     }
 
@@ -195,9 +240,9 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
     /**
      * @notice Get the round data for a given base/quote pair
      * @dev Calls the getLatestPriceFeed function from the feed manager, not from feedAdapter itself
-     *      currently the roundId is not used and latest round is returned
      * @param base The base asset address
      * @param quote The quote asset address
+     * @param roundId The roundId - is ignored, only latest round is supported
      * @return roundId The roundId
      * @return answer The answer
      * @return startedAt The startedAt
@@ -207,11 +252,12 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
     function getRoundData(
         address base,
         address quote,
-        uint80
+        // solhint-disable-next-line no-unused-vars
+        uint80 roundId
     )
         external
         view
-        returns (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound)
+        returns (uint80, int256, uint256, uint256, uint80)
     {
         IEOFeedManager.PriceFeed memory feedData =
             _feedManager.getLatestPriceFeed(_tokenAddressesToFeedIds[base][quote]);
@@ -231,7 +277,7 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
      * @param quote The quote asset address
      * @return int256 The latest price
      */
-    function latestAnswer(address base, address quote) external view override returns (int256) {
+    function latestAnswer(address base, address quote) external view returns (int256) {
         return int256(_feedManager.getLatestPriceFeed(_tokenAddressesToFeedIds[base][quote]).value);
     }
 
@@ -249,27 +295,31 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
     /**
      * @notice Get the answer for a given base/quote pair and round
      * @dev Calls the getLatestPriceFeed function from the feed manager, not from feedAdapter itself
-     *      currently the roundId is not used and latest answer is returned
      * @param base The base asset address
      * @param quote The quote asset address
-     * @param
+     * @param roundId The roundId - is ignored, only latest round is supported
      * @return int256 The answer
      */
-    function getAnswer(address base, address quote, uint256) external view returns (int256) {
-        return int256(_feedManager.getLatestPriceFeed(_tokenAddressesToFeedIds[base][quote]).value);
+    // solhint-disable-next-line no-unused-vars
+    function getAnswer(address base, address quote, uint256 roundId) external view returns (int256) {
+        IEOFeedManager.PriceFeed memory feedData =
+            _feedManager.getLatestPriceFeed(_tokenAddressesToFeedIds[base][quote]);
+        return int256(feedData.value);
     }
 
     /**
      * @notice Get the timestamp for a given base/quote pair and round
      * @dev Calls the getLatestPriceFeed function from the feed manager, not from feedAdapter itself
-     *      currently the roundId is not used and latest timestamp is returned
      * @param base The base asset address
      * @param quote The quote asset address
-     * @param
+     * @param roundId The roundId - is ignored, only latest round is supported
      * @return uint256 The timestamp
      */
-    function getTimestamp(address base, address quote, uint256) external view returns (uint256) {
-        return _feedManager.getLatestPriceFeed(_tokenAddressesToFeedIds[base][quote]).timestamp;
+    // solhint-disable-next-line no-unused-vars
+    function getTimestamp(address base, address quote, uint256 roundId) external view returns (uint256) {
+        IEOFeedManager.PriceFeed memory feedData =
+            _feedManager.getLatestPriceFeed(_tokenAddressesToFeedIds[base][quote]);
+        return feedData.timestamp;
     }
 
     /**
@@ -278,7 +328,7 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
      * @param quote The quote asset address
      * @return IEOFeedAdapter The feedAdapter
      */
-    function getFeed(address base, address quote) external view override returns (IEOFeedAdapter) {
+    function getFeed(address base, address quote) external view returns (IEOFeedAdapter) {
         return _getFeed(base, quote);
     }
 
@@ -295,17 +345,17 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
      * @notice Get the round feedAdapter for a given base/quote pair
      * @param base The base asset address
      * @param quote The quote asset address
-     * @param
+     * @param roundId The roundId - is ignored, only latest round is supported
      * @return IEOFeedAdapter The feedAdapter
      */
-    function getRoundFeed(address base, address quote, uint80) external view returns (IEOFeedAdapter) {
+    // solhint-disable-next-line no-unused-vars
+    function getRoundFeed(address base, address quote, uint80 roundId) external view returns (IEOFeedAdapter) {
         return _getFeed(base, quote);
     }
 
     /**
      * @notice Get the latest round for a given base/quote pair
      * @dev Calls the getLatestPriceFeed function from the feed manager, not from Feed itself
-     *      currently the roundId is not used and 0 is returned
      * @param base The base asset address
      * @param quote The quote asset address
      * @return uint256 The latest round
@@ -313,6 +363,8 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
     function latestRound(address base, address quote) external view returns (uint256) {
         return _feedManager.getLatestPriceFeed(_tokenAddressesToFeedIds[base][quote]).eoracleBlockNumber;
     }
+
+    /* ============ Internal Functions ============ */
 
     /**
      * @notice Get the feedAdapter for a given base/quote pair
@@ -324,6 +376,10 @@ abstract contract EOFeedRegistryAdapterBase is OwnableUpgradeable, EOFeedFactory
         return _feedAdapters[_tokenAddressesToFeedIds[base][quote]];
     }
 
+    /**
+     * @dev Gap for future storage variables in upgradeable contract.
+     * See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps
+     */
     // slither-disable-next-line unused-state,naming-convention
     // solhint-disable-next-line ordering
     uint256[50] private __gap;

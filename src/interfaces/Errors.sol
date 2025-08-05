@@ -6,9 +6,10 @@ pragma solidity 0.8.25;
 //////////////////////////////////////////////////////////////////////////*/
 error CallerIsNotWhitelisted(address caller);
 error MissingLeafInputs();
-error FeedNotSupported(uint16 feedId);
-error SymbolReplay(uint16 feedId);
-
+error FeedNotSupported(uint256 feedId);
+error CallerIsNotPauser();
+error CallerIsNotUnpauser();
+error CallerIsNotFeedDeployer();
 /*//////////////////////////////////////////////////////////////////////////
                                 EOFeedVerifier
 //////////////////////////////////////////////////////////////////////////*/
@@ -18,15 +19,17 @@ error InvalidProof();
 error InvalidAddress();
 error InvalidEventRoot();
 error VotingPowerIsZero();
-error AggVotingPowerIsZero();
 error InsufficientVotingPower();
 error SignatureVerificationFailed();
+error SignaturePairingFailed();
 error ValidatorIndexOutOfBounds();
 error ValidatorSetTooSmall();
-error SenderNotAllowed(address sender);
+error DuplicatedAddresses();
 
 /*//////////////////////////////////////////////////////////////////////////
                                 EOFeedRegistryAdapter
 //////////////////////////////////////////////////////////////////////////*/
 error FeedAlreadyExists();
 error BaseQuotePairExists();
+error FeedDoesNotExist();
+error NotFeedDeployer();

@@ -18,7 +18,7 @@ contract EOFeedAdapterBeaconTest is EOFeedAdapterTest {
         _baseAddress = makeAddr("base");
         _quoteAddress = makeAddr("quote");
 
-        _feedManager = new MockEOFeedManager();
+        _feedManager = new MockEOFeedManager(address(this));
 
         IEOFeedAdapter feedAdapterImplementation =
             EOFeedAdapter(Upgrades.deployImplementation("EOFeedAdapter.sol", opts));
@@ -30,11 +30,11 @@ contract EOFeedAdapterBeaconTest is EOFeedAdapterTest {
         _feedAdapter = EOFeedAdapter(
             address(
                 feedRegistryAdapter.deployEOFeedAdapter(
-                    _baseAddress, _quoteAddress, FEED_ID, DESCRIPTION, DECIMALS, VERSION
+                    _baseAddress, _quoteAddress, FEED_ID, DESCRIPTION, DECIMALS, DECIMALS, VERSION
                 )
             )
         );
-        _updatePriceFeed(FEED_ID, RATE1, block.timestamp);
+        _updateFeed(FEED_ID, RATE1, block.timestamp);
         _lastTimestamp = block.timestamp;
     }
 }

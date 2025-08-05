@@ -1,0 +1,74 @@
+{
+  "usePrecompiledModexp": false,
+  "feedDeployer": "0xd9c32116a01F1B924a658545158b9C9c2f073AEf",
+  "eoracleChainId": 42420,
+  "targetChainId": 81457,
+  "publishers": ["0x8EA04C858c1bD08a424252DDdB85B63aEB266bfA", "0x625Fa29C6D7Fb1338a074227cB121b94A500eAa8"],
+  "supportedFeedIds": [1, 2, 9, 35, 36, 67],
+  "supportedFeedsData": [
+    {
+      "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "feedId": 1,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "BTC/USD",
+      "deviationThreshold": ""
+    },
+    {
+      "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "feedId": 2,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "ETH/USD",
+      "deviationThreshold": ""
+    },
+    {
+      "base": "0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "feedId": 9,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "MATIC/USD",
+      "deviationThreshold": ""
+    },
+    {
+      "base": "0xd6fAA45f5180A36CE1925ba9b4C9683CCaA3D117",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "feedId": 35,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "BNB/USD",
+      "deviationThreshold": ""
+    },
+    {
+      "base": "0xDB9f97165657aeE56ce412966FD68b8715b04815",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "feedId": 36,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "AVAX/USD",
+      "deviationThreshold": ""
+    },
+    {
+      "base": "0x4E15361FD6b4BB609Fa63C81A2be19d873717870",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "feedId": 67,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "FTM/USD",
+      "deviationThreshold": ""
+    }
+  ],
+  "timelock": {
+    "minDelay": 10,
+    "proposers": ["0x86B7BDF52F679Ba62300195202C74695D37bf80F"],
+    "executors": ["0xf9B5eed4a547635020B3767407BE11f346DF58ae"]
+  },
+  "pauserRegistry": {
+    "pausers": ["0xb6bfCFC4Abb25474Acc09b10195E2981bDb7CFa7"],
+    "unpauser": "0xDE5d72f1b05C92E9fc4B695159fAb4a75D3ec9DB"
+  },
+  "deviationThreshold": "1.0"
+}

@@ -13,14 +13,25 @@ contract DeployFeeds is Script {
 
     EOFeedManager public feedManager;
     EOFeedRegistryAdapter public feedRegistryAdapter;
+    uint256[] public feedIds;
 
-    error FeedIsNotSupported(uint16 feedId);
+    error FeedIsNotSupported(uint256 feedId);
 
     function run() external {
-        run(vm.addr(vm.envUint("OWNER_PRIVATE_KEY")));
+        uint256 pk = vm.envUint("PRIVATE_KEY");
+        vm.startBroadcast(pk);
+        execute();
+        vm.stopBroadcast();
     }
 
-    function run(address broadcastFrom) public {
+    // for testing purposes
+    function run(address broadcastFrom) external {
+        vm.startBroadcast(broadcastFrom);
+        execute();
+        vm.stopBroadcast();
+    }
+
+    function execute() public {
         EOJsonUtils.Config memory configStructured = EOJsonUtils.getParsedConfig();
 
         string memory outputConfig = EOJsonUtils.initOutputConfig();
@@ -28,25 +39,35 @@ contract DeployFeeds is Script {
         feedManager = EOFeedManager(outputConfig.readAddress(".feedManager"));
         feedRegistryAdapter = EOFeedRegistryAdapter(outputConfig.readAddress(".feedRegistryAdapter"));
 
-        vm.startBroadcast(broadcastFrom);
+        // Set supported feedIds in FeedManager which are not set yet
+        uint256 feedId;
+
+        for (uint256 i = 0; i < configStructured.supportedFeedIds.length; i++) {
+            feedId = uint16(configStructured.supportedFeedIds[i]);
+            if (!feedManager.isSupportedFeed(feedId)) {
+                feedIds.push(feedId);
+            }
+        }
+        if (feedIds.length > 0) {
+            feedManager.addSupportedFeeds(feedIds);
+        }
 
         // Deploy feeds which are not deployed yet
         address feedAdapter;
         string memory feedAddressesJsonKey = "feedsJson";
         string memory feedAddressesJson;
-        uint16 feedId;
         uint256 feedsLength = configStructured.supportedFeedsData.length;
 
         // revert if at least one feedId is not supported.
         for (uint256 i = 0; i < feedsLength; i++) {
-            feedId = uint16(configStructured.supportedFeedsData[i].feedId);
+            feedId = uint256(configStructured.supportedFeedsData[i].feedId);
             if (!feedManager.isSupportedFeed(feedId)) {
                 revert FeedIsNotSupported(feedId);
             }
         }
 
         for (uint256 i = 0; i < feedsLength; i++) {
-            feedId = uint16(configStructured.supportedFeedsData[i].feedId);
+            feedId = uint256(configStructured.supportedFeedsData[i].feedId);
             feedAdapter = address(feedRegistryAdapter.getFeedById(feedId));
             if (feedAdapter == address(0)) {
                 feedAdapter = address(
@@ -55,7 +76,8 @@ contract DeployFeeds is Script {
                         configStructured.supportedFeedsData[i].quote,
                         feedId,
                         configStructured.supportedFeedsData[i].description,
-                        uint8(configStructured.supportedFeedsData[i].decimals),
+                        uint8(configStructured.supportedFeedsData[i].inputDecimals),
+                        uint8(configStructured.supportedFeedsData[i].outputDecimals),
                         1
                     )
                 );
@@ -65,7 +87,5 @@ contract DeployFeeds is Script {
         }
         string memory outputConfigJson = EOJsonUtils.OUTPUT_CONFIG.serialize("feeds", feedAddressesJson);
         EOJsonUtils.writeConfig(outputConfigJson);
-
-        vm.stopBroadcast();
     }
 }

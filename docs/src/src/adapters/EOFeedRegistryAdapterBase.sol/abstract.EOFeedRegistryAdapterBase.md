@@ -1,10 +1,12 @@
 # EOFeedRegistryAdapterBase
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/de89fc9e9bc7c046937883aa064d90812f1542cc/src/adapters/EOFeedRegistryAdapterBase.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/401eb40ea1472e38057aaf0537c1644781be9b1b/src/adapters/EOFeedRegistryAdapterBase.sol)
 
 **Inherits:** OwnableUpgradeable,
 [EOFeedFactoryBase](/src/adapters/factories/EOFeedFactoryBase.sol/abstract.EOFeedFactoryBase.md),
 [IEOFeedRegistryAdapter](/src/adapters/interfaces/IEOFeedRegistryAdapter.sol/interface.IEOFeedRegistryAdapter.md)
+
+**Author:** eOracle
 
 base contract which is adapter of EOFeedManager contract for CL FeedManager
 
@@ -12,17 +14,23 @@ base contract which is adapter of EOFeedManager contract for CL FeedManager
 
 ### \_feedManager
 
+_Feed manager contract_
+
 ```solidity
 IEOFeedManager internal _feedManager;
 ```
 
 ### \_feedAdapters
 
+_Map of feed id to feed adapter (feed id => IEOFeedAdapter)_
+
 ```solidity
-mapping(uint16 => IEOFeedAdapter) internal _feedAdapters;
+mapping(uint256 => IEOFeedAdapter) internal _feedAdapters;
 ```
 
 ### \_feedEnabled
+
+_Map of feed adapter to enabled status (feed adapter => is enabled)_
 
 ```solidity
 mapping(address => bool) internal _feedEnabled;
@@ -30,11 +38,16 @@ mapping(address => bool) internal _feedEnabled;
 
 ### \_tokenAddressesToFeedIds
 
+_Map of token addresses to feed ids (base => quote => feed id)_
+
 ```solidity
-mapping(address => mapping(address => uint16)) internal _tokenAddressesToFeedIds;
+mapping(address => mapping(address => uint256)) internal _tokenAddressesToFeedIds;
 ```
 
 ### \_\_gap
+
+_Gap for future storage variables in upgradeable contract. See
+https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps_
 
 ```solidity
 uint256[50] private __gap;
@@ -44,8 +57,26 @@ uint256[50] private __gap;
 
 ### onlyNonZeroAddress
 
+_Allows only non-zero addresses_
+
 ```solidity
 modifier onlyNonZeroAddress(address addr);
+```
+
+### onlyFeedDeployer
+
+_Allows only the feed deployer to call the function_
+
+```solidity
+modifier onlyFeedDeployer();
+```
+
+### constructor
+
+**Note:** oz-upgrades-unsafe-allow: constructor
+
+```solidity
+constructor();
 ```
 
 ### initialize
@@ -53,15 +84,7 @@ modifier onlyNonZeroAddress(address addr);
 Initialize the contract
 
 ```solidity
-function initialize(
-    address feedManager,
-    address feedAdapterImplementation,
-    address owner
-)
-    external
-    initializer
-    onlyNonZeroAddress(feedManager)
-    onlyNonZeroAddress(feedAdapterImplementation);
+function initialize(address feedManager, address feedAdapterImplementation, address owner) external virtual;
 ```
 
 **Parameters**
@@ -94,13 +117,14 @@ deploy EOFeedAdapter
 function deployEOFeedAdapter(
     address base,
     address quote,
-    uint16 feedId,
+    uint256 feedId,
     string calldata feedDescription,
-    uint8 feedDecimals,
+    uint8 inputDecimals,
+    uint8 outputDecimals,
     uint256 feedVersion
 )
     external
-    onlyOwner
+    onlyFeedDeployer
     returns (IEOFeedAdapter);
 ```
 
@@ -110,9 +134,10 @@ function deployEOFeedAdapter(
 | ----------------- | --------- | ----------------------- |
 | `base`            | `address` | The base asset address  |
 | `quote`           | `address` | The quote asset address |
-| `feedId`          | `uint16`  | The feed id             |
+| `feedId`          | `uint256` | The feed id             |
 | `feedDescription` | `string`  | The description of feed |
-| `feedDecimals`    | `uint8`   | The decimals            |
+| `inputDecimals`   | `uint8`   | The input decimals      |
+| `outputDecimals`  | `uint8`   | The output decimals     |
 | `feedVersion`     | `uint256` | The version of the feed |
 
 **Returns**
@@ -120,6 +145,21 @@ function deployEOFeedAdapter(
 | Name     | Type             | Description                     |
 | -------- | ---------------- | ------------------------------- |
 | `<none>` | `IEOFeedAdapter` | IEOFeedAdapter The feed adapter |
+
+### removeFeedAdapter
+
+Remove the feedAdapter
+
+```solidity
+function removeFeedAdapter(address base, address quote) external onlyOwner;
+```
+
+**Parameters**
+
+| Name    | Type      | Description             |
+| ------- | --------- | ----------------------- |
+| `base`  | `address` | The base asset address  |
+| `quote` | `address` | The quote asset address |
 
 ### getFeedManager
 
@@ -140,14 +180,14 @@ function getFeedManager() external view returns (IEOFeedManager);
 Get the feedAdapter for a given id
 
 ```solidity
-function getFeedById(uint16 feedId) external view returns (IEOFeedAdapter);
+function getFeedById(uint256 feedId) external view returns (IEOFeedAdapter);
 ```
 
 **Parameters**
 
-| Name     | Type     | Description |
-| -------- | -------- | ----------- |
-| `feedId` | `uint16` | The feed id |
+| Name     | Type      | Description |
+| -------- | --------- | ----------- |
+| `feedId` | `uint256` | The feed id |
 
 **Returns**
 
@@ -261,37 +301,36 @@ function latestRoundData(
 
 Get the round data for a given base/quote pair
 
-_Calls the getLatestPriceFeed function from the feed manager, not from feedAdapter itself currently the roundId is not
-used and latest round is returned_
+_Calls the getLatestPriceFeed function from the feed manager, not from feedAdapter itself_
 
 ```solidity
 function getRoundData(
     address base,
     address quote,
-    uint80
+    uint80 roundId
 )
     external
     view
-    returns (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound);
+    returns (uint80, int256, uint256, uint256, uint80);
 ```
 
 **Parameters**
 
-| Name     | Type      | Description             |
-| -------- | --------- | ----------------------- |
-| `base`   | `address` | The base asset address  |
-| `quote`  | `address` | The quote asset address |
-| `<none>` | `uint80`  |                         |
+| Name      | Type      | Description                                              |
+| --------- | --------- | -------------------------------------------------------- |
+| `base`    | `address` | The base asset address                                   |
+| `quote`   | `address` | The quote asset address                                  |
+| `roundId` | `uint80`  | The roundId - is ignored, only latest round is supported |
 
 **Returns**
 
-| Name              | Type      | Description         |
-| ----------------- | --------- | ------------------- |
-| `roundId`         | `uint80`  | The roundId         |
-| `answer`          | `int256`  | The answer          |
-| `startedAt`       | `uint256` | The startedAt       |
-| `updatedAt`       | `uint256` | The updatedAt       |
-| `answeredInRound` | `uint80`  | The answeredInRound |
+| Name     | Type      | Description                         |
+| -------- | --------- | ----------------------------------- |
+| `<none>` | `uint80`  | roundId The roundId                 |
+| `<none>` | `int256`  | answer The answer                   |
+| `<none>` | `uint256` | startedAt The startedAt             |
+| `<none>` | `uint256` | updatedAt The updatedAt             |
+| `<none>` | `uint80`  | answeredInRound The answeredInRound |
 
 ### latestAnswer
 
@@ -300,7 +339,7 @@ Get the latest price for a given base/quote pair
 _Calls the getLatestPriceFeed function from the feed manager, not from feedAdapter itself_
 
 ```solidity
-function latestAnswer(address base, address quote) external view override returns (int256);
+function latestAnswer(address base, address quote) external view returns (int256);
 ```
 
 **Parameters**
@@ -343,20 +382,19 @@ function latestTimestamp(address base, address quote) external view returns (uin
 
 Get the answer for a given base/quote pair and round
 
-_Calls the getLatestPriceFeed function from the feed manager, not from feedAdapter itself currently the roundId is not
-used and latest answer is returned_
+_Calls the getLatestPriceFeed function from the feed manager, not from feedAdapter itself_
 
 ```solidity
-function getAnswer(address base, address quote, uint256) external view returns (int256);
+function getAnswer(address base, address quote, uint256 roundId) external view returns (int256);
 ```
 
 **Parameters**
 
-| Name     | Type      | Description             |
-| -------- | --------- | ----------------------- |
-| `base`   | `address` | The base asset address  |
-| `quote`  | `address` | The quote asset address |
-| `<none>` | `uint256` |                         |
+| Name      | Type      | Description                                              |
+| --------- | --------- | -------------------------------------------------------- |
+| `base`    | `address` | The base asset address                                   |
+| `quote`   | `address` | The quote asset address                                  |
+| `roundId` | `uint256` | The roundId - is ignored, only latest round is supported |
 
 **Returns**
 
@@ -368,20 +406,19 @@ function getAnswer(address base, address quote, uint256) external view returns (
 
 Get the timestamp for a given base/quote pair and round
 
-_Calls the getLatestPriceFeed function from the feed manager, not from feedAdapter itself currently the roundId is not
-used and latest timestamp is returned_
+_Calls the getLatestPriceFeed function from the feed manager, not from feedAdapter itself_
 
 ```solidity
-function getTimestamp(address base, address quote, uint256) external view returns (uint256);
+function getTimestamp(address base, address quote, uint256 roundId) external view returns (uint256);
 ```
 
 **Parameters**
 
-| Name     | Type      | Description             |
-| -------- | --------- | ----------------------- |
-| `base`   | `address` | The base asset address  |
-| `quote`  | `address` | The quote asset address |
-| `<none>` | `uint256` |                         |
+| Name      | Type      | Description                                              |
+| --------- | --------- | -------------------------------------------------------- |
+| `base`    | `address` | The base asset address                                   |
+| `quote`   | `address` | The quote asset address                                  |
+| `roundId` | `uint256` | The roundId - is ignored, only latest round is supported |
 
 **Returns**
 
@@ -394,7 +431,7 @@ function getTimestamp(address base, address quote, uint256) external view return
 Get the feedAdapter for a given base/quote pair
 
 ```solidity
-function getFeed(address base, address quote) external view override returns (IEOFeedAdapter);
+function getFeed(address base, address quote) external view returns (IEOFeedAdapter);
 ```
 
 **Parameters**
@@ -435,16 +472,16 @@ function isFeedEnabled(address feedAdapter) external view returns (bool);
 Get the round feedAdapter for a given base/quote pair
 
 ```solidity
-function getRoundFeed(address base, address quote, uint80) external view returns (IEOFeedAdapter);
+function getRoundFeed(address base, address quote, uint80 roundId) external view returns (IEOFeedAdapter);
 ```
 
 **Parameters**
 
-| Name     | Type      | Description             |
-| -------- | --------- | ----------------------- |
-| `base`   | `address` | The base asset address  |
-| `quote`  | `address` | The quote asset address |
-| `<none>` | `uint80`  |                         |
+| Name      | Type      | Description                                              |
+| --------- | --------- | -------------------------------------------------------- |
+| `base`    | `address` | The base asset address                                   |
+| `quote`   | `address` | The quote asset address                                  |
+| `roundId` | `uint80`  | The roundId - is ignored, only latest round is supported |
 
 **Returns**
 
@@ -456,8 +493,7 @@ function getRoundFeed(address base, address quote, uint80) external view returns
 
 Get the latest round for a given base/quote pair
 
-_Calls the getLatestPriceFeed function from the feed manager, not from Feed itself currently the roundId is not used and
-0 is returned_
+_Calls the getLatestPriceFeed function from the feed manager, not from Feed itself_
 
 ```solidity
 function latestRound(address base, address quote) external view returns (uint256);
@@ -501,12 +537,31 @@ function _getFeed(address base, address quote) internal view returns (IEOFeedAda
 
 ### FeedManagerSet
 
+_Event emitted when the feed manager is set_
+
 ```solidity
 event FeedManagerSet(address indexed feedManager);
 ```
 
+**Parameters**
+
+| Name          | Type      | Description              |
+| ------------- | --------- | ------------------------ |
+| `feedManager` | `address` | The feed manager address |
+
 ### FeedAdapterDeployed
 
+_Event emitted when a feed adapter is deployed_
+
 ```solidity
-event FeedAdapterDeployed(uint16 indexed feedId, address indexed feedAdapter, address base, address quote);
+event FeedAdapterDeployed(uint256 indexed feedId, address indexed feedAdapter, address base, address quote);
 ```
+
+**Parameters**
+
+| Name          | Type      | Description              |
+| ------------- | --------- | ------------------------ |
+| `feedId`      | `uint256` | The feed id              |
+| `feedAdapter` | `address` | The feed adapter address |
+| `base`        | `address` | The base asset address   |
+| `quote`       | `address` | The quote asset address  |

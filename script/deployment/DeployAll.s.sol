@@ -1,0 +1,43 @@
+// SPDX-License-Identifier: MIT
+
+pragma solidity 0.8.25;
+
+import { Script } from "forge-std/Script.sol";
+import { stdJson } from "forge-std/Script.sol";
+import { DeployNewTargetContractSet } from "./DeployNewTargetContractSet.s.sol";
+import { DeployFeedRegistryAdapter } from "./DeployFeedRegistryAdapter.s.sol";
+import { DeployFeeds } from "./DeployFeeds.s.sol";
+import { SetupCoreContracts } from "./setup/SetupCoreContracts.s.sol";
+import { SetValidators } from "./setup/SetValidators.s.sol";
+import { TransferOwnershipToTimelock } from "./setup/TransferOwnershipToTimelock.s.sol";
+import { DeployTimelock } from "./DeployTimelock.s.sol";
+
+contract DeployAll is Script {
+    using stdJson for string;
+
+    DeployNewTargetContractSet public mainDeployer;
+    DeployFeedRegistryAdapter public adapterDeployer;
+    SetupCoreContracts public coreContractsSetup;
+    DeployFeeds public feedsDeployer;
+    SetValidators public setValidators;
+    DeployTimelock public timelockDeployer;
+    TransferOwnershipToTimelock public transferOwnership;
+
+    function run() public {
+        mainDeployer = new DeployNewTargetContractSet();
+        coreContractsSetup = new SetupCoreContracts();
+        adapterDeployer = new DeployFeedRegistryAdapter();
+        feedsDeployer = new DeployFeeds();
+        setValidators = new SetValidators();
+        timelockDeployer = new DeployTimelock();
+        transferOwnership = new TransferOwnershipToTimelock();
+
+        timelockDeployer.run(msg.sender);
+        mainDeployer.run(msg.sender);
+        coreContractsSetup.run(msg.sender);
+        adapterDeployer.run(msg.sender);
+        feedsDeployer.run();
+        setValidators.run();
+        transferOwnership.run();
+    }
+}

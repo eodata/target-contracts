@@ -1,6 +1,6 @@
 # EOFeedFactoryClone
 
-[Git Source](https://github.com/Eoracle/target-contracts/blob/de89fc9e9bc7c046937883aa064d90812f1542cc/src/adapters/factories/EOFeedFactoryClone.sol)
+[Git Source](https://github.com/Eoracle/target-contracts/blob/401eb40ea1472e38057aaf0537c1644781be9b1b/src/adapters/factories/EOFeedFactoryClone.sol)
 
 **Inherits:** Initializable,
 [EOFeedFactoryBase](/src/adapters/factories/EOFeedFactoryBase.sol/abstract.EOFeedFactoryBase.md)
@@ -8,6 +8,8 @@
 ## State Variables
 
 ### \_feedImplementation
+
+_The address of the feed adapter implementation_
 
 ```solidity
 address private _feedImplementation;

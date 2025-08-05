@@ -1,0 +1,25 @@
+name: Enforce Conventional Commits
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+jobs:
+  commitlint:
+    runs-on: "k8s-native-eodata"
+    container:
+      image: "node:22-bullseye"
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - name: Install commitlint
+        run: |
+          npm install --no-package-lock --no-save @commitlint/config-conventional @commitlint/cli
+
+      - name: Validate current commit (last commit) with commitlint
+        if: github.event_name == 'push'
+        run: npx commitlint --last --verbose

@@ -1,0 +1,25 @@
+{
+  "usePrecompiledModexp": true,
+  "eoracleChainId": 42421,
+  "targetChainId": 123420001114,
+  "feedDeployer": "0x95B3329acC6f0C519b36ec867EAE7Ac5d905559D",
+  "publishers": ["0x13398A2CadA33c38d7F532948A941b557e7CAB3e"],
+  "supportedFeedIds": [116],
+  "supportedFeedsData": [
+    {
+      "description": "Elon Musk",
+      "feedId": 116,
+      "deviationThreshold": ""
+    }
+  ],
+  "timelock": {
+    "minDelay": 10,
+    "proposers": ["0x95B3329acC6f0C519b36ec867EAE7Ac5d905559D"],
+    "executors": ["0x95B3329acC6f0C519b36ec867EAE7Ac5d905559D"]
+  },
+  "pauserRegistry": {
+    "pausers": ["0x95B3329acC6f0C519b36ec867EAE7Ac5d905559D"],
+    "unpauser": "0x95B3329acC6f0C519b36ec867EAE7Ac5d905559D"
+  },
+  "deviationThreshold": "1.0"
+}

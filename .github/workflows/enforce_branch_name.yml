@@ -1,0 +1,22 @@
+name: Enforce Branch Name
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+jobs:
+  enforce_branch_name:
+    runs-on: "k8s-native-eodata"
+    container:
+      image: "ubuntu:24.04"
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Check Branch Name
+        shell: bash
+        run: |
+          branch_name=${GITHUB_HEAD_REF}
+          echo "Checking branch name: ${branch_name}"
+          ./.husky/check-branch-name.sh $branch_name
+        continue-on-error: false

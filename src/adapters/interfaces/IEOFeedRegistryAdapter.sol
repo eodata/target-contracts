@@ -5,6 +5,7 @@ import { IEOFeedAdapter } from "./IEOFeedAdapter.sol";
 
 /**
  * @title IEOFeedRegistryAdapter
+ * @author eOracle
  * @notice Interface for the FeedManager contract.
  * @dev Simplified version of FeedRegistryInterface from CL.
  */
@@ -28,7 +29,7 @@ interface IEOFeedRegistryAdapter {
     function getRoundData(
         address base,
         address quote,
-        uint80 _roundId
+        uint80
     )
         external
         view

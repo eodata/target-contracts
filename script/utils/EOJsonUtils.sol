@@ -9,23 +9,37 @@ library EOJsonUtils {
     using stdJson for string;
 
     struct Config {
-        address[] allowedSenders;
+        string deviationThreshold;
         uint256 eoracleChainId;
-        address proxyAdminOwner;
+        address feedDeployer;
+        PauserRegistry pauserRegistry;
         address[] publishers;
         uint256[] supportedFeedIds;
         FeedData[] supportedFeedsData;
         uint256 targetChainId;
-        address targetContractsOwner;
+        TimelockConfig timelock;
         bool usePrecompiledModexp;
     }
 
     struct FeedData {
         address base;
-        uint256 decimals;
         string description;
+        string deviationThreshold;
         uint256 feedId;
+        uint256 inputDecimals;
+        uint256 outputDecimals;
         address quote;
+    }
+
+    struct TimelockConfig {
+        address[] executors;
+        uint256 minDelay;
+        address[] proposers;
+    }
+
+    struct PauserRegistry {
+        address[] pausers;
+        address unpauser;
     }
 
     // Cheat code address, 0x7109709ECfa91a80626fF3989D68f67F5b1DD12D.

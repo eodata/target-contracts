@@ -1,0 +1,164 @@
+{
+  "usePrecompiledModexp": false,
+  "feedDeployer": "0x33A6671ecB46Eef7F164A88D61f364556761280d",
+  "eoracleChainId": 42420,
+  "targetChainId": 167000,
+  "publishers": ["0xD2171e5EB129f2D76f60664E021df671D8E42171", "0x77756bBdF2672650ecf9556005FE9b08dC9d9a2b"],
+  "supportedFeedIds": [1, 2, 6, 17, 18, 41, 42, 43, 54, 59, 69, 77, 79, 88, 100, 101],
+  "supportedFeedsData": [
+    {
+      "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "feedId": 1,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "BTC/USD",
+      "deviationThreshold": ""
+    },
+    {
+      "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "feedId": 2,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "ETH/USD",
+      "deviationThreshold": ""
+    },
+    {
+      "base": "0xd4094e4ffa89985583E52D491251619a4C5b0BE9",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "feedId": 6,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "SOL/USD",
+      "deviationThreshold": ""
+    },
+    {
+      "base": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "feedId": 17,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "USDT/USD",
+      "deviationThreshold": ""
+    },
+    {
+      "base": "0x514910771AF9Ca656af840dff83E8264EcF986CA",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "feedId": 18,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "LINK/USD",
+      "deviationThreshold": ""
+    },
+    {
+      "base": "0xa663b02cf0a4b149d2ad41910cb81e23e1c41c32",
+      "quote": "0x853d955acef822db058eb8505911ed77f175b99e",
+      "inputDecimals": 18,
+      "outputDecimals": 18,
+      "description": "sFRAX/FRAX",
+      "feedId": 41,
+      "deviationThreshold": ""
+    },
+    {
+      "base": "0xac3e018457b222d93114458476f3e3416abbe38f",
+      "quote": "0xcf7ecee185f19e2e970a301ee37f93536ed66179",
+      "inputDecimals": 18,
+      "outputDecimals": 18,
+      "description": "sfrxETH/frxETH",
+      "feedId": 42,
+      "deviationThreshold": ""
+    },
+    {
+      "base": "0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84",
+      "quote": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "inputDecimals": 18,
+      "outputDecimals": 18,
+      "description": "stETH/ETH",
+      "feedId": 43,
+      "deviationThreshold": ""
+    },
+    {
+      "base": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "feedId": 54,
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "USDC/USD",
+      "deviationThreshold": ""
+    },
+    {
+      "base": "0x09db87A538BD693E9d08544577d5cCfAA6373A48",
+      "quote": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "inputDecimals": 18,
+      "outputDecimals": 18,
+      "description": "ynETH/ETH",
+      "feedId": 59,
+      "deviationThreshold": ""
+    },
+    {
+      "base": "0x10dea67478c5F8C5E2D90e5E9B26dBe60c54d800",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "TAIKO/USD",
+      "feedId": 69,
+      "deviationThreshold": ""
+    },
+    {
+      "base": "0xB880fd278198bd590252621d4CD071b1842E9Bcd",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "M-BTC/USD",
+      "feedId": 79,
+      "deviationThreshold": ""
+    },
+    {
+      "base": "0x7A56E1C57C7475CCf742a1832B028F0456652F97",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "SolvBTC/USD",
+      "feedId": 77,
+      "deviationThreshold": ""
+    },
+    {
+      "base": "0xbf5495Efe5DB9ce00f80364C8B423567e58d2110",
+      "quote": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "ezETH/USD",
+      "feedId": 88,
+      "deviationThreshold": ""
+    },
+    {
+      "base": "0xd9D920AA40f578ab794426F5C90F6C731D159DEf",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "SolvBTCBBN/USD",
+      "feedId": 100,
+      "deviationThreshold": ""
+    },
+    {
+      "base": "0x004E9C3EF86bc1ca1f0bB5C7662861Ee93350568",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "description": "uniBTC/USD",
+      "feedId": 101,
+      "deviationThreshold": ""
+    }
+  ],
+  "timelock": {
+    "minDelay": 10,
+    "proposers": ["0x5Fd04810187da67e8E5C1F08067EF6a0559946f0"],
+    "executors": ["0x3539b15feE6D59aFc6C6FC8dF247E8c56E31f0C1"]
+  },
+  "pauserRegistry": {
+    "pausers": ["0x1787b3B645649a5DC948A3D949df1cF051f96eDb"],
+    "unpauser": "0x1da60bC3A471477AB844F8617408747D2C293BD9"
+  },
+  "deviationThreshold": "1.0"
+}
