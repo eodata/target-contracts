@@ -4,7 +4,7 @@
   "eoracleChainId": 42420,
   "targetChainId": 81457,
   "publishers": ["0x8EA04C858c1bD08a424252DDdB85B63aEB266bfA", "0x625Fa29C6D7Fb1338a074227cB121b94A500eAa8"],
-  "supportedFeedIds": [1, 2, 9, 35, 36, 67],
+  "supportedFeedIds": [1, 2, 9, 35, 36],
   "supportedFeedsData": [
     {
       "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
@@ -49,15 +49,6 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "AVAX/USD",
-      "deviationThreshold": ""
-    },
-    {
-      "base": "0x4E15361FD6b4BB609Fa63C81A2be19d873717870",
-      "quote": "0x0000000000000000000000000000000000000348",
-      "feedId": 67,
-      "inputDecimals": 18,
-      "outputDecimals": 8,
-      "description": "FTM/USD",
       "deviationThreshold": ""
     }
   ],
