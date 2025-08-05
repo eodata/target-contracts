@@ -4,7 +4,7 @@
   "eoracleChainId": 42420,
   "targetChainId": 8453,
   "publishers": ["0x878305b18a5613FAB36e69450f17E1fdeEddE3eD", "0x136E4d1b22beF5deF28C3e258abcfEb6dda9f41a"],
-  "supportedFeedIds": [1, 2, 6, 13, 17, 18, 41, 42, 43, 54, 59, 64, 88, 89, 92, 116, 135, 160],
+  "supportedFeedIds": [1, 2, 6, 13, 17, 18, 41, 42, 43, 54, 59, 64, 88, 89, 92, 116, 135, 159, 160],
   "supportedFeedsData": [
     {
       "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
@@ -157,6 +157,15 @@
       "quote": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
       "inputDecimals": 18,
       "outputDecimals": 18,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 159,
+      "description": "XDC/USD",
+      "base": "0x951857744785E80e2De051c32EE7b25f9c458C42",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
       "deviationThreshold": ""
     },
     {
