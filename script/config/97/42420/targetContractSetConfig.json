@@ -1,10 +1,10 @@
 {
   "usePrecompiledModexp": false,
-  "feedDeployer": "0x1F3185adD0F576A96f9160b128ce897747373515",
   "eoracleChainId": 42420,
-  "targetChainId": 50,
-  "publishers": ["0x9c5AfeDE74D5286892d8d7b289273FC1248e1E6c"],
-  "supportedFeedIds": [1, 2, 17, 54, 159],
+  "targetChainId": 97,
+  "feedsDeployer": "0x007510bD94De933f47681846ED8a409cC96169Ac",
+  "publishers": ["0xf6ce4cf13e5A56c11AC3a47D25ecA5d3688c4915", "0x67b2A1eA21087778D4690f20d90065c826416601"],
+  "supportedFeedIds": [1, 2, 17, 54],
   "supportedFeedsData": [
     {
       "feedId": 1,
@@ -41,25 +41,16 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "deviationThreshold": ""
-    },
-    {
-      "feedId": 159,
-      "description": "XDC/USD",
-      "base": "0x951857744785E80e2De051c32EE7b25f9c458C42",
-      "quote": "0x0000000000000000000000000000000000000348",
-      "inputDecimals": 18,
-      "outputDecimals": 8,
-      "deviationThreshold": ""
     }
   ],
   "timelock": {
     "minDelay": 10,
-    "proposers": ["0x88e641de36EE3F6a4Add5F07D2647E68FF2171e2"],
-    "executors": ["0xbBB289264BaE1A65b17f7Ff515453C39Be1B4599"]
+    "proposers": ["0x007510bD94De933f47681846ED8a409cC96169Ac"],
+    "executors": ["0x007510bD94De933f47681846ED8a409cC96169Ac"]
   },
   "pauserRegistry": {
-    "pausers": ["0x2F913D0b018f8AF228B6bD8b7B945E3f3b76bFc7"],
-    "unpauser": "0x8c57dBF110735b9D0380F3636BFf94efC733296d"
+    "pausers": ["0x007510bD94De933f47681846ED8a409cC96169Ac"],
+    "unpauser": "0x007510bD94De933f47681846ED8a409cC96169Ac"
   },
-  "deviationThreshold": "0.5"
+  "deviationThreshold": "1.0"
 }
