@@ -1,63 +1,83 @@
-#!/bin/bash
-# This script processes JSON files within a specified directory structure to extract and display information about EOFeedManager and EOFeedAdapter deployments in the documentation.
+#!/bin/sh
+# This script generates a markdown table of feed addresses for each
+# configured network. For every feed it outputs the address, decimals,
+# deviation threshold, heartbeat and notes. Notes include the v1 address
+# when available as well as any hard coded warnings for specific feeds.
 #
 # Example usage:
-# 1. From repo's root directory, run `sh script/utils/generate_feed_addresses.sh > docs/deployments.md`
-# 2. Copy content docs/deployments.md to documentation
+#   From repo root: `sh script/utils/generate_feed_addresses.sh > docs/deployments.md`
 
-# Define the base directory
 base_dir="script/config/"
 
-# Initialize temporary files
-feed_manager_file=$(mktemp)
-feed_adapter_file=$(mktemp)
+# Return additional hard coded notes for a feed
+additional_note() {
+  case "$1" in
+    "BTC/USD") echo "High risk: Liquidity is low across all markets. Consider carefully before integrating" ;;
+    "ETH/USD") echo "exists in Bob" ;;
+    *) echo "" ;;
+  esac
+}
 
-# Initialize header for EOFeedManager Deployments table
-echo "## EOFeedManager Deployments" > $feed_manager_file
-echo "| Network | Address | Supported Symbols |" >> $feed_manager_file
-echo "| ------- | ------- | ----------------- |" >> $feed_manager_file
-
-# Initialize header for EOFeedAdapter Deployments table
-echo "## EOFeedAdapter Deployments" > $feed_adapter_file
-echo "| Network | Symbol | Address |" >> $feed_adapter_file
-echo "| ------- | ------ | ------- |" >> $feed_adapter_file
-
-# Fetch chain list data
+# Fetch chain list data once
 chain_data=$(curl -s https://chainid.network/chains.json)
 
-# Function to get network name from chain ID
 get_network_name() {
-  local chain_id=$1
-  echo "$chain_data" | jq -r --arg chain_id "$chain_id" '.[] | select(.chainId == ($chain_id | tonumber)) | .name'
+  chain_id=$1
+  name=""
+  if [ -n "$chain_data" ]; then
+    name=$(echo "$chain_data" | jq -r --arg chain_id "$chain_id" '.[] | select(.chainId == ($chain_id | tonumber)) | .name')
+  fi
+  if [ -z "$name" ] || [ "$name" = "null" ]; then
+    name="Chain $chain_id"
+  fi
+  echo "$name"
 }
 
-# Function to extract data from JSON files
-extract_data_from_json() {
-  local file_path=$1
-  local chain_id=$(basename $(dirname $(dirname $file_path)))
-  local network=$(get_network_name $chain_id)
+find "$base_dir" -path "*/42420/targetContractAddresses.json" | while read addr_file; do
+  chain_id=$(basename "$(dirname "$(dirname "$addr_file")")")
+  network=$(get_network_name "$chain_id")
+  config_file="$(dirname "$addr_file")/targetContractSetConfig.json"
+  v1_file="$(dirname "$addr_file")/targetContractAddresses_v1.json"
 
-  local feed_manager=$(jq -r '.feedManager' $file_path)
-  local feeds=$(jq -r '.feeds' $file_path)
+  default_dev=$(jq -r '.deviationThreshold' "$config_file")
 
-  # Append to EOFeedManager Deployments
-  local symbols=$(echo $feeds | jq -r 'keys | join(", ")')
-  echo "| $network | $feed_manager | $symbols |" >> $feed_manager_file
+  echo "## $network"
+  echo "| Feed | Address | Decimals | Deviation | Heartbeat | Notes |"
+  echo "| ---- | ------- | -------- | --------- | --------- | ----- |"
 
-  # Append to EOFeedAdapter Deployments
-  echo $feeds | jq -r 'to_entries[] | "| '"$network"' | \(.key) | \(.value) |"' >> $feed_adapter_file
-}
+  jq -r '.feeds | to_entries[] | @base64' "$addr_file" | while read entry; do
+    feed_name=$(echo "$entry" | base64 --decode | jq -r '.key')
+    address=$(echo "$entry" | base64 --decode | jq -r '.value')
 
-# Walk through the directory structure
-find "$base_dir" -path "*/42420/targetContractAddresses.json" | while read file; do
-  extract_data_from_json "$file"
+    feed_data=$(jq -r --arg desc "$feed_name" '.supportedFeedsData[] | select(.description == $desc) | @base64' "$config_file")
+    decimals=$(echo "$feed_data" | base64 --decode | jq -r '.outputDecimals')
+    deviation=$(echo "$feed_data" | base64 --decode | jq -r '.deviationThreshold')
+    if [ -z "$deviation" ] || [ "$deviation" = "null" ]; then
+      deviation=$default_dev
+    fi
+    deviation="${deviation}%"
+    heartbeat="24 hours"
+
+    note=""
+    if [ -f "$v1_file" ]; then
+      v1_addr=$(jq -r --arg f "$feed_name" '.feeds[$f] // empty' "$v1_file")
+      if [ -n "$v1_addr" ]; then
+        note="V1 address: $v1_addr"
+      fi
+    fi
+
+    extra_note=$(additional_note "$feed_name")
+    if [ -n "$extra_note" ]; then
+      if [ -n "$note" ]; then
+        note="$note, $extra_note"
+      else
+        note="$extra_note"
+      fi
+    fi
+
+    echo "| $feed_name | $address | $decimals | $deviation | $heartbeat | $note |"
+  done
+
+  echo
+
 done
-
-# Output the tables
-cat $feed_manager_file
-echo
-cat $feed_adapter_file
-
-# Cleanup temporary files
-rm $feed_manager_file
-rm $feed_adapter_file
