@@ -29,7 +29,7 @@ fi
 # Return additional hard coded notes for a feed
 additional_note() {
   case "$1" in
-    "BTC/USD") echo "High risk: Liquidity is low across all markets. Consider carefully before integrating" ;;
+    "BTC/USD"|"SOV/USD") echo "High risk: Liquidity is low across all markets. Consider carefully before integrating" ;;
     "ETH/USD") echo "exists in Bob" ;;
     *) echo "" ;;
   esac
