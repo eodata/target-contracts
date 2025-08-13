@@ -109,14 +109,16 @@ feed_names=()
 addresses=()
 decimals_list=()
 
-echo "# Price Feeds"
-echo
-echo "Compatible with AggregatorV3Interface."
-echo
-echo "| Feed | Address | Decimals | Deviation | Heartbeat | Notes |"
-echo "| ---- | ------- | -------- | --------- | --------- | ----- |"
+output_file="/tmp/chain-${target_chain_id}.md"
+echo "" > "${output_file}"
+echo "# Price Feeds" | tee "${output_file}"
+echo | tee -a "${output_file}"
+echo "Compatible with AggregatorV3Interface." | tee -a "${output_file}"
+echo | tee -a "${output_file}"
+echo "| Feed | Address | Decimals | Deviation | Heartbeat | Notes |" | tee -a "${output_file}"
+echo "| ---- | ------- | -------- | --------- | --------- | ----- |" | tee -a "${output_file}"
 
-jq -r '.feeds | to_entries[] | @base64' "${addr_file}" | while read entry; do
+while read entry; do
   feed_name=$(echo "${entry}" | base64 --decode | jq -r '.key')
   address=$(echo "${entry}" | base64 --decode | jq -r '.value')
 
@@ -152,77 +154,69 @@ jq -r '.feeds | to_entries[] | @base64' "${addr_file}" | while read entry; do
     address_link="${address}"
   fi
 
-  echo "| ${feed_name} | ${address_link} | ${decimals} | ${deviation} | ${heartbeat} | ${note} |"
+  echo "| ${feed_name} | ${address_link} | ${decimals} | ${deviation} | ${heartbeat} | ${note} |" | tee -a "${output_file}"
 
-  feed_names+="${feed_name}"
-  addresses+="${address}"
-  decimals_list+="${decimals}"
+  feed_names+=("${feed_name}")
+  addresses+=("${address}")
+  decimals_list+=("${decimals}")
 
   if [ -n "${v1_addr}" ]; then
-    feed_names+="${feed_name} (v1)"
-    addresses+="${v1_addr}"
-    decimals_list+="${decimals}"
+    feed_names+=("${feed_name} (v1)")
+    addresses+=("${v1_addr}")
+    decimals_list+=("${decimals}")
   fi
-done
-echo
-echo "feed_names: ${feed_names[@]}"
-echo "addresses: ${addresses[@]}"
-echo "decimals_list: ${decimals_list[@]}"
+done < <(jq -r '.feeds | to_entries[] | @base64' "${addr_file}")
+echo | tee -a "${output_file}"
 
-echo "# Links"
+echo "# Links" | tee -a "${output_file}" | tee -a "${output_file}"
 if [ "${explorer_url}" != "" ]; then
-  echo "- Explorer: <a href=\"${explorer_url}\" target=\"_blank\">${explorer_url}</a>"
+  echo "- Explorer: <a href=\"${explorer_url}\" target=\"_blank\">${explorer_url}</a>" | tee -a "${output_file}"
 fi
 
 if [ "${rpc_url}" != "" ]; then
-  echo "- RPC: <a href=\"${rpc_url}\" target=\"_blank\">${rpc_url}</a>"
+  echo "- RPC: <a href=\"${rpc_url}\" target=\"_blank\">${rpc_url}</a>" | tee -a "${output_file}"
 fi
 
-echo "- Chainlist: <a href=\"${chainlist_url}\" target=\"_blank\">${chainlist_url}</a>"
+echo "- Chainlist: <a href=\"${chainlist_url}\" target=\"_blank\">${chainlist_url}</a>" | tee -a "${output_file}"
 
 if [ "${check_contracts}" = true ]; then
   if [ "${rpc_url}" = "" ]; then
     echo "RPC URL required for contract checks" >&2
   else
     echo
-    echo "# Contract Checks"
-    for i in "${addresses[@]}"; do
+    echo "# Contract Checks ${#addresses[@]} "
+    for i in "${!addresses[@]}"; do
       name="${feed_names[$i]}"
       addr="${addresses[$i]}"
       exp_dec="${decimals_list[$i]}"
 
-      echo "Checking ${name} at ${addr}"
-      on_chain_dec=$(cast c "${addr}" 'decimals()' -r "${rpc_url}" 2>/dev/null)
-      on_chain_desc=$(cast c "${addr}" 'description()' -r "${rpc_url}" 2>/dev/null)
-      latest_ans=$(cast c "${addr}" 'latestAnswer()' -r "${rpc_url}" 2>/dev/null)
-      latest_ts=$(cast c "${addr}" 'latestTimestamp()' -r "${rpc_url}" 2>/dev/null)
+      on_chain_dec=$(cast c "${addr}" 'decimals()' -r "${rpc_url}" | cast 2d 2>/dev/null)
+      on_chain_desc=$(cast c "${addr}" 'description()' -r "${rpc_url}" | xxd -r -p 2>/dev/null | head -c -1 2>/dev/null)
+      latest_ans=$(cast c "${addr}" 'latestAnswer()' -r "${rpc_url}" | cast 2d 2>/dev/null)
+      latest_ts=$(cast c "${addr}" 'latestTimestamp()' -r "${rpc_url}" | cast 2d 2>/dev/null)
 
       if [ -n "${latest_ans}" ] && [ -n "${exp_dec}" ]; then
-        human_ans=$(python3 - <<'PY'
-import sys
-x=int(sys.argv[1])
-dec=int(sys.argv[2])
-print(x/10**dec)
-PY
- "${latest_ans}" "${exp_dec}")
+        human_ans=$(awk -v ans="${latest_ans}" -v dec="${exp_dec}" 'BEGIN { printf "%.3f", ans / (10 ^ dec) }')
       else
         human_ans=""
       fi
 
       if [ -n "${latest_ts}" ]; then
-        human_ts=$(date -d "@${latest_ts}" "+%Y-%m-%d %H:%M:%S" 2>/dev/null)
+        human_ts=$(date -r "${latest_ts}" "+%Y-%m-%d %H:%M:%S" 2>/dev/null)
       else
         human_ts=""
       fi
 
       if [ -n "${on_chain_dec}" ] && [ "${on_chain_dec}" != "${exp_dec}" ]; then
-        echo "Warning: decimals mismatch for ${name} (expected ${exp_dec} got ${on_chain_dec})" >&2
+        echo "Warning: decimals mismatch for ${name} (${addr}) (expected ${exp_dec} got ${on_chain_dec})" >&2
       fi
       if [ -n "${on_chain_desc}" ] && [ "${on_chain_desc}" != "${name}" ]; then
-        echo "Warning: description mismatch for ${name} (on-chain: ${on_chain_desc})" >&2
+        echo "Warning: description mismatch for ${name} (${addr}) (on-chain: ${on_chain_desc})" >&2
       fi
 
-      echo "${name} | ${addr} | ${on_chain_dec} | ${human_ans} | ${human_ts}"
+      printf "%-30s | %s | %2s | %10s | %s\n" "${name}" "${addr}" "${on_chain_dec}" "${human_ans}" "${human_ts}"
     done
   fi
 fi
+
+echo "Output file: cat ${output_file}"
