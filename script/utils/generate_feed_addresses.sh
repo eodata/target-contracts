@@ -8,6 +8,28 @@
 # Define the base directory
 base_dir="script/config/"
 
+# Default options
+target_chain_id=42420
+check_contracts=false
+
+# Parse CLI arguments
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --target-chain-id)
+      target_chain_id="$2"
+      shift 2
+      ;;
+    --check-contracts)
+      check_contracts=true
+      shift
+      ;;
+    *)
+      echo "Unknown option: $1" >&2
+      exit 1
+      ;;
+  esac
+done
+
 # Initialize temporary files
 feed_manager_file=$(mktemp)
 feed_adapter_file=$(mktemp)
@@ -31,6 +53,23 @@ get_network_name() {
   echo "$chain_data" | jq -r --arg chain_id "$chain_id" '.[] | select(.chainId == ($chain_id | tonumber)) | .name'
 }
 
+# Function to get RPC URL from chain ID
+get_network_rpc() {
+  local chain_id=$1
+  echo "$chain_data" | jq -r --arg chain_id "$chain_id" '.[] | select(.chainId == ($chain_id | tonumber)) | .rpc[0]'
+}
+
+# Check if contract bytecode exists at an address
+check_contract() {
+  local rpc_url=$1
+  local address=$2
+  local label=$3
+  local code=$(curl -s -X POST -H 'Content-Type: application/json' --data "{\"jsonrpc\":\"2.0\",\"method\":\"eth_getCode\",\"params\":[\"$address\",\"latest\"],\"id\":1}" $rpc_url | jq -r '.result')
+  if [ "$code" == "0x" ]; then
+    echo "Missing contract at $address ($label)" >&2
+  fi
+}
+
 # Function to extract data from JSON files
 extract_data_from_json() {
   local file_path=$1
@@ -40,16 +79,28 @@ extract_data_from_json() {
   local feed_manager=$(jq -r '.feedManager' $file_path)
   local feeds=$(jq -r '.feeds' $file_path)
 
+  if [ "$check_contracts" = true ]; then
+    local rpc_url=$(get_network_rpc $chain_id)
+    if [ -n "$rpc_url" ] && [ "$rpc_url" != "null" ]; then
+      check_contract "$rpc_url" "$feed_manager" "feedManager on $network"
+      echo "$feeds" | jq -r 'to_entries[] | .value' | while read addr; do
+        check_contract "$rpc_url" "$addr" "feed on $network"
+      done
+    else
+      echo "No RPC URL found for chain $chain_id; skipping contract checks" >&2
+    fi
+  fi
+
   # Append to EOFeedManager Deployments
-  local symbols=$(echo $feeds | jq -r 'keys | join(", ")')
+  local symbols=$(echo "$feeds" | jq -r 'keys | join(", ")')
   echo "| $network | $feed_manager | $symbols |" >> $feed_manager_file
 
   # Append to EOFeedAdapter Deployments
-  echo $feeds | jq -r 'to_entries[] | "| '"$network"' | \(.key) | \(.value) |"' >> $feed_adapter_file
+  echo "$feeds" | jq -r 'to_entries[] | "| '"$network"' | \(.key) | \(.value) |"' >> $feed_adapter_file
 }
 
 # Walk through the directory structure
-find "$base_dir" -path "*/42420/targetContractAddresses.json" | while read file; do
+find "$base_dir" -path "*/${target_chain_id}/targetContractAddresses.json" | while read file; do
   extract_data_from_json "$file"
 done
 
