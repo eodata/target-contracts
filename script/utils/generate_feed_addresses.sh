@@ -5,55 +5,97 @@
 # when available as well as any hard coded warnings for specific feeds.
 #
 # Example usage:
-#   From repo root: `sh script/utils/generate_feed_addresses.sh 42161 > docs/deployments.md`
+#   From repo root: `sh script/utils/generate_feed_addresses.sh --targetchain-id 42161 > docs/deployments.md`
 
-if [ $# -lt 1 ]; then
-  echo "Usage: $0 <chain_id> [target_set_id]" >&2
+usage() {
+  echo "Usage: $0 --target-chain-id <target_chain_id> [--rpc <rpc_url>] [--explorer <url>]" >&2
   exit 1
+}
+
+target_chain_id=""
+eochain="42420"
+rpc_override=""
+explorer_override=""
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --target-chain-id)
+      target_chain_id="$2"
+      shift 2
+      ;;
+    --target-set-id)
+      eochain="$2"
+      shift 2
+      ;;
+    --rpc)
+      rpc_override="$2"
+      shift 2
+      ;;
+    --explorer)
+      explorer_override="$2"
+      shift 2
+      ;;
+    *)
+      echo "Unknown parameter: $1" >&2
+      usage
+      ;;
+  esac
+done
+
+if [ -z "$target_chain_id" ]; then
+  usage
 fi
 
 base_dir="script/config/"
-chain_id="$1"
-target_set_id="${2:-42420}"
 
-addr_dir="$base_dir/$chain_id/$target_set_id"
+addr_dir="$base_dir/$target_chain_id/$eochain"
 addr_file="$addr_dir/targetContractAddresses.json"
 config_file="$addr_dir/targetContractSetConfig.json"
 v1_file="$addr_dir/targetContractAddresses_v1.json"
 
 if [ ! -f "$addr_file" ]; then
-  echo "No feed data found for chain $chain_id (set $target_set_id)" >&2
+  echo "No feed data found for chain $target_chain_id (set $eochain)" >&2
   exit 1
 fi
 
 # Return additional hard coded notes for a feed
 additional_note() {
   case "$1" in
-    "BTC/USD"|"SOV/USD") echo "High risk: Liquidity is low across all markets. Consider carefully before integrating" ;;
-    "ETH/USD") echo "exists in Bob" ;;
+    "SOV/USD") echo "High risk: Liquidity is low across all markets. Consider carefully before integrating" ;;
     *) echo "" ;;
   esac
 }
 
-# Fetch chain list data once
-chain_data=$(curl -s https://chainid.network/chains.json)
+# Fetch chain list data once if needed
+chain_data=""
+if [ -z "$rpc_override" ] || [ -z "$explorer_override" ]; then
+  chain_data=$(curl -s https://chainid.network/chains.json)
+fi
 
-get_network_name() {
-  chain_id=$1
-  name=""
+get_explorer_url() {
+  cid=$1
+  url=""
   if [ -n "$chain_data" ]; then
-    name=$(echo "$chain_data" | jq -r --arg chain_id "$chain_id" '.[] | select(.chainId == ($chain_id | tonumber)) | .name')
+    url=$(echo "$chain_data" | jq -r --arg target_chain_id "$cid" '.[] | select(.chainId == ($target_chain_id | tonumber)) | .explorers[0].url // empty')
   fi
-  if [ -z "$name" ] || [ "$name" = "null" ]; then
-    name="Chain $chain_id"
-  fi
-  echo "$name"
+  echo $url
 }
 
-network=$(get_network_name "$chain_id")
+get_rpc_url() {
+  cid=$1
+  url=""
+  if [ -n "$chain_data" ]; then
+    url=$(echo "$chain_data" | jq -r --arg target_chain_id "$cid" '.[] | select(.chainId == ($target_chain_id | tonumber)) | .rpc[] | select(startswith("https://") and (index("${") | not))' | head -n 1)
+  fi
+  echo $url
+}
+
 default_dev=$(jq -r '.deviationThreshold' "$config_file")
 
-echo "## $network"
+echo "# Price Feeds"
+echo
+echo "Compatible with AggregatorV3Interface."
+echo
 echo "| Feed | Address | Decimals | Deviation | Heartbeat | Notes |"
 echo "| ---- | ------- | -------- | --------- | --------- | ----- |"
 
@@ -91,3 +133,22 @@ jq -r '.feeds | to_entries[] | @base64' "$addr_file" | while read entry; do
 done
 
 echo
+
+explorer_url="${explorer_override}"
+if [ "${explorer_url}" = "" ]; then
+  explorer_url=$(get_explorer_url "${target_chain_id}")
+fi
+rpc_url="${rpc_override}"
+if [ "${rpc_url}" = "" ]; then
+  rpc_url=$(get_rpc_url "${target_chain_id}")
+fi
+chainlist_url="https://chainlist.org/chain/${target_chain_id}"
+
+echo "# Links"
+if [ -n "${explorer_url}" ]; then
+  echo '- Explorer: <a href='${explorer_url}' target="_blank">'${explorer_url}'</a>'
+fi
+if [ -n "${rpc_url}" ]; then
+  echo '- RPC: <a href='${rpc_url}' target="_blank">'${rpc_url}'</a>'
+fi
+echo '- Chainlist: <a href='${chainlist_url}' target="_blank">'${chainlist_url}'</a>'
