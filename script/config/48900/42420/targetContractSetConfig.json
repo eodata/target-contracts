@@ -4,7 +4,7 @@
   "eoracleChainId": 42420,
   "targetChainId": 48900,
   "publishers": ["0x5FdB41Fa496D42C52C1AF4900a13E342684CFB95", "0x5d93E795DBC132Cb1a64981D2919D3501228b246"],
-  "supportedFeedIds": [2, 17, 54, 76, 83, 88, 89, 91, 92, 102, 112],
+  "supportedFeedIds": [2, 17, 54, 76, 83, 88, 89, 91, 92, 102],
   "supportedFeedsData": [
     {
       "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -94,15 +94,6 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "ZRC/USD",
-      "deviationThreshold": ""
-    },
-    {
-      "base": "0x8E0789d39db454DBE9f4a77aCEF6dc7c69f6D552",
-      "quote": "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
-      "feedId": 112,
-      "inputDecimals": 18,
-      "outputDecimals": 18,
-      "description": "inwstETHs/wstETH",
       "deviationThreshold": ""
     }
   ],
