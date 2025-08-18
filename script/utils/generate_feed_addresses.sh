@@ -63,6 +63,58 @@ fi
 additional_note() {
   case "$1" in
     "SOV/USD") echo "High risk: Liquidity is low across all markets. Consider carefully before integrating" ;;
+    "sFRAX/FRAX") echo "Fundamental exchange Rate" ;;
+    "sfrxETH/frxETH") echo "Fundamental exchange Rate" ;;
+    "stETH/ETH") echo "Fundamental exchange Rate" ;;
+    "rETH/ETH") echo "Fundamental exchange Rate" ;;
+    "cbETH/ETH") echo "Fundamental exchange Rate" ;;
+    "ETHx/ETH") echo "Fundamental exchange Rate" ;;
+    "ankrETH/ETH") echo "Fundamental exchange Rate" ;;
+    "oETH/ETH") echo "Fundamental exchange Rate" ;;
+    "osETH/ETH") echo "Fundamental exchange Rate" ;;
+    "swETH/ETH") echo "Fundamental exchange Rate" ;;
+    "wBETH/ETH") echo "Fundamental exchange Rate" ;;
+    "lsETH/ETH") echo "Fundamental exchange Rate" ;;
+    "mETH/ETH") echo "Fundamental exchange Rate" ;;
+    "ezETH/ETH") echo "Fundamental exchange Rate" ;;
+    "weETH/ETH") echo "Fundamental exchange Rate" ;;
+    "pufETH/ETH") echo "Fundamental exchange Rate" ;;
+    "ynETH/ETH") echo "Fundamental exchange Rate" ;;
+    "uniETH/ETH") echo "Fundamental exchange Rate" ;;
+    "rswETH/ETH") echo "Fundamental exchange Rate" ;;
+    "weETHs/ETH") echo "Fundamental exchange Rate" ;;
+    "swBTC/BTC") echo "Fundamental exchange Rate" ;;
+    "eBTC/BTC") echo "Fundamental exchange Rate" ;;
+    "STONE/ETH") echo "Fundamental exchange Rate" ;;
+    "rsETH/ETH") echo "Fundamental exchange Rate" ;;
+    "pufEUSD/USD") echo "Fundamental exchange Rate" ;;
+    "STONE/USD") echo "Fundamental exchange Rate" ;;
+    "wstETH/ETH") echo "Fundamental exchange Rate" ;;
+    "stETH/USD") echo "Fundamental exchange Rate" ;;
+    "ezETH/USD") echo "Fundamental exchange Rate" ;;
+    "weETH/USD") echo "Fundamental exchange Rate" ;;
+    "uniETH/USD") echo "Fundamental exchange Rate" ;;
+    "pufEUSD/USD") echo "Fundamental exchange Rate" ;;
+    "rsETH/USD") echo "Fundamental exchange Rate" ;;
+    "wstETH/USD") echo "Fundamental exchange Rate" ;;
+    "SolvBTCBBN/USD") echo "Fundamental exchange Rate" ;;
+    "uniBTC/USD") echo "Fundamental exchange Rate" ;;
+    "wBTC/USD") echo "Fundamental exchange Rate" ;;
+    "wOETH/USD") echo "Fundamental exchange Rate" ;;
+    "inwstETH/USD") echo "Fundamental exchange Rate" ;;
+    "LBTC/USD") echo "Fundamental exchange Rate" ;;
+    "sUSDe/USDe") echo "Fundamental exchange Rate" ;;
+    "eBTC/USD") echo "Fundamental exchange Rate" ;;
+    "LBTC/BTC") echo "Fundamental exchange Rate" ;;
+    "wUSDM/USDM") echo "Fundamental exchange Rate" ;;
+    "xUSD/USD") echo "Fundamental exchange Rate" ;;
+    "yUSD/USD") echo "Fundamental exchange Rate" ;;
+    "xSolvBTC/USD") echo "Fundamental exchange Rate" ;;
+    "wsrUSD/USD") echo "Fundamental exchange Rate" ;;
+    "uSDC/USDC") echo "Fundamental exchange Rate" ;;
+    "xETH/ETH") echo "Fundamental exchange Rate" ;;
+    "xBTC/BTC") echo "Fundamental exchange Rate" ;;
+    "xUSD/USDC") echo "Fundamental exchange Rate" ;;
     *) echo "" ;;
   esac
 }
@@ -166,8 +218,46 @@ while read entry; do
     decimals_list+=("${decimals}")
   fi
 done < <(jq -r '.feeds | to_entries[] | @base64' "${addr_file}")
-echo | tee -a "${output_file}"
 
+# adding the factoryFeeds addresses
+while read entry; do
+  feed_name=$(echo "${entry}" | base64 --decode | jq -r '.key')
+  address=$(echo "${entry}" | base64 --decode | jq -r '.value')
+
+  decimals=$(cast c "${address}" 'decimals()' -r "${rpc_url}" | cast 2d 2>/dev/null)
+  deviation="--"
+  heartbeat="--"
+
+  note=""
+  extra_note=$(additional_note "${feed_name}")
+  if [ -n "${extra_note}" ]; then
+    if [ -n "${note}" ]; then
+      note="${note}, ${extra_note}"
+    else
+      note="${extra_note}"
+    fi
+  fi
+
+  if [ "${explorer_url}" != "" ]; then
+    address_link="<a href=\"${explorer_url}/address/${address}\" target=\"_blank\">${address}</a>"
+  else
+    address_link="${address}"
+  fi
+
+  echo "| ${feed_name} | ${address_link} | ${decimals} | ${deviation} | ${heartbeat} | ${note} |" | tee -a "${output_file}"
+
+  feed_names+=("${feed_name}")
+  addresses+=("${address}")
+  decimals_list+=("${decimals}")
+
+  if [ -n "${v1_addr}" ]; then
+    feed_names+=("${feed_name} (v1)")
+    addresses+=("${v1_addr}")
+    decimals_list+=("${decimals}")
+  fi
+done < <(jq -r '.factoryFeeds | to_entries[] | @base64' "${addr_file}")
+
+echo | tee -a "${output_file}"
 echo "# Links" | tee -a "${output_file}" | tee -a "${output_file}"
 if [ "${explorer_url}" != "" ]; then
   echo "- Explorer: <a href=\"${explorer_url}\" target=\"_blank\">${explorer_url}</a>" | tee -a "${output_file}"
