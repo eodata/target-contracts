@@ -160,6 +160,7 @@ chainlist_url="https://chainlist.org/chain/${target_chain_id}"
 feed_names=()
 addresses=()
 decimals_list=()
+v1_feeds=()
 
 output_file="/tmp/chain-${target_chain_id}.md"
 echo "" > "${output_file}"
@@ -184,20 +185,9 @@ while read entry; do
   heartbeat="24 hours"
 
   note=""
-  if [ -f "${v1_file}" ]; then
-    v1_addr=$(jq -r --arg f "${feed_name}" '.feeds[$f] // empty' "${v1_file}" | tr -d '\r')
-    if [ -n "${v1_addr}" ]; then
-      note="V1 address: ${v1_addr}"
-    fi
-  fi
-
   extra_note=$(additional_note "${feed_name}")
   if [ -n "${extra_note}" ]; then
-    if [ -n "${note}" ]; then
-      note="${note}, ${extra_note}"
-    else
-      note="${extra_note}"
-    fi
+    note="${extra_note}"
   fi
 
   if [ "${explorer_url}" != "" ]; then
@@ -212,10 +202,12 @@ while read entry; do
   addresses+=("${address}")
   decimals_list+=("${decimals}")
 
-  if [ -n "${v1_addr}" ]; then
-    feed_names+=("${feed_name} (v1)")
-    addresses+=("${v1_addr}")
-    decimals_list+=("${decimals}")
+  # Store V1 address for separate table
+  if [ -f "${v1_file}" ]; then
+    v1_addr=$(jq -r --arg f "${feed_name}" '.feeds[$f] // empty' "${v1_file}" | tr -d '\r')
+    if [ -n "${v1_addr}" ]; then
+      v1_feeds+=("${feed_name}|${v1_addr}|${decimals}")
+    fi
   fi
 done < <(jq -r '.feeds | to_entries[] | @base64' "${addr_file}")
 
@@ -231,11 +223,7 @@ while read entry; do
   note=""
   extra_note=$(additional_note "${feed_name}")
   if [ -n "${extra_note}" ]; then
-    if [ -n "${note}" ]; then
-      note="${note}, ${extra_note}"
-    else
-      note="${extra_note}"
-    fi
+    note="${extra_note}"
   fi
 
   if [ "${explorer_url}" != "" ]; then
@@ -250,15 +238,41 @@ while read entry; do
   addresses+=("${address}")
   decimals_list+=("${decimals}")
 
-  if [ -n "${v1_addr}" ]; then
-    feed_names+=("${feed_name} (v1)")
-    addresses+=("${v1_addr}")
-    decimals_list+=("${decimals}")
+  # Store V1 address for separate table (if exists)
+  if [ -f "${v1_file}" ]; then
+    v1_addr=$(jq -r --arg f "${feed_name}" '.feeds[$f] // empty' "${v1_file}" | tr -d '\r')
+    if [ -n "${v1_addr}" ]; then
+      v1_feeds+=("${feed_name}|${v1_addr}|${decimals}")
+    fi
   fi
 done < <(jq -r '.factoryFeeds | to_entries[] | @base64' "${addr_file}")
 
+# Add V1 addresses table if any exist
+if [ ${#v1_feeds[@]} -gt 0 ]; then
+  echo | tee -a "${output_file}"
+  echo "<details>" | tee -a "${output_file}"
+  echo "<summary><strong>Legacy Feed Addresses (V1)</strong></summary>" | tee -a "${output_file}"
+  echo | tee -a "${output_file}"
+  echo "| Feed | V1 Address | Decimals |" | tee -a "${output_file}"
+  echo "| ---- | ----------- | -------- |" | tee -a "${output_file}"
+  
+  for v1_feed in "${v1_feeds[@]}"; do
+    IFS='|' read -r feed_name v1_addr decimals <<< "${v1_feed}"
+    
+    if [ "${explorer_url}" != "" ]; then
+      v1_address_link="<a href=\"${explorer_url}/address/${v1_addr}\" target=\"_blank\">${v1_addr}</a>"
+    else
+      v1_address_link="${v1_addr}"
+    fi
+    
+    echo "| ${feed_name} | ${v1_address_link} | ${decimals} |" | tee -a "${output_file}"
+  done
+  
+  echo "</details>" | tee -a "${output_file}"
+fi
+
 echo | tee -a "${output_file}"
-echo "# Links" | tee -a "${output_file}" | tee -a "${output_file}"
+echo "# Links" | tee -a "${output_file}"
 if [ "${explorer_url}" != "" ]; then
   echo "- Explorer: <a href=\"${explorer_url}\" target=\"_blank\">${explorer_url}</a>" | tee -a "${output_file}"
 fi
