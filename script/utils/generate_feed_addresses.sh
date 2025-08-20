@@ -206,7 +206,7 @@ while read entry; do
   if [ -f "${v1_file}" ]; then
     v1_addr=$(jq -r --arg f "${feed_name}" '.feeds[$f] // empty' "${v1_file}" | tr -d '\r')
     if [ -n "${v1_addr}" ]; then
-      v1_feeds+=("${feed_name}|${v1_addr}|${decimals}")
+      v1_feeds+=("${feed_name}|${v1_addr}|${decimals}|${deviation}|${heartbeat}|${note}")
     fi
   fi
 done < <(jq -r '.feeds | to_entries[] | @base64' "${addr_file}")
@@ -242,7 +242,7 @@ while read entry; do
   if [ -f "${v1_file}" ]; then
     v1_addr=$(jq -r --arg f "${feed_name}" '.feeds[$f] // empty' "${v1_file}" | tr -d '\r')
     if [ -n "${v1_addr}" ]; then
-      v1_feeds+=("${feed_name}|${v1_addr}|${decimals}")
+      v1_feeds+=("${feed_name}|${v1_addr}|${decimals}|${deviation}|${heartbeat}|${note}")
     fi
   fi
 done < <(jq -r '.factoryFeeds | to_entries[] | @base64' "${addr_file}")
@@ -251,13 +251,13 @@ done < <(jq -r '.factoryFeeds | to_entries[] | @base64' "${addr_file}")
 if [ ${#v1_feeds[@]} -gt 0 ]; then
   echo | tee -a "${output_file}"
   echo "<details>" | tee -a "${output_file}"
-  echo "<summary><strong>Legacy Feed Addresses (V1)</strong></summary>" | tee -a "${output_file}"
+  echo "<summary><strong>V1 Addresses (Legacy)</strong></summary>" | tee -a "${output_file}"
   echo | tee -a "${output_file}"
-  echo "| Feed | V1 Address | Decimals |" | tee -a "${output_file}"
-  echo "| ---- | ----------- | -------- |" | tee -a "${output_file}"
+  echo "| Feed | V1 Address | Decimals | Deviation | Heartbeat | Notes |" | tee -a "${output_file}"
+  echo "| ---- | ----------- | -------- | --------- | --------- | ----- |" | tee -a "${output_file}"
   
   for v1_feed in "${v1_feeds[@]}"; do
-    IFS='|' read -r feed_name v1_addr decimals <<< "${v1_feed}"
+    IFS='|' read -r feed_name v1_addr decimals deviation heartbeat note <<< "${v1_feed}"
     
     if [ "${explorer_url}" != "" ]; then
       v1_address_link="<a href=\"${explorer_url}/address/${v1_addr}\" target=\"_blank\">${v1_addr}</a>"
@@ -265,7 +265,7 @@ if [ ${#v1_feeds[@]} -gt 0 ]; then
       v1_address_link="${v1_addr}"
     fi
     
-    echo "| ${feed_name} | ${v1_address_link} | ${decimals} |" | tee -a "${output_file}"
+    echo "| ${feed_name} | ${v1_address_link} | ${decimals} | ${deviation} | ${heartbeat} | ${note} |" | tee -a "${output_file}"
   done
   
   echo "</details>" | tee -a "${output_file}"
