@@ -1,7 +1,7 @@
 #!/bin/bash
 # This script generates a markdown table of feed addresses for a single
 # configured chain. For every feed it outputs the address, decimals,
-# deviation threshold, heartbeat and notes. Notes include the v1 address
+# deviation threshold, heartbeat and notes.
 # when available as well as any hard coded warnings for specific feeds.
 #
 # Example usage:
