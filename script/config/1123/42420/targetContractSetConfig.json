@@ -4,7 +4,7 @@
   "targetChainId": 1123,
   "feedDeployer": "0x69128C9dBDBADfBE36b9176882029F2A90bF54EB",
   "publishers": ["0x2C873283C58Cdc8d3330F42090a0796E85B5CeCB"],
-  "supportedFeedIds": [1, 2, 17, 54, 55],
+  "supportedFeedIds": [1, 2, 3, 4, 5, 17, 54, 55],
   "supportedFeedsData": [
     {
       "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
@@ -22,6 +22,33 @@
       "outputDecimals": 8,
       "description": "ETH/USD",
       "feedId": 2,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 3,
+      "description": "XRP/USD",
+      "base": "0xa3FCD2041abc7fd3ac76aF9DEfCe42ea241b2a5f",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 4,
+      "description": "ADA/USD",
+      "base": "0xadADADadAdADAdadADADADadadADAdAdadaDAdAD",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 5,
+      "description": "DOGE/USD",
+      "base": "0xDDdDddDdDdddDDddDDddDDDDdDdDDdDDdDDDDDDd",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
       "deviationThreshold": ""
     },
     {
