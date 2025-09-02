@@ -1231,6 +1231,15 @@
       "inputDecimals": 18,
       "outputDecimals": 18,
       "deviationThreshold": ""
+    },
+    {
+      "feedId": 164,
+      "description": "miUSD/USD",
+      "base": "0xeCA400Ce587a1aF540Af349eaC645C21219912D3",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
     }
   ]
 }
