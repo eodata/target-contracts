@@ -61,5 +61,5 @@
     "pausers": ["0x73782E8BdE463C44af75f3D52fbf2939429E90Ee"],
     "unpauser": "0xFfdBAe8Ef099D2A747ab3f46d20bf8cB5F2d66c3"
   },
-  "deviationThreshold": "1.0"
+  "deviationThreshold": "0.5"
 }
