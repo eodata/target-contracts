@@ -1,0 +1,65 @@
+{
+  "usePrecompiledModexp": false,
+  "eoracleChainId": 42420,
+  "targetChainId": 747474,
+  "feedsDeployer": "0x2d4E31FC78C9D0A2f1A3Ef3a0F77AFAD3A91e8BB",
+  "publishers": ["0x2C093dB63885d18c0c934ddF8e56C74CFca91a5E", "0x90be8AC05D92D65cCa4754d40Ca1a18497fc8e79"],
+  "supportedFeedIds": [1, 2, 17, 54, 164],
+  "supportedFeedsData": [
+    {
+      "feedId": 1,
+      "description": "BTC/USD",
+      "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 2,
+      "description": "ETH/USD",
+      "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 17,
+      "description": "USDT/USD",
+      "base": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 54,
+      "description": "USDC/USD",
+      "base": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 164,
+      "description": "miUSD/USD",
+      "base": "0xeCA400Ce587a1aF540Af349eaC645C21219912D3",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    }
+  ],
+  "timelock": {
+    "minDelay": 10,
+    "proposers": ["0x9D21ef6e6640477Cd74AE3c44b842311d0b59252"],
+    "executors": ["0x78A33c0a9beF2ecEAecD95dc4d7aAA2B265FF1cc"]
+  },
+  "pauserRegistry": {
+    "pausers": ["0x73782E8BdE463C44af75f3D52fbf2939429E90Ee"],
+    "unpauser": "0xFfdBAe8Ef099D2A747ab3f46d20bf8cB5F2d66c3"
+  },
+  "deviationThreshold": "0.5"
+}
