@@ -4,7 +4,7 @@
   "targetChainId": 999,
   "feedDeployer": "0xF40A852240b578BEA6f4cbb2dE237EE5c84dFc52",
   "publishers": ["0x185586338508542D49831827140f8F71a99cBc58"],
-  "supportedFeedIds": [1, 2, 17, 54],
+  "supportedFeedIds": [1, 2, 17, 54, 164],
   "supportedFeedsData": [
     {
       "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
@@ -37,6 +37,15 @@
       "feedId": 54,
       "description": "USDC/USD",
       "base": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 164,
+      "description": "miUSD/USD",
+      "base": "0xeCA400Ce587a1aF540Af349eaC645C21219912D3",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8,
