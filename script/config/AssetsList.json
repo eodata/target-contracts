@@ -1240,6 +1240,15 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "deviationThreshold": ""
+    },
+    {
+      "feedId": 165,
+      "description": "sdeUSD/deUSD",
+      "base": "0x3f6c8f2Efb8cc78C3baB5353E2Ad5f19De56D856",
+      "quote": "0x1271656F45e251f588847721BA2C561dd1F0223F",
+      "inputDecimals": 18,
+      "outputDecimals": 18,
+      "deviationThreshold": ""
     }
   ]
 }
