@@ -1,0 +1,9 @@
+{
+  "targetChainId": 17000,
+  "heartbeat": {
+    "common": "0 */12 * * *",
+    "overrides": {
+      "0 */6 * * *": [54]
+    }
+  }
+}
