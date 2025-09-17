@@ -45,5 +45,5 @@
       "deviationThreshold": ""
     }
   ],
-  "deviationThreshold": "1.0"
+  "deviationThreshold": "0.05"
 }
