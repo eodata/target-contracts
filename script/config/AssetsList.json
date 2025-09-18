@@ -882,9 +882,9 @@
     },
     {
       "feedId": 111,
-      "description": "wOETH/USD",
+      "description": "wOETH/ETH",
       "base": "0xdcee70654261af21c44c093c300ed3bb97b78192",
-      "quote": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "quote": "0x856c4efb76c1d1ae02e20ceb03a2a6a08b0b8dc3",
       "inputDecimals": 18,
       "outputDecimals": 18
     },
@@ -963,7 +963,7 @@
     {
       "feedId": 122,
       "description": "bfBTC/USD",
-      "base": "",
+      "base": "0x623F2774d9f27B59bc6b954544487532CE79d9DF",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8
@@ -983,6 +983,102 @@
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8
+    },
+    {
+      "feedId": 125,
+      "description": "vUSD/USD",
+      "base": "0x7A06C4AeF988e7925575C50261297a946aD204A8",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 126,
+      "description": "IBIT/USD",
+      "base": "0xa3cb87080e68ad54d00573983d935fa85d168fde",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 127,
+      "description": "SPY/USD",
+      "base": "0x17fd3caa66502c6f1cbd5600d8448f3af8f2aba1",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 128,
+      "description": "stBTC/USD",
+      "base": "0xf6718b2701D4a6498eF77D7c152b2137Ab28b8A3",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 130,
+      "description": "S/USD",
+      "base": "0x597877Ccf65be938BD214C4c46907669e3E62128",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 131,
+      "description": "iBERA/USD",
+      "base": "0x9b6761bf2397Bb5a6624a856cC84A3A14Dcd3fe5",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 132,
+      "description": "sUSDE/USDE",
+      "base": "0x597877Ccf65be938BD214C4c46907669e3E62128",
+      "quote": "0x4c9EDD5852cd905f086C759E8383e09bff1E68B3",
+      "inputDecimals": 18,
+      "outputDecimals": 18
+    },
+    {
+      "feedId": 133,
+      "description": "sNECT/NECT",
+      "base": "0x597877Ccf65be938BD214C4c46907669e3E62128",
+      "quote": "0x1ce0a25d13ce4d52071ae7e02cf1f6606f4c79d3",
+      "inputDecimals": 18,
+      "outputDecimals": 18
+    },
+    {
+      "feedId": 134,
+      "description": "LBTC/BTC",
+      "base": "0x8236a87084f8b84306f72007f36f2618a5634494",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 135,
+      "description": "LBTC/BTC",
+      "base": "0x8236a87084f8b84306f72007f36f2618a5634494",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 136,
+      "description": "TIA/USD",
+      "base": "0x6Fae4D9935E2fcb11fC79a64e917fb2BF14DaFaa",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 137,
+      "description": "BB.sNECT/NECT",
+      "base": "0x1d22592f66fc92e0a64ee9300eaeca548cd466c5",
+      "quote": "0x1cE0a25D13CE4d52071aE7e02Cf1F6606F4C79d3",
+      "inputDecimals": 18,
+      "outputDecimals": 18
     }
   ]
 }

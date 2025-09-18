@@ -6,7 +6,7 @@
   "targetChainId": 8453,
   "publishers": ["0x878305b18a5613FAB36e69450f17E1fdeEddE3eD"],
   "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
-  "supportedFeedIds": [1, 2, 6, 11, 13, 14, 16, 17, 18, 41, 42, 43, 54, 59, 88, 89, 92],
+  "supportedFeedIds": [1, 2, 6, 13, 17, 18, 41, 42, 43, 54, 59, 64, 88, 89, 92, 116, 135],
   "supportedFeedsData": [
     {
       "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
@@ -33,36 +33,12 @@
       "description": "SOL/USD"
     },
     {
-      "base": "0x7D800a2559b7e3A9b50a1865Ac45C22D168Ce900",
-      "quote": "0x0000000000000000000000000000000000000348",
-      "feedId": 11,
-      "inputDecimals": 18,
-      "outputDecimals": 8,
-      "description": "XAU/USD"
-    },
-    {
       "base": "0x00000000000000000000000000000000000003d2",
       "quote": "0x0000000000000000000000000000000000000348",
       "feedId": 13,
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "EUR/USD"
-    },
-    {
-      "base": "0x0000000000000000000000000000000000000024",
-      "quote": "0x0000000000000000000000000000000000000348",
-      "feedId": 14,
-      "inputDecimals": 18,
-      "outputDecimals": 8,
-      "description": "AUD/USD"
-    },
-    {
-      "base": "0x000000000000000000000000000000000000033A",
-      "quote": "0x0000000000000000000000000000000000000348",
-      "feedId": 16,
-      "inputDecimals": 18,
-      "outputDecimals": 8,
-      "description": "GBP/USD"
     },
     {
       "base": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
@@ -121,6 +97,14 @@
       "feedId": 59
     },
     {
+      "feedId": 64,
+      "description": "eBTC/BTC",
+      "base": "0x657e8C867D8B37dCC18fA4Caead9C45EB088C642",
+      "quote": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
       "feedId": 88,
       "base": "0xbf5495Efe5DB9ce00f80364C8B423567e58d2110",
       "quote": "0x0000000000000000000000000000000000000348",
@@ -141,6 +125,14 @@
       "base": "0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0",
       "quote": "0x0000000000000000000000000000000000000348",
       "description": "wstETH/USD",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 135,
+      "description": "LBTC/BTC",
+      "base": "0x8236a87084f8b84306f72007f36f2618a5634494",
+      "quote": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
       "inputDecimals": 18,
       "outputDecimals": 8
     }

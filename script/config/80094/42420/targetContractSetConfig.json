@@ -6,7 +6,9 @@
   "targetChainId": 80094,
   "publishers": ["0x6A64A1E7992B1a0d277bC6444bD93269d9214C4d"],
   "allowedSenders": ["0x4E70004b01987B4fd7DAcab348F0B39E9AE26110"],
-  "supportedFeedIds": [1, 2, 17, 54, 61, 64, 65, 76, 77, 85, 89, 91, 100, 101, 103, 104, 108, 115],
+  "supportedFeedIds": [
+    1, 2, 17, 54, 61, 64, 65, 76, 77, 85, 89, 91, 100, 101, 103, 104, 105, 108, 115, 131, 132, 133, 137, 146
+  ],
   "supportedFeedsData": [
     {
       "feedId": 1,
@@ -137,6 +139,14 @@
       "outputDecimals": 8
     },
     {
+      "feedId": 105,
+      "description": "iBGT/USD",
+      "base": "0xac03caba51e17c86c921e1f6cbfbdc91f8bb2e6b",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
       "feedId": 108,
       "description": "pumpBTC/USD",
       "base": "0xF469fBD2abcd6B9de8E169d128226C0Fc90a012e",
@@ -148,6 +158,46 @@
       "feedId": 115,
       "description": "NECT/USD",
       "base": "0x1ce0a25d13ce4d52071ae7e02cf1f6606f4c79d3",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 131,
+      "description": "iBERA/USD",
+      "base": "0x9b6761bf2397bb5a6624a856cc84a3a14dcd3fe5",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8
+    },
+    {
+      "feedId": 132,
+      "description": "sUSDe/USDe",
+      "base": "0x211Cc4DD073734dA055fbF44a2b4667d5E5fE5d2",
+      "quote": "0x5d3a1Ff2b6BAb83b63cd9AD0787074081a52ef34",
+      "inputDecimals": 18,
+      "outputDecimals": 18
+    },
+    {
+      "feedId": 133,
+      "description": "sNECT/NECT",
+      "base": "0x597877Ccf65be938BD214C4c46907669e3E62128",
+      "quote": "0x1cE0a25D13CE4d52071aE7e02Cf1F6606F4C79d3",
+      "inputDecimals": 18,
+      "outputDecimals": 18
+    },
+    {
+      "feedId": 137,
+      "description": "BB.sNECT/NECT",
+      "base": "0x1d22592f66fc92e0a64ee9300eaeca548cd466c5",
+      "quote": "0x1cE0a25D13CE4d52071aE7e02Cf1F6606F4C79d3",
+      "inputDecimals": 18,
+      "outputDecimals": 18
+    },
+    {
+      "feedId": 146,
+      "description": "xUSD/USD",
+      "base": "0xE2Fc85BfB48C4cF147921fBE110cf92Ef9f26F94",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8
