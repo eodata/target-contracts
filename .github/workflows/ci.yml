@@ -18,7 +18,7 @@ jobs:
   build:
     runs-on: "k8s-native-eodata"
     container:
-      image: "node:22-bullseye"
+      image: "node:22-bookworm"
     steps:
       - name: "Check out the repo"
         uses: "actions/checkout@v4"
@@ -60,7 +60,7 @@ jobs:
     needs: ["build"]
     runs-on: "k8s-native-eodata"
     container:
-      image: "node:22-bullseye"
+      image: "node:22-bookworm"
     steps:
       - name: "Check out the repo"
         uses: "actions/checkout@v4"
