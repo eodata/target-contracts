@@ -4,7 +4,7 @@
   "targetChainId": 143,
   "feedsDeployer": "0x85d5B0A1604aEF59258CB6b7d10BBD96f991E172",
   "publishers": ["0xcF64789305dB08f84fc7d754bFAd327Ed20e62c6", "0xE413D837dfcBc8573885C4698e460C2f42fA25DA"],
-  "supportedFeedIds": [1, 2, 17, 54],
+  "supportedFeedIds": [1, 2, 17, 54, 56, 57, 86, 146, 147],
   "supportedFeedsData": [
     {
       "feedId": 1,
@@ -37,6 +37,51 @@
       "feedId": 54,
       "description": "USDC/USD",
       "base": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 56,
+      "description": "ezETH/ETH",
+      "base": "0xbf5495Efe5DB9ce00f80364C8B423567e58d2110",
+      "quote": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "inputDecimals": 18,
+      "outputDecimals": 18,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 57,
+      "description": "weETH/ETH",
+      "base": "0xCd5fE23C85820F7B72D0926FC9b05b43E359b7ee",
+      "quote": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "inputDecimals": 18,
+      "outputDecimals": 18,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 86,
+      "description": "wstETH/ETH",
+      "base": "0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0",
+      "quote": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "inputDecimals": 18,
+      "outputDecimals": 18,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 146,
+      "description": "xUSD/USD",
+      "base": "0xE2Fc85BfB48C4cF147921fBE110cf92Ef9f26F94",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 147,
+      "description": "yUSD/USD",
+      "base": "0x19Ebd191f7A24ECE672ba13A302212b5eF7F35cb",
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8,
