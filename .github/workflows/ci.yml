@@ -109,7 +109,9 @@ jobs:
           echo "✅ Passed" >> $GITHUB_STEP_SUMMARY
 
   slither-analyze:
-    runs-on: "k8s-dind"
+    runs-on: "k8s-native-eodata"
+    container:
+      image: "node:22-bookworm"
     permissions:
       actions: "read"
       contents: "read"
