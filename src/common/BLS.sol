@@ -692,7 +692,7 @@ library ModexpSqrt {
  * @dev points on G1 are used for signatures and messages, and on G2 for public keys
  */
 contract BLS is IBLS {
-    uint256 internal constant PAIRING_EQUALITY_CHECK_GAS = 120_000;
+    uint256 internal constant PAIRING_EQUALITY_CHECK_GAS = 250_000;
 
     // Field order
     // prettier-ignore
