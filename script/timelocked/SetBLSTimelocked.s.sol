@@ -7,6 +7,7 @@ import { stdJson } from "forge-std/Script.sol";
 import { TimelockController } from "openzeppelin-contracts/contracts/governance/TimelockController.sol";
 import { EOJsonUtils } from "../utils/EOJsonUtils.sol";
 import { EOFeedVerifier } from "../../src/EOFeedVerifier.sol";
+import { IBLS } from "../../src/interfaces/IBLS.sol";
 import { TimelockBase } from "./TimelockBase.sol";
 
 /*
@@ -47,7 +48,7 @@ contract SetBLSTimelocked is Script, TimelockBase {
         feedVerifier = EOFeedVerifier(outputConfig.readAddress(".feedVerifier"));
         timelock = TimelockController(payable(outputConfig.readAddress(".timelock")));
 
-        bytes memory data = abi.encodeCall(feedVerifier.setBLS, (newBLS));
+        bytes memory data = abi.encodeCall(feedVerifier.setBLS, (IBLS(newBLS)));
         bytes memory txn = callTimelock(timelock, isExecutionMode, send, address(feedVerifier), data, seed);
 
         return txn;
