@@ -1,10 +1,10 @@
 {
   "usePrecompiledModexp": false,
   "eoracleChainId": 42420,
-  "targetChainId": 43114,
-  "feedsDeployer": "0x6dfBf87A56034fb37cdCe6a5D2088e8A3bf25584",
-  "publishers": ["0xF14E67BbE16E118864e78ea6963F9D35469a8927", "0x660eEa3835048d3D77e6682FFC7bc7A464aef513"],
-  "supportedFeedIds": [1, 2, 17, 54, 161, 162, 163],
+  "targetChainId": 1329,
+  "feedsDeployer": "0x428Fd9f6DB58cAa8675aE44784Da22C44626aC19",
+  "publishers": ["0x1bFe7138f2422c672a3De0b8e42649910B867dBd", "0x6b8F5F4dD1BaE9e23642e807648B433d27Ff8C98"],
+  "supportedFeedIds": [1, 2, 17, 54, 146],
   "supportedFeedsData": [
     {
       "feedId": 1,
@@ -43,41 +43,23 @@
       "deviationThreshold": ""
     },
     {
-      "feedId": 161,
-      "description": "xETH/ETH",
-      "base": "0x7E586fBaF3084C0be7aB5C82C04FfD7592723153",
-      "quote": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
-      "inputDecimals": 18,
-      "outputDecimals": 18,
-      "deviationThreshold": ""
-    },
-    {
-      "feedId": 162,
-      "description": "xBTC/BTC",
-      "base": "0x12fd502e2052CaFB41eccC5B596023d9978057d6",
-      "quote": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+      "feedId": 146,
+      "description": "xUSD/USD",
+      "base": "0xE2Fc85BfB48C4cF147921fBE110cf92Ef9f26F94",
+      "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8,
-      "deviationThreshold": ""
-    },
-    {
-      "feedId": 163,
-      "description": "xUSD/USDC",
-      "base": "0xE2Fc85BfB48C4cF147921fBE110cf92Ef9f26F94",
-      "quote": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
-      "inputDecimals": 18,
-      "outputDecimals": 18,
       "deviationThreshold": ""
     }
   ],
   "timelock": {
     "minDelay": 10,
-    "proposers": ["0xbC916ED1A42658055835d607f60067f731ed059D"],
-    "executors": ["0x45eB8451a4F3eA6B81AeB4B9a464D9428120f500"]
+    "proposers": ["0xE59a83838956F78e7d1bdf357D5e6e62fD170b66"],
+    "executors": ["0xdBb8af9723b25BC800707D1f71Ab4814D8D97C41"]
   },
   "pauserRegistry": {
-    "pausers": ["0xFb93B9c3495A4f1af9D04F705Fd703D84086eF73"],
-    "unpauser": "0xe3B412fe1921B34B20e37fed20F96E1E90D49323"
+    "pausers": ["0x6D97A6E043B9A7d70b2b48eA15541fa2EcFf58F0"],
+    "unpauser": "0xC994667A120E8a84575e99239a69172d9FaC058F"
   },
-  "deviationThreshold": "0.5"
+  "deviationThreshold": "1.0"
 }
