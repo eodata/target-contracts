@@ -4,7 +4,7 @@
   "eoracleChainId": 42420,
   "targetChainId": 50,
   "publishers": ["0x9c5AfeDE74D5286892d8d7b289273FC1248e1E6c"],
-  "supportedFeedIds": [1, 2, 17, 54, 159],
+  "supportedFeedIds": [1, 2, 17, 54, 159, 166],
   "supportedFeedsData": [
     {
       "feedId": 1,
@@ -49,6 +49,15 @@
       "quote": "0x0000000000000000000000000000000000000348",
       "inputDecimals": 18,
       "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 166,
+      "description": "ynRWAx/USDC",
+      "base": "0x01Ba69727E2860b37bc1a2bd56999c1aFb4C15D8",
+      "quote": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+      "inputDecimals": 18,
+      "outputDecimals": 18,
       "deviationThreshold": ""
     }
   ],
