@@ -77,9 +77,6 @@ contract DisableFeedsTimelocked is Script, TimelockBase {
 
         // Create bool array with all false values to disable all provided feeds
         bool[] memory isSupported = new bool[](feedIds.length);
-        for (uint256 i = 0; i < feedIds.length; ++i) {
-            isSupported[i] = false;
-        }
 
         bytes memory data = abi.encodeCall(feedManager.setSupportedFeeds, (feedIds, isSupported));
         bytes memory txn = callTimelock(timelock, isExecutionMode, send, address(feedManager), data, seed);
