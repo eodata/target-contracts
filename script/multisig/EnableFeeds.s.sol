@@ -8,7 +8,7 @@ import { EOJsonUtils } from "../utils/EOJsonUtils.sol";
 
 /*
 Usage: (add --broadcast)
-forge script script/multisig/DisableFeeds.s.sol \
+forge script script/multisig/EnableFeeds.s.sol \
     --sig "run(bool,bool,uint256[],string,string)" \
     true \
     true \
@@ -18,16 +18,16 @@ forge script script/multisig/DisableFeeds.s.sol \
     --rpc-url $RPC_URL \
     -vvvv
 */
-/// @title DisableFeeds
-/// @notice Script to disable feeds via multisig
+/// @title EnableFeeds
+/// @notice Script to enable feeds via multisig
 /// @author eOracle
-contract DisableFeeds is ExecuteAny {
+contract EnableFeeds is ExecuteAny {
     using stdJson for string;
 
-    /// @notice Main run function to disable feeds via multisig
+    /// @notice Main run function to enable feeds via multisig
     /// @param send Whether to send the transaction
     /// @param isExecution Whether to execute (true) or schedule (false)
-    /// @param feedIds Array of feed IDs to disable
+    /// @param feedIds Array of feed IDs to enable
     /// @param chainAlias Chain alias for the multisig
     /// @param seed Seed for transaction salt
     function run(
@@ -47,7 +47,7 @@ contract DisableFeeds is ExecuteAny {
         address[] memory targets = new address[](1);
         targets[0] = timelock;
         bytes[] memory txns = new bytes[](1);
-        txns[0] = setSupportedFeedsTimelocked.execute(isExecution, false, feedIds, false, seed);
+        txns[0] = setSupportedFeedsTimelocked.execute(isExecution, false, feedIds, true, seed);
         run(send, multisig, chainAlias, targets, txns);
     }
 }
