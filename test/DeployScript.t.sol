@@ -10,6 +10,7 @@ import { SetupCoreContracts } from "../script/deployment/setup/SetupCoreContract
 import { DeployTimelock } from "../script/deployment/DeployTimelock.s.sol";
 import { TransferOwnershipToTimelock } from "../script/deployment/setup/TransferOwnershipToTimelock.s.sol";
 import { WhitelistPublishersTimelocked } from "../script/timelocked/WhitelistPublishersTimelocked.s.sol";
+import { SetSupportedFeedsTimelocked } from "../script/timelocked/SetSupportedFeedsTimelocked.s.sol";
 import { EOFeedVerifier } from "../src/EOFeedVerifier.sol";
 import { EOFeedManager } from "../src/EOFeedManager.sol";
 import { EOFeedRegistryAdapter } from "../src/adapters/EOFeedRegistryAdapter.sol";
@@ -125,5 +126,61 @@ contract DeployScriptTest is Test {
         for (uint256 i = 0; i < configStructured.publishers.length; i++) {
             assertTrue(EOFeedManager(feedManagerProxy).isWhitelistedPublisher(configStructured.publishers[i]));
         }
+    }
+
+    function test_SetSupportedFeedsTimelocked_Disable() public {
+        EOJsonUtils.Config memory configStructured = EOJsonUtils.getParsedConfig();
+        // transfer ownership to timelock
+        transferOwnership.run(address(this));
+
+        // Get a feed ID that is currently supported
+        uint256 feedId = uint256(configStructured.supportedFeedIds[0]);
+        assertTrue(EOFeedManager(feedManagerProxy).isSupportedFeed(feedId));
+
+        uint256[] memory feedIds = new uint256[](1);
+        feedIds[0] = feedId;
+
+        SetSupportedFeedsTimelocked setSupportedFeedsTimelocked = new SetSupportedFeedsTimelocked();
+
+        // Schedule disabling the feed
+        setSupportedFeedsTimelocked.run(configStructured.timelock.proposers[0], false, feedIds, false, "disable-feed");
+
+        vm.warp(block.timestamp + configStructured.timelock.minDelay + 1);
+
+        // Execute disabling the feed
+        setSupportedFeedsTimelocked.run(configStructured.timelock.executors[0], true, feedIds, false, "disable-feed");
+
+        assertFalse(EOFeedManager(feedManagerProxy).isSupportedFeed(feedId));
+    }
+
+    function test_SetSupportedFeedsTimelocked_Enable() public {
+        EOJsonUtils.Config memory configStructured = EOJsonUtils.getParsedConfig();
+
+        // Get a feed ID that is currently supported
+        uint256 feedId = uint256(configStructured.supportedFeedIds[0]);
+        assertTrue(EOFeedManager(feedManagerProxy).isSupportedFeed(feedId));
+
+        // First disable it directly (as owner before transfer)
+        uint256[] memory feedIds = new uint256[](1);
+        feedIds[0] = feedId;
+        bool[] memory isSupported = new bool[](1);
+        isSupported[0] = false;
+        EOFeedManager(feedManagerProxy).setSupportedFeeds(feedIds, isSupported);
+        assertFalse(EOFeedManager(feedManagerProxy).isSupportedFeed(feedId));
+
+        // Transfer ownership to timelock
+        transferOwnership.run(address(this));
+
+        SetSupportedFeedsTimelocked setSupportedFeedsTimelocked = new SetSupportedFeedsTimelocked();
+
+        // Schedule enabling the feed
+        setSupportedFeedsTimelocked.run(configStructured.timelock.proposers[0], false, feedIds, true, "enable-feed");
+
+        vm.warp(block.timestamp + configStructured.timelock.minDelay + 1);
+
+        // Execute enabling the feed
+        setSupportedFeedsTimelocked.run(configStructured.timelock.executors[0], true, feedIds, true, "enable-feed");
+
+        assertTrue(EOFeedManager(feedManagerProxy).isSupportedFeed(feedId));
     }
 }
