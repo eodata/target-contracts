@@ -1,0 +1,65 @@
+{
+  "usePrecompiledModexp": false,
+  "eoracleChainId": 42420,
+  "targetChainId": 1329,
+  "feedsDeployer": "0x428Fd9f6DB58cAa8675aE44784Da22C44626aC19",
+  "publishers": ["0x1bFe7138f2422c672a3De0b8e42649910B867dBd", "0x6b8F5F4dD1BaE9e23642e807648B433d27Ff8C98"],
+  "supportedFeedIds": [1, 2, 17, 54, 146],
+  "supportedFeedsData": [
+    {
+      "feedId": 1,
+      "description": "BTC/USD",
+      "base": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 2,
+      "description": "ETH/USD",
+      "base": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 17,
+      "description": "USDT/USD",
+      "base": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 54,
+      "description": "USDC/USD",
+      "base": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    },
+    {
+      "feedId": 146,
+      "description": "xUSD/USD",
+      "base": "0xE2Fc85BfB48C4cF147921fBE110cf92Ef9f26F94",
+      "quote": "0x0000000000000000000000000000000000000348",
+      "inputDecimals": 18,
+      "outputDecimals": 8,
+      "deviationThreshold": ""
+    }
+  ],
+  "timelock": {
+    "minDelay": 10,
+    "proposers": ["0xE59a83838956F78e7d1bdf357D5e6e62fD170b66"],
+    "executors": ["0xdBb8af9723b25BC800707D1f71Ab4814D8D97C41"]
+  },
+  "pauserRegistry": {
+    "pausers": ["0x6D97A6E043B9A7d70b2b48eA15541fa2EcFf58F0"],
+    "unpauser": "0xC994667A120E8a84575e99239a69172d9FaC058F"
+  },
+  "deviationThreshold": "0.5"
+}
