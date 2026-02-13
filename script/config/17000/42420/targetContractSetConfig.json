@@ -5,7 +5,7 @@
   "feedDeployer": "0xB0462F8dD528F0602fc7867827D64c3c9b5D93B2",
   "publishers": ["0x077758247f36a5ec1d11b0A583f717eeD66578bf"],
   "supportedFeedIds": [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 14, 15, 17, 18, 19, 21, 22, 23, 24, 25, 27, 28, 29, 30, 31, 34, 35, 36, 41, 42,
+    1, 2, 3, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17, 18, 19, 21, 22, 23, 24, 25, 27, 28, 29, 30, 31, 34, 35, 36, 41, 42,
     43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67
   ],
   "supportedFeedsData": [
@@ -79,15 +79,6 @@
       "inputDecimals": 18,
       "outputDecimals": 8,
       "description": "DOT/USD",
-      "deviationThreshold": ""
-    },
-    {
-      "base": "0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0",
-      "quote": "0x0000000000000000000000000000000000000348",
-      "feedId": 9,
-      "inputDecimals": 18,
-      "outputDecimals": 8,
-      "description": "MATIC/USD",
       "deviationThreshold": ""
     },
     {
